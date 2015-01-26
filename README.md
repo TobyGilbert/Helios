@@ -1,3 +1,3 @@
-BlankOpenGLScene_Qt - Toby Gilbert
+Helios - A Real-Time Path Tracer
 ===================
-A blank OpenGL scene to work from using Qt widgets for window management, assimp for model loading and devIL for image loading.
+Helios is a real-time path tracer developed by Toby Gilbert and Declan Russell using the Nvidia OptiX engine.
