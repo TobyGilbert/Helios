@@ -23,11 +23,10 @@ SOURCES += \
     src/Model.cpp \
     src/OpenGLWidget.cpp \
     src/Shader.cpp \
-    src/optixsample.cpp \
-    src/optixsampletwo.cpp \
     src/pathtracerscene.cpp \
     src/pinholecamera.cpp \
-    optixSrc/*.cu
+    optixSrc/*.cu \
+    src/HDRLoader.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -44,11 +43,10 @@ HEADERS += \
     include/ui_mainwindow.h \
     include/helpers.h \
     include/random.h \
-    include/optixsample.h \
-    include/optixsampletwo.h \
     include/path_tracer.h \
     include/pathtracerscene.h \
-    include/pinholecamera.h
+    include/pinholecamera.h \
+    include/HDRLoader.h
 
 INCLUDEPATH +=./include /opt/local/include
 LIBS += -L/opt/local/lib -lIL -lassimp
@@ -85,7 +83,8 @@ OTHER_FILES += \
     shaders/PhongFrag.glsl \
     shaders/PhongVert.glsl \
     shaders/pathTraceVert.vert \
-    shaders/pathTraceFrag.frag
+    shaders/pathTraceFrag.frag \
+    textures/CedarCity.hdr
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu

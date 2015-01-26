@@ -75,6 +75,7 @@ rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );
 rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );
 rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
 
+
 static __device__ inline float3 powf(float3 a, float exp)
 {
   return make_float3(powf(a.x, exp), powf(a.y, exp), powf(a.z, exp));
@@ -256,7 +257,11 @@ RT_PROGRAM void glass_refract()
   current_prd.radiance = make_float3(0.0f);
 }
 
+rtDeclareVariable(float, reflectivity, , );
+rtDeclareVariable(int, max_depth, , );
+rtDeclareVariable(float, importance_cutoff, , );
 RT_PROGRAM void reflections(){
+  float3 colour = diffuse_color;
   float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
   float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
 
@@ -275,11 +280,94 @@ RT_PROGRAM void reflections(){
   float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
 
   // Get reflection colour
+  if (current_prd.depth < max_depth){
+      PerRayData_pathtrace reflection_prd;
+      float3 R = reflect(ray.direction, ffnormal);
+      Ray refl_ray = make_Ray(hitpoint, R, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
+      rtTrace(top_object, refl_ray, reflection_prd);
+      colour +=  reflectivity * reflection_prd.colour;
+      reflection_prd.done = true;
+  }
+
+  current_prd.attenuation = current_prd.attenuation * colour;
+  current_prd.countEmitted = false;
+  // Compute direct light...
+  // Or shoot one...
+  unsigned int num_lights = lights.size();
+  float3 result = make_float3(0.0f);
+
+  for(int i = 0; i < num_lights; ++i) {
+    ParallelogramLight light = lights[i];
+    float z1 = rnd(current_prd.seed);
+    float z2 = rnd(current_prd.seed);
+    float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+
+    float Ldist = length(light_pos - hitpoint);
+    float3 L = normalize(light_pos - hitpoint);
+    float nDl = dot( ffnormal, L );
+    float LnDl = dot( light.normal, L );
+    float A = length(cross(light.v1, light.v2));
+
+    // cast shadow ray
+    if ( nDl > 0.0f && LnDl > 0.0f ) {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow){
+        float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
+  }
+  current_prd.colour = colour;
+  current_prd.radiance =result;//  make_float3(1.0, 1.0, 1.0);
+}
+
+rtDeclareVariable(float3, tile_v0, , );
+rtDeclareVariable(float3, tile_v1, , );
+rtDeclareVariable(float3, crack_colour, , );
+rtDeclareVariable(float, crack_width, , );
+RT_PROGRAM void procedural_floor(){
+  float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+  float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+
+  float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
+
+  float3 hitpoint = ray.origin + t_hit * ray.direction;
+  current_prd.origin = hitpoint;
+
+  // Procedural
+  float k0 = dot(tile_v0, hitpoint);
+  float k1 = dot(tile_v1, hitpoint);
+
+  k0 = k0 - floor(k0);
+  k1 = k1 - floor(k1);
+
+  float3 local_colour;
+  if (k0 > crack_width && k1  > crack_width){
+      local_colour = diffuse_color;
+  }
+  else{
+      local_colour = crack_colour;
+  }
+
+  float z1=rnd(current_prd.seed);
+  float z2=rnd(current_prd.seed);
+  float3 p;
+  cosine_sample_hemisphere(z1, z2, p);
+  float3 v1, v2;
+  createONB(ffnormal, v1, v2);
+  current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
+  float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
+
+  // Get reflection colour
   PerRayData_pathtrace reflection_prd;
   float3 R = reflect(ray.direction, ffnormal);
   Ray refl_ray = make_Ray(hitpoint, R, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
   rtTrace(top_object, refl_ray, reflection_prd);
-  current_prd.attenuation = current_prd.attenuation * reflection_prd.radiance * reflection_prd.colour;
+  current_prd.attenuation = current_prd.attenuation * local_colour + (reflectivity * reflection_prd.colour);
   current_prd.countEmitted = false;
 
   // Compute direct light...
@@ -312,9 +400,10 @@ RT_PROGRAM void reflections(){
       }
     }
   }
-  current_prd.colour = reflection_prd.colour;
-  current_prd.radiance =  make_float3(1.0, 1.0, 1.0);
+  current_prd.colour = local_colour + (reflectivity * reflection_prd.colour);
+  current_prd.radiance =result;//  make_float3(1.0, 1.0, 1.0);
 }
+
 //-----------------------------------------------------------------------------
 //
 //  Exception program
@@ -339,6 +428,17 @@ RT_PROGRAM void miss()
   current_prd.done = true;
 }
 
+// Environment map
+rtTextureSampler<float4, 2> envmap;
+RT_PROGRAM void envi_miss(){
+    float theta = atan2f(ray.direction.x, ray.direction.z);
+    float phi = M_PIf * 0.5f - acos(ray.direction.y);
+    float u = (theta + M_PIf) * (0.5f * M_1_PIf);
+    float v = 0.5f * ( 1.0f + sin(phi));
+    current_prd.radiance = make_float3(tex2D(envmap, u, v));
+    current_prd.colour = make_float3(tex2D(envmap, u, v));
+    current_prd.done = true;
+}
 
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
 

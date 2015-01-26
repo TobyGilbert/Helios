@@ -22,6 +22,7 @@
 #pragma once
 
 #include <optixu/optixu_math_namespace.h>
+#include <optix_math.h>
 
 // Convert a float3 in [0,1)^3 to a uchar4 in [0,255]^4 -- 4th channel is set to 255
 #ifdef __CUDACC__
@@ -232,4 +233,5 @@ static __host__ __device__ __inline__ optix::float3 tonemap( const optix::float3
 
   return mapped_rgb;
 }
+
 

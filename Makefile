@@ -55,10 +55,9 @@ SOURCES       = src/main.cpp \
 		src/Model.cpp \
 		src/OpenGLWidget.cpp \
 		src/Shader.cpp \
-		src/optixsample.cpp \
-		src/optixsampletwo.cpp \
 		src/pathtracerscene.cpp \
-		src/pinholecamera.cpp moc/moc_mainwindow.cpp \
+		src/pinholecamera.cpp \
+		src/HDRLoader.cpp moc/moc_mainwindow.cpp \
 		moc/moc_OpenGLWidget.cpp
 OBJECTS       = obj/main.o \
 		obj/mainwindow.o \
@@ -70,10 +69,9 @@ OBJECTS       = obj/main.o \
 		obj/Model.o \
 		obj/OpenGLWidget.o \
 		obj/Shader.o \
-		obj/optixsample.o \
-		obj/optixsampletwo.o \
 		obj/pathtracerscene.o \
 		obj/pinholecamera.o \
+		obj/HDRLoader.o \
 		obj/moc_mainwindow.o \
 		obj/moc_OpenGLWidget.o
 DIST          = /Users/Toby/Qt5.2.1/5.2.1/clang_64/mkspecs/features/spec_pre.prf \
@@ -472,7 +470,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d obj/Helios.out1.0.0 || mkdir -p obj/Helios.out1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/box.cu optixSrc/constantbg.cu optixSrc/draw_color.cu optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/phong.cu optixSrc/pinhole_camera.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/Model.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/optixsample.h include/optixsampletwo.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/Model.cpp src/OpenGLWidget.cpp src/Shader.cpp src/optixsample.cpp src/optixsampletwo.cpp src/pathtracerscene.cpp src/pinholecamera.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/box.cu optixSrc/constantbg.cu optixSrc/draw_color.cu optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/phong.cu optixSrc/pinhole_camera.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/Model.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/Model.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
 
 
 clean:compiler_clean 
@@ -841,7 +839,7 @@ moc/moc_mainwindow.cpp: /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framewo
 		/opt/local/include/GLFW/glfw3.h \
 		include/Shader.h \
 		include/Model.h \
-		include/optixsample.h \
+		include/pathtracerscene.h \
 		/Developer/OptiX/include/optixu/optixpp_namespace.h \
 		/Developer/OptiX/include/optix.h \
 		/Developer/OptiX/include/optix_device.h \
@@ -866,8 +864,6 @@ moc/moc_mainwindow.cpp: /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framewo
 		/Developer/OptiX/include/optix_cuda_interop.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		include/optixsampletwo.h \
-		include/pathtracerscene.h \
 		include/random.h \
 		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
@@ -981,7 +977,7 @@ moc/moc_OpenGLWidget.cpp: /Developer/OptiX/SDK/sutil/GL/glew.h \
 		/opt/local/include/GLFW/glfw3.h \
 		include/Shader.h \
 		include/Model.h \
-		include/optixsample.h \
+		include/pathtracerscene.h \
 		/Developer/OptiX/include/optixu/optixpp_namespace.h \
 		/Developer/OptiX/include/optix.h \
 		/Developer/OptiX/include/optix_device.h \
@@ -1006,8 +1002,6 @@ moc/moc_OpenGLWidget.cpp: /Developer/OptiX/SDK/sutil/GL/glew.h \
 		/Developer/OptiX/include/optix_cuda_interop.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		include/optixsampletwo.h \
-		include/pathtracerscene.h \
 		include/random.h \
 		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
@@ -1171,7 +1165,7 @@ obj/main.o: src/main.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framew
 		/opt/local/include/GLFW/glfw3.h \
 		include/Shader.h \
 		include/Model.h \
-		include/optixsample.h \
+		include/pathtracerscene.h \
 		/Developer/OptiX/include/optixu/optixpp_namespace.h \
 		/Developer/OptiX/include/optix.h \
 		/Developer/OptiX/include/optix_device.h \
@@ -1196,8 +1190,6 @@ obj/main.o: src/main.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framew
 		/Developer/OptiX/include/optix_cuda_interop.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		include/optixsampletwo.h \
-		include/pathtracerscene.h \
 		include/random.h \
 		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
@@ -1336,7 +1328,7 @@ obj/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		/opt/local/include/GLFW/glfw3.h \
 		include/Shader.h \
 		include/Model.h \
-		include/optixsample.h \
+		include/pathtracerscene.h \
 		/Developer/OptiX/include/optixu/optixpp_namespace.h \
 		/Developer/OptiX/include/optix.h \
 		/Developer/OptiX/include/optix_device.h \
@@ -1361,8 +1353,6 @@ obj/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		/Developer/OptiX/include/optix_cuda_interop.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		include/optixsampletwo.h \
-		include/pathtracerscene.h \
 		include/random.h \
 		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
@@ -1912,11 +1902,9 @@ obj/OpenGLWidget.o: src/OpenGLWidget.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/
 		/opt/local/include/GLFW/glfw3.h \
 		include/Shader.h \
 		include/Model.h \
-		include/optixsample.h \
+		include/pathtracerscene.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		include/optixsampletwo.h \
-		include/pathtracerscene.h \
 		include/random.h \
 		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
@@ -2021,65 +2009,6 @@ obj/Shader.o: src/Shader.cpp include/Shader.h \
 		include/ShaderUtils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Shader.o src/Shader.cpp
 
-obj/optixsample.o: src/optixsample.cpp include/optixsample.h \
-		/Developer/OptiX/include/optixu/optixpp_namespace.h \
-		/Developer/OptiX/include/optix.h \
-		/Developer/OptiX/include/optix_device.h \
-		/Developer/OptiX/include/internal/optix_datatypes.h \
-		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
-		/Developer/OptiX/include/optixu/optixu_vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
-		/Developer/OptiX/include/internal/optix_declarations.h \
-		/Developer/OptiX/include/internal/optix_internal.h \
-		/Developer/OptiX/include/internal/optix_defines.h \
-		/Developer/OptiX/include/optix_sizet.h \
-		/Developer/OptiX/include/optix_host.h \
-		/Developer/OptiX/include/optix_d3d9_interop.h \
-		/Developer/OptiX/include/optix_d3d10_interop.h \
-		/Developer/OptiX/include/optix_d3d11_interop.h \
-		/Developer/OptiX/include/optix_gl_interop.h \
-		/Developer/OptiX/include/optix_cuda_interop.h \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QColor \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/optixsample.o src/optixsample.cpp
-
-obj/optixsampletwo.o: src/optixsampletwo.cpp include/optixsampletwo.h \
-		/Developer/OptiX/include/optixu/optixpp_namespace.h \
-		/Developer/OptiX/include/optix.h \
-		/Developer/OptiX/include/optix_device.h \
-		/Developer/OptiX/include/internal/optix_datatypes.h \
-		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
-		/Developer/OptiX/include/optixu/optixu_vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
-		/Developer/OptiX/include/internal/optix_declarations.h \
-		/Developer/OptiX/include/internal/optix_internal.h \
-		/Developer/OptiX/include/internal/optix_defines.h \
-		/Developer/OptiX/include/optix_sizet.h \
-		/Developer/OptiX/include/optix_host.h \
-		/Developer/OptiX/include/optix_d3d9_interop.h \
-		/Developer/OptiX/include/optix_d3d10_interop.h \
-		/Developer/OptiX/include/optix_d3d11_interop.h \
-		/Developer/OptiX/include/optix_gl_interop.h \
-		/Developer/OptiX/include/optix_cuda_interop.h \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QImage \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qimage.h \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QColor \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h \
-		include/commonStructs.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/optixsampletwo.o src/optixsampletwo.cpp
-
 obj/pathtracerscene.o: src/pathtracerscene.cpp include/pathtracerscene.h \
 		/Developer/OptiX/include/optixu/optixpp_namespace.h \
 		/Developer/OptiX/include/optix.h \
@@ -2119,7 +2048,10 @@ obj/pathtracerscene.o: src/pathtracerscene.cpp include/pathtracerscene.h \
 		include/helpers.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QColor \
-		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h
+		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h \
+		include/HDRLoader.h \
+		/Developer/OptiX/SDK/sutil/sutil.h \
+		/Developer/OptiX/SDK/sutil/sutilapi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/pathtracerscene.o src/pathtracerscene.cpp
 
 obj/pinholecamera.o: src/pinholecamera.cpp include/pinholecamera.h \
@@ -2149,6 +2081,33 @@ obj/pinholecamera.o: src/pinholecamera.cpp include/pinholecamera.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
 		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/pinholecamera.o src/pinholecamera.cpp
+
+obj/HDRLoader.o: src/HDRLoader.cpp include/HDRLoader.h \
+		/Developer/OptiX/include/optixu/optixpp_namespace.h \
+		/Developer/OptiX/include/optix.h \
+		/Developer/OptiX/include/optix_device.h \
+		/Developer/OptiX/include/internal/optix_datatypes.h \
+		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
+		/Developer/OptiX/include/optixu/optixu_vector_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
+		/Developer/OptiX/include/internal/optix_declarations.h \
+		/Developer/OptiX/include/internal/optix_internal.h \
+		/Developer/OptiX/include/internal/optix_defines.h \
+		/Developer/OptiX/include/optix_sizet.h \
+		/Developer/OptiX/include/optix_host.h \
+		/Developer/OptiX/include/optix_d3d9_interop.h \
+		/Developer/OptiX/include/optix_d3d10_interop.h \
+		/Developer/OptiX/include/optix_d3d11_interop.h \
+		/Developer/OptiX/include/optix_gl_interop.h \
+		/Developer/OptiX/include/optix_cuda_interop.h \
+		/Developer/OptiX/SDK/sutil/sutil.h \
+		/Developer/OptiX/SDK/sutil/sutilapi.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/HDRLoader.o src/HDRLoader.cpp
 
 obj/moc_mainwindow.o: moc/moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/moc_mainwindow.o moc/moc_mainwindow.cpp

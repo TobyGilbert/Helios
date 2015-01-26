@@ -11,7 +11,7 @@ int main(int argc, char **argv)
     file.open(QFile::ReadOnly);
     QString stylesheet = QLatin1String(file.readAll());
     w.setStyleSheet(stylesheet);
-    w.setWindowTitle(QString("Plain Scene"));
+    w.setWindowTitle(QString("Helios"));
     w.show();
     app.exec();
 }

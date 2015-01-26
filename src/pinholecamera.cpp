@@ -15,8 +15,12 @@ void PinholeCamera::setParameters(float3 _eye, float3 _lookat, float3 _up, float
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PinholeCamera::calcVectors(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
-    m_U = optix::normalize(optix::cross(_lookat,_up));
-    m_V = optix::normalize(optix::cross(m_U,_lookat));
+//    m_U = optix::normalize(optix::cross(_lookat,_up));
+    m_U = optix::cross(_lookat,_up);
+
+//    m_V = optix::normalize(optix::cross(m_U,_lookat));
+    m_V = optix::cross(m_U,_lookat);
+
 
     float length = optix::length(_lookat);
     float height = 2.0*tan(_vfov/2.0) * length;
