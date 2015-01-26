@@ -6,6 +6,7 @@
 #include <iostream>
 
 const static float INCREMENT=0.01;
+const static int RESOLOUTION_SCALE = 2;
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -144,8 +145,7 @@ void OpenGLWidget::initializeGL(){
 void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    m_pathTracer->resize(_w,_h);
-    //m_cam->setShape(_w, _h);
+    m_pathTracer->resize(_w/RESOLOUTION_SCALE,_h/RESOLOUTION_SCALE);
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ void OpenGLWidget::paintGL(){
       if(buffer_format == RT_FORMAT_UNSIGNED_BYTE4) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width(), height(), 0, GL_BGRA, GL_UNSIGNED_BYTE, 0);
       } else if(buffer_format == RT_FORMAT_FLOAT4) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width(), height(), 0, GL_RGBA, GL_FLOAT, 0);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
       } else if(buffer_format == RT_FORMAT_FLOAT3) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB32F_ARB, width(), height(),0, GL_RGB, GL_FLOAT, 0);
       } else if(buffer_format == RT_FORMAT_FLOAT) {

@@ -40,7 +40,7 @@ void PathTracerScene::init(){
 
     m_outputBuffer = m_context->createBufferFromGLBO(RT_BUFFER_OUTPUT,vbo);
     m_outputBuffer->setFormat(RT_FORMAT_FLOAT4);
-    m_outputBuffer->setSize(m_width,m_height);
+    m_outputBuffer->setSize(m_width/2,m_height/2);
 //    m_outputBuffer = m_context->createBuffer(RT_BUFFER_OUTPUT,RT_FORMAT_FLOAT4, m_width, m_height);
     output_buffer->set(m_outputBuffer);
 
@@ -101,7 +101,7 @@ void PathTracerScene::createGeometry(){
       light.v1       = make_float3( -130.0f, 0.0f, 0.0f);
       light.v2       = make_float3( 0.0f, 0.0f, 105.0f);
       light.normal   = normalize( cross(light.v1, light.v2) );
-      light.emission = make_float3( 15.0f, 15.0f, 5.0f );
+      light.emission = make_float3( 25.0f, 25.0f, 25.0f );
 
       Buffer light_buffer = m_context->createBuffer( RT_BUFFER_INPUT );
       light_buffer->setFormat( RT_FORMAT_USER );
@@ -110,7 +110,8 @@ void PathTracerScene::createGeometry(){
       memcpy( light_buffer->map(), &light, sizeof( light ) );
       light_buffer->unmap();
       m_context["lights"]->setBuffer( light_buffer );
-      // Set up material
+
+      // Set up diffuse material
       Material diffuse = m_context->createMaterial();
       std::string ptx_path = "ptx/path_tracer.cu.ptx";
       Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "diffuse" );
@@ -122,6 +123,13 @@ void PathTracerScene::createGeometry(){
       Program diffuse_em = m_context->createProgramFromPTXFile( ptx_path, "diffuseEmitter" );
       diffuse_light->setClosestHitProgram( 0, diffuse_em );
 
+      // Reflective Material
+      Material reflective_material = m_context->createMaterial();
+      Program reflective_ch = m_context->createProgramFromPTXFile( ptx_path, "reflections");
+      reflective_material->setClosestHitProgram(0, reflective_ch);
+      Program reflective_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow");
+      reflective_material->setAnyHitProgram(1, reflective_ah);
+
       // Set up parallelogram programs
       ptx_path = "ptx/parallelogram.cu.ptx";
       m_pgram_bounding_box = m_context->createProgramFromPTXFile( ptx_path, "bounds" );
@@ -130,7 +138,7 @@ void PathTracerScene::createGeometry(){
       // create geometry instances
       std::vector<GeometryInstance> gis;
 
-      const float3 white = make_float3( 0.8f, 0.8f, 0.8f );
+      const float3 white = make_float3( 1.0f, 1.0f, 1.0f );
       const float3 green = make_float3( 0.05f, 0.8f, 0.05f );
       const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
       const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
@@ -139,7 +147,10 @@ void PathTracerScene::createGeometry(){
       gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
                                           make_float3( 0.0f, 0.0f, 559.2f ),
                                           make_float3( 556.0f, 0.0f, 0.0f ) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+
 
       // Ceiling
       gis.push_back( createParallelogram( make_float3( 0.0f, 548.8f, 0.0f ),

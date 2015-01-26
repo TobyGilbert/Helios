@@ -26,8 +26,10 @@ SOURCES += \
     src/optixsample.cpp \
     src/optixsampletwo.cpp \
     src/pathtracerscene.cpp \
-    src/pinholecamera.cpp
+    src/pinholecamera.cpp \
+    optixSrc/*.cu
 
+SOURCES -= optixSrc/*.cu
 
 HEADERS += \
     include/mainwindow.h \
