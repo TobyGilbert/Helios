@@ -93,13 +93,13 @@ RT_PROGRAM void intersect_sphere(int primIdx){
         float root1 = (-b - sdisc);
         bool check_second = true;
         if( rtPotentialIntersection( root1 ) ) {
-            shading_normal = geometric_normal = (O + root1*ray.direction) / radius;
+            shading_normal = geometric_normal = make_float3(0.0, 0.0, 1.0);// ((ray.origin + root1*ray.direction) - center)/radius;
             if( rtReportIntersection( 0 ) ) check_second = false;
         }
         if( check_second ) {
             float root2 = (-b + sdisc);
             if( rtPotentialIntersection( root2 ) ) {
-                shading_normal = geometric_normal = (O + root2*ray.direction) / radius;
+                shading_normal = geometric_normal = make_float3(0.0, 0.0, 1.0);//((ray.origin + root2*ray.direction)- center)/radius;
                 rtReportIntersection( 0 );
             }
         }

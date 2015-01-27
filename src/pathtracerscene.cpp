@@ -158,13 +158,18 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
 
       // Sphere
-      gis.push_back( createSphere(make_float4(0.0, 0.0, 0.0, 200.0)));
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
+////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["reflectivity"]->setFloat(0.5);
+//      gis.back()["max_depth"]->setInt(3);
 
       // Floor
       gis.push_back( createParallelogram( make_float3( -1000.0f, 0.0f, 0.0f ),
                                           make_float3( 0.0f, 0.0f, 2000.2f ),
                                           make_float3( 2000.0f, 0.0f, 0.0f ) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
       gis.back()["reflectivity"]->setFloat(0.5);
