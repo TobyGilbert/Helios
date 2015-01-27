@@ -57,7 +57,6 @@ void PathTracerScene::init(){
     camera.getEyeUVW(eye,U,V,W);
 
     //set up our camera in our engine
-<<<<<<< HEAD
     m_context["eye"]->setFloat( eye );
     m_context["U"]->setFloat( U );
     m_context["V"]->setFloat( V );
@@ -70,23 +69,6 @@ void PathTracerScene::init(){
     std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
 
-=======
-//    m_context["eye"]->setFloat( eye );
-//    m_context["U"]->setFloat( U );
-//    m_context["V"]->setFloat( V );
-//    m_context["W"]->setFloat( make_float3(0, 0, 800));
-
-//    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
-//    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
-//    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
-//    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
-
-    m_context["eye"]->setFloat( make_float3(278,273,-800) );
-    m_context["U"]->setFloat( make_float3(-252.239,0,0) );
-    m_context["V"]->setFloat( make_float3(0,252.239,0) );
-    m_context["W"]->setFloat( make_float3(0,0,800) );
-
->>>>>>> ef126158d2be7e1bdaa661fc98385813925effa7
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( optix::make_float3(0.0f) );
