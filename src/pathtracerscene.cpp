@@ -146,8 +146,12 @@ void PathTracerScene::createGeometry(){
       ptx_path = "ptx/parallelogram.cu.ptx";
       m_pgram_bounding_box = m_context->createProgramFromPTXFile( ptx_path, "bounds" );
       m_pgram_intersection = m_context->createProgramFromPTXFile( ptx_path, "intersect" );
+
+      // Set up sphere programs
+      ptx_path = "ptx/sphere.cu.ptx";
       m_pgram_bounding_sphere = m_context->createProgramFromPTXFile(ptx_path, "bounds_sphere");
       m_pgram_sphereIntersection = m_context->createProgramFromPTXFile(ptx_path, "intersect_sphere");
+
 
       // create geometry instances
       std::vector<GeometryInstance> gis;
@@ -158,8 +162,8 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
 
       // Sphere
-//      gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
-////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 //      gis.back()->addMaterial(reflective_material);
 //      gis.back()["diffuse_color"]->setFloat(white);
 //      gis.back()["reflectivity"]->setFloat(0.5);

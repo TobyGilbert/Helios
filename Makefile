@@ -227,7 +227,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: helios.pro .qmake.cache /Users/Toby/Qt5.2.1/5.2.1/clang_64/mkspecs/macx-clang/qmake.conf /Users/Toby/Qt5.2.1/5.2.1/clang_64/mkspecs/features/spec_pre.prf \
@@ -470,7 +470,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d obj/Helios.out1.0.0 || mkdir -p obj/Helios.out1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/box.cu optixSrc/constantbg.cu optixSrc/draw_color.cu optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/phong.cu optixSrc/pinhole_camera.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/Model.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/Model.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/sphere.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/Model.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/Model.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
 
 
 clean:compiler_clean 
@@ -491,89 +491,9 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_optix_make_all: ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx
+compiler_optix_make_all: ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx
 compiler_optix_clean:
-	-$(DEL_FILE) ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx
-ptx/box.cu.ptx: /Developer/OptiX/include/optix.h \
-		/Developer/OptiX/include/optix_device.h \
-		/Developer/OptiX/include/internal/optix_datatypes.h \
-		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
-		/Developer/OptiX/include/optixu/optixu_vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
-		/Developer/OptiX/include/internal/optix_declarations.h \
-		/Developer/OptiX/include/internal/optix_internal.h \
-		/Developer/OptiX/include/internal/optix_defines.h \
-		/Developer/OptiX/include/optix_sizet.h \
-		/Developer/OptiX/include/optix_host.h \
-		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h \
-		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_aabb_namespace.h \
-		optixSrc/box.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/box.cu -o ptx/box.cu.ptx
-
-ptx/constantbg.cu.ptx: /Developer/OptiX/include/optix_world.h \
-		/Developer/OptiX/include/optix_host.h \
-		/Developer/OptiX/include/internal/optix_declarations.h \
-		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
-		/Developer/OptiX/include/optix_device.h \
-		/Developer/OptiX/include/internal/optix_datatypes.h \
-		/Developer/OptiX/include/optixu/optixu_vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
-		/Developer/OptiX/include/internal/optix_internal.h \
-		/Developer/OptiX/include/internal/optix_defines.h \
-		/Developer/OptiX/include/optix_sizet.h \
-		/Developer/OptiX/include/optix_d3d9_interop.h \
-		/Developer/OptiX/include/optix.h \
-		/Developer/OptiX/include/optix_d3d10_interop.h \
-		/Developer/OptiX/include/optix_d3d11_interop.h \
-		/Developer/OptiX/include/optix_gl_interop.h \
-		/Developer/OptiX/include/optixu/optixu.h \
-		/Developer/OptiX/include/optixu/optixu_traversal.h \
-		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h \
-		/Developer/OptiX/include/optixu/optixpp_namespace.h \
-		/Developer/OptiX/include/optix_cuda_interop.h \
-		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_aabb_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		optixSrc/constantbg.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/constantbg.cu -o ptx/constantbg.cu.ptx
-
-ptx/draw_color.cu.ptx: /Developer/OptiX/include/optix.h \
-		/Developer/OptiX/include/optix_device.h \
-		/Developer/OptiX/include/internal/optix_datatypes.h \
-		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
-		/Developer/OptiX/include/optixu/optixu_vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
-		/Developer/OptiX/include/internal/optix_declarations.h \
-		/Developer/OptiX/include/internal/optix_internal.h \
-		/Developer/OptiX/include/internal/optix_defines.h \
-		/Developer/OptiX/include/optix_sizet.h \
-		/Developer/OptiX/include/optix_host.h \
-		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h \
-		optixSrc/draw_color.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/draw_color.cu -o ptx/draw_color.cu.ptx
-
+	-$(DEL_FILE) ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx
 ptx/parallelogram.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optix_host.h \
 		/Developer/OptiX/include/internal/optix_declarations.h \
@@ -641,46 +561,7 @@ ptx/path_tracer.cu.ptx: /Developer/OptiX/include/optix.h \
 		optixSrc/path_tracer.cu
 	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/path_tracer.cu -o ptx/path_tracer.cu.ptx
 
-ptx/phong.cu.ptx: /Developer/OptiX/include/optix.h \
-		/Developer/OptiX/include/optix_device.h \
-		/Developer/OptiX/include/internal/optix_datatypes.h \
-		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
-		/Developer/OptiX/include/optixu/optixu_vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
-		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
-		/Developer/OptiX/include/internal/optix_declarations.h \
-		/Developer/OptiX/include/internal/optix_internal.h \
-		/Developer/OptiX/include/internal/optix_defines.h \
-		/Developer/OptiX/include/optix_sizet.h \
-		/Developer/OptiX/include/optix_host.h \
-		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h \
-		include/phong.h \
-		/Developer/OptiX/include/optix_world.h \
-		/Developer/OptiX/include/optix_d3d9_interop.h \
-		/Developer/OptiX/include/optix_d3d10_interop.h \
-		/Developer/OptiX/include/optix_d3d11_interop.h \
-		/Developer/OptiX/include/optix_gl_interop.h \
-		/Developer/OptiX/include/optixu/optixu.h \
-		/Developer/OptiX/include/optixu/optixu_traversal.h \
-		/Developer/OptiX/include/optixu/optixpp_namespace.h \
-		/Developer/OptiX/include/optix_cuda_interop.h \
-		/Developer/OptiX/include/optixu/optixu_aabb_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/Developer/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		include/commonStructs.h \
-		include/helpers.h \
-		/Developer/OptiX/include/optix_math.h \
-		/Developer/OptiX/include/optixu/optixu_math.h \
-		optixSrc/phong.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/phong.cu -o ptx/phong.cu.ptx
-
-ptx/pinhole_camera.cu.ptx: /Developer/OptiX/include/optix_world.h \
+ptx/sphere.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optix_host.h \
 		/Developer/OptiX/include/internal/optix_declarations.h \
 		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
@@ -711,11 +592,8 @@ ptx/pinhole_camera.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optixu/optixu_aabb_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		include/helpers.h \
-		/Developer/OptiX/include/optix_math.h \
-		/Developer/OptiX/include/optixu/optixu_math.h \
-		optixSrc/pinhole_camera.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/pinhole_camera.cu -o ptx/pinhole_camera.cu.ptx
+		optixSrc/sphere.cu
+	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/sphere.cu -o ptx/sphere.cu.ptx
 
 compiler_objective_c_make_all:
 compiler_objective_c_clean:
