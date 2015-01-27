@@ -6,8 +6,8 @@
 
 PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
                                     , m_sqrt_num_samples( 2u )
-                                    , m_width(512u)
-                                    , m_height(512u)
+                                    , m_width(512)
+                                    , m_height(512)
                                     , m_frame(0)
 {
     // create an instance of our OptiX engine
@@ -52,7 +52,6 @@ void PathTracerScene::init(){
                          35.0f,                                          //hfov
                          35.0f);                                         //vfov
 
-
     float3 eye,U,V,W;
     camera.getEyeUVW(eye,U,V,W);
 
@@ -62,12 +61,11 @@ void PathTracerScene::init(){
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
 
-    std::cout<<"Camera paramiters: "<<std::endl;
-    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
-    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
-    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
-    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
-
+//    std::cout<<"Camera paramiters: "<<std::endl;
+//    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
+//    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
+//    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
+//    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
@@ -159,7 +157,7 @@ void PathTracerScene::createGeometry(){
       const float3 white = make_float3( 1.0f, 1.0f, 1.0f );
       const float3 green = make_float3( 0.05f, 0.8f, 0.05f );
       const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
-      const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
+      const float3 light_em = make_float3( 15.0f, 15.0f, 15.0f );
 
       // Sphere
       gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
