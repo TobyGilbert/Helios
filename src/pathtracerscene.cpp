@@ -164,11 +164,11 @@ void PathTracerScene::createGeometry(){
       gis.back()["reflectivity"]->setFloat(0.5);
       gis.back()["max_depth"]->setInt(3);
 
-      // Ceiling
-      gis.push_back( createParallelogram( make_float3( 0.0f, 548.8f, 0.0f ),
-                                          make_float3( 556.0f, 0.0f, 0.0f ),
-                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      // Ceiling
+//      gis.push_back( createParallelogram( make_float3( 0.0f, 548.8f, 0.0f ),
+//                                          make_float3( 556.0f, 0.0f, 0.0f ),
+//                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
 ////      // Back wall
 //      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 559.2f),
