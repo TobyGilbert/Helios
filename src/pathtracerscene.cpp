@@ -57,6 +57,7 @@ void PathTracerScene::init(){
     camera.getEyeUVW(eye,U,V,W);
 
     //set up our camera in our engine
+<<<<<<< HEAD
     m_context["eye"]->setFloat( eye );
     m_context["U"]->setFloat( U );
     m_context["V"]->setFloat( V );
@@ -69,6 +70,23 @@ void PathTracerScene::init(){
     std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
 
+=======
+//    m_context["eye"]->setFloat( eye );
+//    m_context["U"]->setFloat( U );
+//    m_context["V"]->setFloat( V );
+//    m_context["W"]->setFloat( make_float3(0, 0, 800));
+
+//    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
+//    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
+//    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
+//    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
+
+    m_context["eye"]->setFloat( make_float3(278,273,-800) );
+    m_context["U"]->setFloat( make_float3(-252.239,0,0) );
+    m_context["V"]->setFloat( make_float3(0,252.239,0) );
+    m_context["W"]->setFloat( make_float3(0,0,800) );
+
+>>>>>>> ef126158d2be7e1bdaa661fc98385813925effa7
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( optix::make_float3(0.0f) );
@@ -88,15 +106,15 @@ void PathTracerScene::init(){
     m_context["frame_number"]->setUint(1);
 
     // Index of sampling_stategy (BSDF, light, MIS)
-   m_sampling_strategy = 0;
-   m_context["sampling_stategy"]->setInt(m_sampling_strategy);
+    m_sampling_strategy = 0;
+    m_context["sampling_stategy"]->setInt(m_sampling_strategy);
 
-   // Create scene geometry
-   createGeometry();
+    // Create scene geometry
+    createGeometry();
 
-   // Finalize
-   m_context->validate();
-   m_context->compile();
+    // Finalize
+    m_context->validate();
+    m_context->compile();
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::createGeometry(){
@@ -146,6 +164,8 @@ void PathTracerScene::createGeometry(){
       ptx_path = "ptx/parallelogram.cu.ptx";
       m_pgram_bounding_box = m_context->createProgramFromPTXFile( ptx_path, "bounds" );
       m_pgram_intersection = m_context->createProgramFromPTXFile( ptx_path, "intersect" );
+      m_pgram_bounding_sphere = m_context->createProgramFromPTXFile(ptx_path, "bounds_sphere");
+      m_pgram_sphereIntersection = m_context->createProgramFromPTXFile(ptx_path, "intersect_sphere");
 
       // create geometry instances
       std::vector<GeometryInstance> gis;
@@ -154,6 +174,10 @@ void PathTracerScene::createGeometry(){
       const float3 green = make_float3( 0.05f, 0.8f, 0.05f );
       const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
       const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
+
+      // Sphere
+      gis.push_back( createSphere(make_float4(0.0, 0.0, 0.0, 200.0)));
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
       // Floor
       gis.push_back( createParallelogram( make_float3( -1000.0f, 0.0f, 0.0f ),
@@ -231,7 +255,11 @@ void PathTracerScene::createGeometry(){
       gis.push_back( createParallelogram( make_float3( 265.0f, 0.0f, 296.0f),
                                           make_float3( 0.0f, 330.0f, 0.0f),
                                           make_float3( 158.0f, 0.0f, -49.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["reflectivity"]->setFloat(0.5);
+      gis.back()["max_depth"]->setInt(5);
 
       // Create shadow group (no light)
       GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
@@ -297,7 +325,21 @@ optix::GeometryInstance PathTracerScene::createLightParallelogram(const float3 &
     gi->setGeometry(parallelogram);
     return gi;
 }
+//----------------------------------------------------------------------------------------------------------------------
+optix::GeometryInstance PathTracerScene::createSphere(const float4 &sphereLoc){
+    Geometry sphere = m_context->createGeometry();
 
+    sphere->setPrimitiveCount( 1u );
+    sphere->setIntersectionProgram( m_pgram_sphereIntersection );
+    sphere->setBoundingBoxProgram( m_pgram_bounding_sphere );
+
+    sphere["sphere"]->setFloat( sphereLoc );
+
+    GeometryInstance gi = m_context->createGeometryInstance();
+    gi->setGeometry(sphere);
+
+    return gi;
+}
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material material, const std::string &color_name, const float3 &color){
     gi->addMaterial(material);
