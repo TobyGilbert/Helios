@@ -1,6 +1,7 @@
 #include "pinholecamera.h"
 
 #include <optixu/optixu_math_namespace.h>
+#include <cmath>
 
 PinholeCamera::PinholeCamera()
 {
@@ -15,19 +16,13 @@ void PinholeCamera::setParameters(float3 _eye, float3 _lookat, float3 _up, float
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PinholeCamera::calcVectors(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
-//    m_U = optix::normalize(optix::cross(_lookat,_up));
-    m_U = optix::cross(_lookat,_up);
-
-//    m_V = optix::normalize(optix::cross(m_U,_lookat));
-    m_V = optix::cross(m_U,_lookat);
-
-
-    float length = optix::length(_lookat);
-    float height = 2.0*tan(_vfov/2.0) * length;
-    float width = 2.0*tan(_hfov/2.0) * length;
-
-    m_W = 0.5*width*m_U + 0.5*height*m_V - _eye;
     m_eye = _eye;
+    m_W = _lookat - _eye;
+    float lookdir_len = optix::length(m_W);
+    m_U = optix::normalize(optix::cross(m_W,_up));
+    m_V = optix::normalize(optix::cross(m_U,m_W));
+    m_U*= lookdir_len * tanf(DtoR(_hfov*0.5f));
+    m_V*= lookdir_len * tanf(DtoR(_vfov*0.5f));
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PinholeCamera::getEyeUVW(float3 &_eye, float3 &_U, float3 &_V, float3 &_W){

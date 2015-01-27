@@ -42,7 +42,7 @@ void PathTracerScene::init(){
 
     m_outputBuffer = m_context->createBufferFromGLBO(RT_BUFFER_OUTPUT,vbo);
     m_outputBuffer->setFormat(RT_FORMAT_FLOAT4);
-    m_outputBuffer->setSize(m_width/2,m_height/2);
+    m_outputBuffer->setSize(m_width/m_devicePixelRatio,m_height/m_devicePixelRatio);
 //    m_outputBuffer = m_context->createBuffer(RT_BUFFER_OUTPUT,RT_FORMAT_FLOAT4, m_width, m_height);
     output_buffer->set(m_outputBuffer);
 
@@ -57,22 +57,16 @@ void PathTracerScene::init(){
     camera.getEyeUVW(eye,U,V,W);
 
     //set up our camera in our engine
-//    m_context["eye"]->setFloat( eye );
-//    m_context["U"]->setFloat( U );
-//    m_context["V"]->setFloat( V );
-//    m_context["W"]->setFloat( make_float3(0, 0, 800));
+    m_context["eye"]->setFloat( eye );
+    m_context["U"]->setFloat( U );
+    m_context["V"]->setFloat( V );
+    m_context["W"]->setFloat( W);
 
-//    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
-//    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
-//    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
-//    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
-
-
-    m_context["eye"]->setFloat( make_float3(278,273,-800) );
-    m_context["U"]->setFloat( make_float3(-252.239,0,0) );
-    m_context["V"]->setFloat( make_float3(0,252.239,0) );
-    m_context["W"]->setFloat( make_float3(0,0,800) );
-
+    std::cout<<"Camera paramiters: "<<std::endl;
+    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
+    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
+    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
+    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
 
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
@@ -176,23 +170,23 @@ void PathTracerScene::createGeometry(){
                                           make_float3( 0.0f, 0.0f, 559.2f ) ) );
       setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-//      // Back wall
-      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 559.2f),
-                                          make_float3( 0.0f, 548.8f, 0.0f),
-                                          make_float3( 556.0f, 0.0f, 0.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+////      // Back wall
+//      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 559.2f),
+//                                          make_float3( 0.0f, 548.8f, 0.0f),
+//                                          make_float3( 556.0f, 0.0f, 0.0f) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-      // Right wall
-      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
-                                          make_float3( 0.0f, 548.8f, 0.0f ),
-                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", green);
+//      // Right wall
+//      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
+//                                          make_float3( 0.0f, 548.8f, 0.0f ),
+//                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", green);
 
-      // Left wall
-      gis.push_back( createParallelogram( make_float3( 556.0f, 0.0f, 0.0f ),
-                                          make_float3( 0.0f, 0.0f, 559.2f ),
-                                          make_float3( 0.0f, 548.8f, 0.0f ) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", red);
+//      // Left wall
+//      gis.push_back( createParallelogram( make_float3( 556.0f, 0.0f, 0.0f ),
+//                                          make_float3( 0.0f, 0.0f, 559.2f ),
+//                                          make_float3( 0.0f, 548.8f, 0.0f ) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", red);
 
 //      // Short block
 //      gis.push_back( createParallelogram( make_float3( 130.0f, 165.0f, 65.0f),
@@ -346,8 +340,8 @@ void PathTracerScene::trace(){
 
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::resize(int _width, int _height){
-    m_width = _width/2;
-    m_height = _height/2;
+    m_width = _width/m_devicePixelRatio;
+    m_height = _height/m_devicePixelRatio;
 
     unsigned int elementSize = m_outputBuffer->getElementSize();
     GLuint handleID = m_outputBuffer->getGLBOId();

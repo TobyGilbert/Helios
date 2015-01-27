@@ -45,6 +45,7 @@ void OpenGLWidget::initializeGL(){
     m_pathTracer = new PathTracerScene();
     m_pathTracer->setNumSamples(2u);
     m_pathTracer->setSize(width(),height());
+    m_pathTracer->setDevicePixelRatio(devicePixelRatio());
     m_pathTracer->init();
 
     //create our plane to project our scene onto

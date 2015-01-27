@@ -133,7 +133,9 @@ optix.output = $$PTX_DIR/${QMAKE_FILE_BASE}.cu.ptx
 
 # Tweak arch according to your hw's compute capability
 #for optix you can only have one architechture when using the PTX flags when using the -ptx flag you dont want to have the -c flag for compiling
-optix.commands = $$CUDA_DIR/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+macx:optix.commands = $$CUDA_DIR/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+linux:optix.commands = $$CUDA_DIR/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+
 #use this line for debug code
 #optix.commands = $$CUDA_DIR/bin/nvcc -m64 -g -G -gencode arch=compute_52,code=sm_52 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 #Declare that we wnat to do this before compiling the C++ code
