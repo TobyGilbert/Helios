@@ -277,7 +277,6 @@ RT_PROGRAM void reflections(){
     float3 v1, v2;
     createONB(ffnormal, v1, v2);
     current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
-    float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
 
   // Get reflection colour
     if (current_prd.depth < max_depth){
@@ -287,7 +286,6 @@ RT_PROGRAM void reflections(){
         reflection_prd.countEmitted = true;
         reflection_prd.done = false;
         reflection_prd.inside = false;
-//        reflection_prd.seed = seed;
         reflection_prd.depth = current_prd.depth+1;
         reflection_prd.colour = make_float3(1.0, 1.0, 1.0);
         float3 R = reflect(ray.direction, ffnormal);
@@ -299,7 +297,7 @@ RT_PROGRAM void reflections(){
 
     current_prd.colour = colour;
     current_prd.attenuation = current_prd.attenuation * colour;
-    current_prd.countEmitted = false;
+    current_prd.countEmitted = true;
     // Compute direct light...
     // Or shoot one...
     unsigned int num_lights = lights.size();

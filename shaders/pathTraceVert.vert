@@ -8,5 +8,5 @@ uniform mat4 MVP;
 void main(void)
 {
     VTexCoord = vertexTexCoord;
-    gl_Position = MVP * vec4(vec2(50.0, 50.0) *vertexPosition,-6.0,1.0);
+    gl_Position = MVP * vec4(vec2(50.0, 50.0) *vertexPosition,-7.0,1.0);
 }
