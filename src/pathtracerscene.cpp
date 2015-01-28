@@ -150,7 +150,6 @@ void PathTracerScene::createGeometry(){
       m_pgram_bounding_sphere = m_context->createProgramFromPTXFile(ptx_path, "bounds_sphere");
       m_pgram_sphereIntersection = m_context->createProgramFromPTXFile(ptx_path, "intersect_sphere");
 
-
       // create geometry instances
       std::vector<GeometryInstance> gis;
 
@@ -161,10 +160,9 @@ void PathTracerScene::createGeometry(){
 
       // Sphere
       gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(0.5);
+      gis.back()["reflectivity"]->setFloat(1.0);
       gis.back()["max_depth"]->setInt(3);
 
       // Floor
@@ -174,7 +172,7 @@ void PathTracerScene::createGeometry(){
 //      setMaterial(gis.back(), diffuse, "diffuse_color", white);
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(0.5);
+      gis.back()["reflectivity"]->setFloat(1.0);
       gis.back()["max_depth"]->setInt(3);
 
 //      // Ceiling
@@ -227,27 +225,43 @@ void PathTracerScene::createGeometry(){
       gis.push_back( createParallelogram( make_float3( 423.0f, 330.0f, 247.0f),
                                           make_float3( -158.0f, 0.0f, 49.0f),
                                           make_float3( 49.0f, 0.0f, 159.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["reflectivity"]->setFloat(1.0);
+      gis.back()["max_depth"]->setInt(5);
 
       gis.push_back( createParallelogram( make_float3( 423.0f, 0.0f, 247.0f),
                                           make_float3( 0.0f, 330.0f, 0.0f),
                                           make_float3( 49.0f, 0.0f, 159.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["reflectivity"]->setFloat(1.0);
+      gis.back()["max_depth"]->setInt(5);
       gis.push_back( createParallelogram( make_float3( 472.0f, 0.0f, 406.0f),
                                           make_float3( 0.0f, 330.0f, 0.0f),
                                           make_float3( -158.0f, 0.0f, 50.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["reflectivity"]->setFloat(1.0);
+      gis.back()["max_depth"]->setInt(5);
       gis.push_back( createParallelogram( make_float3( 314.0f, 0.0f, 456.0f),
                                           make_float3( 0.0f, 330.0f, 0.0f),
                                           make_float3( -49.0f, 0.0f, -160.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["reflectivity"]->setFloat(1.0);
+      gis.back()["max_depth"]->setInt(5);
       gis.push_back( createParallelogram( make_float3( 265.0f, 0.0f, 296.0f),
                                           make_float3( 0.0f, 330.0f, 0.0f),
                                           make_float3( 158.0f, 0.0f, -49.0f) ) );
 //      setMaterial(gis.back(), diffuse, "diffuse_color", white);
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(0.5);
+      gis.back()["reflectivity"]->setFloat(1.0);
       gis.back()["max_depth"]->setInt(5);
 
       // Create shadow group (no light)
@@ -256,10 +270,10 @@ void PathTracerScene::createGeometry(){
       m_context["top_shadower"]->set( shadow_group );
 
       // Light
-      gis.push_back( createParallelogram( make_float3( 343.0f, 548.6f, 227.0f),
-                                          make_float3( -130.0f, 0.0f, 0.0f),
-                                          make_float3( 0.0f, 0.0f, 105.0f) ) );
-      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+//      gis.push_back( createParallelogram( make_float3(348.0f, 548.6f, 250.0f),
+//                                          make_float3( -130.0f, 0.0f, 0.0f),
+//                                          make_float3( 0.0f, 0.0f, 105.0f) ) );
+//      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
