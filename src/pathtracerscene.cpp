@@ -140,6 +140,13 @@ void PathTracerScene::createGeometry(){
       procedural_floor_material->setClosestHitProgram(0, procedural_ch);
       procedural_floor_material->setAnyHitProgram(1, procedural_ah);
 
+      // Glass material
+      Material glass_material = m_context->createMaterial();
+      Program glass_ch = m_context->createProgramFromPTXFile( ptx_path, "glass_refract");
+      Program glass_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow");
+      glass_material->setClosestHitProgram(0, glass_ch);
+      glass_material->setAnyHitProgram(1, glass_ah);
+
       // Set up parallelogram programs
       ptx_path = "ptx/parallelogram.cu.ptx";
       m_pgram_bounding_box = m_context->createProgramFromPTXFile( ptx_path, "bounds" );
@@ -159,11 +166,30 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 15.0f, 15.0f, 15.0f );
 
       // Sphere
-      gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
+      gis.push_back( createSphere(make_float4(125.0, 250.0, 250.0, 100.0)));
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["reflectivity"]->setFloat(1.0);
+//      gis.back()["max_depth"]->setInt(3);
+      gis.back()->addMaterial(glass_material);
+      gis.back()["glass_color"]->setFloat(white);
+      gis.back()["index_of_refraction"]->setFloat(1.5);
+
+      gis.push_back( createSphere(make_float4(125.0, 250.0, 250.0, 95.0)));
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["reflectivity"]->setFloat(1.0);
+//      gis.back()["max_depth"]->setInt(3);
+      gis.back()->addMaterial(glass_material);
+      gis.back()["glass_color"]->setFloat(white);
+      gis.back()["index_of_refraction"]->setFloat(1.5);
+
+      gis.push_back( createSphere(make_float4(400.0, 250.0, 250.0, 100.0)));
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
       gis.back()["reflectivity"]->setFloat(1.0);
       gis.back()["max_depth"]->setInt(3);
+
 
       // Floor
       gis.push_back( createParallelogram( make_float3( -1000.0f, 0.0f, 0.0f ),
@@ -181,7 +207,7 @@ void PathTracerScene::createGeometry(){
 //                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
 //      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-////      // Back wall
+//////      // Back wall
 //      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 559.2f),
 //                                          make_float3( 0.0f, 548.8f, 0.0f),
 //                                          make_float3( 556.0f, 0.0f, 0.0f) ) );
@@ -221,48 +247,97 @@ void PathTracerScene::createGeometry(){
 //                                          make_float3( -158.0f, 0.0f, -47.0f) ) );
 //      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-      // Tall block
-      gis.push_back( createParallelogram( make_float3( 423.0f, 330.0f, 247.0f),
-                                          make_float3( -158.0f, 0.0f, 49.0f),
-                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(1.0);
-      gis.back()["max_depth"]->setInt(5);
+//      // Tall block
+//      gis.push_back( createParallelogram( make_float3( 423.0f, 330.0f, 247.0f),
+//                                          make_float3( -158.0f, 0.0f, 49.0f),
+//                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
+////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+////      gis.back()->addMaterial(reflective_material);
+////      gis.back()["diffuse_color"]->setFloat(white);
+////      gis.back()["reflectivity"]->setFloat(1.0);
+////      gis.back()["max_depth"]->setInt(5);
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
 
-      gis.push_back( createParallelogram( make_float3( 423.0f, 0.0f, 247.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(1.0);
-      gis.back()["max_depth"]->setInt(5);
-      gis.push_back( createParallelogram( make_float3( 472.0f, 0.0f, 406.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( -158.0f, 0.0f, 50.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(1.0);
-      gis.back()["max_depth"]->setInt(5);
-      gis.push_back( createParallelogram( make_float3( 314.0f, 0.0f, 456.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( -49.0f, 0.0f, -160.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(1.0);
-      gis.back()["max_depth"]->setInt(5);
-      gis.push_back( createParallelogram( make_float3( 265.0f, 0.0f, 296.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( 158.0f, 0.0f, -49.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(1.0);
-      gis.back()["max_depth"]->setInt(5);
+//      gis.push_back( createParallelogram( make_float3( 423.0f, 330.0f, 247.0f),
+//                                          make_float3( -158.0f, 0.0f, 49.0f),
+//                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+
+//      gis.push_back( createParallelogram( make_float3( 423.0f, 0.0f, 247.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
+////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+////      gis.back()->addMaterial(reflective_material);
+////      gis.back()["diffuse_color"]->setFloat(white);
+////      gis.back()["reflectivity"]->setFloat(1.0);
+////      gis.back()["max_depth"]->setInt(5);
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+//      gis.push_back( createParallelogram( make_float3( 423.0f, 0.0f, 247.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+
+//      gis.push_back( createParallelogram( make_float3( 472.0f, 0.0f, 406.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( -158.0f, 0.0f, 50.0f) ) );
+////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+////      gis.back()->addMaterial(reflective_material);
+////      gis.back()["diffuse_color"]->setFloat(white);
+////      gis.back()["reflectivity"]->setFloat(1.0);
+////      gis.back()["max_depth"]->setInt(5);
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+//      gis.push_back( createParallelogram( make_float3( 472.0f, 0.0f, 406.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( -158.0f, 0.0f, 50.0f) ) );
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+
+//      gis.push_back( createParallelogram( make_float3( 314.0f, 0.0f, 456.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( -49.0f, 0.0f, -160.0f) ) );
+////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+////      gis.back()->addMaterial(reflective_material);
+////      gis.back()["diffuse_color"]->setFloat(white);
+////      gis.back()["reflectivity"]->setFloat(1.0);
+////      gis.back()["max_depth"]->setInt(5);
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+//      gis.push_back( createParallelogram( make_float3( 314.0f, 0.0f, 456.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( -49.0f, 0.0f, -160.0f) ) );
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+
+//      gis.push_back( createParallelogram( make_float3( 265.0f, 0.0f, 296.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( 158.0f, 0.0f, -49.0f) ) );
+////      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+////      gis.back()->addMaterial(reflective_material);
+////      gis.back()["diffuse_color"]->setFloat(white);
+////      gis.back()["reflectivity"]->setFloat(1.0);
+////      gis.back()["max_depth"]->setInt(5);
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
+//      gis.push_back( createParallelogram( make_float3( 255.0f, 0.0f, 306.0f),
+//                                          make_float3( 0.0f, 320.0f, 0.0f),
+//                                          make_float3( 148.0f, 0.0f, -39.0f) ) );
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
 
       // Create shadow group (no light)
       GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());

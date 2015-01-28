@@ -6,8 +6,8 @@
 /// @author Declan Russell
 /// @date 27/01/2015
 
-#include<optixu/optixpp_namespace.h>
-#define M_PI 3.14159265359
+#include <optixu/optixpp_namespace.h>
+#include <cmath>
 
 class PinholeCamera
 {
