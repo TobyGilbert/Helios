@@ -294,11 +294,6 @@ RT_PROGRAM void reflections(){
         reflection_prd.done = false;
         reflection_prd.inside = false;
         reflection_prd.depth = current_prd.depth+1;
-<<<<<<< HEAD
-=======
-        reflection_prd.colour = make_float3(1.0, 1.0, 1.0);
-
->>>>>>> bb758e46d65476f937c60f1b9750277a525f4c0f
         float3 R = reflect(ray.direction, ffnormal);
         Ray refl_ray = make_Ray(hitpoint, R, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
         rtTrace(top_object, refl_ray, reflection_prd);

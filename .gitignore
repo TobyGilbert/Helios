@@ -36,3 +36,5 @@
 moc/
 obj/
 ptx/
+
+Makefile

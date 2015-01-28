@@ -10,7 +10,6 @@ MAKEFILE      = Makefile
 
 ####### Compiler, tools and options
 
-<<<<<<< HEAD
 CC            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang
 CXX           = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 DEFINES       = -DQT5BUILD -DDARWIN -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
@@ -19,24 +18,10 @@ CXXFLAGS      = -pipe -msse -msse2 -msse3 -arch x86_64 -g -gdwarf-2 -isysroot /A
 INCPATH       = -I/Users/Toby/Qt5.2.1/5.2.1/clang_64/mkspecs/macx-clang -I. -Iinclude -I/opt/local/include -I/usr/local/include -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include -I/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers -I/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framework/Versions/5/Headers -I/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers -I/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers -Imoc -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/AGL.framework/Headers -I. -F/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib
 LINK          = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++
 LFLAGS        = -headerpad_max_install_names -Wl,-syslibroot,/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk -mmacosx-version-min=10.6
-LIBS          = $(SUBLIBS) -L/Developer/NVIDIA/CUDA-6.5/lib -L/Developer/NVIDIA/CUDA-6.5/samples/common/lib -L/Developer/OptiX/lib64 -F/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix -framework QtOpenGL -framework QtWidgets -framework QtGui -framework QtCore -framework OpenGL -framework AGL 
+LIBS          = $(SUBLIBS) -L/Developer/NVIDIA/CUDA-6.5/lib -L/Developer/NVIDIA/CUDA-6.5/samples/common/lib -L/Developer/OptiX/lib64 -F/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix -loptixu -framework QtOpenGL -framework QtWidgets -framework QtGui -framework QtCore -framework OpenGL -framework AGL 
 AR            = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cq
 RANLIB        = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib -s
 QMAKE         = /Users/Toby/Qt5.2.1/5.2.1/clang_64/bin/qmake
-=======
-CC            = gcc
-CXX           = g++
-DEFINES       = -DQT5BUILD -DGL42 -DLINUX -DQT_OPENGL_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
-CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIE $(DEFINES)
-CXXFLAGS      = -pipe -msse -msse2 -msse3 -march=native -g -Wall -W -Wno-unused-parameter -D_REENTRANT -fPIE $(DEFINES)
-INCPATH       = -I/opt/Qt/5.2.1/gcc_64/mkspecs/linux-g++ -I. -Iinclude -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/targets/x86_64-linux/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include -I/opt/Qt/5.2.1/gcc_64/include -I/opt/Qt/5.2.1/gcc_64/include/QtOpenGL -I/opt/Qt/5.2.1/gcc_64/include/QtWidgets -I/opt/Qt/5.2.1/gcc_64/include/QtGui -I/opt/Qt/5.2.1/gcc_64/include/QtCore -Imoc -I.
-LINK          = g++
-LFLAGS        = -Wl,-rpath,/opt/Qt/5.2.1/gcc_64 -Wl,-rpath,/opt/Qt/5.2.1/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/usr/local/cuda-6.5/lib64 -L/usr/local/cuda-6.5/samples/common/lib -L/usr/local/OptiX/lib64 -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu -L/opt/Qt/5.2.1/gcc_64/lib -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
-AR            = ar cqs
-RANLIB        = 
-QMAKE         = /opt/Qt/5.2.1/gcc_64/bin/qmake
->>>>>>> Declan
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 COPY          = cp -f
@@ -242,11 +227,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-<<<<<<< HEAD
-$(TARGET): ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx ui_mainwindow.h $(OBJECTS)  
-=======
-$(TARGET): ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ptx/triangle_mesh.cu.ptx ui_mainwindow.h $(OBJECTS)  
->>>>>>> Declan
+$(TARGET): ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx ptx/triangle_mesh.cu.ptx ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: helios.pro .qmake.cache /Users/Toby/Qt5.2.1/5.2.1/clang_64/mkspecs/macx-clang/qmake.conf /Users/Toby/Qt5.2.1/5.2.1/clang_64/mkspecs/features/spec_pre.prf \
@@ -489,11 +470,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d obj/Helios.out1.0.0 || mkdir -p obj/Helios.out1.0.0
-<<<<<<< HEAD
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/sphere.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/Model.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/Model.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
-=======
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/box.cu optixSrc/constantbg.cu optixSrc/draw_color.cu optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/phong.cu optixSrc/pinhole_camera.cu optixSrc/triangle_mesh.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h include/optixmodel.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp src/optixmodel.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
->>>>>>> Declan
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/sphere.cu optixSrc/triangle_mesh.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h include/optixmodel.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp src/optixmodel.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
 
 
 clean:compiler_clean 
@@ -514,10 +491,9 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-<<<<<<< HEAD
-compiler_optix_make_all: ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx
+compiler_optix_make_all: ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx ptx/triangle_mesh.cu.ptx
 compiler_optix_clean:
-	-$(DEL_FILE) ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx
+	-$(DEL_FILE) ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/sphere.cu.ptx ptx/triangle_mesh.cu.ptx
 ptx/parallelogram.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optix_host.h \
 		/Developer/OptiX/include/internal/optix_declarations.h \
@@ -550,125 +526,7 @@ ptx/parallelogram.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_math_stream_namespace.h \
 		optixSrc/parallelogram.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/parallelogram.cu -o ptx/parallelogram.cu.ptx
-=======
-compiler_optix_make_all: ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ptx/triangle_mesh.cu.ptx
-compiler_optix_clean:
-	-$(DEL_FILE) ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ptx/triangle_mesh.cu.ptx
-ptx/box.cu.ptx: /usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
-		optixSrc/box.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/box.cu -o ptx/box.cu.ptx
-
-ptx/constantbg.cu.ptx: /usr/local/OptiX/include/optix_world.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_d3d9_interop.h \
-		/usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_d3d10_interop.h \
-		/usr/local/OptiX/include/optix_d3d11_interop.h \
-		/usr/local/OptiX/include/optix_gl_interop.h \
-		/usr/local/OptiX/include/optixu/optixu.h \
-		/usr/local/OptiX/include/optixu/optixu_traversal.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
-		/usr/local/OptiX/include/optix_cuda_interop.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		optixSrc/constantbg.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/constantbg.cu -o ptx/constantbg.cu.ptx
-
-ptx/draw_color.cu.ptx: /usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		optixSrc/draw_color.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/draw_color.cu -o ptx/draw_color.cu.ptx
-
-ptx/parallelogram.cu.ptx: /usr/local/OptiX/include/optix_world.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_d3d9_interop.h \
-		/usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_d3d10_interop.h \
-		/usr/local/OptiX/include/optix_d3d11_interop.h \
-		/usr/local/OptiX/include/optix_gl_interop.h \
-		/usr/local/OptiX/include/optixu/optixu.h \
-		/usr/local/OptiX/include/optixu/optixu_traversal.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
-		/usr/local/OptiX/include/optix_cuda_interop.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		optixSrc/parallelogram.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/parallelogram.cu -o ptx/parallelogram.cu.ptx
->>>>>>> Declan
+	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix -loptixu optixSrc/parallelogram.cu -o ptx/parallelogram.cu.ptx
 
 ptx/path_tracer.cu.ptx: /Developer/OptiX/include/optix.h \
 		/Developer/OptiX/include/optix_device.h \
@@ -701,8 +559,7 @@ ptx/path_tracer.cu.ptx: /Developer/OptiX/include/optix.h \
 		/opt/local/include/GL/glext.h \
 		include/random.h \
 		optixSrc/path_tracer.cu
-<<<<<<< HEAD
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/path_tracer.cu -o ptx/path_tracer.cu.ptx
+	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix -loptixu optixSrc/path_tracer.cu -o ptx/path_tracer.cu.ptx
 
 ptx/sphere.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optix_host.h \
@@ -736,110 +593,31 @@ ptx/sphere.cu.ptx: /Developer/OptiX/include/optix_world.h \
 		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_math_stream_namespace.h \
 		optixSrc/sphere.cu
-	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix optixSrc/sphere.cu -o ptx/sphere.cu.ptx
-=======
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/path_tracer.cu -o ptx/path_tracer.cu.ptx
+	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix -loptixu optixSrc/sphere.cu -o ptx/sphere.cu.ptx
 
-ptx/phong.cu.ptx: /usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		include/phong.h \
-		/usr/local/OptiX/include/optix_world.h \
-		/usr/local/OptiX/include/optix_d3d9_interop.h \
-		/usr/local/OptiX/include/optix_d3d10_interop.h \
-		/usr/local/OptiX/include/optix_d3d11_interop.h \
-		/usr/local/OptiX/include/optix_gl_interop.h \
-		/usr/local/OptiX/include/optixu/optixu.h \
-		/usr/local/OptiX/include/optixu/optixu_traversal.h \
-		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
-		/usr/local/OptiX/include/optix_cuda_interop.h \
-		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		include/commonStructs.h \
-		include/helpers.h \
-		/usr/local/OptiX/include/optix_math.h \
-		/usr/local/OptiX/include/optixu/optixu_math.h \
-		optixSrc/phong.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/phong.cu -o ptx/phong.cu.ptx
-
-ptx/pinhole_camera.cu.ptx: /usr/local/OptiX/include/optix_world.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_d3d9_interop.h \
-		/usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_d3d10_interop.h \
-		/usr/local/OptiX/include/optix_d3d11_interop.h \
-		/usr/local/OptiX/include/optix_gl_interop.h \
-		/usr/local/OptiX/include/optixu/optixu.h \
-		/usr/local/OptiX/include/optixu/optixu_traversal.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
-		/usr/local/OptiX/include/optix_cuda_interop.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_math_stream_namespace.h \
-		include/helpers.h \
-		/usr/local/OptiX/include/optix_math.h \
-		/usr/local/OptiX/include/optixu/optixu_math.h \
-		optixSrc/pinhole_camera.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/pinhole_camera.cu -o ptx/pinhole_camera.cu.ptx
-
-ptx/triangle_mesh.cu.ptx: /usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
-		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
-		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
+ptx/triangle_mesh.cu.ptx: /Developer/OptiX/include/optix.h \
+		/Developer/OptiX/include/optix_device.h \
+		/Developer/OptiX/include/internal/optix_datatypes.h \
+		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
+		/Developer/OptiX/include/optixu/optixu_vector_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
+		/Developer/OptiX/include/internal/optix_declarations.h \
+		/Developer/OptiX/include/internal/optix_internal.h \
+		/Developer/OptiX/include/internal/optix_defines.h \
+		/Developer/OptiX/include/optix_sizet.h \
+		/Developer/OptiX/include/optix_host.h \
+		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
+		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
+		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
+		/Developer/OptiX/include/optixu/optixu_aabb_namespace.h \
 		optixSrc/triangle_mesh.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/triangle_mesh.cu -o ptx/triangle_mesh.cu.ptx
->>>>>>> Declan
+	/Developer/NVIDIA/CUDA-6.5/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include/ -I/Developer/OptiX/SDK/sutil -I/Developer/OptiX/SDK -I/Developer/NVIDIA/CUDA-6.5/include -I/Developer/NVIDIA/CUDA-6.5/common/inc/ -I/Developer/NVIDIA/CUDA-6.5/../shared/inc/ -I/Developer/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lcudart -loptix -loptixu optixSrc/triangle_mesh.cu -o ptx/triangle_mesh.cu.ptx
 
 compiler_objective_c_make_all:
 compiler_objective_c_clean:
@@ -1001,6 +779,7 @@ moc/moc_mainwindow.cpp: /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framewo
 		include/helpers.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
+		include/optixmodel.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1140,6 +919,7 @@ moc/moc_OpenGLWidget.cpp: /Developer/OptiX/SDK/sutil/GL/glew.h \
 		include/helpers.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
+		include/optixmodel.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1329,6 +1109,7 @@ obj/main.o: src/main.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framew
 		include/helpers.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
+		include/optixmodel.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1493,6 +1274,7 @@ obj/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		include/helpers.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
+		include/optixmodel.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1802,120 +1584,6 @@ obj/Texture.o: src/Texture.cpp include/Texture.h \
 		include/TextureUtils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Texture.o src/Texture.cpp
 
-<<<<<<< HEAD
-obj/Model.o: src/Model.cpp include/Model.h \
-		/Developer/OptiX/SDK/sutil/GL/glew.h \
-		/opt/local/include/GL/glu.h \
-		/opt/local/include/GL/glu_mangle.h \
-		/opt/local/include/GL/gl.h \
-		/opt/local/include/GL/gl_mangle.h \
-		/opt/local/include/GL/glext.h \
-		/opt/local/include/assimp/Importer.hpp \
-		/opt/local/include/assimp/types.h \
-		/opt/local/include/assimp/defs.h \
-		/opt/local/include/assimp/vector3.h \
-		/opt/local/include/assimp/Compiler/pushpack1.h \
-		/opt/local/include/assimp/Compiler/poppack1.h \
-		/opt/local/include/assimp/vector2.h \
-		/opt/local/include/assimp/color4.h \
-		/opt/local/include/assimp/matrix3x3.h \
-		/opt/local/include/assimp/matrix4x4.h \
-		/opt/local/include/assimp/quaternion.h \
-		/opt/local/include/assimp/vector2.inl \
-		/opt/local/include/assimp/vector3.inl \
-		/opt/local/include/assimp/color4.inl \
-		/opt/local/include/glm/gtc/quaternion.inl \
-		/opt/local/include/glm/trigonometric.hpp \
-		/opt/local/include/glm/detail/func_trigonometric.hpp \
-		/opt/local/include/glm/detail/func_trigonometric.inl \
-		/opt/local/include/glm/detail/_vectorize.hpp \
-		/opt/local/include/glm/detail/type_vec1.hpp \
-		/opt/local/include/glm/fwd.hpp \
-		/opt/local/include/glm/detail/type_int.hpp \
-		/opt/local/include/glm/detail/setup.hpp \
-		/Developer/NVIDIA/CUDA-6.5/include/cuda.h \
-		/opt/local/include/glm/detail/type_float.hpp \
-		/opt/local/include/glm/detail/type_vec.hpp \
-		/opt/local/include/glm/detail/precision.hpp \
-		/opt/local/include/glm/detail/type_mat.hpp \
-		/opt/local/include/glm/detail/_swizzle.hpp \
-		/opt/local/include/glm/detail/_swizzle_func.hpp \
-		/opt/local/include/glm/detail/type_vec1.inl \
-		/opt/local/include/glm/detail/type_vec2.hpp \
-		/opt/local/include/glm/detail/type_vec2.inl \
-		/opt/local/include/glm/detail/type_vec3.hpp \
-		/opt/local/include/glm/detail/type_vec3.inl \
-		/opt/local/include/glm/detail/type_vec4.hpp \
-		/opt/local/include/glm/detail/type_vec4.inl \
-		/opt/local/include/glm/geometric.hpp \
-		/opt/local/include/glm/detail/func_geometric.hpp \
-		/opt/local/include/glm/detail/func_geometric.inl \
-		/opt/local/include/glm/detail/func_exponential.hpp \
-		/opt/local/include/glm/detail/func_exponential.inl \
-		/opt/local/include/glm/detail/func_vector_relational.hpp \
-		/opt/local/include/glm/detail/func_vector_relational.inl \
-		/opt/local/include/glm/detail/func_common.hpp \
-		/opt/local/include/glm/detail/_fixes.hpp \
-		/opt/local/include/glm/detail/func_common.inl \
-		/opt/local/include/glm/exponential.hpp \
-		/opt/local/include/assimp/matrix3x3.inl \
-		/opt/local/include/assimp/matrix4x4.inl \
-		/opt/local/include/assimp/config.h \
-		/opt/local/include/assimp/scene.h \
-		/opt/local/include/assimp/texture.h \
-		/opt/local/include/assimp/mesh.h \
-		/opt/local/include/assimp/light.h \
-		/opt/local/include/assimp/camera.h \
-		/opt/local/include/assimp/material.h \
-		/opt/local/include/assimp/material.inl \
-		/opt/local/include/assimp/anim.h \
-		/opt/local/include/assimp/postprocess.h \
-		/opt/local/include/glm/glm.hpp \
-		/opt/local/include/glm/vec2.hpp \
-		/opt/local/include/glm/vec3.hpp \
-		/opt/local/include/glm/vec4.hpp \
-		/opt/local/include/glm/mat2x2.hpp \
-		/opt/local/include/glm/detail/type_mat2x2.hpp \
-		/opt/local/include/glm/detail/type_mat2x2.inl \
-		/opt/local/include/glm/mat2x3.hpp \
-		/opt/local/include/glm/detail/type_mat2x3.hpp \
-		/opt/local/include/glm/detail/type_mat2x3.inl \
-		/opt/local/include/glm/mat2x4.hpp \
-		/opt/local/include/glm/detail/type_mat2x4.hpp \
-		/opt/local/include/glm/detail/type_mat2x4.inl \
-		/opt/local/include/glm/mat3x2.hpp \
-		/opt/local/include/glm/detail/type_mat3x2.hpp \
-		/opt/local/include/glm/detail/type_mat3x2.inl \
-		/opt/local/include/glm/mat3x3.hpp \
-		/opt/local/include/glm/detail/type_mat3x3.hpp \
-		/opt/local/include/glm/detail/type_mat3x3.inl \
-		/opt/local/include/glm/mat3x4.hpp \
-		/opt/local/include/glm/detail/type_mat3x4.hpp \
-		/opt/local/include/glm/detail/type_mat3x4.inl \
-		/opt/local/include/glm/mat4x2.hpp \
-		/opt/local/include/glm/detail/type_mat4x2.hpp \
-		/opt/local/include/glm/detail/type_mat4x2.inl \
-		/opt/local/include/glm/mat4x3.hpp \
-		/opt/local/include/glm/detail/type_mat4x3.hpp \
-		/opt/local/include/glm/detail/type_mat4x3.inl \
-		/opt/local/include/glm/mat4x4.hpp \
-		/opt/local/include/glm/detail/type_mat4x4.hpp \
-		/opt/local/include/glm/detail/type_mat4x4.inl \
-		/opt/local/include/glm/common.hpp \
-		/opt/local/include/glm/packing.hpp \
-		/opt/local/include/glm/detail/func_packing.hpp \
-		/opt/local/include/glm/detail/func_packing.inl \
-		/opt/local/include/glm/detail/type_half.hpp \
-		/opt/local/include/glm/detail/type_half.inl \
-		/opt/local/include/glm/matrix.hpp \
-		/opt/local/include/glm/detail/func_matrix.hpp \
-		/opt/local/include/glm/detail/func_matrix.inl \
-		/opt/local/include/glm/vector_relational.hpp \
-		/opt/local/include/glm/integer.hpp \
-		/opt/local/include/glm/detail/func_integer.hpp \
-		/opt/local/include/glm/detail/func_integer.inl
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Model.o src/Model.cpp
-
 obj/OpenGLWidget.o: src/OpenGLWidget.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QGuiApplication \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qguiapplication.h \
 		/Developer/OptiX/include/optixu/optixpp_namespace.h \
@@ -1940,111 +1608,6 @@ obj/OpenGLWidget.o: src/OpenGLWidget.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/
 		/Developer/OptiX/include/optix_d3d11_interop.h \
 		/Developer/OptiX/include/optix_gl_interop.h \
 		/Developer/OptiX/include/optix_cuda_interop.h \
-=======
-obj/OpenGLWidget.o: src/OpenGLWidget.cpp /opt/Qt/5.2.1/gcc_64/include/QtGui/QGuiApplication \
-		/opt/Qt/5.2.1/gcc_64/include/QtGui/qguiapplication.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qcoreapplication.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qglobal.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qconfig.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qfeatures.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qsystemdetection.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qprocessordetection.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qcompilerdetection.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qglobalstatic.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qbasicatomic.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qgenericatomic.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_msvc.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_integrity.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qoldbasicatomic.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_vxworks.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_power.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_alpha.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_armv7.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_armv6.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_armv5.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_bfin.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_ia64.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_mips.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_s390.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_sh4a.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_sparc.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_x86.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_cxx11.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_gcc.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qatomic_unix.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qmutex.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qlogging.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qflags.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qtypeinfo.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qtypetraits.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qsysinfo.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qstring.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qchar.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qbytearray.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qrefcount.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qnamespace.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qarraydata.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qstringbuilder.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qobject.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qobjectdefs.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qlist.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qalgorithms.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qiterator.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qcoreevent.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qscopedpointer.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qmetatype.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qvarlengtharray.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qcontainerfwd.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qisenum.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qobject_impl.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qeventloop.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtGui/qwindowdefs.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtGui/qwindowdefs_win.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtGui/qinputmethod.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qlocale.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qvariant.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qmap.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qpair.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qdebug.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qhash.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qtextstream.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qiodevice.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qvector.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qpoint.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qset.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qcontiguouscache.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qstringlist.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qdatastream.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qregexp.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qstringmatcher.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qshareddata.h \
-		/opt/Qt/5.2.1/gcc_64/include/QtCore/qsize.h \
-		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
-		/usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/optix_d3d9_interop.h \
-		/usr/local/OptiX/include/optix_d3d10_interop.h \
-		/usr/local/OptiX/include/optix_d3d11_interop.h \
-		/usr/local/OptiX/include/optix_gl_interop.h \
-		/usr/local/OptiX/include/optix_cuda_interop.h \
->>>>>>> Declan
 		include/OpenGLWidget.h \
 		/Developer/OptiX/SDK/sutil/GL/glew.h \
 		/opt/local/include/GL/glu.h \
@@ -2152,6 +1715,7 @@ obj/OpenGLWidget.o: src/OpenGLWidget.cpp /opt/Qt/5.2.1/gcc_64/include/QtGui/QGui
 		include/helpers.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
+		include/optixmodel.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -2289,6 +1853,84 @@ obj/pathtracerscene.o: src/pathtracerscene.cpp include/pathtracerscene.h \
 		include/helpers.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
+		include/optixmodel.h \
+		/opt/local/include/glm/glm.hpp \
+		/opt/local/include/glm/detail/_fixes.hpp \
+		/opt/local/include/glm/fwd.hpp \
+		/opt/local/include/glm/detail/type_int.hpp \
+		/opt/local/include/glm/detail/setup.hpp \
+		/Developer/NVIDIA/CUDA-6.5/include/cuda.h \
+		/opt/local/include/glm/detail/type_float.hpp \
+		/opt/local/include/glm/detail/type_vec.hpp \
+		/opt/local/include/glm/detail/precision.hpp \
+		/opt/local/include/glm/detail/type_mat.hpp \
+		/opt/local/include/glm/vec2.hpp \
+		/opt/local/include/glm/detail/type_vec2.hpp \
+		/opt/local/include/glm/detail/_swizzle.hpp \
+		/opt/local/include/glm/detail/_swizzle_func.hpp \
+		/opt/local/include/glm/detail/type_vec2.inl \
+		/opt/local/include/glm/vec3.hpp \
+		/opt/local/include/glm/detail/type_vec3.hpp \
+		/opt/local/include/glm/detail/type_vec3.inl \
+		/opt/local/include/glm/vec4.hpp \
+		/opt/local/include/glm/detail/type_vec4.hpp \
+		/opt/local/include/glm/detail/type_vec4.inl \
+		/opt/local/include/glm/mat2x2.hpp \
+		/opt/local/include/glm/detail/type_mat2x2.hpp \
+		/opt/local/include/glm/detail/type_mat2x2.inl \
+		/opt/local/include/glm/mat2x3.hpp \
+		/opt/local/include/glm/detail/type_mat2x3.hpp \
+		/opt/local/include/glm/detail/type_mat2x3.inl \
+		/opt/local/include/glm/mat2x4.hpp \
+		/opt/local/include/glm/detail/type_mat2x4.hpp \
+		/opt/local/include/glm/detail/type_mat2x4.inl \
+		/opt/local/include/glm/mat3x2.hpp \
+		/opt/local/include/glm/detail/type_mat3x2.hpp \
+		/opt/local/include/glm/detail/type_mat3x2.inl \
+		/opt/local/include/glm/mat3x3.hpp \
+		/opt/local/include/glm/detail/type_mat3x3.hpp \
+		/opt/local/include/glm/detail/type_mat3x3.inl \
+		/opt/local/include/glm/mat3x4.hpp \
+		/opt/local/include/glm/detail/type_mat3x4.hpp \
+		/opt/local/include/glm/detail/type_mat3x4.inl \
+		/opt/local/include/glm/mat4x2.hpp \
+		/opt/local/include/glm/detail/type_mat4x2.hpp \
+		/opt/local/include/glm/detail/type_mat4x2.inl \
+		/opt/local/include/glm/mat4x3.hpp \
+		/opt/local/include/glm/detail/type_mat4x3.hpp \
+		/opt/local/include/glm/detail/type_mat4x3.inl \
+		/opt/local/include/glm/mat4x4.hpp \
+		/opt/local/include/glm/detail/type_mat4x4.hpp \
+		/opt/local/include/glm/detail/type_mat4x4.inl \
+		/opt/local/include/glm/trigonometric.hpp \
+		/opt/local/include/glm/detail/func_trigonometric.hpp \
+		/opt/local/include/glm/detail/func_trigonometric.inl \
+		/opt/local/include/glm/detail/_vectorize.hpp \
+		/opt/local/include/glm/detail/type_vec1.hpp \
+		/opt/local/include/glm/detail/type_vec1.inl \
+		/opt/local/include/glm/exponential.hpp \
+		/opt/local/include/glm/detail/func_exponential.hpp \
+		/opt/local/include/glm/detail/func_exponential.inl \
+		/opt/local/include/glm/detail/func_vector_relational.hpp \
+		/opt/local/include/glm/detail/func_vector_relational.inl \
+		/opt/local/include/glm/common.hpp \
+		/opt/local/include/glm/detail/func_common.hpp \
+		/opt/local/include/glm/detail/func_common.inl \
+		/opt/local/include/glm/packing.hpp \
+		/opt/local/include/glm/detail/func_packing.hpp \
+		/opt/local/include/glm/detail/func_packing.inl \
+		/opt/local/include/glm/detail/type_half.hpp \
+		/opt/local/include/glm/detail/type_half.inl \
+		/opt/local/include/glm/geometric.hpp \
+		/opt/local/include/glm/detail/func_geometric.hpp \
+		/opt/local/include/glm/detail/func_geometric.inl \
+		/opt/local/include/glm/matrix.hpp \
+		/opt/local/include/glm/detail/func_matrix.hpp \
+		/opt/local/include/glm/detail/func_matrix.inl \
+		/opt/local/include/glm/vector_relational.hpp \
+		/opt/local/include/glm/integer.hpp \
+		/opt/local/include/glm/detail/func_integer.hpp \
+		/opt/local/include/glm/detail/func_integer.inl \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QColor \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h \
@@ -2353,29 +1995,133 @@ obj/HDRLoader.o: src/HDRLoader.cpp include/HDRLoader.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/HDRLoader.o src/HDRLoader.cpp
 
 obj/optixmodel.o: src/optixmodel.cpp include/optixmodel.h \
-		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
-		/usr/local/OptiX/include/optix.h \
-		/usr/local/OptiX/include/optix_device.h \
-		/usr/local/OptiX/include/internal/optix_datatypes.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
-		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
-		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
-		/usr/local/OptiX/include/internal/optix_declarations.h \
-		/usr/local/OptiX/include/internal/optix_internal.h \
-		/usr/local/OptiX/include/internal/optix_defines.h \
-		/usr/local/OptiX/include/optix_sizet.h \
-		/usr/local/OptiX/include/optix_host.h \
-		/usr/local/OptiX/include/optix_d3d9_interop.h \
-		/usr/local/OptiX/include/optix_d3d10_interop.h \
-		/usr/local/OptiX/include/optix_d3d11_interop.h \
-		/usr/local/OptiX/include/optix_gl_interop.h \
-		/usr/local/OptiX/include/optix_cuda_interop.h \
-		/usr/local/OptiX/include/optixu/optixu.h
+		/Developer/OptiX/include/optixu/optixpp_namespace.h \
+		/Developer/OptiX/include/optix.h \
+		/Developer/OptiX/include/optix_device.h \
+		/Developer/OptiX/include/internal/optix_datatypes.h \
+		/Developer/NVIDIA/CUDA-6.5/include/host_defines.h \
+		/Developer/OptiX/include/optixu/optixu_vector_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/vector_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/builtin_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/device_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/driver_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/surface_types.h \
+		/Developer/NVIDIA/CUDA-6.5/include/texture_types.h \
+		/Developer/OptiX/include/internal/optix_declarations.h \
+		/Developer/OptiX/include/internal/optix_internal.h \
+		/Developer/OptiX/include/internal/optix_defines.h \
+		/Developer/OptiX/include/optix_sizet.h \
+		/Developer/OptiX/include/optix_host.h \
+		/Developer/OptiX/include/optix_d3d9_interop.h \
+		/Developer/OptiX/include/optix_d3d10_interop.h \
+		/Developer/OptiX/include/optix_d3d11_interop.h \
+		/Developer/OptiX/include/optix_gl_interop.h \
+		/Developer/OptiX/include/optix_cuda_interop.h \
+		/opt/local/include/glm/glm.hpp \
+		/opt/local/include/glm/detail/_fixes.hpp \
+		/opt/local/include/glm/fwd.hpp \
+		/opt/local/include/glm/detail/type_int.hpp \
+		/opt/local/include/glm/detail/setup.hpp \
+		/Developer/NVIDIA/CUDA-6.5/include/cuda.h \
+		/opt/local/include/glm/detail/type_float.hpp \
+		/opt/local/include/glm/detail/type_vec.hpp \
+		/opt/local/include/glm/detail/precision.hpp \
+		/opt/local/include/glm/detail/type_mat.hpp \
+		/opt/local/include/glm/vec2.hpp \
+		/opt/local/include/glm/detail/type_vec2.hpp \
+		/opt/local/include/glm/detail/_swizzle.hpp \
+		/opt/local/include/glm/detail/_swizzle_func.hpp \
+		/opt/local/include/glm/detail/type_vec2.inl \
+		/opt/local/include/glm/vec3.hpp \
+		/opt/local/include/glm/detail/type_vec3.hpp \
+		/opt/local/include/glm/detail/type_vec3.inl \
+		/opt/local/include/glm/vec4.hpp \
+		/opt/local/include/glm/detail/type_vec4.hpp \
+		/opt/local/include/glm/detail/type_vec4.inl \
+		/opt/local/include/glm/mat2x2.hpp \
+		/opt/local/include/glm/detail/type_mat2x2.hpp \
+		/opt/local/include/glm/detail/type_mat2x2.inl \
+		/opt/local/include/glm/mat2x3.hpp \
+		/opt/local/include/glm/detail/type_mat2x3.hpp \
+		/opt/local/include/glm/detail/type_mat2x3.inl \
+		/opt/local/include/glm/mat2x4.hpp \
+		/opt/local/include/glm/detail/type_mat2x4.hpp \
+		/opt/local/include/glm/detail/type_mat2x4.inl \
+		/opt/local/include/glm/mat3x2.hpp \
+		/opt/local/include/glm/detail/type_mat3x2.hpp \
+		/opt/local/include/glm/detail/type_mat3x2.inl \
+		/opt/local/include/glm/mat3x3.hpp \
+		/opt/local/include/glm/detail/type_mat3x3.hpp \
+		/opt/local/include/glm/detail/type_mat3x3.inl \
+		/opt/local/include/glm/mat3x4.hpp \
+		/opt/local/include/glm/detail/type_mat3x4.hpp \
+		/opt/local/include/glm/detail/type_mat3x4.inl \
+		/opt/local/include/glm/mat4x2.hpp \
+		/opt/local/include/glm/detail/type_mat4x2.hpp \
+		/opt/local/include/glm/detail/type_mat4x2.inl \
+		/opt/local/include/glm/mat4x3.hpp \
+		/opt/local/include/glm/detail/type_mat4x3.hpp \
+		/opt/local/include/glm/detail/type_mat4x3.inl \
+		/opt/local/include/glm/mat4x4.hpp \
+		/opt/local/include/glm/detail/type_mat4x4.hpp \
+		/opt/local/include/glm/detail/type_mat4x4.inl \
+		/opt/local/include/glm/trigonometric.hpp \
+		/opt/local/include/glm/detail/func_trigonometric.hpp \
+		/opt/local/include/glm/detail/func_trigonometric.inl \
+		/opt/local/include/glm/detail/_vectorize.hpp \
+		/opt/local/include/glm/detail/type_vec1.hpp \
+		/opt/local/include/glm/detail/type_vec1.inl \
+		/opt/local/include/glm/exponential.hpp \
+		/opt/local/include/glm/detail/func_exponential.hpp \
+		/opt/local/include/glm/detail/func_exponential.inl \
+		/opt/local/include/glm/detail/func_vector_relational.hpp \
+		/opt/local/include/glm/detail/func_vector_relational.inl \
+		/opt/local/include/glm/common.hpp \
+		/opt/local/include/glm/detail/func_common.hpp \
+		/opt/local/include/glm/detail/func_common.inl \
+		/opt/local/include/glm/packing.hpp \
+		/opt/local/include/glm/detail/func_packing.hpp \
+		/opt/local/include/glm/detail/func_packing.inl \
+		/opt/local/include/glm/detail/type_half.hpp \
+		/opt/local/include/glm/detail/type_half.inl \
+		/opt/local/include/glm/geometric.hpp \
+		/opt/local/include/glm/detail/func_geometric.hpp \
+		/opt/local/include/glm/detail/func_geometric.inl \
+		/opt/local/include/glm/matrix.hpp \
+		/opt/local/include/glm/detail/func_matrix.hpp \
+		/opt/local/include/glm/detail/func_matrix.inl \
+		/opt/local/include/glm/vector_relational.hpp \
+		/opt/local/include/glm/integer.hpp \
+		/opt/local/include/glm/detail/func_integer.hpp \
+		/opt/local/include/glm/detail/func_integer.inl \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/glm/gtc/quaternion.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
+		/Developer/OptiX/include/optixu/optixu.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/optixmodel.o src/optixmodel.cpp
 
 obj/moc_mainwindow.o: moc/moc_mainwindow.cpp 
