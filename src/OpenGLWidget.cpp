@@ -27,6 +27,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
 OpenGLWidget::~OpenGLWidget(){
     delete m_pathTracer;
     delete m_shaderProgram;
+    delete m_cam;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::initializeGL(){
@@ -37,7 +38,7 @@ void OpenGLWidget::initializeGL(){
         std::cerr<<"GLEW IS NOT OK!!! "<<std::endl;
     }
 #endif
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     // as re-size is not explicitly called we need to do this.
     glViewport(0,0,width(),height());
@@ -63,13 +64,13 @@ void OpenGLWidget::initializeGL(){
     //the resulting image from a pinhole camera will be upside down
     float texCoords[]={
         //bottom left
-        0.0,0.0f,
+        1.0,1.0f,
         //top left
-        0.0f,1.0f,
-        //bottom right
         1.0f,0.0f,
+        //bottom right
+        0.0f,1.0f,
         //top right
-        1.0f,1.0f
+        0.0f,0.0f
 
     };
 
@@ -121,6 +122,8 @@ void OpenGLWidget::initializeGL(){
     m_texLoc = m_shaderProgram->getUniformLoc("pathTraceTex");
     glUniform1i(m_texLoc,0);
 
+    m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
+
     startTimer(0);
 
 }
@@ -129,6 +132,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
     m_pathTracer->resize(_w/RESOLOUTION_SCALE,_h/RESOLOUTION_SCALE);
+    m_cam->setShape(width(), height());
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -156,10 +160,19 @@ void OpenGLWidget::paintGL(){
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
 
+    loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
+
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
     glBindVertexArray(m_VAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+}
+void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewMatrix, glm::mat4 _perspectiveMatrix){
+    GLuint MVPLoc = m_shaderProgram->getUniformLoc("MVP");
+
+    glm::mat4 MVP = _perspectiveMatrix;
+
+    glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------

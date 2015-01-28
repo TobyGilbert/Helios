@@ -129,15 +129,15 @@ void PathTracerScene::createGeometry(){
       // Reflective Material
       Material reflective_material = m_context->createMaterial();
       Program reflective_ch = m_context->createProgramFromPTXFile( ptx_path, "reflections");
-      reflective_material->setClosestHitProgram(0, reflective_ch);
       Program reflective_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow");
+      reflective_material->setClosestHitProgram(0, reflective_ch);
       reflective_material->setAnyHitProgram(1, reflective_ah);
 
-      // Procedural floor materila
+      // Procedural floor material
       Material procedural_floor_material = m_context->createMaterial();
       Program procedural_ch = m_context->createProgramFromPTXFile(ptx_path, "procedural_floor");
-      procedural_floor_material->setClosestHitProgram(0, procedural_ch);
       Program procedural_ah = m_context->createProgramFromPTXFile(ptx_path, "shadow");
+      procedural_floor_material->setClosestHitProgram(0, procedural_ch);
       procedural_floor_material->setAnyHitProgram(1, procedural_ah);
 
       // Set up parallelogram programs
@@ -161,11 +161,11 @@ void PathTracerScene::createGeometry(){
 
       // Sphere
       gis.push_back( createSphere(make_float4(100.0, 250.0, 250.0, 100.0)));
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-//      gis.back()->addMaterial(reflective_material);
-//      gis.back()["diffuse_color"]->setFloat(white);
-//      gis.back()["reflectivity"]->setFloat(0.5);
-//      gis.back()["max_depth"]->setInt(3);
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.back()->addMaterial(reflective_material);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["reflectivity"]->setFloat(0.5);
+      gis.back()["max_depth"]->setInt(3);
 
       // Floor
       gis.push_back( createParallelogram( make_float3( -1000.0f, 0.0f, 0.0f ),
