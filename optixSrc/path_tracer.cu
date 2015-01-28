@@ -238,7 +238,8 @@ RT_PROGRAM void glass_refract(){
     if (current_prd.inside) {
         // Shoot outgoing ray
         iof = 1.0f/index_of_refraction;
-    } else {
+    }
+    else {
         iof = index_of_refraction;
     }
         refract(current_prd.direction, ray.direction, ffnormal, iof);
