@@ -4,6 +4,7 @@
 #include <iostream>
 #include "HDRLoader.h"
 
+
 PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
                                     , m_sqrt_num_samples( 2u )
                                     , m_width(512u)
@@ -23,7 +24,6 @@ void PathTracerScene::init(){
     m_context->setEntryPointCount( 1 );
     // for printing?
     m_context->setStackSize( 1800 );
-
     // set some variables
     m_context["scene_epsilon"]->setFloat( 1.e-3f );
     // set our ray types
@@ -46,8 +46,8 @@ void PathTracerScene::init(){
 //    m_outputBuffer = m_context->createBuffer(RT_BUFFER_OUTPUT,RT_FORMAT_FLOAT4, m_width, m_height);
     output_buffer->set(m_outputBuffer);
 
-    PinholeCamera camera(optix::make_float3( 278.0f, 273.0f, -800.0f ),  //eye
-                         optix::make_float3( 278.0f, 273.0f, 0.0f ),     //lookat
+    PinholeCamera camera(optix::make_float3( 0.0f, 25.0f, -50.0f ),  //eye
+                         optix::make_float3( 0.0f, 25.0f, 0.0f ),     //lookat
                          optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
                          35.0f,                                          //hfov
                          35.0f);                                         //vfov
@@ -102,9 +102,9 @@ void PathTracerScene::init(){
 void PathTracerScene::createGeometry(){
     // Light buffer
       ParallelogramLight light;
-      light.corner   = make_float3( 343.0f, 548.6f, 227.0f);
-      light.v1       = make_float3( -130.0f, 0.0f, 0.0f);
-      light.v2       = make_float3( 0.0f, 0.0f, 105.0f);
+      light.corner   = make_float3( 10.0f, 49.9f, 50.0f);
+      light.v1       = make_float3( -20.0f, 0.0f, 0.0f);
+      light.v2       = make_float3( 0.0f, 0.0f, 10.0f);
       light.normal   = normalize( cross(light.v1, light.v2) );
       light.emission = make_float3( 15.0f, 15.0f, 15.0f );
 
@@ -158,90 +158,96 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 15.0f, 15.0f, 5.0f );
 
       // Sphere
-      gis.push_back( createSphere(make_float4(0.0, 0.0, 0.0, 200.0)));
+      gis.push_back( createSphere(make_float4(0.0, 0.0, 20.0, 5.0)));
       setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["reflectivity"]->setFloat(0.5);
+//      gis.back()["max_depth"]->setInt(5);
 
       // Floor
-      gis.push_back( createParallelogram( make_float3( -1000.0f, 0.0f, 0.0f ),
-                                          make_float3( 0.0f, 0.0f, 2000.2f ),
-                                          make_float3( 2000.0f, 0.0f, 0.0f ) ) );
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(0.5);
-      gis.back()["max_depth"]->setInt(3);
+      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 25.0f ),
+                                          make_float3( 0.0f, 0.0f, 50.0f ),
+                                          make_float3( 50.0f, 0.0f, 0.0f ) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-//      // Ceiling
-//      gis.push_back( createParallelogram( make_float3( 0.0f, 548.8f, 0.0f ),
-//                                          make_float3( 556.0f, 0.0f, 0.0f ),
-//                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["reflectivity"]->setFloat(0.5);
+//      gis.back()["max_depth"]->setInt(3);
 
-////      // Back wall
-//      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 559.2f),
-//                                          make_float3( 0.0f, 548.8f, 0.0f),
-//                                          make_float3( 556.0f, 0.0f, 0.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      // Ceiling
+      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
+                                          make_float3( -50.0f, 0.0f, 0.0f ),
+                                          make_float3( 0.0f, 0.0f, -50.0f ) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-//      // Right wall
-//      gis.push_back( createParallelogram( make_float3( 0.0f, 0.0f, 0.0f ),
-//                                          make_float3( 0.0f, 548.8f, 0.0f ),
-//                                          make_float3( 0.0f, 0.0f, 559.2f ) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", green);
+//      // Back wall
+      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 75.0f),
+                                          make_float3( 0.0f, 50.0f, 0.0f),
+                                          make_float3( 50.0f, 0.0f, 0.0f) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-//      // Left wall
-//      gis.push_back( createParallelogram( make_float3( 556.0f, 0.0f, 0.0f ),
-//                                          make_float3( 0.0f, 0.0f, 559.2f ),
-//                                          make_float3( 0.0f, 548.8f, 0.0f ) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", red);
+      // Left wall
+      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 25.0f ),
+                                          make_float3( 0.0f, 50.0f, 0.0f ),
+                                          make_float3( 0.0f, 0.0f, 50.0f ) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", green);
+
+      // Right wall
+      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
+                                          make_float3( 0.0f, 0.0f, -50.0f ),
+                                          make_float3( 0.0f, -50.0f, 0.0f ) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", red);
 
 //      // Short block
-//      gis.push_back( createParallelogram( make_float3( 130.0f, 165.0f, 65.0f),
-//                                          make_float3( -48.0f, 0.0f, 160.0f),
-//                                          make_float3( 160.0f, 0.0f, 49.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-//      gis.push_back( createParallelogram( make_float3( 290.0f, 0.0f, 114.0f),
-//                                          make_float3( 0.0f, 165.0f, 0.0f),
-//                                          make_float3( -50.0f, 0.0f, 158.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-//      gis.push_back( createParallelogram( make_float3( 130.0f, 0.0f, 65.0f),
-//                                          make_float3( 0.0f, 165.0f, 0.0f),
-//                                          make_float3( 160.0f, 0.0f, 49.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-//      gis.push_back( createParallelogram( make_float3( 82.0f, 0.0f, 225.0f),
-//                                          make_float3( 0.0f, 165.0f, 0.0f),
-//                                          make_float3( 48.0f, 0.0f, -160.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-//      gis.push_back( createParallelogram( make_float3( 240.0f, 0.0f, 272.0f),
-//                                          make_float3( 0.0f, 165.0f, 0.0f),
-//                                          make_float3( -158.0f, 0.0f, -47.0f) ) );
-//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-
-      // Tall block
-      gis.push_back( createParallelogram( make_float3( 423.0f, 330.0f, 247.0f),
-                                          make_float3( -158.0f, 0.0f, 49.0f),
-                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
+      gis.push_back( createParallelogram( make_float3( 10.0f, 20.0f, 10.0f),
+                                          make_float3( -10.0f, 0.0f, 10.0f),
+                                          make_float3( 10.0f, 0.0f, 10.0f) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.push_back( createParallelogram( make_float3( 10.0f, 0.0f, 10.0f),
+                                          make_float3( 0.0f, 20.0f, 0.0f),
+                                          make_float3( -10.0f, 0.0f, 10.0f) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.push_back( createParallelogram( make_float3( 10.0f, 0.0f, 10.0f),
+                                          make_float3( 0.0f, 20.0f, 0.0f),
+                                          make_float3( 10.0f, 0.0f, 10.0f) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.push_back( createParallelogram( make_float3( 10.0f, 0.0f, 30.0f),
+                                          make_float3( 0.0f, 20.0f, 0.0f),
+                                          make_float3( -10.0f, 0.0f, -10.0f) ) );
+      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+      gis.push_back( createParallelogram( make_float3( 20.0f, 0.0f, 20.0f),
+                                          make_float3( 0.0f, 20.0f, 0.0f),
+                                          make_float3( -10.0f, 0.0f, 10.0f) ) );
       setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-      gis.push_back( createParallelogram( make_float3( 423.0f, 0.0f, 247.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( 49.0f, 0.0f, 159.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.push_back( createParallelogram( make_float3( 472.0f, 0.0f, 406.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( -158.0f, 0.0f, 50.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.push_back( createParallelogram( make_float3( 314.0f, 0.0f, 456.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( -49.0f, 0.0f, -160.0f) ) );
-      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.push_back( createParallelogram( make_float3( 265.0f, 0.0f, 296.0f),
-                                          make_float3( 0.0f, 330.0f, 0.0f),
-                                          make_float3( 158.0f, 0.0f, -49.0f) ) );
+//      // Tall block
+//      gis.push_back( createParallelogram( make_float3( 40.0f, 30.0f, 20.0f),
+//                                          make_float3( -15.0f, 0.0f, 50.0f),
+//                                          make_float3( 5.0f, 0.0f, 15.0f) ) );
 //      setMaterial(gis.back(), diffuse, "diffuse_color", white);
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["reflectivity"]->setFloat(0.5);
-      gis.back()["max_depth"]->setInt(5);
+
+//      gis.push_back( createParallelogram( make_float3( 40.0f, 0.0f, 20.0f),
+//                                          make_float3( 0.0f, 30.0f, 0.0f),
+//                                          make_float3( 5.0f, 0.0f, 15.0f) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.push_back( createParallelogram( make_float3( 50.0f, 0.0f, 40.0f),
+//                                          make_float3( 0.0f, 30.0f, 0.0f),
+//                                          make_float3( -15.0f, 0.0f, 5.0f) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.push_back( createParallelogram( make_float3( 30.0f, 0.0f, 50.0f),
+//                                          make_float3( 0.0f, 30.0f, 0.0f),
+//                                          make_float3( -50.0f, 0.0f, -15.0f) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.push_back( createParallelogram( make_float3( 30.0f, 0.0f, 30.0f),
+//                                          make_float3( 0.0f, 330.0f, 0.0f),
+//                                          make_float3( 15.0f, 0.0f, -50.0f) ) );
+//      setMaterial(gis.back(), diffuse, "diffuse_color", white);
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["reflectivity"]->setFloat(0.5);
+//      gis.back()["max_depth"]->setInt(5);
 
       // Create shadow group (no light)
       GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
@@ -249,13 +255,16 @@ void PathTracerScene::createGeometry(){
       m_context["top_shadower"]->set( shadow_group );
 
       // Light
-      gis.push_back( createParallelogram( make_float3( 343.0f, 548.6f, 227.0f),
-                                          make_float3( -130.0f, 0.0f, 0.0f),
-                                          make_float3( 0.0f, 0.0f, 105.0f) ) );
+      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
+                                          make_float3( -20.0f, 0.0f, 0.0f),
+                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
       setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
+      m_model = new OptiXModel();
+      m_model->createGeomtry("models/pikatchu.obj",m_context);
+      geometry_group->addChild(m_model->getGeomtryInstance());
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
       m_context["top_object"]->set( geometry_group );
 }

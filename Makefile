@@ -18,7 +18,7 @@ CXXFLAGS      = -pipe -msse -msse2 -msse3 -march=native -g -Wall -W -Wno-unused-
 INCPATH       = -I/opt/Qt/5.2.1/gcc_64/mkspecs/linux-g++ -I. -Iinclude -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/targets/x86_64-linux/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include -I/opt/Qt/5.2.1/gcc_64/include -I/opt/Qt/5.2.1/gcc_64/include/QtOpenGL -I/opt/Qt/5.2.1/gcc_64/include/QtWidgets -I/opt/Qt/5.2.1/gcc_64/include/QtGui -I/opt/Qt/5.2.1/gcc_64/include/QtCore -Imoc -I.
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/opt/Qt/5.2.1/gcc_64 -Wl,-rpath,/opt/Qt/5.2.1/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/usr/local/cuda-6.5/lib64 -L/usr/local/cuda-6.5/samples/common/lib -L/usr/local/OptiX/lib64 -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -L/opt/Qt/5.2.1/gcc_64/lib -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -L/usr/local/cuda-6.5/lib64 -L/usr/local/cuda-6.5/samples/common/lib -L/usr/local/OptiX/lib64 -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu -L/opt/Qt/5.2.1/gcc_64/lib -lQt5OpenGL -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 QMAKE         = /opt/Qt/5.2.1/gcc_64/bin/qmake
@@ -52,12 +52,12 @@ SOURCES       = src/main.cpp \
 		src/TextureUtils.cpp \
 		src/ShaderProgram.cpp \
 		src/Texture.cpp \
-		src/Model.cpp \
 		src/OpenGLWidget.cpp \
 		src/Shader.cpp \
 		src/pathtracerscene.cpp \
 		src/pinholecamera.cpp \
-		src/HDRLoader.cpp moc/moc_mainwindow.cpp \
+		src/HDRLoader.cpp \
+		src/optixmodel.cpp moc/moc_mainwindow.cpp \
 		moc/moc_OpenGLWidget.cpp
 OBJECTS       = obj/main.o \
 		obj/mainwindow.o \
@@ -66,12 +66,12 @@ OBJECTS       = obj/main.o \
 		obj/TextureUtils.o \
 		obj/ShaderProgram.o \
 		obj/Texture.o \
-		obj/Model.o \
 		obj/OpenGLWidget.o \
 		obj/Shader.o \
 		obj/pathtracerscene.o \
 		obj/pinholecamera.o \
 		obj/HDRLoader.o \
+		obj/optixmodel.o \
 		obj/moc_mainwindow.o \
 		obj/moc_OpenGLWidget.o
 DIST          = /opt/Qt/5.2.1/gcc_64/mkspecs/features/spec_pre.prf \
@@ -209,7 +209,7 @@ first: all
 
 all: Makefile $(TARGET)
 
-$(TARGET): ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ui_mainwindow.h $(OBJECTS)  
+$(TARGET): ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ptx/triangle_mesh.cu.ptx ui_mainwindow.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 	{ test -n "$(DESTDIR)" && DESTDIR="$(DESTDIR)" || DESTDIR=.; } && test $$(gdb --version | sed -e 's,[^0-9][^0-9]*\([0-9]\)\.\([0-9]\).*,\1\2,;q') -gt 72 && gdb --nx --batch --quiet -ex 'set confirm off' -ex "save gdb-index $$DESTDIR" -ex quit '$(TARGET)' && test -f $(TARGET).gdb-index && objcopy --add-section '.gdb_index=$(TARGET).gdb-index' --set-section-flags '.gdb_index=readonly' '$(TARGET)' '$(TARGET)' && rm -f $(TARGET).gdb-index || true
 
@@ -439,7 +439,7 @@ qmake_all: FORCE
 
 dist: 
 	@test -d obj/Helios.out1.0.0 || mkdir -p obj/Helios.out1.0.0
-	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/box.cu optixSrc/constantbg.cu optixSrc/draw_color.cu optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/phong.cu optixSrc/pinhole_camera.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/Model.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/Model.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
+	$(COPY_FILE) --parents $(SOURCES) $(DIST) obj/Helios.out1.0.0/ && $(COPY_FILE) --parents optixSrc/box.cu optixSrc/constantbg.cu optixSrc/draw_color.cu optixSrc/parallelogram.cu optixSrc/path_tracer.cu optixSrc/phong.cu optixSrc/pinhole_camera.cu optixSrc/triangle_mesh.cu obj/Helios.out1.0.0/ && $(COPY_FILE) --parents include/mainwindow.h include/Camera.h include/ShaderUtils.h include/TextureUtils.h include/ShaderProgram.h include/Texture.h include/OpenGLWidget.h include/Shader.h include/ui_mainwindow.h include/helpers.h include/random.h include/path_tracer.h include/pathtracerscene.h include/pinholecamera.h include/HDRLoader.h include/optixmodel.h obj/Helios.out1.0.0/ && $(COPY_FILE) --parents src/main.cpp src/mainwindow.cpp src/Camera.cpp src/ShaderUtils.cpp src/TextureUtils.cpp src/ShaderProgram.cpp src/Texture.cpp src/OpenGLWidget.cpp src/Shader.cpp src/pathtracerscene.cpp src/pinholecamera.cpp src/HDRLoader.cpp src/optixmodel.cpp obj/Helios.out1.0.0/ && $(COPY_FILE) --parents ui/mainwindow.ui obj/Helios.out1.0.0/ && (cd `dirname obj/Helios.out1.0.0` && $(TAR) Helios.out1.0.0.tar Helios.out1.0.0 && $(COMPRESS) Helios.out1.0.0.tar) && $(MOVE) `dirname obj/Helios.out1.0.0`/Helios.out1.0.0.tar.gz . && $(DEL_FILE) -r obj/Helios.out1.0.0
 
 
 clean:compiler_clean 
@@ -460,9 +460,9 @@ mocables: compiler_moc_header_make_all compiler_moc_source_make_all
 
 check: first
 
-compiler_optix_make_all: ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx
+compiler_optix_make_all: ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ptx/triangle_mesh.cu.ptx
 compiler_optix_clean:
-	-$(DEL_FILE) ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx
+	-$(DEL_FILE) ptx/box.cu.ptx ptx/constantbg.cu.ptx ptx/draw_color.cu.ptx ptx/parallelogram.cu.ptx ptx/path_tracer.cu.ptx ptx/phong.cu.ptx ptx/pinhole_camera.cu.ptx ptx/triangle_mesh.cu.ptx
 ptx/box.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optix_device.h \
 		/usr/local/OptiX/include/internal/optix_datatypes.h \
@@ -485,7 +485,7 @@ ptx/box.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
 		optixSrc/box.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/box.cu -o ptx/box.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/box.cu -o ptx/box.cu.ptx
 
 ptx/constantbg.cu.ptx: /usr/local/OptiX/include/optix_world.h \
 		/usr/local/OptiX/include/optix_host.h \
@@ -519,7 +519,7 @@ ptx/constantbg.cu.ptx: /usr/local/OptiX/include/optix_world.h \
 		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/usr/local/OptiX/include/optixu/optixu_math_stream_namespace.h \
 		optixSrc/constantbg.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/constantbg.cu -o ptx/constantbg.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/constantbg.cu -o ptx/constantbg.cu.ptx
 
 ptx/draw_color.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optix_device.h \
@@ -541,7 +541,7 @@ ptx/draw_color.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
 		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
 		optixSrc/draw_color.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/draw_color.cu -o ptx/draw_color.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/draw_color.cu -o ptx/draw_color.cu.ptx
 
 ptx/parallelogram.cu.ptx: /usr/local/OptiX/include/optix_world.h \
 		/usr/local/OptiX/include/optix_host.h \
@@ -575,7 +575,7 @@ ptx/parallelogram.cu.ptx: /usr/local/OptiX/include/optix_world.h \
 		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/usr/local/OptiX/include/optixu/optixu_math_stream_namespace.h \
 		optixSrc/parallelogram.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/parallelogram.cu -o ptx/parallelogram.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/parallelogram.cu -o ptx/parallelogram.cu.ptx
 
 ptx/path_tracer.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optix_device.h \
@@ -603,7 +603,7 @@ ptx/path_tracer.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/SDK/sutil/GL/glew.h \
 		include/random.h \
 		optixSrc/path_tracer.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/path_tracer.cu -o ptx/path_tracer.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/path_tracer.cu -o ptx/path_tracer.cu.ptx
 
 ptx/phong.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optix_device.h \
@@ -642,7 +642,7 @@ ptx/phong.cu.ptx: /usr/local/OptiX/include/optix.h \
 		/usr/local/OptiX/include/optix_math.h \
 		/usr/local/OptiX/include/optixu/optixu_math.h \
 		optixSrc/phong.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/phong.cu -o ptx/phong.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/phong.cu -o ptx/phong.cu.ptx
 
 ptx/pinhole_camera.cu.ptx: /usr/local/OptiX/include/optix_world.h \
 		/usr/local/OptiX/include/optix_host.h \
@@ -679,7 +679,31 @@ ptx/pinhole_camera.cu.ptx: /usr/local/OptiX/include/optix_world.h \
 		/usr/local/OptiX/include/optix_math.h \
 		/usr/local/OptiX/include/optixu/optixu_math.h \
 		optixSrc/pinhole_camera.cu
-	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix optixSrc/pinhole_camera.cu -o ptx/pinhole_camera.cu.ptx
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/pinhole_camera.cu -o ptx/pinhole_camera.cu.ptx
+
+ptx/triangle_mesh.cu.ptx: /usr/local/OptiX/include/optix.h \
+		/usr/local/OptiX/include/optix_device.h \
+		/usr/local/OptiX/include/internal/optix_datatypes.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
+		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
+		/usr/local/OptiX/include/internal/optix_declarations.h \
+		/usr/local/OptiX/include/internal/optix_internal.h \
+		/usr/local/OptiX/include/internal/optix_defines.h \
+		/usr/local/OptiX/include/optix_sizet.h \
+		/usr/local/OptiX/include/optix_host.h \
+		/usr/local/OptiX/include/optixu/optixu_math_namespace.h \
+		/usr/local/OptiX/include/optixu/optixu_vector_functions.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_functions.h \
+		/usr/local/OptiX/include/optixu/optixu_matrix_namespace.h \
+		/usr/local/OptiX/include/optixu/optixu_aabb_namespace.h \
+		optixSrc/triangle_mesh.cu
+	/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -L/opt/local/lib -lIL -lassimp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/triangle_mesh.cu -o ptx/triangle_mesh.cu.ptx
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
@@ -839,7 +863,6 @@ moc/moc_mainwindow.cpp: /opt/Qt/5.2.1/gcc_64/include/QtWidgets/QMainWindow \
 		include/Camera.h \
 		include/ShaderProgram.h \
 		include/Shader.h \
-		include/Model.h \
 		include/pathtracerscene.h \
 		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
 		/usr/local/OptiX/include/optix.h \
@@ -897,7 +920,6 @@ moc/moc_OpenGLWidget.cpp: /usr/local/OptiX/SDK/sutil/GL/glew.h \
 		include/Camera.h \
 		include/ShaderProgram.h \
 		include/Shader.h \
-		include/Model.h \
 		include/pathtracerscene.h \
 		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
 		/usr/local/OptiX/include/optix.h \
@@ -1239,7 +1261,6 @@ obj/main.o: src/main.cpp /opt/Qt/5.2.1/gcc_64/include/QtWidgets/QApplication \
 		include/Camera.h \
 		include/ShaderProgram.h \
 		include/Shader.h \
-		include/Model.h \
 		include/pathtracerscene.h \
 		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
 		/usr/local/OptiX/include/optix.h \
@@ -1446,7 +1467,6 @@ obj/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		include/Camera.h \
 		include/ShaderProgram.h \
 		include/Shader.h \
-		include/Model.h \
 		include/pathtracerscene.h \
 		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
 		/usr/local/OptiX/include/optix.h \
@@ -1750,10 +1770,6 @@ obj/Texture.o: src/Texture.cpp include/Texture.h \
 		include/TextureUtils.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Texture.o src/Texture.cpp
 
-obj/Model.o: src/Model.cpp include/Model.h \
-		/usr/local/OptiX/SDK/sutil/GL/glew.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/Model.o src/Model.cpp
-
 obj/OpenGLWidget.o: src/OpenGLWidget.cpp /opt/Qt/5.2.1/gcc_64/include/QtGui/QGuiApplication \
 		/opt/Qt/5.2.1/gcc_64/include/QtGui/qguiapplication.h \
 		/opt/Qt/5.2.1/gcc_64/include/QtCore/qcoreapplication.h \
@@ -1862,7 +1878,6 @@ obj/OpenGLWidget.o: src/OpenGLWidget.cpp /opt/Qt/5.2.1/gcc_64/include/QtGui/QGui
 		include/Camera.h \
 		include/ShaderProgram.h \
 		include/Shader.h \
-		include/Model.h \
 		include/pathtracerscene.h \
 		/opt/Qt/5.2.1/gcc_64/include/QtGui/QImage \
 		/opt/Qt/5.2.1/gcc_64/include/QtGui/qimage.h \
@@ -2102,6 +2117,32 @@ obj/HDRLoader.o: src/HDRLoader.cpp include/HDRLoader.h \
 		/usr/local/OptiX/SDK/sutil/sutil.h \
 		/usr/local/OptiX/SDK/sutil/sutilapi.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/HDRLoader.o src/HDRLoader.cpp
+
+obj/optixmodel.o: src/optixmodel.cpp include/optixmodel.h \
+		/usr/local/OptiX/include/optixu/optixpp_namespace.h \
+		/usr/local/OptiX/include/optix.h \
+		/usr/local/OptiX/include/optix_device.h \
+		/usr/local/OptiX/include/internal/optix_datatypes.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/host_defines.h \
+		/usr/local/OptiX/include/optixu/optixu_vector_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/vector_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/builtin_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/device_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/driver_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/surface_types.h \
+		/usr/local/cuda-6.5/targets/x86_64-linux/include/texture_types.h \
+		/usr/local/OptiX/include/internal/optix_declarations.h \
+		/usr/local/OptiX/include/internal/optix_internal.h \
+		/usr/local/OptiX/include/internal/optix_defines.h \
+		/usr/local/OptiX/include/optix_sizet.h \
+		/usr/local/OptiX/include/optix_host.h \
+		/usr/local/OptiX/include/optix_d3d9_interop.h \
+		/usr/local/OptiX/include/optix_d3d10_interop.h \
+		/usr/local/OptiX/include/optix_d3d11_interop.h \
+		/usr/local/OptiX/include/optix_gl_interop.h \
+		/usr/local/OptiX/include/optix_cuda_interop.h \
+		/usr/local/OptiX/include/optixu/optixu.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/optixmodel.o src/optixmodel.cpp
 
 obj/moc_mainwindow.o: moc/moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/moc_mainwindow.o moc/moc_mainwindow.cpp
