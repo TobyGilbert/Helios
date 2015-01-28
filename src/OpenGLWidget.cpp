@@ -64,6 +64,7 @@ void OpenGLWidget::initializeGL(){
     //the resulting image from a pinhole camera will be upside down
     float texCoords[]={
         //bottom left
+<<<<<<< HEAD
         1.0,1.0f,
         //top left
         1.0f,0.0f,
@@ -71,6 +72,15 @@ void OpenGLWidget::initializeGL(){
         0.0f,1.0f,
         //top right
         0.0f,0.0f
+=======
+        1.0,0.0f,
+        //top left
+        1.0f,1.0f,
+        //bottom right
+        0.0f,0.0f,
+        //top right
+        0.0f,1.0f
+>>>>>>> Declan
 
     };
 
