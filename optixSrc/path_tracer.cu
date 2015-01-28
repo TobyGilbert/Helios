@@ -114,6 +114,7 @@ RT_PROGRAM void pathtrace_camera(){
         prd.inside = false;
         prd.seed = seed;
         prd.depth = 0;
+        prd.colour = make_float3(0.0, 0.0, 0.0);
 
     for(;;) {
         Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
@@ -157,6 +158,7 @@ rtDeclareVariable(float3,        emission_color, , );
 
 RT_PROGRAM void diffuseEmitter(){
     current_prd.radiance = current_prd.countEmitted? emission_color : make_float3(0.f);
+    current_prd.colour = emission_color;
     current_prd.done = true;
 }
 
@@ -280,6 +282,14 @@ RT_PROGRAM void reflections(){
   // Get reflection colour
     if (current_prd.depth < max_depth){
         PerRayData_pathtrace reflection_prd;
+        reflection_prd.result = make_float3(0.f);
+        reflection_prd.attenuation = make_float3(1.f);
+        reflection_prd.countEmitted = true;
+        reflection_prd.done = false;
+        reflection_prd.inside = false;
+//        reflection_prd.seed = seed;
+        reflection_prd.depth = current_prd.depth+1;
+        reflection_prd.colour = make_float3(1.0, 1.0, 1.0);
         float3 R = reflect(ray.direction, ffnormal);
         Ray refl_ray = make_Ray(hitpoint, R, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
         rtTrace(top_object, refl_ray, reflection_prd);
@@ -287,6 +297,7 @@ RT_PROGRAM void reflections(){
         reflection_prd.done = true;
     }
 
+    current_prd.colour = colour;
     current_prd.attenuation = current_prd.attenuation * colour;
     current_prd.countEmitted = false;
     // Compute direct light...
@@ -319,8 +330,7 @@ RT_PROGRAM void reflections(){
             }
         }
     }
-    current_prd.colour = colour;
-    current_prd.radiance =result;//  make_float3(1.0, 1.0, 1.0);
+    current_prd.radiance = result;
 }
 
 rtDeclareVariable(float3, tile_v0, , );

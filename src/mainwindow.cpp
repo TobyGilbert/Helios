@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->addDockWidget(Qt::RightDockWidgetArea, m_lightDockWidget);
 
     //--------------------------------------------------------------------------------------------------------------------
-    // ------------------------------------------------Mesh functionality------------------------------------------------
+    // ------------------------------------------------Mesh functionality-------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
     // Button to access the mesh specific parameters
     QPixmap mesh("icons/teapot.png");
@@ -106,6 +106,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_meshDockWidget->setWidget(m_meshWidget);
     m_meshDockWidget->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, m_meshDockWidget);
+
+    //--------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------Connections-------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
 
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
     connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
