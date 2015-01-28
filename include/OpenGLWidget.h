@@ -11,7 +11,6 @@
 #include "Camera.h"
 #include "ShaderProgram.h"
 #include "Shader.h"
-#include "Model.h"
 #include "pathtracerscene.h"
 
 #include <QGLWidget>

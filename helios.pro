@@ -20,13 +20,13 @@ SOURCES += \
     src/TextureUtils.cpp \
     src/ShaderProgram.cpp \
     src/Texture.cpp \
-    src/Model.cpp \
     src/OpenGLWidget.cpp \
     src/Shader.cpp \
     src/pathtracerscene.cpp \
     src/pinholecamera.cpp \
     optixSrc/*.cu \
-    src/HDRLoader.cpp
+    src/HDRLoader.cpp \
+    src/optixmodel.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -37,7 +37,6 @@ HEADERS += \
     include/TextureUtils.h \
     include/ShaderProgram.h \
     include/Texture.h \
-    include/Model.h \
     include/OpenGLWidget.h \
     include/Shader.h \
     include/ui_mainwindow.h \
@@ -46,7 +45,8 @@ HEADERS += \
     include/path_tracer.h \
     include/pathtracerscene.h \
     include/pinholecamera.h \
-    include/HDRLoader.h
+    include/HDRLoader.h \
+    include/optixmodel.h
 
 INCLUDEPATH +=./include /opt/local/include
 LIBS += -L/opt/local/lib -lIL -lassimp
@@ -113,7 +113,7 @@ linux:QMAKE_LIBDIR += $$CUDA_DIR/lib64
 QMAKE_LIBDIR += $$CUDA_SDK/common/lib
 macx:QMAKE_LIBDIR += /Developer/OptiX/lib64
 linux:QMAKE_LIBDIR += /usr/local/OptiX/lib64
-LIBS += -lcudart  -loptix
+LIBS += -lcudart  -loptix -loptixu
 
 # nvcc flags (ptxas option verbose is always useful)
 # add the PTX flags to compile optix files
