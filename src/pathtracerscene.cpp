@@ -165,25 +165,18 @@ void PathTracerScene::createGeometry(){
       const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
       const float3 light_em = make_float3( 15.0f, 15.0f, 15.0f );
 
-      // Sphere
+      // Glass Sphere
       gis.push_back( createSphere(make_float4(125.0, 250.0, 250.0, 100.0)));
-//      gis.back()->addMaterial(reflective_material);
-//      gis.back()["diffuse_color"]->setFloat(white);
-//      gis.back()["reflectivity"]->setFloat(1.0);
-//      gis.back()["max_depth"]->setInt(3);
       gis.back()->addMaterial(glass_material);
       gis.back()["glass_color"]->setFloat(white);
       gis.back()["index_of_refraction"]->setFloat(1.5);
 
       gis.push_back( createSphere(make_float4(125.0, 250.0, 250.0, 95.0)));
-//      gis.back()->addMaterial(reflective_material);
-//      gis.back()["diffuse_color"]->setFloat(white);
-//      gis.back()["reflectivity"]->setFloat(1.0);
-//      gis.back()["max_depth"]->setInt(3);
       gis.back()->addMaterial(glass_material);
       gis.back()["glass_color"]->setFloat(white);
       gis.back()["index_of_refraction"]->setFloat(1.5);
 
+      // Metal Sphere
       gis.push_back( createSphere(make_float4(400.0, 250.0, 250.0, 100.0)));
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
