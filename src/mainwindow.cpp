@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,1,2,2);
 
+
     // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
     m_toolBar = new QToolBar();
     m_toolBar->setOrientation(Qt::Vertical);
