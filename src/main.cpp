@@ -2,6 +2,7 @@
 #include <QFile>
 #include "mainwindow.h"
 
+#define FULLSCREEN
 
 int main(int argc, char **argv)
 {
@@ -12,6 +13,9 @@ int main(int argc, char **argv)
     QString stylesheet = QLatin1String(file.readAll());
     w.setStyleSheet(stylesheet);
     w.setWindowTitle(QString("Helios"));
+#ifdef FULLSCREEN
+    w.showMaximized();
+#endif
     w.show();
     app.exec();
 }
