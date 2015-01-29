@@ -795,7 +795,7 @@ BB0_14:
 	mov.u64 	%SPL, __local_depot2;
 	cvta.local.u64 	%SP, %SPL;
 	ld.global.u32 	%r4, [current_prd+76];
-	setp.gt.s32	%p1, %r4, 5;
+	setp.gt.s32	%p1, %r4, 3;
 	@%p1 bra 	BB2_9;
 
 	ld.global.f32 	%f33, [shading_normal];
@@ -1085,7 +1085,7 @@ BB2_10:
 {
 	.reg .pred 	%p<6>;
 	.reg .f32 	%f<119>;
-	.reg .s32 	%r<11>;
+	.reg .s32 	%r<12>;
 
 
 	ld.global.f32 	%f27, [shading_normal];
@@ -1240,6 +1240,10 @@ BB3_10:
 	st.global.u32 	[current_prd+20], %r9;
 	st.global.u32 	[current_prd+16], %r9;
 	st.global.u32 	[current_prd+12], %r9;
+	mov.u32 	%r11, 1065353216;
+	st.global.u32 	[current_prd+68], %r11;
+	st.global.u32 	[current_prd+64], %r11;
+	st.global.u32 	[current_prd+60], %r11;
 	ret;
 }
 
@@ -1260,7 +1264,7 @@ BB3_10:
 	mov.u64 	%SPL, __local_depot4;
 	cvta.local.u64 	%SP, %SPL;
 	ld.global.u32 	%r5, [current_prd+76];
-	setp.gt.s32	%p1, %r5, 5;
+	setp.gt.s32	%p1, %r5, 3;
 	@%p1 bra 	BB4_11;
 
 	ld.global.f32 	%f241, [diffuse_color+8];

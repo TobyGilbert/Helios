@@ -166,7 +166,7 @@ rtDeclareVariable(float3,        diffuse_color, , );
 
 
 RT_PROGRAM void diffuse(){
-    if (current_prd.depth > 5){
+    if (current_prd.depth > 3){
         current_prd.done = true;
         return;
 
@@ -227,7 +227,6 @@ RT_PROGRAM void diffuse(){
 rtDeclareVariable(float3,        glass_color, , );
 rtDeclareVariable(float,         index_of_refraction, , );
 
-
 RT_PROGRAM void glass_refract(){
     float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
     float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
@@ -254,6 +253,7 @@ RT_PROGRAM void glass_refract(){
     }
     current_prd.inside = !current_prd.inside;
     current_prd.radiance = make_float3(0.0f);
+    current_prd.colour = make_float3(1.0, 1.0, 1.0);
 }
 
 rtDeclareVariable(float, reflectivity, , );
@@ -262,7 +262,7 @@ rtDeclareVariable(float, importance_cutoff, , );
 
 
 RT_PROGRAM void reflections(){
-    if (current_prd.depth > 5){
+    if (current_prd.depth > 3){
         current_prd.done = true;
         return;
     }
@@ -299,7 +299,6 @@ RT_PROGRAM void reflections(){
         rtTrace(top_object, refl_ray, reflection_prd);
         colour +=  reflectivity * reflection_prd.colour;
         reflection_prd.done = true;
-
     }
 
     current_prd.colour = colour;
@@ -336,7 +335,6 @@ RT_PROGRAM void reflections(){
         }
     }
     current_prd.radiance = result;
-
 }
 
 rtDeclareVariable(float3, tile_v0, , );
