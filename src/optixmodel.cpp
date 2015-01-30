@@ -5,17 +5,20 @@
 #include <assimp/Importer.hpp>
 #include <optixu/optixu.h>
 
+#include <iostream>
+
 //----------------------------------------------------------------------------------------------------------------------
-OptiXModel::OptiXModel()
+OptiXModel::OptiXModel(Context &_context)
 {
-//    // identity matrix to init our transformation
-//    float m[16];
-//    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
-//    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
-//    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
-//    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
-//    //init our trans
-//    m_trans->setMatrix(false,m,0);
+    // identity matrix to init our transformation
+    float m[16];
+    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
+    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
+    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
+    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
+    //init our trans
+    m_trans = _context->createTransform();
+    m_trans->setMatrix(false,m,0);
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createGeomtry(std::string _loc, Context &_context){
@@ -132,16 +135,16 @@ void OptiXModel::createGeomtry(std::string _loc, Context &_context){
     unsigned int usePTX32InHost64 = 0;
     RTgeometry geo = m_geometry->get();
 
-    rtuCreateClusteredMeshExt( _context->get(),usePTX32InHost64,&geo,
-                                     (unsigned int)mesh->mNumVertices,
-                                     vertArray,
-                                     (unsigned int)mesh->mNumFaces,
-                                     vertIdices,
-                                     matIndices,
-                                     m_normalBuffer->get(),
-                                     vertIdices,
-                                     m_texCoordsBuffer->get(),
-                                     vertIdices );
+//    rtuCreateClusteredMeshExt( _context->get(),usePTX32InHost64,&geo,
+//                                     (unsigned int)mesh->mNumVertices,
+//                                     vertArray,
+//                                     (unsigned int)mesh->mNumFaces,
+//                                     vertIdices,
+//                                     matIndices,
+//                                     m_normalBuffer->get(),
+//                                     vertIdices,
+//                                     m_texCoordsBuffer->get(),
+//                                     vertIdices );
 
     m_geometry.take(geo);
     m_geometry->setPrimitiveCount(mesh->mNumFaces);
@@ -157,6 +160,21 @@ void OptiXModel::createGeomtry(std::string _loc, Context &_context){
             m_geometryInstance->addMaterial(m_materials[i]);
         }
     }
+
+    GeometryGroup geoGroup = _context->createGeometryGroup();
+    geoGroup->setChildCount(1);
+    //stick our instance in our group
+    geoGroup->setChild(0,m_geometryInstance);
+
+    //create our acceleration method, in this case none becuase we only have one peice of geomtry
+    Acceleration acceleration = _context->createAcceleration("Bvh","Bvh");
+    //set this acceleration in our geometry group
+    geoGroup->setAcceleration(acceleration);
+
+    //make a acceleration dirty
+    acceleration->markDirty();
+
+    m_trans->setChild(geoGroup);
 }
 //----------------------------------------------------------------------------------------------------------------------
 Material OptiXModel::createDefaultMat(Context &_context){
