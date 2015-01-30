@@ -282,14 +282,14 @@ void PathTracerScene::createGeometry(){
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
-      m_model = new OptiXModel(m_context);
-      glm::mat4 trans;
-      trans = glm::scale(trans,glm::vec3(0.8));
-      trans = glm::rotate(trans,180.0f,glm::vec3(0.0f,1.0f,0.0f));
-      trans[3][2] = 50;
-      m_model->setTrans(trans);
+//      m_model = new OptiXModel(m_context);
+//      glm::mat4 trans;
+//      trans = glm::scale(trans,glm::vec3(0.8));
+//      trans = glm::rotate(trans,180.0f,glm::vec3(0.0f,1.0f,0.0f));
+//      trans[3][2] = 50;
+//      m_model->setTrans(trans);
 //      m_model->addMaterial(reflective_material);
-      m_model->createGeomtry("models/pikatchu.obj",m_context);
+//      m_model->createGeomtry("models/pikatchu.obj",m_context);
 //      m_model->getGeomtryInstance()["diffuse_color"]->setFloat(white);
 //      m_model->getGeomtryInstance()["reflectivity"]->setFloat(1.0);
 //      m_model->getGeomtryInstance()["max_depth"]->setInt(3);
@@ -297,7 +297,7 @@ void PathTracerScene::createGeometry(){
 
       Group topGroup = m_context->createGroup();
       topGroup->addChild(geometry_group);
-      topGroup->addChild(m_model->getGeomAndTrans());
+//      topGroup->addChild(m_model->getGeomAndTrans());
       topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
       topGroup->getAcceleration()->markDirty();
 

@@ -185,8 +185,8 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     float diffx=_event->x()-m_origX;
     float diffy=_event->y()-m_origY;
     glm::mat4 rotx,roty,finalRot;
-    rotx = glm::rotate(rotx, 0.01f * diffy,glm::vec3(1.0,0.0,0.0));
-    roty = glm::rotate(roty, 0.01f * diffx,glm::vec3(0.0,1.0,0.0));
+    rotx = glm::rotate(rotx, 0.002f * diffy,glm::vec3(1.0,0.0,0.0));
+    roty = glm::rotate(roty, 0.002f * diffx,glm::vec3(0.0,1.0,0.0));
     finalRot = rotx*roty;
     m_pathTracer->getCamera()->rotate(finalRot);
     m_pathTracer->signalCameraChanged();
@@ -245,13 +245,13 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
     // check the diff of the wheel position (0 means no change)
     if(_event->delta() > 0)
     {
-        m_zoom=1.0 + ZOOM;
-        m_pathTracer->getCamera()->dolly(m_zoom);
+        m_zoom=ZOOM;
+        m_pathTracer->getCamera()->dolly(-m_zoom);
         m_pathTracer->signalCameraChanged();
     }
     else if(_event->delta() <0 )
     {
-        m_zoom=1.0 - ZOOM;
+        m_zoom= ZOOM;
         m_pathTracer->getCamera()->dolly(m_zoom);
         m_pathTracer->signalCameraChanged();
     }
