@@ -2,7 +2,7 @@
 #include <QFile>
 #include "mainwindow.h"
 
-#define FULLSCREEN
+//#define FULLSCREEN
 
 int main(int argc, char **argv)
 {
