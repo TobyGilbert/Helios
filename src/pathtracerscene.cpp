@@ -1,8 +1,9 @@
 #include "pathtracerscene.h"
-#include "pinholecamera.h"
 #include <QColor>
 #include <iostream>
 #include "HDRLoader.h"
+
+
 
 
 PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
@@ -13,6 +14,9 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
 {
     // create an instance of our OptiX engine
     m_context = optix::Context::create();
+}
+PathTracerScene::~PathTracerScene(){
+    delete m_camera;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -46,26 +50,38 @@ void PathTracerScene::init(){
 //    m_outputBuffer = m_context->createBuffer(RT_BUFFER_OUTPUT,RT_FORMAT_FLOAT4, m_width, m_height);
     output_buffer->set(m_outputBuffer);
 
-    PinholeCamera camera(optix::make_float3( 0.0f, 25.0f, -50.0f ),  //eye
+//    PinholeCamera camera(optix::make_float3( 0.0f, 25.0f, -50.0f ),  //eye
+//                         optix::make_float3( 0.0f, 25.0f, 0.0f ),     //lookat
+//                         optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
+//                         35.0f,                                          //hfov
+//                         35.0f);                                         //vfov
+
+//    float3 eye,U,V,W;
+//    camera.getEyeUVW(eye,U,V,W);
+
+//    //set up our camera in our engine
+//    m_context["eye"]->setFloat( eye );
+//    m_context["U"]->setFloat( U );
+//    m_context["V"]->setFloat( V );
+//    m_context["W"]->setFloat( W);
+    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 25.0f, -50.0f ),  //eye
                          optix::make_float3( 0.0f, 25.0f, 0.0f ),     //lookat
                          optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
                          35.0f,                                          //hfov
                          35.0f);                                         //vfov
-
     float3 eye,U,V,W;
-    camera.getEyeUVW(eye,U,V,W);
+    m_camera->getEyeUVW(eye,U,V,W);
+
+    std::cout<<"eye: "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
+    std::cout<<"U: "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
+    std::cout<<"V: "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
+    std::cout<<"W: "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
     //set up our camera in our engine
     m_context["eye"]->setFloat( eye );
     m_context["U"]->setFloat( U );
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
-
-//    std::cout<<"Camera paramiters: "<<std::endl;
-//    std::cout<<"eye "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
-//    std::cout<<"U "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
-//    std::cout<<"V "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
-//    std::cout<<"W "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
@@ -75,7 +91,7 @@ void PathTracerScene::init(){
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "pathtrace_camera" );
+    optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "dof_camera" );
 
     m_context->setRayGenerationProgram( 0, ray_gen_program );
     optix::Program exception_program = m_context->createProgramFromPTXFile( ptx_path, "exception" );
@@ -168,7 +184,7 @@ void PathTracerScene::createGeometry(){
 
       // Glass Sphere
       // Sphere
-      gis.push_back( createSphere(make_float4(-12.0, 20.0, 50.0, 10.0)));
+      gis.push_back( createSphere(make_float4(-12.0, 20.0, 40.0, 10.0)));
       gis.back()->addMaterial(glass_material);
       gis.back()["glass_color"]->setFloat(white);
       gis.back()["index_of_refraction"]->setFloat(1.5);
@@ -179,7 +195,7 @@ void PathTracerScene::createGeometry(){
 //      gis.back()["index_of_refraction"]->setFloat(1.5);
 
       // Metal Sphere
-      gis.push_back( createSphere(make_float4(12.0, 20.0, 50.0, 10.0)));
+      gis.push_back( createSphere(make_float4(12.0, 20.0, 70.0, 10.0)));
       gis.back()->addMaterial(reflective_material);
       gis.back()["diffuse_color"]->setFloat(white);
       gis.back()["reflectivity"]->setFloat(1.0);
@@ -208,11 +224,15 @@ void PathTracerScene::createGeometry(){
 //                                          make_float3( 50.0f, 0.0f, 0.0f) ) );
 //      setMaterial(gis.back(), diffuse, "diffuse_color", white);
 
-//      // Right wall
+      // Right wall
 //      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 25.0f ),
 //                                          make_float3( 0.0f, 50.0f, 0.0f ),
 //                                          make_float3( 0.0f, 0.0f, 50.0f ) ) );
 //      setMaterial(gis.back(), diffuse, "diffuse_color", green);
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(green);
+//      gis.back()["reflectivity"]->setFloat(0.5);
+//      gis.back()["max_depth"]->setInt(3);
 
 //      // Left wall
 //      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
@@ -274,10 +294,10 @@ void PathTracerScene::createGeometry(){
       shadow_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
       m_context["top_shadower"]->set( shadow_group );
 
-      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
-                                          make_float3( -20.0f, 0.0f, 0.0f),
-                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
-      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+//      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
+//                                          make_float3( -20.0f, 0.0f, 0.0f),
+//                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
+//      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
@@ -408,3 +428,4 @@ void PathTracerScene::resize(int _width, int _height){
     m_frame = 0;
 
 }
+//----------------------------------------------------------------------------------------------------------------------

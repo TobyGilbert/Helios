@@ -16,6 +16,7 @@ public:
     /// @brief type def for easier use of our optix float3
     //----------------------------------------------------------------------------------------------------------------------
     typedef optix::float3 float3;
+    typedef optix::float4 float4;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our default contructor that does all our calculations
     /// @param _eye - the eye of our pinhole camera
