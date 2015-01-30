@@ -26,7 +26,8 @@ SOURCES += \
     src/pinholecamera.cpp \
     optixSrc/*.cu \
     src/HDRLoader.cpp \
-    src/optixmodel.cpp
+    src/optixmodel.cpp \
+    src/meshwidget.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -46,7 +47,8 @@ HEADERS += \
     include/pathtracerscene.h \
     include/pinholecamera.h \
     include/HDRLoader.h \
-    include/optixmodel.h
+    include/optixmodel.h \
+    include/meshwidget.h
 
 INCLUDEPATH +=./include /opt/local/include
 LIBS += -L/opt/local/lib -lIL -lassimp

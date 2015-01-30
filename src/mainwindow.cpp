@@ -80,30 +80,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_toolBar->addWidget(m_meshToolbarButton);
     m_toolBar->addSeparator();
 
-    m_meshWidget = new QWidget();
-    m_meshDockGridLayout = new QGridLayout();
-    m_meshWidget->setLayout(m_meshDockGridLayout);
+
+    m_meshWidget = new MeshWidget();
+
     m_meshDockWidget = new QDockWidget("Mesh Attributes");
-
-    m_meshTranslateLabel = new QLabel("Translate");
-    m_meshDockGridLayout->addWidget(m_meshTranslateLabel, 0, 0, 1, 1);
-    m_meshTranslateXDSpinBox = new QDoubleSpinBox();
-    m_meshDockGridLayout->addWidget(m_meshTranslateXDSpinBox, 0, 1, 1, 1);
-    m_meshTranslateYDSpinBox = new QDoubleSpinBox();
-    m_meshDockGridLayout->addWidget(m_meshTranslateYDSpinBox, 0, 2, 1, 1);
-    m_meshTranslateZDSpinBox = new QDoubleSpinBox();
-    m_meshDockGridLayout->addWidget(m_meshTranslateZDSpinBox, 0, 3, 1, 1);
-    m_meshRotateLabel = new QLabel("Rotate");
-    m_meshDockGridLayout->addWidget(m_meshRotateLabel, 1, 0, 1, 1);
-    m_meshRotateXDSpinBox = new QDoubleSpinBox();
-    m_meshDockGridLayout->addWidget(m_meshRotateXDSpinBox, 1, 1, 1, 1);
-    m_meshRotateYDSpinBox = new QDoubleSpinBox();
-    m_meshDockGridLayout->addWidget(m_meshRotateYDSpinBox, 1, 2, 1, 1);
-    m_meshRotateZDSpinBox = new QDoubleSpinBox();
-    m_meshDockGridLayout->addWidget(m_meshRotateZDSpinBox, 1, 3, 1, 1);
-
-    m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    m_meshDockGridLayout->addItem(m_meshSpacer, 5, 0, 2, 1);
     m_meshDockWidget->setWidget(m_meshWidget);
     m_meshDockWidget->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, m_meshDockWidget);
@@ -112,6 +92,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
 
+    connect(m_meshWidget,SIGNAL(importMesh(std::string)),m_openGLWidget,SLOT(importMesh(std::string)));
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
     connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
     connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
@@ -121,15 +102,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow(){
     delete m_meshToolbarButton;
-    delete m_meshTranslateXDSpinBox;
-    delete m_meshTranslateYDSpinBox;
-    delete m_meshTranslateZDSpinBox;
-    delete m_meshRotateXDSpinBox;
-    delete m_meshRotateYDSpinBox;
-    delete m_meshRotateZDSpinBox;
-    delete m_meshRotateLabel;
-    delete m_meshTranslateLabel;
-    delete m_meshDockGridLayout;
+
     delete m_meshWidget;
     delete m_meshDockWidget;
 //    delete m_lightSpacer;
