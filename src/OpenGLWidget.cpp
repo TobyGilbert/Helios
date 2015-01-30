@@ -10,7 +10,7 @@ const static int RESOLOUTION_SCALE = 1;
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //------------------------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=0.1;
+const static float ZOOM=0.01;
 OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidget(_format,_parent){
     // set this widget to have the initial keyboard focus
     setFocus();
@@ -20,6 +20,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     // mouse rotation values set to 0
     m_spinXFace=0;
     m_spinYFace=0;
+    m_zoom = 1.0;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -181,21 +182,26 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
   // this is different from button() which is used to check which button was
   // pressed when the mousePress/Release event is generated
   if(m_rotate && _event->buttons() == Qt::LeftButton){
-    int diffx=_event->x()-m_origX;
-    int diffy=_event->y()-m_origY;
-    m_spinXFace += (float) 0.5f * diffy;
-    m_spinYFace += (float) 0.5f * diffx;
+    float diffx=_event->x()-m_origX;
+    float diffy=_event->y()-m_origY;
+    glm::mat4 rotx,roty,finalRot;
+    rotx = glm::rotate(rotx, 0.002f * diffy,glm::vec3(1.0,0.0,0.0));
+    roty = glm::rotate(roty, 0.002f * diffx,glm::vec3(0.0,1.0,0.0));
+    finalRot = rotx*roty;
+    m_pathTracer->getCamera()->rotate(finalRot);
+    m_pathTracer->signalCameraChanged();
     m_origX = _event->x();
     m_origY = _event->y();
   }
         // right mouse translate code
   else if(m_translate && _event->buttons() == Qt::RightButton){
-    int diffX = (int)(_event->x() - m_origXPos);
-    int diffY = (int)(_event->y() - m_origYPos);
+    float diffX = (_event->x() - m_origXPos) * INCREMENT;
+    float diffY = (_event->y() - m_origYPos) * INCREMENT;
+    diffX*=-1.0;
     m_origXPos=_event->x();
     m_origYPos=_event->y();
-    m_modelPos.x += INCREMENT * diffX;
-    m_modelPos.y -= INCREMENT * diffY;
+    m_pathTracer->getCamera()->translate(diffX,diffY);
+    m_pathTracer->signalCameraChanged();
    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -239,11 +245,15 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
     // check the diff of the wheel position (0 means no change)
     if(_event->delta() > 0)
     {
-        m_modelPos.z+=ZOOM;
+        m_zoom=ZOOM;
+        m_pathTracer->getCamera()->dolly(-m_zoom);
+        m_pathTracer->signalCameraChanged();
     }
     else if(_event->delta() <0 )
     {
-        m_modelPos.z-=ZOOM;
+        m_zoom= ZOOM;
+        m_pathTracer->getCamera()->dolly(m_zoom);
+        m_pathTracer->signalCameraChanged();
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

@@ -780,6 +780,8 @@ moc/moc_mainwindow.cpp: /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framewo
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		include/pinholecamera.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -920,6 +922,8 @@ moc/moc_OpenGLWidget.cpp: /Developer/OptiX/SDK/sutil/GL/glew.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		include/pinholecamera.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1110,6 +1114,8 @@ obj/main.o: src/main.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framew
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		include/pinholecamera.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1275,6 +1281,8 @@ obj/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		include/pinholecamera.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1716,6 +1724,8 @@ obj/OpenGLWidget.o: src/OpenGLWidget.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		include/pinholecamera.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtCore.framework/Versions/5/Headers/QEvent \
@@ -1932,11 +1942,14 @@ obj/pathtracerscene.o: src/pathtracerscene.cpp include/pathtracerscene.h \
 		/opt/local/include/glm/detail/func_integer.hpp \
 		/opt/local/include/glm/detail/func_integer.inl \
 		include/pinholecamera.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QColor \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h \
 		include/HDRLoader.h \
 		/Developer/OptiX/SDK/sutil/sutil.h \
-		/Developer/OptiX/SDK/sutil/sutilapi.h
+		/Developer/OptiX/SDK/sutil/sutilapi.h \
+		/opt/local/include/glm/gtc/matrix_transform.hpp \
+		/opt/local/include/glm/gtc/matrix_transform.inl
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/pathtracerscene.o src/pathtracerscene.cpp
 
 obj/pinholecamera.o: src/pinholecamera.cpp include/pinholecamera.h \
@@ -1962,9 +1975,87 @@ obj/pinholecamera.o: src/pinholecamera.cpp include/pinholecamera.h \
 		/Developer/OptiX/include/optix_d3d11_interop.h \
 		/Developer/OptiX/include/optix_gl_interop.h \
 		/Developer/OptiX/include/optix_cuda_interop.h \
+		/Developer/OptiX/include/optixu/optixu_matrix_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_math_namespace.h \
 		/Developer/OptiX/include/optixu/optixu_vector_functions.h \
-		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h
+		/Developer/NVIDIA/CUDA-6.5/include/vector_functions.h \
+		/opt/local/include/glm/glm.hpp \
+		/opt/local/include/glm/detail/_fixes.hpp \
+		/opt/local/include/glm/fwd.hpp \
+		/opt/local/include/glm/detail/type_int.hpp \
+		/opt/local/include/glm/detail/setup.hpp \
+		/Developer/NVIDIA/CUDA-6.5/include/cuda.h \
+		/opt/local/include/glm/detail/type_float.hpp \
+		/opt/local/include/glm/detail/type_vec.hpp \
+		/opt/local/include/glm/detail/precision.hpp \
+		/opt/local/include/glm/detail/type_mat.hpp \
+		/opt/local/include/glm/vec2.hpp \
+		/opt/local/include/glm/detail/type_vec2.hpp \
+		/opt/local/include/glm/detail/_swizzle.hpp \
+		/opt/local/include/glm/detail/_swizzle_func.hpp \
+		/opt/local/include/glm/detail/type_vec2.inl \
+		/opt/local/include/glm/vec3.hpp \
+		/opt/local/include/glm/detail/type_vec3.hpp \
+		/opt/local/include/glm/detail/type_vec3.inl \
+		/opt/local/include/glm/vec4.hpp \
+		/opt/local/include/glm/detail/type_vec4.hpp \
+		/opt/local/include/glm/detail/type_vec4.inl \
+		/opt/local/include/glm/mat2x2.hpp \
+		/opt/local/include/glm/detail/type_mat2x2.hpp \
+		/opt/local/include/glm/detail/type_mat2x2.inl \
+		/opt/local/include/glm/mat2x3.hpp \
+		/opt/local/include/glm/detail/type_mat2x3.hpp \
+		/opt/local/include/glm/detail/type_mat2x3.inl \
+		/opt/local/include/glm/mat2x4.hpp \
+		/opt/local/include/glm/detail/type_mat2x4.hpp \
+		/opt/local/include/glm/detail/type_mat2x4.inl \
+		/opt/local/include/glm/mat3x2.hpp \
+		/opt/local/include/glm/detail/type_mat3x2.hpp \
+		/opt/local/include/glm/detail/type_mat3x2.inl \
+		/opt/local/include/glm/mat3x3.hpp \
+		/opt/local/include/glm/detail/type_mat3x3.hpp \
+		/opt/local/include/glm/detail/type_mat3x3.inl \
+		/opt/local/include/glm/mat3x4.hpp \
+		/opt/local/include/glm/detail/type_mat3x4.hpp \
+		/opt/local/include/glm/detail/type_mat3x4.inl \
+		/opt/local/include/glm/mat4x2.hpp \
+		/opt/local/include/glm/detail/type_mat4x2.hpp \
+		/opt/local/include/glm/detail/type_mat4x2.inl \
+		/opt/local/include/glm/mat4x3.hpp \
+		/opt/local/include/glm/detail/type_mat4x3.hpp \
+		/opt/local/include/glm/detail/type_mat4x3.inl \
+		/opt/local/include/glm/mat4x4.hpp \
+		/opt/local/include/glm/detail/type_mat4x4.hpp \
+		/opt/local/include/glm/detail/type_mat4x4.inl \
+		/opt/local/include/glm/trigonometric.hpp \
+		/opt/local/include/glm/detail/func_trigonometric.hpp \
+		/opt/local/include/glm/detail/func_trigonometric.inl \
+		/opt/local/include/glm/detail/_vectorize.hpp \
+		/opt/local/include/glm/detail/type_vec1.hpp \
+		/opt/local/include/glm/detail/type_vec1.inl \
+		/opt/local/include/glm/exponential.hpp \
+		/opt/local/include/glm/detail/func_exponential.hpp \
+		/opt/local/include/glm/detail/func_exponential.inl \
+		/opt/local/include/glm/detail/func_vector_relational.hpp \
+		/opt/local/include/glm/detail/func_vector_relational.inl \
+		/opt/local/include/glm/common.hpp \
+		/opt/local/include/glm/detail/func_common.hpp \
+		/opt/local/include/glm/detail/func_common.inl \
+		/opt/local/include/glm/packing.hpp \
+		/opt/local/include/glm/detail/func_packing.hpp \
+		/opt/local/include/glm/detail/func_packing.inl \
+		/opt/local/include/glm/detail/type_half.hpp \
+		/opt/local/include/glm/detail/type_half.inl \
+		/opt/local/include/glm/geometric.hpp \
+		/opt/local/include/glm/detail/func_geometric.hpp \
+		/opt/local/include/glm/detail/func_geometric.inl \
+		/opt/local/include/glm/matrix.hpp \
+		/opt/local/include/glm/detail/func_matrix.hpp \
+		/opt/local/include/glm/detail/func_matrix.inl \
+		/opt/local/include/glm/vector_relational.hpp \
+		/opt/local/include/glm/integer.hpp \
+		/opt/local/include/glm/detail/func_integer.hpp \
+		/opt/local/include/glm/detail/func_integer.inl
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o obj/pinholecamera.o src/pinholecamera.cpp
 
 obj/HDRLoader.o: src/HDRLoader.cpp include/HDRLoader.h \

@@ -2,7 +2,8 @@
 #include <QColor>
 #include <iostream>
 #include "HDRLoader.h"
-
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 
 
@@ -11,6 +12,7 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
                                     , m_width(512)
                                     , m_height(512)
                                     , m_frame(0)
+                                    , m_cameraChanged(false)
 {
     // create an instance of our OptiX engine
     m_context = optix::Context::create();
@@ -50,32 +52,15 @@ void PathTracerScene::init(){
 //    m_outputBuffer = m_context->createBuffer(RT_BUFFER_OUTPUT,RT_FORMAT_FLOAT4, m_width, m_height);
     output_buffer->set(m_outputBuffer);
 
-//    PinholeCamera camera(optix::make_float3( 0.0f, 25.0f, -50.0f ),  //eye
-//                         optix::make_float3( 0.0f, 25.0f, 0.0f ),     //lookat
-//                         optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
-//                         35.0f,                                          //hfov
-//                         35.0f);                                         //vfov
+    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 25.0f, -50.0f ),      //eye
+                                 optix::make_float3( 0.0f, 25.0f, 0.0f ),        //lookat
+                                 optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
+                                 35.0f,                                          //hfov
+                                 35.0f);                                         //vfov
 
-//    float3 eye,U,V,W;
-//    camera.getEyeUVW(eye,U,V,W);
-
-//    //set up our camera in our engine
-//    m_context["eye"]->setFloat( eye );
-//    m_context["U"]->setFloat( U );
-//    m_context["V"]->setFloat( V );
-//    m_context["W"]->setFloat( W);
-    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 25.0f, -50.0f ),  //eye
-                         optix::make_float3( 0.0f, 25.0f, 0.0f ),     //lookat
-                         optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
-                         35.0f,                                          //hfov
-                         35.0f);                                         //vfov
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
 
-    std::cout<<"eye: "<<eye.x<<","<<eye.y<<","<<eye.z<<std::endl;
-    std::cout<<"U: "<<U.x<<","<<U.y<<","<<U.z<<std::endl;
-    std::cout<<"V: "<<V.x<<","<<V.y<<","<<V.z<<std::endl;
-    std::cout<<"W: "<<W.x<<","<<W.y<<","<<W.z<<std::endl;
 
     //set up our camera in our engine
     m_context["eye"]->setFloat( eye );
@@ -301,11 +286,26 @@ void PathTracerScene::createGeometry(){
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
-//      m_model = new OptiXModel();
-//      m_model->createGeomtry("models/newteapot.obj",m_context);
-//      geometry_group->addChild(m_model->getGeomtryInstance());
+//      m_model = new OptiXModel(m_context);
+//      glm::mat4 trans;
+//      trans = glm::scale(trans,glm::vec3(0.8));
+//      trans = glm::rotate(trans,180.0f,glm::vec3(0.0f,1.0f,0.0f));
+//      trans[3][2] = 50;
+//      m_model->setTrans(trans);
+//      m_model->addMaterial(reflective_material);
+//      m_model->createGeomtry("models/pikatchu.obj",m_context);
+//      m_model->getGeomtryInstance()["diffuse_color"]->setFloat(white);
+//      m_model->getGeomtryInstance()["reflectivity"]->setFloat(1.0);
+//      m_model->getGeomtryInstance()["max_depth"]->setInt(3);
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
-      m_context["top_object"]->set( geometry_group );
+
+      Group topGroup = m_context->createGroup();
+      topGroup->addChild(geometry_group);
+//      topGroup->addChild(m_model->getGeomAndTrans());
+      topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+      topGroup->getAcceleration()->markDirty();
+
+      m_context["top_object"]->set(topGroup);
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
@@ -378,8 +378,10 @@ void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material m
 
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::trace(){
-    //launch it
+    //if our camera has changed then update it in our engine
+    if(m_cameraChanged) updateCamera();
 
+    //launch it
     m_context["frame_number"]->setUint( m_frame++ );
     m_context->launch(0,m_width,m_height);
 
@@ -429,3 +431,20 @@ void PathTracerScene::resize(int _width, int _height){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
+<<<<<<< HEAD
+=======
+void PathTracerScene::updateCamera(){
+    float3 eye,U,V,W;
+    m_camera->getEyeUVW(eye,U,V,W);
+
+    //set up our camera in our engine
+    m_context["eye"]->setFloat( eye );
+    m_context["U"]->setFloat( U );
+    m_context["V"]->setFloat( V );
+    m_context["W"]->setFloat( W);
+    m_frame = 0;
+    m_cameraChanged = false;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+>>>>>>> master
