@@ -90,6 +90,11 @@ void PathTracerScene::init(){
     m_sampling_strategy = 0;
     m_context["sampling_stategy"]->setInt(m_sampling_strategy);
 
+    //create our top group and set it in our engine
+    m_topGroup = m_context->createGroup();
+    m_context["top_object"]->set(m_topGroup);
+    m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+
     // Create scene geometry
     createGeometry();
 
@@ -295,13 +300,12 @@ void PathTracerScene::createGeometry(){
 //      m_model->getGeomtryInstance()["max_depth"]->setInt(3);
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
-      Group topGroup = m_context->createGroup();
-      topGroup->addChild(geometry_group);
-      topGroup->addChild(m_model->getGeomAndTrans());
-      topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
-      topGroup->getAcceleration()->markDirty();
 
-      m_context["top_object"]->set(topGroup);
+      m_topGroup->addChild(geometry_group);
+      m_topGroup->addChild(m_model->getGeomAndTrans());
+      m_topGroup->getAcceleration()->markDirty();
+
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
@@ -370,6 +374,18 @@ optix::GeometryInstance PathTracerScene::createSphere(const float4 &sphereLoc){
 void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material material, const std::string &color_name, const float3 &color){
     gi->addMaterial(material);
     gi[color_name]->setFloat(color);
+}
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::importMesh(std::string _path){
+    //import mesh
+    OptiXModel* model = new OptiXModel(m_context);
+    model->createGeomtry(_path,m_context);
+    //add to our scene
+    std::cout<<"has been called path: "<<_path<<std::endl;
+    m_topGroup->addChild(model->getGeomAndTrans());
+    m_topGroup->getAcceleration()->markDirty();
+    m_meshArray.push_back(model);
+    m_frame = 0;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
