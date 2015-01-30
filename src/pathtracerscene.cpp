@@ -431,8 +431,6 @@ void PathTracerScene::resize(int _width, int _height){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-=======
 void PathTracerScene::updateCamera(){
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
@@ -447,4 +445,3 @@ void PathTracerScene::updateCamera(){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
->>>>>>> master
