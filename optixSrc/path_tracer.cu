@@ -72,6 +72,9 @@ rtDeclareVariable(float3, texcoord, attribute texcoord, );
 
 rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
 
+// Environment map
+rtTextureSampler<float4, 2> envmap;
+
 rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );
 rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );
 rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
@@ -431,8 +434,7 @@ RT_PROGRAM void miss(){
     current_prd.done = true;
 }
 
-// Environment map
-rtTextureSampler<float4, 2> envmap;
+
 
 RT_PROGRAM void envi_miss(){
     float theta = atan2f(ray.direction.x, ray.direction.z);
