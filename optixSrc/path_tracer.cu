@@ -34,6 +34,7 @@ struct PerRayData_pathtrace{
     float3 origin;
     float3 direction;
     float3 colour;
+    float importance;
     unsigned int seed;
     int depth;
     int countEmitted;
@@ -66,6 +67,8 @@ rtDeclareVariable(unsigned int,  rr_begin_depth, , );
 
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
 rtDeclareVariable(float3, shading_normal,   attribute shading_normal, ); 
+rtDeclareVariable(float3, texcoord, attribute texcoord, );
+
 
 rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
 
@@ -105,6 +108,7 @@ RT_PROGRAM void pathtrace_camera(){
         float2 d = pixel + jitter*jitter_scale;
         float3 ray_origin = eye;
         float3 ray_direction = normalize(d.x*U + d.y*V + W);
+
 
         PerRayData_pathtrace prd;
         prd.result = make_float3(0.f);
@@ -155,9 +159,8 @@ RT_PROGRAM void pathtrace_camera(){
 }
 
 
-RT_PROGRAM void dof_camera(){
-    float4 focal_plane = make_float4(0, 0, 1.0, 50);
-    float focal_distance = 100.0;
+RT_PROGRAM void thin_lens_camera(){
+
     size_t2 screen = output_buffer.size();
 
     float2 inv_screen = 1.0f/make_float2(screen) * 2.f;
@@ -177,14 +180,24 @@ RT_PROGRAM void dof_camera(){
         float3 ray_origin = eye;
         float3 ray_direction = normalize(d.x*U + d.y*V + W);
 
-        // Find intersection with the focal plane
-//          float3 intersect = ray_origin + ray_direction * (focal_distance/screen.x);
-//          double TWO_PI = 2 * M_PI;
-//          float2 randVec2 = make_float2(rnd(seed), rnd(seed));
-//          float3 offset = make_float3(randVec2.x * cos((float)TWO_PI*randVec2.y), randVec2.x * sin((float)TWO_PI*randVec2.y), 0.0f) *10.0;
-//          ray_origin = ray_origin + offset;
-//          ray_direction = (intersect - ray_origin);
+        //Find intersection with the focal plane
 
+//        float3 P = ray_origin + ray_direction * (focal_distance/screen.x);
+        float3 fpNormal = normalize(-W);
+        float3 V0 = make_float3(0.0, 0.0, 50.0);
+        float3 P0 = ray_origin;
+        float3 P1 = ray_origin + ray_direction * 100.0;
+        float t = dot(fpNormal, (V0 - P0)) / dot(fpNormal, (P1 - P0));
+        float3 P = ray_origin + t*ray_direction;
+
+        float pixelT = dot(fpNormal, ((eye+W) - P0)) / dot(fpNormal, (P1 - P0));
+        float3 pixelP = ray_origin + pixelT*ray_direction;
+
+        // Plane
+
+        // plane eye + w;
+
+//        float3 P = ray_origin + (-ray_origin.z)/   (length(make_float3(pixel.x, pixel.y, ray_origin.z) - ray_origin) / (length(make_float3(pixel.x, pixel.y, ray_origin.z) - ray_origin) * f)) * normalize(make_float3(pixel.x, pixel.y, ray_origin.z) - ray_origin);
         PerRayData_pathtrace prd;
         prd.result = make_float3(0.f);
         prd.attenuation = make_float3(1.f);
@@ -193,9 +206,14 @@ RT_PROGRAM void dof_camera(){
         prd.inside = false;
         prd.seed = seed;
         prd.depth = 0;
+        prd.importance = 1.0f;
         prd.colour = make_float3(0.0, 0.0, 0.0);
 
     for(;;) {
+        float3 jitter3 = make_float3(x-rnd(seed), y-rnd(seed), 0.0);
+        float3 jitterScale =  make_float3(jitter_scale.x, jitter_scale.y, 0.0);
+        ray_origin = pixelP;// + jitter3 * jitterScale;
+        ray_direction = normalize(P - ray_origin);
         Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
         rtTrace(top_object, ray, prd);
         if(prd.done) {
@@ -243,10 +261,11 @@ RT_PROGRAM void diffuseEmitter(){
 
 rtDeclareVariable(float3,        diffuse_color, , );
 
+rtTextureSampler<float4, 2> map_texture;
 
 RT_PROGRAM void diffuse(){
-    current_prd.colour = diffuse_color;
-    if (current_prd.depth > 3){
+    current_prd.colour = make_float3(tex2D(map_texture, texcoord.x, texcoord.y));
+    if (current_prd.depth > 10){
         current_prd.done = true;
         return;
 
@@ -266,8 +285,9 @@ RT_PROGRAM void diffuse(){
     float3 v1, v2;
     createONB(ffnormal, v1, v2);
     current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
-//    float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
-    current_prd.attenuation = current_prd.attenuation * diffuse_color; // use the diffuse_color as the diffuse response
+    float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
+
+    current_prd.attenuation = current_prd.attenuation * make_float3(tex2D(map_texture, texcoord.x, texcoord.y)); // use the diffuse_color as the diffuse response
     current_prd.countEmitted = false;
 
     // Compute direct light...
@@ -337,54 +357,31 @@ RT_PROGRAM void glass_refract(){
 
 rtDeclareVariable(float, reflectivity, , );
 rtDeclareVariable(int, max_depth, , );
-rtDeclareVariable(float, importance_cutoff, , );
-
 
 RT_PROGRAM void reflections(){
-    if (current_prd.depth > 3){
+    if (current_prd.depth > 10){
         current_prd.done = true;
         return;
     }
-    float3 colour = diffuse_color;
+    float3 colour = make_float3(0.0, 0.0, 0.0);
     float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
     float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-
-
     float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
-
     float3 hitpoint = ray.origin + t_hit * ray.direction;
+
     current_prd.origin = hitpoint;
 
     float z1=rnd(current_prd.seed);
     float z2=rnd(current_prd.seed);
+
     float3 p;
     cosine_sample_hemisphere(z1, z2, p);
     float3 v1, v2;
+
     createONB(ffnormal, v1, v2);
-    current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
 
+    current_prd.direction = reflect(ray.direction, ffnormal);
 
-  // Get reflection colour
-    if (current_prd.depth < max_depth){
-        PerRayData_pathtrace reflection_prd;
-        reflection_prd.result = make_float3(0.f);
-        reflection_prd.attenuation = make_float3(1.f);
-        reflection_prd.countEmitted = true;
-        reflection_prd.done = false;
-        reflection_prd.inside = false;
-        reflection_prd.depth = current_prd.depth+1;
-        float3 R = reflect(ray.direction, ffnormal);
-        Ray refl_ray = make_Ray(hitpoint, R, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
-        rtTrace(top_object, refl_ray, reflection_prd);
-        colour +=  reflectivity *reflection_prd.colour;
-        reflection_prd.done = true;
-    }
-
-    current_prd.colour = normalize(colour);
-    current_prd.attenuation = current_prd.attenuation * colour;
-    current_prd.countEmitted = true;
-    // Compute direct light...
-    // Or shoot one...
     unsigned int num_lights = lights.size();
     float3 result = make_float3(0.0f);
 
@@ -415,106 +412,20 @@ RT_PROGRAM void reflections(){
     }
     current_prd.radiance = result;
 }
-
-rtDeclareVariable(float3, tile_v0, , );
-rtDeclareVariable(float3, tile_v1, , );
-rtDeclareVariable(float3, crack_colour, , );
-rtDeclareVariable(float, crack_width, , );
-
-RT_PROGRAM void procedural_floor(){
-    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-
-    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
-
-    float3 hitpoint = ray.origin + t_hit * ray.direction;
-    current_prd.origin = hitpoint;
-
-    // Procedural
-    float k0 = dot(tile_v0, hitpoint);
-    float k1 = dot(tile_v1, hitpoint);
-
-    k0 = k0 - floor(k0);
-    k1 = k1 - floor(k1);
-
-    float3 local_colour;
-    if (k0 > crack_width && k1  > crack_width){
-        local_colour = diffuse_color;
-    }
-    else{
-        local_colour = crack_colour;
-    }
-
-    float z1=rnd(current_prd.seed);
-    float z2=rnd(current_prd.seed);
-    float3 p;
-    cosine_sample_hemisphere(z1, z2, p);
-    float3 v1, v2;
-    createONB(ffnormal, v1, v2);
-    current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
-    float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
-
-    // Get reflection colour
-    PerRayData_pathtrace reflection_prd;
-    float3 R = reflect(ray.direction, ffnormal);
-    Ray refl_ray = make_Ray(hitpoint, R, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
-    rtTrace(top_object, refl_ray, reflection_prd);
-    current_prd.attenuation = current_prd.attenuation * local_colour + (reflectivity * reflection_prd.colour);
-    current_prd.countEmitted = false;
-
-    // Compute direct light...
-    // Or shoot one...
-    unsigned int num_lights = lights.size();
-    float3 result = make_float3(0.0f);
-
-    for(int i = 0; i < num_lights; ++i) {
-        ParallelogramLight light = lights[i];
-        float z1 = rnd(current_prd.seed);
-        float z2 = rnd(current_prd.seed);
-        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
-
-        float Ldist = length(light_pos - hitpoint);
-        float3 L = normalize(light_pos - hitpoint);
-        float nDl = dot( ffnormal, L );
-        float LnDl = dot( light.normal, L );
-        float A = length(cross(light.v1, light.v2));
-
-        // cast shadow ray
-        if ( nDl > 0.0f && LnDl > 0.0f ) {
-            PerRayData_pathtrace_shadow shadow_prd;
-            shadow_prd.inShadow = false;
-            Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-            rtTrace(top_object, shadow_ray, shadow_prd);
-
-            if(!shadow_prd.inShadow){
-                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-                result += light.emission * weight;
-            }
-        }
-    }
-    current_prd.colour = local_colour + (reflectivity * reflection_prd.colour);
-    current_prd.radiance =result;//  make_float3(1.0, 1.0, 1.0);
-}
-
 //-----------------------------------------------------------------------------
 //
 //  Exception program
 //
 //-----------------------------------------------------------------------------
-
-
 RT_PROGRAM void exception(){
     output_buffer[launch_index] = make_float4(bad_color, 0.0f);
 
 }
-
-
 //-----------------------------------------------------------------------------
 //
 //  Miss program
 //
 //-----------------------------------------------------------------------------
-
 RT_PROGRAM void miss(){
     current_prd.radiance = bg_color;
     current_prd.done = true;
@@ -529,7 +440,6 @@ RT_PROGRAM void envi_miss(){
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
     current_prd.radiance = make_float3(tex2D(envmap, u, v));
-    current_prd.colour = make_float3(tex2D(envmap, u, v));
     current_prd.done = true;
 }
 

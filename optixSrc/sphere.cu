@@ -7,6 +7,7 @@ rtDeclareVariable(float4, sphere, , );
 rtDeclareVariable(float3, texcoord, attribute texcoord, );
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, );
 rtDeclareVariable(float3, shading_normal, attribute shading_normal, );
+
 rtDeclareVariable(int, lgt_idx, attribute lgt_idx, );
 rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
 
@@ -24,12 +25,21 @@ RT_PROGRAM void intersect_sphere(int primIdx){
         bool check_second = true;
         if( rtPotentialIntersection( root1 ) ) {
             shading_normal = geometric_normal = ((O + root1*ray.direction))/radius;
-            if( rtReportIntersection( 0 ) ) check_second = false;
+            float u = 0.5 + atan2(shading_normal.z, shading_normal.x) / (2*M_PI);
+            float v = 0.5 - asin(shading_normal.y) / M_PI;
+            texcoord = make_float3(u, v, 1.0);
+
+            if( rtReportIntersection( 0 ) ){
+                check_second = false;
+            }
         }
         if( check_second ) {
             float root2 = (-b + sdisc) / ( 2 * a);
             if( rtPotentialIntersection( root2 ) ) {
                 shading_normal = geometric_normal =((O + root2*ray.direction))/radius;
+                float u = 0.5 + atan2(shading_normal.z, shading_normal.x) / (2*M_PI);
+                float v = 0.5 - asin(shading_normal.y) / M_PI;
+                texcoord = make_float3(u, v, 1.0);
                 rtReportIntersection( 0 );
             }
         }

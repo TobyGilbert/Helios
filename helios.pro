@@ -26,7 +26,8 @@ SOURCES += \
     src/pinholecamera.cpp \
     optixSrc/*.cu \
     src/HDRLoader.cpp \
-    src/optixmodel.cpp
+    src/optixmodel.cpp \
+    src/TextureLoader.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -46,7 +47,8 @@ HEADERS += \
     include/pathtracerscene.h \
     include/pinholecamera.h \
     include/HDRLoader.h \
-    include/optixmodel.h
+    include/optixmodel.h \
+    include/TextureLoader.h
 
 INCLUDEPATH +=./include /opt/local/include
 LIBS += -L/opt/local/lib -lIL -lassimp
@@ -84,7 +86,8 @@ OTHER_FILES += \
     shaders/PhongVert.glsl \
     shaders/pathTraceVert.vert \
     shaders/pathTraceFrag.frag \
-    textures/CedarCity.hdr
+    textures/CedarCity.hdr \
+    textures/map.png
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu

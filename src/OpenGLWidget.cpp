@@ -5,12 +5,12 @@
 #include "OpenGLWidget.h"
 #include <iostream>
 
-const static float INCREMENT=0.01;
+const static float INCREMENT=0.02;
 const static int RESOLOUTION_SCALE = 1;
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //------------------------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=0.01;
+const static float ZOOM=0.1;
 OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidget(_format,_parent){
     // set this widget to have the initial keyboard focus
     setFocus();

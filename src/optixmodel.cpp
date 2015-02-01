@@ -20,8 +20,18 @@ OptiXModel::OptiXModel(Context &_context)
     m_trans = _context->createTransform();
     m_trans->setMatrix(false,m,0);
 }
+OptiXModel::~OptiXModel(){
+    m_vertexBuffer->destroy();
+    m_normalBuffer->destroy();
+    m_texCoordsBuffer->destroy();
+    m_vertIdxBuffer->destroy();
+    m_normIdxBuffer->destroy();
+    m_texCoordIdxBuffer->destroy();
+    m_matIdxBuffer->destroy();
+
+}
 //----------------------------------------------------------------------------------------------------------------------
-void OptiXModel::createGeomtry(std::string _loc, Context &_context){
+void OptiXModel::createGeometry(std::string _loc, Context &_context){
     //import our mesh
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(_loc.c_str(), aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
@@ -135,16 +145,16 @@ void OptiXModel::createGeomtry(std::string _loc, Context &_context){
     unsigned int usePTX32InHost64 = 0;
     RTgeometry geo = m_geometry->get();
 
-//    rtuCreateClusteredMeshExt( _context->get(),usePTX32InHost64,&geo,
-//                                     (unsigned int)mesh->mNumVertices,
-//                                     vertArray,
-//                                     (unsigned int)mesh->mNumFaces,
-//                                     vertIdices,
-//                                     matIndices,
-//                                     m_normalBuffer->get(),
-//                                     vertIdices,
-//                                     m_texCoordsBuffer->get(),
-//                                     vertIdices );
+    rtuCreateClusteredMeshExt( _context->get(),usePTX32InHost64,&geo,
+                                     (unsigned int)mesh->mNumVertices,
+                                     vertArray,
+                                     (unsigned int)mesh->mNumFaces,
+                                     vertIdices,
+                                     matIndices,
+                                     m_normalBuffer->get(),
+                                     vertIdices,
+                                     m_texCoordsBuffer->get(),
+                                     vertIdices );
 
     m_geometry.take(geo);
     m_geometry->setPrimitiveCount(mesh->mNumFaces);
