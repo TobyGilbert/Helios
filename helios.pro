@@ -27,7 +27,8 @@ SOURCES += \
     optixSrc/*.cu \
     src/HDRLoader.cpp \
     src/optixmodel.cpp \
-    src/TextureLoader.cpp
+    src/TextureLoader.cpp \
+    src/meshwidget.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -48,7 +49,8 @@ HEADERS += \
     include/pinholecamera.h \
     include/HDRLoader.h \
     include/optixmodel.h \
-    include/TextureLoader.h
+    include/TextureLoader.h \
+    include/meshwidget.h
 
 INCLUDEPATH +=./include /opt/local/include
 LIBS += -L/opt/local/lib -lIL -lassimp
