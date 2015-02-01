@@ -1,118 +1,116 @@
-#ifndef OPTIXMODEL_H
-#define OPTIXMODEL_H
+#ifndef MeshWidget_H
+#define MeshWidget_H
 
-/// @class OptiXModel
-/// @author Declan Russell
-/// @date 28/01/2014
-/// @brief This is a class to import models ready to be used with the OptiX ray tracing engine
-/// @todo do something with the material buffer, atm it all just defaults to 0
+#include <QWidget>
+#include <QGridLayout>
+#include <QLabel>
+#include <QDoubleSpinBox>
+#include <QSpacerItem>
+#include <QPushButton>
+#include <QFileDialog>
+#include <QString>
 
-#include <optixu/optixpp_namespace.h>
-#include <glm/glm.hpp>
-
-using namespace optix;
-class OptiXModel
+class MeshWidget : public QWidget
 {
+    Q_OBJECT
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor, doesnt really do anything apart from init our members
+    /// @brief our default constructor
     //----------------------------------------------------------------------------------------------------------------------
-    OptiXModel(Context &_context);
+    explicit MeshWidget();
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our destructor
     //----------------------------------------------------------------------------------------------------------------------
-    ~OptiXModel();
+    ~MeshWidget();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief creates our geomtry
-    /// @param _loc - the location of the mesh we wish to import
-    /// @param _context - a reference to the instance of our OptiX Engine
+signals:
+
     //----------------------------------------------------------------------------------------------------------------------
-    void createGeometry(std::string _loc, Context &_context);
+    /// @brief our signal to deliver our tranforms, called by signalTransformChange()
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a mutator for our transformation matrix for our geomtry
-    /// @brief this function converts glm matricies to OptiX compatible array of floats
-    /// @param _trans our translation matrix
-    /// @param _transpose - is our matrix transposed
+    void meshTransform(float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
-    void setTrans(glm::mat4 _trans, bool _transpose = false);
+    /// @brief a signal to import mesh, called by signal import mesh if a mesh has been selected
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a mutator for our transformation matrix for our geomtry
-    /// @param _trans - our translation matrix
-    /// @param _transpose - is our matrix transposed
-    /// @param _invM - the inverse of our matrix, default not required.
+    void importMesh(std::string _path);
     //----------------------------------------------------------------------------------------------------------------------
-    void setTrans(float *_m, bool _transpose = false, float *_invM = 0);
+public slots:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief set our material list
-    /// @param vector of our materials
+    /// @brief our signal to norify if any tranform spinbox have been changed
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setMatrialList(std::vector<Material> _matList){m_materials = _matList;}
+    void signalTransformChange();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief add to our material list
-    /// @param matrial to add to list
+    /// @brief function called to import mesh when importMeshBtn pressed
     //----------------------------------------------------------------------------------------------------------------------
-    inline void addMaterial(Material &_mat){m_materials.push_back(_mat);}
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief an accessor to our model with a transformation applied
-    //----------------------------------------------------------------------------------------------------------------------
-    inline Transform getGeomAndTrans(){return m_trans;}
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief an accessor to our geomtry instance
-    //----------------------------------------------------------------------------------------------------------------------
-    inline GeometryInstance getGeometryInstance(){return m_geometryInstance;}
-    //----------------------------------------------------------------------------------------------------------------------
-protected:
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief create a default defuse material
-    //----------------------------------------------------------------------------------------------------------------------
-    Material createDefaultMat(Context &_context);
+    void signalImportMesh();
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our OptiX geometry instance
+    /// @brief our inport mesh push button
     //----------------------------------------------------------------------------------------------------------------------
-    GeometryInstance m_geometryInstance;
+    QPushButton* m_importMeshBtn;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our OptiX geomtry
+    /// @brief our spacer for the widget
     //----------------------------------------------------------------------------------------------------------------------
-    Geometry m_geometry;
+    QSpacerItem* m_meshSpacer;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our list of materials applied to our geomtry
+    /// @brief our spinbox for x rotation
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<Material> m_materials;
+    QDoubleSpinBox* m_meshRotateXDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our model tranformation
+    /// @brief our spinbox for y rotation
     //----------------------------------------------------------------------------------------------------------------------
-    Transform m_trans;
+    QDoubleSpinBox* m_meshRotateYDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our vertex buffer
+    /// @brief our spinbox for z rotation
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_vertexBuffer;
+    QDoubleSpinBox* m_meshRotateZDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our normals buffer
+    /// @brief our rotate label
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_normalBuffer;
+    QLabel* m_meshRotateLabel;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @briefour texture coordinates buffer
+    /// @brief our spinbox for x translation
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_texCoordsBuffer;
+    QDoubleSpinBox* m_meshTranslateXDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our vertex index buffer
+    /// @brief our spinbox for y translation
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_vertIdxBuffer;
+    QDoubleSpinBox* m_meshTranslateYDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our normals index buffer
+    /// @brief our spinbox for z translation
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_normIdxBuffer;
+    QDoubleSpinBox* m_meshTranslateZDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our textures coordinates index buffer
+    /// @brief our translate label
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_texCoordIdxBuffer;
+    QLabel* m_meshTranslateLabel;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our material index buffer
+    /// @brief our spinbox for x scale
     //----------------------------------------------------------------------------------------------------------------------
-    Buffer m_matIdxBuffer;
+    QDoubleSpinBox* m_meshScaleXDSpinBox;
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our spinbox for Y scale
+    //----------------------------------------------------------------------------------------------------------------------
+    QDoubleSpinBox* m_meshScaleYDSpinBox;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our spinbox for z scale
+    //----------------------------------------------------------------------------------------------------------------------
+    QDoubleSpinBox* m_meshScaleZDSpinBox;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our scale label
+    //----------------------------------------------------------------------------------------------------------------------
+    QLabel* m_meshScaleLabel;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our grid layour for our widget
+    //----------------------------------------------------------------------------------------------------------------------
+    QGridLayout* m_meshDockGridLayout;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the mesh id
+    //----------------------------------------------------------------------------------------------------------------------
+    int m_meshId;
+    //----------------------------------------------------------------------------------------------------------------------
+
 };
 
-#endif // OPTIXMODEL_H
+#endif // MeshWidget_H
