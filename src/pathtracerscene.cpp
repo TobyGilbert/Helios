@@ -244,7 +244,7 @@ void PathTracerScene::createGeometry(){
       // Metal teapot
       m_model = new OptiXModel(m_context);
       m_model->addMaterial(diffuse);
-      m_model->createGeometry("models/Predator.obj",m_context);
+      m_model->createGeometry("models/newteapot.obj",m_context);
       m_model->getGeometryInstance()["diffuse_color"]->setFloat(white);
       glm::mat4 trans;
       trans = glm::scale(trans,glm::vec3(13.0));
