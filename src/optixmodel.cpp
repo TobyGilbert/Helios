@@ -1,8 +1,6 @@
 #include "optixmodel.h"
 
-#include <assimp/scene.h>
-#include <assimp/postprocess.h>
-#include <assimp/Importer.hpp>
+
 #include <optixu/optixu.h>
 
 #include <iostream>
@@ -35,56 +33,134 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
     //import our mesh
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(_loc.c_str(), aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
-    aiMesh* mesh = scene->mMeshes[0];
+
+    if(scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
+    {
+        std::cerr<<"The file was not successfully opened: "<<_loc.c_str()<<std::endl;
+        return;
+    }
+    loadMesh(scene->mRootNode, scene, _context);
+}
+void OptiXModel::loadMesh(const aiNode* _node, const aiScene *_scene,Context &_context){
+    for (int i=0; i<_node->mNumMeshes; i++){
+        aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
+        processMesh(mesh, _context);
+    }
+
+    for (int i=0; i<_node->mNumChildren; i++){
+        loadMesh(_node->mChildren[i], _scene, _context);
+    }
+
+    createBuffers(_context);
+}
+void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
+
+    for(int i = 0; i <_mesh->mNumVertices; i++)
+    {
+        glm::vec3 tempVec;
+
+        // position
+        tempVec.x = _mesh->mVertices[i].x;
+        tempVec.y = _mesh->mVertices[i].y;
+        tempVec.z = _mesh->mVertices[i].z;
+
+        m_vertices.push_back(tempVec);
+
+        // normals
+        tempVec.x = _mesh->mNormals[i].x;
+        tempVec.y = _mesh->mNormals[i].y;
+        tempVec.z = _mesh->mNormals[i].z;
+
+        m_normals.push_back(tempVec);
+
+        // UV
+        if(_mesh->mTextureCoords[0]){
+            tempVec.x = _mesh->mTextureCoords[0][i].x;
+            tempVec.y = _mesh->mTextureCoords[0][i].y;
+        }
+        else{
+            tempVec.x = tempVec.y = 0.0;
+        }
+
+        m_texCoords.push_back(glm::vec2(tempVec.x, tempVec.y));
+    }
+
+    //lets fill up our idx buffers
+    typedef struct { int x; int y; int z;} ixyz;
+    unsigned int i;
+    for(i=0; i<_mesh->mNumFaces;i++){
+//        vertIndices[i*3] = i*3;
+//        vertIndices[i*3+1] = i*3+1;
+//        vertIndices[i*3+2] = i*3+2;
+        m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+    }
+
+    for(i=0; i<_mesh->mNumFaces;i++){
+        m_normalIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+    }
+
+    for(i=0; i<_mesh->mNumFaces;i++){
+        m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+    }
+}
+void OptiXModel::createBuffers(Context &_context){
 
     // Create vertex, normal, and texture_coordinate buffers
-    m_vertexBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, mesh->mNumVertices );
-    m_normalBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, mesh->mNumVertices );
-    m_texCoordsBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT2, mesh->mNumVertices);
+    m_vertexBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
+    m_normalBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
+    m_texCoordsBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT2, m_vertices.size());
     //now lets write our information to our buffers
     void *vertPtr = m_vertexBuffer->map();
     typedef struct { float x; float y; float z;} xyz;
     xyz* vertData = (xyz*)vertPtr;
-    float vertArray[mesh->mNumVertices*3];
+    float vertArray[m_vertices.size()*3];
     unsigned int i;
-    for(i=0; i<mesh->mNumVertices;i++){
-        vertData[i].x = mesh->mVertices[i].x;
-        vertData[i].y = mesh->mVertices[i].y;
-        vertData[i].z = mesh->mVertices[i].z;
-        vertArray[i*3] = mesh->mVertices[i].x;
-        vertArray[i*3+1] = mesh->mVertices[i].x;
-        vertArray[i*3+2] = mesh->mVertices[i].x;
+    for(i=0; i<m_vertices.size();i++){
+        vertData[i].x = m_vertices[i].x;
+        vertData[i].y = m_vertices[i].y;
+        vertData[i].z = m_vertices[i].z;
+        vertArray[i*3] = m_vertices[i].x;
+        vertArray[i*3+1] = m_vertices[i].x;
+        vertArray[i*3+2] = m_vertices[i].x;
     }
     m_vertexBuffer->unmap();
+
     vertPtr = m_normalBuffer->map();
     vertData = (xyz*)vertPtr;
-    for(i=0; i<mesh->mNumVertices;i++){
-        vertData[i].x = mesh->mNormals[i].x;
-        vertData[i].y = mesh->mNormals[i].y;
-        vertData[i].z = mesh->mNormals[i].z;
+    for(i=0; i<m_vertices.size();i++){
+        vertData[i].x = m_normals[i].x;
+        vertData[i].y = m_normals[i].y;
+        vertData[i].z = m_normals[i].z;
     }
     m_normalBuffer->unmap();
+
     void *texPtr = m_texCoordsBuffer->map();
     typedef struct {float x; float y;} xy;
     xy* texData = (xy*)texPtr;
-    for(i=0; i<mesh->mNumVertices;i++){
-        texData[i].x = mesh->mTextureCoords[0][i].x;
-        texData[i].y = mesh->mTextureCoords[0][i].y;
+
+    for(i=0; i<m_vertices.size();i++){
+        if (m_texCoords.size() > 0.0){
+            texData[i].x = m_texCoords[i].x;
+            texData[i].y = m_texCoords[i].y;
+        }
+        else{
+            texData[i].x = texData[i].y = 0.0;
+        }
     }
     m_texCoordsBuffer->unmap();
 
     //now lets set up our index buffers
-    m_vertIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, mesh->mNumFaces );
-    m_normIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, mesh->mNumFaces );
-    m_texCoordIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, mesh->mNumFaces );
-    m_matIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_INT, mesh->mNumFaces );
+    m_vertIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
+    m_normIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
+    m_texCoordIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
+    m_matIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_INT, m_vertices.size()/3 );
 
     //lets fill up our idx buffers
-    unsigned int vertIdices[mesh->mNumVertices];
+    unsigned int vertIdices[m_vertices.size()];
     void *idxPtr = m_vertIdxBuffer->map();
     typedef struct { int x; int y; int z;} ixyz;
     ixyz* idxData = (ixyz*)idxPtr;
-    for(i=0; i<mesh->mNumFaces;i++){
+    for(i=0; i<m_vertices.size()/3;i++){
         idxData[i].x = i*3;
         idxData[i].y = i*3+1;
         idxData[i].z = i*3+2;
@@ -96,7 +172,7 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
 
     idxPtr = m_normIdxBuffer->map();
     idxData = (ixyz*)idxPtr;
-    for(i=0; i<mesh->mNumFaces;i++){
+    for(i=0; i<m_vertices.size()/3;i++){
         idxData[i].x = i*3;
         idxData[i].y = i*3+1;
         idxData[i].z = i*3+2;
@@ -105,7 +181,7 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
 
     idxPtr = m_texCoordIdxBuffer->map();
     idxData = (ixyz*)idxPtr;
-    for(i=0; i<mesh->mNumFaces;i++){
+    for(i=0; i<m_vertices.size()/3;i++){
         idxData[i].x = i*3;
         idxData[i].y = i*3+1;
         idxData[i].z = i*3+2;
@@ -113,13 +189,14 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
     m_texCoordIdxBuffer->unmap();
 
     //Dont really know what to do with materials yet so lets just have them all default to 0
-    unsigned int matIndices[mesh->mNumFaces];
+    unsigned int matIndices[m_vertices.size()/3];
     unsigned int * matPtr = static_cast<unsigned int*>(m_matIdxBuffer->map());
-    for(i=0;i<mesh->mNumFaces;i++){
+    for(i=0;i<m_vertices.size()/3;i++){
         matPtr[i]=0u;
         matIndices[i]=0u;
     }
     m_matIdxBuffer->unmap();
+
 
     //create our geometry in our engine
     m_geometry = _context->createGeometry();
@@ -142,22 +219,22 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
     m_geometry["material_buffer"]->setBuffer( m_matIdxBuffer );
 
     //create our cluster mesh thing
-    unsigned int usePTX32InHost64 = 0;
+//    unsigned int usePTX32InHost64 = 0;
     RTgeometry geo = m_geometry->get();
 
-    rtuCreateClusteredMeshExt( _context->get(),usePTX32InHost64,&geo,
-                                     (unsigned int)mesh->mNumVertices,
-                                     vertArray,
-                                     (unsigned int)mesh->mNumFaces,
-                                     vertIdices,
-                                     matIndices,
-                                     m_normalBuffer->get(),
-                                     vertIdices,
-                                     m_texCoordsBuffer->get(),
-                                     vertIdices );
+//    rtuCreateClusteredMeshExt( _context->get(),usePTX32InHost64,&geo,
+//                                     (unsigned int)_mesh->mNumVertices,
+//                                     vertArray,
+//                                     (unsigned int)_mesh->mNumFaces,
+//                                     vertIdices,
+//                                     matIndices,
+//                                     m_normalBuffer->get(),
+//                                     vertIdices,
+//                                     m_texCoordsBuffer->get(),
+//                                     vertIdices );
 
     m_geometry.take(geo);
-    m_geometry->setPrimitiveCount(mesh->mNumFaces);
+    m_geometry->setPrimitiveCount(m_vertices.size()/3);
 
     m_geometryInstance = _context->createGeometryInstance();
     m_geometryInstance->setGeometry(m_geometry);
@@ -224,3 +301,4 @@ void OptiXModel::setTrans(glm::mat4 _trans, bool _transpose){
     m_trans->setMatrix(_transpose,m,invM);
 }
 //----------------------------------------------------------------------------------------------------------------------
+

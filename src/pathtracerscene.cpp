@@ -114,7 +114,7 @@ void PathTracerScene::init(){
 void PathTracerScene::createGeometry(){
     // Light buffer
       ParallelogramLight light;
-      light.corner   = make_float3( 10.0f, 49.9f, 40.0f);
+      light.corner   = make_float3( 10.0f, 60.9f, 70.0f);
       light.v1       = make_float3( -20.0f, 0.0f, 0.0f);
       light.v2       = make_float3( 0.0f, 0.0f, 10.0f);
       light.normal   = normalize( cross(light.v1, light.v2) );
@@ -173,23 +173,23 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
       const float3 blue = make_float3( 0.0, 0.0, 1.0);
 
-      // Diffuse Sphere
-      gis.push_back(createSphere(make_float4(0.0, 30.0, 60.0, 8.0)));
-      gis.back()->addMaterial(diffuse);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
+//      // Diffuse Sphere
+//      gis.push_back(createSphere(make_float4(0.0, 30.0, 60.0, 8.0)));
+//      gis.back()->addMaterial(diffuse);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
 
-      // Glass Sphere
-      gis.push_back( createSphere(make_float4(20.0, 30.0, 60.0, 8.0)));
-      gis.back()->addMaterial(glass_material);
-      gis.back()["glass_color"]->setFloat(white);
-      gis.back()["index_of_refraction"]->setFloat(1.5);
+//      // Glass Sphere
+//      gis.push_back( createSphere(make_float4(20.0, 30.0, 60.0, 8.0)));
+//      gis.back()->addMaterial(glass_material);
+//      gis.back()["glass_color"]->setFloat(white);
+//      gis.back()["index_of_refraction"]->setFloat(1.5);
 
-      // Metal Sphere
-      gis.push_back( createSphere(make_float4(-20.0, 30.0, 60.0, 8.0)));
-      gis.back()->addMaterial(reflective_material);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["max_depth"]->setInt(3);
+//      // Metal Sphere
+//      gis.push_back( createSphere(make_float4(-20.0, 30.0, 60.0, 8.0)));
+//      gis.back()->addMaterial(reflective_material);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["max_depth"]->setInt(3);
 
 
       // Floor
@@ -198,7 +198,8 @@ void PathTracerScene::createGeometry(){
                                           make_float3( 100.0f, 0.0f, 0.0f ) ) );
 //      gis.back()->addMaterial(reflective_material);
       gis.back()->addMaterial(diffuse);
-      gis.back()["map_texture"]->setTextureSampler(loadTexture(m_context, "textures/map.png"));
+      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["map_texture"]->setTextureSampler(loadTexture(m_context, "textures/map.png"));
 
 ////      // Ceiling
 //      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
@@ -232,50 +233,51 @@ void PathTracerScene::createGeometry(){
       shadow_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
       m_context["top_shadower"]->set( shadow_group );
 
-      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
-                                          make_float3( -20.0f, 0.0f, 0.0f),
-                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
-      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+//      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
+//                                          make_float3( -20.0f, 0.0f, 0.0f),
+//                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
+//      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
       // Metal teapot
       m_model = new OptiXModel(m_context);
-      m_model->addMaterial(reflective_material);
-      m_model->createGeometry("models/newteapot.obj",m_context);
+      m_model->addMaterial(diffuse);
+      m_model->createGeometry("models/Predator.obj",m_context);
+      m_model->getGeometryInstance()["diffuse_color"]->setFloat(white);
       glm::mat4 trans;
       trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = -23;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
+      trans[3][0] = 0;
+      trans[3][1] = 30;
+      trans[3][2] = 70;
       m_model->setTrans(trans);
 
-      // Glass Teapot
-      m_model2 = new OptiXModel(m_context);
-      m_model2->addMaterial(glass_material);
-      m_model2->createGeometry("models/newteapot.obj",m_context);
-      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
-      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
-      trans = glm::mat4(1.0);
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 23;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
-      m_model2->setTrans(trans);
+//      // Glass Teapot
+//      m_model2 = new OptiXModel(m_context);
+//      m_model2->addMaterial(glass_material);
+//      m_model2->createGeometry("models/newteapot.obj",m_context);
+//      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
+//      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
+//      trans = glm::mat4(1.0);
+//      trans = glm::scale(trans,glm::vec3(13.0));
+//      trans[3][0] = 23;
+//      trans[3][1] = 10;
+//      trans[3][2] = 50;
+//      m_model2->setTrans(trans);
 
-      // Diffuse teapot
-      m_model3 = new OptiXModel(m_context);
-      m_model3->addMaterial(diffuse);
-      m_model3->createGeometry("models/teapot.obj", m_context);
-      m_model3->getGeometryInstance()["diffuse_color"]->setFloat(white);
-      m_model3->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
-      trans = glm::mat4(1.0);
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 0;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
-      m_model3->setTrans(trans);
+//      // Diffuse teapot
+//      m_model3 = new OptiXModel(m_context);
+//      m_model3->addMaterial(diffuse);
+//      m_model3->createGeometry("models/teapot.obj", m_context);
+//      m_model3->getGeometryInstance()["diffuse_color"]->setFloat(white);
+//      m_model3->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
+//      trans = glm::mat4(1.0);
+//      trans = glm::scale(trans,glm::vec3(13.0));
+//      trans[3][0] = 0;
+//      trans[3][1] = 10;
+//      trans[3][2] = 50;
+//      m_model3->setTrans(trans);
 
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
@@ -283,8 +285,8 @@ void PathTracerScene::createGeometry(){
 
       m_topGroup->addChild(geometry_group);
       m_topGroup->addChild(m_model->getGeomAndTrans());
-      m_topGroup->addChild(m_model2->getGeomAndTrans());
-      m_topGroup->addChild(m_model3->getGeomAndTrans());
+//      m_topGroup->addChild(m_model2->getGeomAndTrans());
+//      m_topGroup->addChild(m_model3->getGeomAndTrans());
       m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
       m_topGroup->getAcceleration()->markDirty();
 

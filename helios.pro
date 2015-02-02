@@ -89,7 +89,8 @@ OTHER_FILES += \
     shaders/pathTraceVert.vert \
     shaders/pathTraceFrag.frag \
     textures/CedarCity.hdr \
-    textures/map.png
+    textures/map.png \
+    models/dragon.obj
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu
