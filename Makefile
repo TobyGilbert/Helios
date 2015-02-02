@@ -780,6 +780,32 @@ moc/moc_mainwindow.cpp: /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framewo
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
@@ -929,6 +955,32 @@ moc/moc_OpenGLWidget.cpp: /Developer/OptiX/SDK/sutil/GL/glew.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
@@ -1140,6 +1192,32 @@ obj/main.o: src/main.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtWidgets.framew
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
@@ -1314,6 +1392,32 @@ obj/mainwindow.o: src/mainwindow.cpp include/mainwindow.h \
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
@@ -1762,6 +1866,32 @@ obj/OpenGLWidget.o: src/OpenGLWidget.cpp /Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/
 		/Developer/OptiX/include/optix_math.h \
 		/Developer/OptiX/include/optixu/optixu_math.h \
 		include/optixmodel.h \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/QGLWidget \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtOpenGL.framework/Versions/5/Headers/qgl.h \
@@ -1979,6 +2109,33 @@ obj/pathtracerscene.o: src/pathtracerscene.cpp include/pathtracerscene.h \
 		/opt/local/include/glm/integer.hpp \
 		/opt/local/include/glm/detail/func_integer.hpp \
 		/opt/local/include/glm/detail/func_integer.inl \
+		/opt/local/include/assimp/scene.h \
+		/opt/local/include/assimp/types.h \
+		/opt/local/include/assimp/defs.h \
+		/opt/local/include/assimp/vector3.h \
+		/opt/local/include/assimp/Compiler/pushpack1.h \
+		/opt/local/include/assimp/Compiler/poppack1.h \
+		/opt/local/include/assimp/vector2.h \
+		/opt/local/include/assimp/color4.h \
+		/opt/local/include/assimp/matrix3x3.h \
+		/opt/local/include/assimp/matrix4x4.h \
+		/opt/local/include/assimp/quaternion.h \
+		/opt/local/include/assimp/vector2.inl \
+		/opt/local/include/assimp/vector3.inl \
+		/opt/local/include/assimp/color4.inl \
+		/opt/local/include/glm/gtc/quaternion.inl \
+		/opt/local/include/assimp/matrix3x3.inl \
+		/opt/local/include/assimp/matrix4x4.inl \
+		/opt/local/include/assimp/texture.h \
+		/opt/local/include/assimp/mesh.h \
+		/opt/local/include/assimp/light.h \
+		/opt/local/include/assimp/camera.h \
+		/opt/local/include/assimp/material.h \
+		/opt/local/include/assimp/material.inl \
+		/opt/local/include/assimp/anim.h \
+		/opt/local/include/assimp/postprocess.h \
+		/opt/local/include/assimp/Importer.hpp \
+		/opt/local/include/assimp/config.h \
 		include/pinholecamera.h \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/QColor \
 		/Users/Toby/Qt5.2.1/5.2.1/clang_64/lib/QtGui.framework/Versions/5/Headers/qcolor.h \
