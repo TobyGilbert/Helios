@@ -267,11 +267,8 @@ rtDeclareVariable(float3,        diffuse_color, , );
 rtTextureSampler<float4, 2> map_texture;
 
 RT_PROGRAM void diffuse(){
-<<<<<<< HEAD
     current_prd.colour = make_float3(tex2D(map_texture, texcoord.x, texcoord.y));
-=======
-    current_prd.colour = diffuse_color;//make_float3(tex2D(map_texture, texcoord.x, texcoord.y));
->>>>>>> Toby
+
     if (current_prd.depth > 10){
         current_prd.done = true;
         return;
@@ -294,11 +291,8 @@ RT_PROGRAM void diffuse(){
     current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
     float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
 
-<<<<<<< HEAD
     current_prd.attenuation = current_prd.attenuation * make_float3(tex2D(map_texture, texcoord.x, texcoord.y)); // use the diffuse_color as the diffuse response
-=======
-    current_prd.attenuation = current_prd.attenuation * diffuse_color;//make_float3(tex2D(map_texture, texcoord.x, texcoord.y)); // use the diffuse_color as the diffuse response
->>>>>>> Toby
+
     current_prd.countEmitted = false;
 
     // Compute direct light...
