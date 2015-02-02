@@ -29,8 +29,6 @@ rtDeclareVariable(float3, v2, , );
 rtDeclareVariable(float3, anchor, , );
 rtDeclareVariable(int, lgt_instance, , ) = {0};
 
-rtDeclareVariable(float4, sphere, , );
-
 rtDeclareVariable(float3, texcoord, attribute texcoord, ); 
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
 rtDeclareVariable(float3, shading_normal, attribute shading_normal, ); 
