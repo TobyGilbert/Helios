@@ -6,7 +6,14 @@
 #include <iostream>
 
 //----------------------------------------------------------------------------------------------------------------------
-OptiXModel::OptiXModel(Context &_context)
+/// @brief declare our static member to keep track of how many instances we have so if we remove one we dont delete the buffers
+/// @brief that the other instances are using
+//----------------------------------------------------------------------------------------------------------------------
+int OptiXModel::m_numInstances;
+//----------------------------------------------------------------------------------------------------------------------
+
+//----------------------------------------------------------------------------------------------------------------------
+OptiXModel::OptiXModel(std::string _path, Context &_context)
 {
     // identity matrix to init our transformation
     float m[16];
@@ -17,8 +24,58 @@ OptiXModel::OptiXModel(Context &_context)
     //init our trans
     m_trans = _context->createTransform();
     m_trans->setMatrix(false,m,0);
+    createGeometry(_path,_context);
 }
+//----------------------------------------------------------------------------------------------------------------------
+OptiXModel::OptiXModel(OptiXModel *_instance, Context &_context){
+    //increment our instance count
+    m_numInstances++;
+    // create our instance of our geometry
+    m_geometry = _instance->m_geometry;
+    m_geometryInstance = _context->createGeometryInstance();
+    m_geometryInstance->setGeometry(m_geometry);
+    // create a new transform as we dont want this to be the same as our other model
+    m_trans = _context->createTransform();
+    // identity matrix to init our transformation
+    float m[16];
+    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
+    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
+    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
+    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
+    m_trans->setMatrix(false,m,0);
+    // add our instance to a geomtry group so we can add it to our transform
+    GeometryGroup geoGroup = _context->createGeometryGroup();
+    geoGroup->setChildCount(1);
+    //stick our instance in our group
+    geoGroup->setChild(0,m_geometryInstance);
+    //create our acceleration method, in this case none becuase we only have one peice of geomtry
+    //set this acceleration in our geometry group
+    geoGroup->setAcceleration(_context->createAcceleration("Bvh","Bvh"));
+    //make a acceleration dirty
+    geoGroup->getAcceleration()->markDirty();
+    m_trans->setChild(geoGroup);
+
+    // now lets just copy everything else across like a normal copy contructor
+    // all our buffers will be the same
+    m_vertexBuffer = _instance->m_vertexBuffer;
+    m_normalBuffer = _instance->m_normalBuffer;
+    m_texCoordsBuffer = _instance->m_texCoordsBuffer;
+    m_vertIdxBuffer = _instance->m_vertIdxBuffer;
+    m_normIdxBuffer = _instance->m_normIdxBuffer;
+    m_texCoordIdxBuffer = _instance->m_texCoordIdxBuffer;
+    m_matIdxBuffer = _instance->m_matIdxBuffer;
+    m_vertices = _instance->m_vertices;
+    m_normals = _instance->m_normals;
+    m_texCoords = _instance->m_texCoords;
+    m_indices = _instance->m_indices;
+    m_vertIndices = _instance->m_vertIndices;
+    m_normalIndices = _instance->m_normalIndices;
+    m_texCoordIndices = _instance->m_texCoordIndices;
+}
+//----------------------------------------------------------------------------------------------------------------------
 OptiXModel::~OptiXModel(){
+    //if this is the last instance of its kind then lets delete it
+    if(m_numInstances==0){
     m_vertexBuffer->destroy();
     m_normalBuffer->destroy();
     m_texCoordsBuffer->destroy();
@@ -26,7 +83,8 @@ OptiXModel::~OptiXModel(){
     m_normIdxBuffer->destroy();
     m_texCoordIdxBuffer->destroy();
     m_matIdxBuffer->destroy();
-
+    }
+    else m_numInstances--;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createGeometry(std::string _loc, Context &_context){
@@ -41,6 +99,7 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
     }
     loadMesh(scene->mRootNode, scene, _context);
 }
+//----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::loadMesh(const aiNode* _node, const aiScene *_scene,Context &_context){
     for (int i=0; i<_node->mNumMeshes; i++){
         aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
@@ -53,6 +112,7 @@ void OptiXModel::loadMesh(const aiNode* _node, const aiScene *_scene,Context &_c
 
     createBuffers(_context);
 }
+//----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
 
     for(int i = 0; i <_mesh->mNumVertices; i++)
@@ -103,6 +163,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
         m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
     }
 }
+//----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(Context &_context){
 
     // Create vertex, normal, and texture_coordinate buffers
@@ -238,15 +299,6 @@ void OptiXModel::createBuffers(Context &_context){
 
     m_geometryInstance = _context->createGeometryInstance();
     m_geometryInstance->setGeometry(m_geometry);
-    if(m_materials.size()==0){
-        m_geometryInstance->addMaterial(createDefaultMat(_context));
-        m_geometryInstance["diffuse_color"]->setFloat(1.0f,1.0f,1.0f);
-    }
-    else{
-        for(i=0;i<m_materials.size();i++){
-            m_geometryInstance->addMaterial(m_materials[i]);
-        }
-    }
 
     GeometryGroup geoGroup = _context->createGeometryGroup();
     geoGroup->setChildCount(1);
@@ -262,6 +314,10 @@ void OptiXModel::createBuffers(Context &_context){
     acceleration->markDirty();
 
     m_trans->setChild(geoGroup);
+}
+//----------------------------------------------------------------------------------------------------------------------
+void OptiXModel::addMaterial(Material &_mat){
+    m_geometryInstance->addMaterial(_mat);
 }
 //----------------------------------------------------------------------------------------------------------------------
 Material OptiXModel::createDefaultMat(Context &_context){

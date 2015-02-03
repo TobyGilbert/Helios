@@ -2,55 +2,56 @@
 #include <QMessageBox>
 #include <iostream>
 
-MeshWidget::MeshWidget() :
+MeshWidget::MeshWidget(int _id) :
     QWidget()
 {
+    m_meshId = _id;
     //add our grid layout to our widget
-    m_meshDockGridLayout = new QGridLayout();
-    this->setLayout(m_meshDockGridLayout);
+    m_meshGridLayout = new QGridLayout();
+    this->setLayout(m_meshGridLayout);
 
 
     m_importMeshBtn = new QPushButton("Import Mesh");
-    m_meshDockGridLayout->addWidget(m_importMeshBtn,0,0,1,1);
+    m_meshGridLayout->addWidget(m_importMeshBtn,0,0,1,1);
 
     m_meshTranslateLabel = new QLabel("Translate");
     m_meshTranslateLabel->hide();
-    m_meshDockGridLayout->addWidget(m_meshTranslateLabel, 1, 0, 1, 1);
+    m_meshGridLayout->addWidget(m_meshTranslateLabel, 1, 0, 1, 1);
     m_meshTranslateXDSpinBox = new QDoubleSpinBox();
     m_meshTranslateXDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshTranslateXDSpinBox, 1, 1, 1, 1);
+    m_meshGridLayout->addWidget(m_meshTranslateXDSpinBox, 1, 1, 1, 1);
     m_meshTranslateYDSpinBox = new QDoubleSpinBox();
     m_meshTranslateYDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshTranslateYDSpinBox, 1, 2, 1, 1);
+    m_meshGridLayout->addWidget(m_meshTranslateYDSpinBox, 1, 2, 1, 1);
     m_meshTranslateZDSpinBox = new QDoubleSpinBox();
     m_meshTranslateZDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshTranslateZDSpinBox, 1, 3, 1, 1);
+    m_meshGridLayout->addWidget(m_meshTranslateZDSpinBox, 1, 3, 1, 1);
     m_meshRotateLabel = new QLabel("Rotate");
     m_meshRotateLabel->hide();
-    m_meshDockGridLayout->addWidget(m_meshRotateLabel, 2, 0, 1, 1);
+    m_meshGridLayout->addWidget(m_meshRotateLabel, 2, 0, 1, 1);
     m_meshRotateXDSpinBox = new QDoubleSpinBox();
     m_meshRotateXDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshRotateXDSpinBox, 2, 1, 1, 1);
+    m_meshGridLayout->addWidget(m_meshRotateXDSpinBox, 2, 1, 1, 1);
     m_meshRotateYDSpinBox = new QDoubleSpinBox();
     m_meshRotateYDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshRotateYDSpinBox, 2, 2, 1, 1);
+    m_meshGridLayout->addWidget(m_meshRotateYDSpinBox, 2, 2, 1, 1);
     m_meshRotateZDSpinBox = new QDoubleSpinBox();
     m_meshRotateZDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshRotateZDSpinBox, 2, 3, 1, 1);
+    m_meshGridLayout->addWidget(m_meshRotateZDSpinBox, 2, 3, 1, 1);
     m_meshScaleLabel = new QLabel("Scale");
     m_meshScaleLabel->hide();
-    m_meshDockGridLayout->addWidget(m_meshScaleLabel, 3, 0, 1, 1);
+    m_meshGridLayout->addWidget(m_meshScaleLabel, 3, 0, 1, 1);
     m_meshScaleXDSpinBox = new QDoubleSpinBox();
     m_meshScaleXDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshScaleXDSpinBox, 3, 1, 1, 1);
+    m_meshGridLayout->addWidget(m_meshScaleXDSpinBox, 3, 1, 1, 1);
     m_meshScaleYDSpinBox = new QDoubleSpinBox();
     m_meshScaleYDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshScaleYDSpinBox, 3, 2, 1, 1);
+    m_meshGridLayout->addWidget(m_meshScaleYDSpinBox, 3, 2, 1, 1);
     m_meshScaleZDSpinBox = new QDoubleSpinBox();
     m_meshScaleZDSpinBox->hide();
-    m_meshDockGridLayout->addWidget(m_meshScaleZDSpinBox, 3, 3, 1, 1);
+    m_meshGridLayout->addWidget(m_meshScaleZDSpinBox, 3, 3, 1, 1);
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    m_meshDockGridLayout->addItem(m_meshSpacer, 5, 0, 2, 1);
+    m_meshGridLayout->addItem(m_meshSpacer, 5, 0, 2, 1);
 
     //-------------------------------------------------------------------------------------------------
     //-------------------------Connect up our signals and slots----------------------------------------
@@ -82,7 +83,7 @@ MeshWidget::~MeshWidget(){
     delete m_meshRotateLabel;
     delete m_meshTranslateLabel;
     delete m_meshScaleLabel;
-    delete m_meshDockGridLayout;
+    delete m_meshGridLayout;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::signalTransformChange(){

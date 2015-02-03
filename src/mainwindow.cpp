@@ -81,18 +81,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_toolBar->addSeparator();
 
 
-    m_meshWidget = new MeshWidget();
 
-    m_meshDockWidget = new QDockWidget("Mesh Attributes");
-    m_meshDockWidget->setWidget(m_meshWidget);
+    m_meshDockWidget = new MeshDockWidget();
     m_meshDockWidget->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, m_meshDockWidget);
 
     //--------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
-
-    connect(m_meshWidget,SIGNAL(importMesh(std::string)),m_openGLWidget,SLOT(importMesh(std::string)));
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
     connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
     connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));

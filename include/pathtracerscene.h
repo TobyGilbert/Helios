@@ -1,6 +1,12 @@
 #ifndef PATHTRACERSCENE_H
 #define PATHTRACERSCENE_H
 
+/// @class PathTracerScene
+/// @date 06/01/15
+/// @author Declan Russell
+/// @brief A class to manage our OptiX path tracer converted and  extended from OptiX path tracer demo
+/// @todo Put our models into a map and create slots oppropriate to access them
+
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_matrix_namespace.h>
 

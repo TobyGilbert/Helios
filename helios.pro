@@ -28,7 +28,8 @@ SOURCES += \
     src/HDRLoader.cpp \
     src/optixmodel.cpp \
     src/TextureLoader.cpp \
-    src/meshwidget.cpp
+    src/meshwidget.cpp \
+    src/MeshDockWidget.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -50,7 +51,8 @@ HEADERS += \
     include/HDRLoader.h \
     include/optixmodel.h \
     include/TextureLoader.h \
-    include/meshwidget.h
+    include/meshwidget.h \
+    include/MeshDockWidget.h
 
 INCLUDEPATH +=./include /opt/local/include
 LIBS += -L/opt/local/lib -lIL -lassimp
