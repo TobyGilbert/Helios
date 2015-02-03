@@ -33,11 +33,13 @@ signals:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our signal to deliver our tranforms, called by signalTransformChange()
     //----------------------------------------------------------------------------------------------------------------------
-    void meshTransform(float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
+    void meshTransform(int _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a signal to import mesh, called by signal import mesh if a mesh has been selected
+    /// @param _id - the id of our mesh widget
+    /// @param _path - the path to our mesh
     //----------------------------------------------------------------------------------------------------------------------
-    void importMesh(std::string _path);
+    void importMesh(int _id, std::string _path);
     //----------------------------------------------------------------------------------------------------------------------
 public slots:
     //----------------------------------------------------------------------------------------------------------------------

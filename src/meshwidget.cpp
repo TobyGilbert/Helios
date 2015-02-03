@@ -18,36 +18,57 @@ MeshWidget::MeshWidget(int _id) :
     m_meshTranslateLabel->hide();
     m_meshGridLayout->addWidget(m_meshTranslateLabel, 1, 0, 1, 1);
     m_meshTranslateXDSpinBox = new QDoubleSpinBox();
+    m_meshTranslateXDSpinBox->setMaximum(1000.0);
+    m_meshTranslateXDSpinBox->setMinimum(-1000.0);
     m_meshTranslateXDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshTranslateXDSpinBox, 1, 1, 1, 1);
     m_meshTranslateYDSpinBox = new QDoubleSpinBox();
+    m_meshTranslateYDSpinBox->setMaximum(1000.0);
+    m_meshTranslateYDSpinBox->setMinimum(-1000.0);
     m_meshTranslateYDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshTranslateYDSpinBox, 1, 2, 1, 1);
     m_meshTranslateZDSpinBox = new QDoubleSpinBox();
+    m_meshTranslateZDSpinBox->setMaximum(1000.0);
+    m_meshTranslateZDSpinBox->setMinimum(-1000.0);
     m_meshTranslateZDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshTranslateZDSpinBox, 1, 3, 1, 1);
     m_meshRotateLabel = new QLabel("Rotate");
     m_meshRotateLabel->hide();
     m_meshGridLayout->addWidget(m_meshRotateLabel, 2, 0, 1, 1);
     m_meshRotateXDSpinBox = new QDoubleSpinBox();
+    m_meshRotateXDSpinBox->setMaximum(1000.0);
+    m_meshRotateXDSpinBox->setMinimum(-1000.0);
     m_meshRotateXDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshRotateXDSpinBox, 2, 1, 1, 1);
     m_meshRotateYDSpinBox = new QDoubleSpinBox();
+    m_meshRotateYDSpinBox->setMaximum(1000.0);
+    m_meshRotateYDSpinBox->setMinimum(-1000.0);
     m_meshRotateYDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshRotateYDSpinBox, 2, 2, 1, 1);
     m_meshRotateZDSpinBox = new QDoubleSpinBox();
+    m_meshRotateZDSpinBox->setMaximum(1000.0);
+    m_meshRotateZDSpinBox->setMinimum(-1000.0);
     m_meshRotateZDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshRotateZDSpinBox, 2, 3, 1, 1);
     m_meshScaleLabel = new QLabel("Scale");
     m_meshScaleLabel->hide();
     m_meshGridLayout->addWidget(m_meshScaleLabel, 3, 0, 1, 1);
     m_meshScaleXDSpinBox = new QDoubleSpinBox();
+    m_meshScaleXDSpinBox->setMaximum(1000.0);
+    m_meshScaleXDSpinBox->setMinimum(-1000.0);
+    m_meshScaleXDSpinBox->setValue(1.0);
     m_meshScaleXDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshScaleXDSpinBox, 3, 1, 1, 1);
     m_meshScaleYDSpinBox = new QDoubleSpinBox();
+    m_meshScaleYDSpinBox->setMaximum(1000.0);
+    m_meshScaleYDSpinBox->setMinimum(-1000.0);
+    m_meshScaleYDSpinBox->setValue(1.0);
     m_meshScaleYDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshScaleYDSpinBox, 3, 2, 1, 1);
     m_meshScaleZDSpinBox = new QDoubleSpinBox();
+    m_meshScaleZDSpinBox->setMaximum(1000.0);
+    m_meshScaleZDSpinBox->setMinimum(-1000.0);
+    m_meshScaleZDSpinBox->setValue(1.0);
     m_meshScaleZDSpinBox->hide();
     m_meshGridLayout->addWidget(m_meshScaleZDSpinBox, 3, 3, 1, 1);
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -100,7 +121,7 @@ void MeshWidget::signalTransformChange(){
     float scaleZ = m_meshScaleZDSpinBox->value();
 
     // signal the change to whatever is hooked up to use them
-    meshTransform(transX,transY,transZ,rotX,rotY,rotZ,scaleX,scaleY,scaleZ);
+    meshTransform(m_meshId,transX,transY,transZ,rotX,rotY,rotZ,scaleX,scaleY,scaleZ);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -108,7 +129,7 @@ void MeshWidget::signalImportMesh(){
     QString location = QFileDialog::getOpenFileName(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj)"));
     if (!location.isEmpty()){
             std::string path = location.toUtf8().constData();
-            importMesh(path);
+            importMesh(m_meshId, path);
 
             //hide our import mesh button as we done need that anymore
             m_importMeshBtn->hide();

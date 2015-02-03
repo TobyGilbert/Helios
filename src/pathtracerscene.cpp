@@ -7,7 +7,6 @@
 #include "TextureLoader.h"
 
 
-
 PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
                                     , m_sqrt_num_samples( 2u )
                                     , m_width(512)
@@ -243,14 +242,12 @@ void PathTracerScene::createGeometry(){
 
       // Metal teapot
       m_model = new OptiXModel("models/newteapot.obj",m_context);
-      m_model->addMaterial(diffuse);
-//      m_model->getGeometryInstance()["diffuse_color"]->setFloat(white);
-      m_model->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture(m_context, "textures/map.png"));
+      m_model->addMaterial(reflective_material);
       glm::mat4 trans;
       trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 0;
-      trans[3][1] = 30;
-      trans[3][2] = 70;
+      trans[3][0] = -23;
+      trans[3][1] = 10;
+      trans[3][2] = 50;
       m_model->setTrans(trans);
 
       // Glass Teapot
@@ -363,14 +360,33 @@ void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material m
     gi[color_name]->setFloat(color);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::importMesh(std::string _path){
+void PathTracerScene::importMesh(int _id, std::string _path){
+    /// @todo maybe have all this stuff in a model management class rather than the scene
+    /// @todo meshes are all set with detault diffuse texture, we need some sort of material management
     //import mesh
     OptiXModel* model = new OptiXModel(_path,m_context);
+    Material diffuse = m_context->createMaterial();
+    std::string ptx_path = "ptx/path_tracer.cu.ptx";
+    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "diffuse" );
+    Program diffuse_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
+    diffuse->setClosestHitProgram( 0, diffuse_ch );
+    diffuse->setAnyHitProgram( 1, diffuse_ah );
+    diffuse["diffuse_color"]->setFloat(1.0,1.0,1.0);
+    diffuse["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
+    model->addMaterial(diffuse);
     //add to our scene
     std::cout<<"has been called path: "<<_path<<std::endl;
     m_topGroup->addChild(model->getGeomAndTrans());
     m_topGroup->getAcceleration()->markDirty();
-    m_meshArray.push_back(model);
+    m_meshArray[_id] = model;
+    m_frame = 0;
+}
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::transformModel(int _id, glm::mat4 _trans){
+    std::map<int,OptiXModel*>::iterator it = m_meshArray.find(_id);
+    OptiXModel* mdl = it->second;
+    mdl->setTrans(_trans);
+    m_topGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
 

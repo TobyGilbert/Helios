@@ -7,6 +7,7 @@
 
 const static float INCREMENT=0.02;
 const static int RESOLOUTION_SCALE = 1;
+#define PI 3.14159265359f
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -173,6 +174,23 @@ void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewM
     glm::mat4 MVP = _perspectiveMatrix;
 
     glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, glm::value_ptr(MVP));
+}
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::meshTransform(int _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
+    glm::mat4 rotX,rotY,rotZ,finalRot;
+    float DtoR = PI/180.0;
+    rotX = glm::rotate(rotX,_rotX*DtoR,glm::vec3(1,0,0));
+    rotY = glm::rotate(rotY,_rotY*DtoR,glm::vec3(0,1,0));
+    rotZ = glm::rotate(rotZ,_rotZ*DtoR,glm::vec3(0,0,1));
+    finalRot = rotX * rotY * rotZ;
+    glm::mat4 finalTrans = finalRot;
+    finalTrans[3][0] = _transX;
+    finalTrans[3][1] = _transY;
+    finalTrans[3][2] = _transZ;
+    finalTrans[0][0] = _scaleX;
+    finalTrans[1][1] = _scaleY;
+    finalTrans[2][2] = _scaleZ;
+    m_pathTracer->transformModel(_id,finalTrans);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------

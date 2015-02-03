@@ -300,20 +300,20 @@ void OptiXModel::createBuffers(Context &_context){
     m_geometryInstance = _context->createGeometryInstance();
     m_geometryInstance->setGeometry(m_geometry);
 
-    GeometryGroup geoGroup = _context->createGeometryGroup();
-    geoGroup->setChildCount(1);
+    m_geometryGroup = _context->createGeometryGroup();
+    m_geometryGroup->setChildCount(1);
     //stick our instance in our group
-    geoGroup->setChild(0,m_geometryInstance);
+    m_geometryGroup->setChild(0,m_geometryInstance);
 
     //create our acceleration method, in this case none becuase we only have one peice of geomtry
     Acceleration acceleration = _context->createAcceleration("Bvh","Bvh");
     //set this acceleration in our geometry group
-    geoGroup->setAcceleration(acceleration);
+    m_geometryGroup->setAcceleration(acceleration);
 
     //make a acceleration dirty
     acceleration->markDirty();
 
-    m_trans->setChild(geoGroup);
+    m_trans->setChild(m_geometryGroup);
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::addMaterial(Material &_mat){
@@ -337,6 +337,7 @@ Material OptiXModel::createDefaultMat(Context &_context){
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::setTrans(float *_m, bool _transpose, float *_invM){
     m_trans->setMatrix(_transpose,_m,_invM);
+    m_geometryGroup->getAcceleration()->markDirty();
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::setTrans(glm::mat4 _trans, bool _transpose){

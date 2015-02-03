@@ -5,7 +5,8 @@
 /// @date 06/01/15
 /// @author Declan Russell
 /// @brief A class to manage our OptiX path tracer converted and  extended from OptiX path tracer demo
-/// @todo Put our models into a map and create slots oppropriate to access them
+/// @todo All our imported geometry will have a our default diffuse texture material  applied to it
+/// @todo we need to add some way of applying your own material to it
 
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_matrix_namespace.h>
@@ -78,8 +79,15 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief function to import a mesh to our scene
     /// @param _path - the path to our mesh
+    /// @param _id - the id of our mesh
     //----------------------------------------------------------------------------------------------------------------------
-    void importMesh(std::string _path);
+    void importMesh(int _id, std::string _path);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief transforms a model in our scene
+    /// @param _id - the id of our model
+    /// @param _trans - the transform we wish to apply to our model
+    //----------------------------------------------------------------------------------------------------------------------
+    void transformModel(int _id, glm::mat4 _trans);
     //----------------------------------------------------------------------------------------------------------------------
 protected:
     //----------------------------------------------------------------------------------------------------------------------
@@ -95,7 +103,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief an array of all our mesh's
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<OptiXModel*> m_meshArray;
+    std::map<int,OptiXModel*> m_meshArray;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a bool to notify us if the camera has changed and we need to update engine camera paramiters
     //----------------------------------------------------------------------------------------------------------------------
