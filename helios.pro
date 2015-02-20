@@ -28,7 +28,8 @@ SOURCES += \
     src/HDRLoader.cpp \
     src/optixmodel.cpp \
     src/TextureLoader.cpp \
-    src/meshwidget.cpp
+    src/meshwidget.cpp \
+    src/Shading.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -50,10 +51,11 @@ HEADERS += \
     include/HDRLoader.h \
     include/optixmodel.h \
     include/TextureLoader.h \
-    include/meshwidget.h
+    include/meshwidget.h \
+    include/Shading.h
 
-INCLUDEPATH +=./include /opt/local/include
-LIBS += -L/opt/local/lib -lIL -lassimp
+INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL
+LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lassimp -lboost_system
 DESTDIR=./
 
 CONFIG += console

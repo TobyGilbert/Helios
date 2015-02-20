@@ -1,4 +1,7 @@
 #include <QGuiApplication>
+#include <QFileDialog>
+#include <QBuffer>
+#include <QImageWriter>
 
 #include <optixu/optixpp_namespace.h>
 
@@ -29,6 +32,8 @@ OpenGLWidget::~OpenGLWidget(){
     delete m_pathTracer;
     delete m_shaderProgram;
     delete m_cam;
+    glDeleteVertexArrays(1, &m_VAO);
+    glDeleteBuffers(2, m_VBO);
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::initializeGL(){
@@ -158,7 +163,8 @@ void OpenGLWidget::paintGL(){
     else if ((elementSize % 2) == 0) glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
     else                             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
+//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, height()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
 
@@ -266,4 +272,10 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
             break;
     }
 }
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::saveImage(){
+   QImage image = m_pathTracer->saveImage();
+   QString saveFile = QFileDialog::getSaveFileName();
 
+   image.save(saveFile+QString(".png"), "PNG");
+}

@@ -16,7 +16,6 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QWidget>
@@ -26,10 +25,14 @@ QT_BEGIN_NAMESPACE
 class Ui_MainWindow
 {
 public:
+    QAction *actionSave;
+    QAction *actionSave_2;
+    QAction *actionHelios_Help;
+    QAction *actionImage;
+    QAction *actionFullscreen;
     QWidget *centralwidget;
     QGridLayout *gridLayout;
     QSpacerItem *verticalSpacer;
-    QMenuBar *menubar;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
@@ -38,6 +41,16 @@ public:
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
         MainWindow->resize(800, 600);
         MainWindow->setMinimumSize(QSize(500, 500));
+        actionSave = new QAction(MainWindow);
+        actionSave->setObjectName(QStringLiteral("actionSave"));
+        actionSave_2 = new QAction(MainWindow);
+        actionSave_2->setObjectName(QStringLiteral("actionSave_2"));
+        actionHelios_Help = new QAction(MainWindow);
+        actionHelios_Help->setObjectName(QStringLiteral("actionHelios_Help"));
+        actionImage = new QAction(MainWindow);
+        actionImage->setObjectName(QStringLiteral("actionImage"));
+        actionFullscreen = new QAction(MainWindow);
+        actionFullscreen->setObjectName(QStringLiteral("actionFullscreen"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -47,10 +60,6 @@ public:
         gridLayout->addItem(verticalSpacer, 0, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow);
-        menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 22));
-        MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QStringLiteral("statusbar"));
         MainWindow->setStatusBar(statusbar);
@@ -63,6 +72,11 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", 0));
+        actionSave->setText(QApplication::translate("MainWindow", "Import", 0));
+        actionSave_2->setText(QApplication::translate("MainWindow", "Save", 0));
+        actionHelios_Help->setText(QApplication::translate("MainWindow", "Helios Help", 0));
+        actionImage->setText(QApplication::translate("MainWindow", "Image", 0));
+        actionFullscreen->setText(QApplication::translate("MainWindow", "Fullscreen", 0));
     } // retranslateUi
 
 };

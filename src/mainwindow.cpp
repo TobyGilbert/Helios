@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,1,2,2);
 
+    createMenus();
 
     // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
     m_toolBar = new QToolBar();
@@ -98,14 +99,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
     connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));
+
+//    connect(m_renderMenu, SIGNAL(triggered(QAction*)),
 }
 
 MainWindow::~MainWindow(){
     delete m_meshToolbarButton;
-
     delete m_meshWidget;
     delete m_meshDockWidget;
-//    delete m_lightSpacer;
+
+    //    delete m_lightSpacer;
     delete m_lightIntensityLabel;
     delete m_lightIntensitySlider;
     delete m_lightColourButton;
@@ -116,7 +119,36 @@ MainWindow::~MainWindow(){
     delete m_lightWidget;
     delete m_lightDockWidget;
     delete m_lightToolbarButton;
+
     delete m_toolBar;
+
+    delete m_fileMenu;
+
+    delete m_saveImage;
+    delete m_renderMenu;
+
+    delete m_menuBar;
+
     delete ui;
+
     delete m_openGLWidget;
+}
+
+void MainWindow::createMenus(){
+    m_menuBar = new QMenuBar(this);
+
+    m_fileMenu = new QMenu("File");
+    m_fileMenu->addAction("Import");
+    m_fileMenu->addAction("Save");
+    m_menuBar->addAction(m_fileMenu->menuAction());
+
+    m_renderMenu = new QMenu("Render");
+
+    m_saveImage = new QAction(tr("&Image"), this);
+//    m_saveImage->setShortcut(QKeySequence::Image);
+    m_saveImage->setStatusTip(tr("Render to image"));
+    connect(m_saveImage, SIGNAL(triggered()), m_openGLWidget, SLOT(saveImage()));
+
+    m_renderMenu->addAction(m_saveImage);
+    m_menuBar->addAction(m_renderMenu->menuAction());
 }

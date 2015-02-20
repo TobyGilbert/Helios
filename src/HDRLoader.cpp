@@ -225,7 +225,7 @@ float* HDRLoader::raster()const
 
 optix::TextureSampler loadHDRTexture( optix::Context context,
                                       const std::string& filename,
-                                      const optix::float3& default_color )
+                                      const optix::float3& default_color)
 {
   // Create tex sampler and populate with default values
   optix::TextureSampler sampler = context->createTextureSampler();
@@ -244,6 +244,7 @@ optix::TextureSampler loadHDRTexture( optix::Context context,
 
     // Create buffer with single texel set to default_color
     optix::Buffer buffer = context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT4, 1u, 1u );
+
     float* buffer_data = static_cast<float*>( buffer->map() );
     buffer_data[0] = default_color.x;
     buffer_data[1] = default_color.y;
@@ -265,6 +266,8 @@ optix::TextureSampler loadHDRTexture( optix::Context context,
 
   // Create buffer and populate with HDR data
   optix::Buffer buffer = context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT4, nx, ny );
+  buffer = context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT4, nx, ny );
+
   float* buffer_data = static_cast<float*>( buffer->map() );
 
   for ( unsigned int i = 0; i < nx; ++i ) {

@@ -268,7 +268,6 @@ rtTextureSampler<float4, 2> map_texture;
 
 RT_PROGRAM void diffuse(){
     current_prd.colour = make_float3(tex2D(map_texture, texcoord.x, texcoord.y));
-
     if (current_prd.depth > 10){
         current_prd.done = true;
         return;
@@ -326,6 +325,7 @@ RT_PROGRAM void diffuse(){
         }
     }
     current_prd.radiance = result;
+    // dctsystems.co.uk
 }
 
 rtDeclareVariable(float3,        glass_color, , );

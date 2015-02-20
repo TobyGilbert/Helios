@@ -25,8 +25,9 @@ PathTracerScene::~PathTracerScene(){
     delete m_model3;
     m_outputBuffer->destroy();
     m_lightBuffer->destroy();
+    m_mapTexSample->destroy();
+    m_enviSampler->destroy();
     m_context->destroy();
-
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -68,7 +69,6 @@ void PathTracerScene::init(){
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
 
-
     //set up our camera in our engine
     m_context["eye"]->setFloat( eye );
     m_context["U"]->setFloat( U );
@@ -79,8 +79,8 @@ void PathTracerScene::init(){
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( make_float3(0.0f) );
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
-    m_context["envmap"]->setTextureSampler(loadHDRTexture( m_context, "./textures/CedarCity.hdr", default_color) );
-//    m_context["envmap"]->setTextureSampler(loadTexture( m_context, "./textures/map.png") );
+    m_enviSampler = loadHDRTexture(m_context, "./textures/CedarCity.hdr", default_color);
+    m_context["envmap"]->setTextureSampler(m_enviSampler);
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
@@ -90,6 +90,7 @@ void PathTracerScene::init(){
     optix::Program exception_program = m_context->createProgramFromPTXFile( ptx_path, "exception" );
     m_context->setExceptionProgram( 0, exception_program );
     m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( ptx_path, "envi_miss" ) );
+//    m_context->setMissProgram(0, m_context->createProgramFromPTXFile(ptx_path, "miss"));
 
     //init our frame number
     m_context["frame_number"]->setUint(1);
@@ -102,6 +103,9 @@ void PathTracerScene::init(){
     m_topGroup = m_context->createGroup();
     m_context["top_object"]->set(m_topGroup);
     m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+
+    // Our our map texture sample
+    m_mapTexSample = loadTexture(m_context, "textures/map.png");
 
     // Create scene geometry
     createGeometry();
@@ -118,7 +122,7 @@ void PathTracerScene::createGeometry(){
       light.v1       = make_float3( -20.0f, 0.0f, 0.0f);
       light.v2       = make_float3( 0.0f, 0.0f, 10.0f);
       light.normal   = normalize( cross(light.v1, light.v2) );
-      light.emission = make_float3( 15.0f, 15.0f, 15.0f );
+      light.emission = make_float3( 25.0f, 25.0f, 25.0f );
 
       m_lightBuffer = m_context->createBuffer( RT_BUFFER_INPUT );
       m_lightBuffer->setFormat( RT_FORMAT_USER );
@@ -173,20 +177,20 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
       const float3 blue = make_float3( 0.0, 0.0, 1.0);
 
-//      // Diffuse Sphere
-//      gis.push_back(createSphere(make_float4(0.0, 30.0, 60.0, 8.0)));
-//      gis.back()->addMaterial(diffuse);
-//      gis.back()["diffuse_color"]->setFloat(white);
-//      gis.back()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
+      // Diffuse Sphere
+      gis.push_back(createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
+      gis.back()->addMaterial(diffuse);
+      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
 
 //      // Glass Sphere
-//      gis.push_back( createSphere(make_float4(20.0, 30.0, 60.0, 8.0)));
+//      gis.push_back( createSphere(make_float4(20.0, 30.0, 70.0, 8.0)));
 //      gis.back()->addMaterial(glass_material);
 //      gis.back()["glass_color"]->setFloat(white);
 //      gis.back()["index_of_refraction"]->setFloat(1.5);
 
 //      // Metal Sphere
-//      gis.push_back( createSphere(make_float4(-20.0, 30.0, 60.0, 8.0)));
+//      gis.push_back( createSphere(make_float4(-20.0, 30.0, 70.0, 8.0)));
 //      gis.back()->addMaterial(reflective_material);
 //      gis.back()["diffuse_color"]->setFloat(white);
 //      gis.back()["max_depth"]->setInt(3);
@@ -196,10 +200,10 @@ void PathTracerScene::createGeometry(){
       gis.push_back( createParallelogram( make_float3( -50.0f, 5.0f, 100.0f ),
                                           make_float3( 0.0f, 0.0f, -200.0f ),
                                           make_float3( 100.0f, 0.0f, 0.0f ) ) );
-//      gis.back()->addMaterial(reflective_material);
+////      gis.back()->addMaterial(reflective_material);
       gis.back()->addMaterial(diffuse);
-//      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["map_texture"]->setTextureSampler(loadTexture(m_context, "textures/map.png"));
+////      gis.back()["diffuse_color"]->setFloat(white);
+      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
 
 ////      // Ceiling
 //      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
@@ -233,26 +237,24 @@ void PathTracerScene::createGeometry(){
       shadow_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
       m_context["top_shadower"]->set( shadow_group );
 
-//      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
-//                                          make_float3( -20.0f, 0.0f, 0.0f),
-//                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
-//      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
+                                          make_float3( -20.0f, 0.0f, 0.0f),
+                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
+      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
       // Metal teapot
-      m_model = new OptiXModel(m_context);
-      m_model->addMaterial(diffuse);
-      m_model->createGeometry("models/newteapot.obj",m_context);
-//      m_model->getGeometryInstance()["diffuse_color"]->setFloat(white);
-      m_model->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture(m_context, "textures/map.png"));
-      glm::mat4 trans;
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 0;
-      trans[3][1] = 30;
-      trans[3][2] = 70;
-      m_model->setTrans(trans);
+//      m_model = new OptiXModel(m_context);
+//      m_model->addMaterial(reflective_material);
+//      m_model->createGeometry("models/newteapot.obj",m_context);
+//      glm::mat4 trans;
+//      trans = glm::scale(trans,glm::vec3(13.0));
+//      trans[3][0] = -23;
+//      trans[3][1] = 10;
+//      trans[3][2] = 50;
+//      m_model->setTrans(trans);
 
 //      // Glass Teapot
 //      m_model2 = new OptiXModel(m_context);
@@ -283,18 +285,11 @@ void PathTracerScene::createGeometry(){
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
       m_topGroup->addChild(geometry_group);
-      m_topGroup->addChild(m_model->getGeomAndTrans());
+//      m_topGroup->addChild(m_model->getGeomAndTrans());
 //      m_topGroup->addChild(m_model2->getGeomAndTrans());
 //      m_topGroup->addChild(m_model3->getGeomAndTrans());
-      m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+//      m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
       m_topGroup->getAcceleration()->markDirty();
-
-
-      m_topGroup->addChild(geometry_group);
-      m_topGroup->addChild(m_model->getGeomAndTrans());
-      m_topGroup->getAcceleration()->markDirty();
-
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
@@ -415,7 +410,8 @@ void PathTracerScene::trace(){
 
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::resize(int _width, int _height){
-    m_width = _width/m_devicePixelRatio;
+//    m_width = _width/m_devicePixelRatio;
+    m_width = _height/m_devicePixelRatio;
     m_height = _height/m_devicePixelRatio;
 
     unsigned int elementSize = m_outputBuffer->getElementSize();
@@ -444,5 +440,33 @@ void PathTracerScene::updateCamera(){
     m_frame = 0;
     m_cameraChanged = false;
 }
-
 //----------------------------------------------------------------------------------------------------------------------
+QImage PathTracerScene::saveImage(){
+    std::cout<<m_width<<","<<m_height<<std::endl;
+    QImage img(m_width,m_height,QImage::Format_RGB32);
+    QColor color;
+    int idx;
+    void* data = m_outputBuffer->map();
+    typedef struct { float r; float g; float b; float a;} rgb;
+    rgb* rgb_data = (rgb*)data;
+    if(rgb_data[0].r>0||rgb_data[0].g>0||rgb_data[0].b>0)
+//    std::cout<<rgb_data[0].r<<","<<rgb_data[0].g<<","<<rgb_data[0].b<<std::endl;
+
+    for(unsigned int i=0; i<m_width*m_height; i++){
+        int h = m_width * m_height;
+//        std::cout<<rgb_data[i].r<<","<<rgb_data[i].g<<","<<rgb_data[i].b<<std::endl;
+        float red = rgb_data[h-i].r; if(red>1.0) red=1.0;
+        float green = rgb_data[h-i].g; if(green>1.0) green=1.0;
+        float blue = rgb_data[h-i].b; if(blue>1.0) blue=1.0;
+        float alpha = rgb_data[h-i].a; if(alpha>1.0) alpha=1.0;
+        color.setRgbF(red,green,blue,alpha);
+        idx = floor((float)i/m_width);
+
+        img.setPixel(i-(idx*m_width), idx, color.rgb());
+
+    }
+    m_outputBuffer->unmap();
+//    img.save("pathTraceTest.png","PNG");
+
+    return img;
+}

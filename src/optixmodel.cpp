@@ -26,7 +26,6 @@ OptiXModel::~OptiXModel(){
     m_normIdxBuffer->destroy();
     m_texCoordIdxBuffer->destroy();
     m_matIdxBuffer->destroy();
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createGeometry(std::string _loc, Context &_context){
@@ -89,9 +88,6 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
     typedef struct { int x; int y; int z;} ixyz;
     unsigned int i;
     for(i=0; i<_mesh->mNumFaces;i++){
-//        vertIndices[i*3] = i*3;
-//        vertIndices[i*3+1] = i*3+1;
-//        vertIndices[i*3+2] = i*3+2;
         m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
     }
 

@@ -37,7 +37,7 @@
 // texture color.
 SUTILAPI optix::TextureSampler loadHDRTexture( optix::Context context,
                                                const std::string& hdr_filename,
-                                               const optix::float3& default_color );
+                                               const optix::float3& default_color);
 
 
 //-----------------------------------------------------------------------------
