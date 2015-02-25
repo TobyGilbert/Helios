@@ -24,8 +24,17 @@
 #include "helpers.h"
 #include "path_tracer.h"
 #include "random.h"
+//#include "ShaderGlobals.h"
 
 using namespace optix;
+
+struct ShaderGlobals{
+    float3 P;
+    float3 I;
+    float3 N;
+    float3 Ng;
+    float u, v;
+};
 
 struct PerRayData_pathtrace{
     float3 result;
@@ -68,7 +77,6 @@ rtDeclareVariable(unsigned int,  rr_begin_depth, , );
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
 rtDeclareVariable(float3, shading_normal,   attribute shading_normal, ); 
 rtDeclareVariable(float3, texcoord, attribute texcoord, );
-
 
 rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
 
@@ -161,97 +169,37 @@ RT_PROGRAM void pathtrace_camera(){
     }
 }
 
+// Construct the shader globals
+RT_PROGRAM void constructShaderGlobals(){
+    ShaderGlobals sg;
+    // Calcualte the shading and geometric normals for use with our OSL shaders
+    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+    // The shading position
+    sg.P = ray.origin + t_hit * ray.direction;
+    // Texture coordinates
+    sg.u = texcoord.x;
+    sg.v = texcoord.y;
 
-RT_PROGRAM void thin_lens_camera(){
+    current_prd.origin = sg.P;
+    reflectionss(sg.N, sg.Ng);
+}
 
-    size_t2 screen = output_buffer.size();
+//__device__ void constructShaderGlobals(){
+//    ShaderGlobals sg;
+//    // Calcualte the shading and geometric normals for use with our OSL shaders
+//    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+//    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+//    // The shading position
+//    sg.P = ray.origin + t_hit * ray.direction;
+//    // Texture coordinates
+//    sg.u = texcoord.x;
+//    sg.v = texcoord.y;
+//}
 
-    float2 inv_screen = 1.0f/make_float2(screen) * 2.f;
-    float2 pixel = (make_float2(launch_index)) * inv_screen - 1.f;
-
-    float2 jitter_scale = inv_screen / sqrt_num_samples;
-    unsigned int samples_per_pixel = sqrt_num_samples*sqrt_num_samples;
-    float3 result = make_float3(0.0f);
-
-    unsigned int seed = tea<16>(screen.x*launch_index.y+launch_index.x, frame_number);
-    do {
-
-        unsigned int x = samples_per_pixel%sqrt_num_samples;
-        unsigned int y = samples_per_pixel/sqrt_num_samples;
-        float2 jitter = make_float2(x-rnd(seed), y-rnd(seed));
-        float2 d = pixel + jitter*jitter_scale;
-        float3 ray_origin = eye;
-        float3 ray_direction = normalize(d.x*U + d.y*V + W);
-
-        //Find intersection with the focal plane
-
-//        float3 P = ray_origin + ray_direction * (focal_distance/screen.x);
-        float3 fpNormal = normalize(-W);
-        float3 V0 = make_float3(0.0, 0.0, 50.0);
-        float3 P0 = ray_origin;
-        float3 P1 = ray_origin + ray_direction * 100.0;
-        float t = dot(fpNormal, (V0 - P0)) / dot(fpNormal, (P1 - P0));
-        float3 P = ray_origin + t*ray_direction;
-
-        float pixelT = dot(fpNormal, ((eye+W) - P0)) / dot(fpNormal, (P1 - P0));
-        float3 pixelP = ray_origin + pixelT*ray_direction;
-
-        // Plane
-
-        // plane eye + w;
-
-//        float3 P = ray_origin + (-ray_origin.z)/   (length(make_float3(pixel.x, pixel.y, ray_origin.z) - ray_origin) / (length(make_float3(pixel.x, pixel.y, ray_origin.z) - ray_origin) * f)) * normalize(make_float3(pixel.x, pixel.y, ray_origin.z) - ray_origin);
-        PerRayData_pathtrace prd;
-        prd.result = make_float3(0.f);
-        prd.attenuation = make_float3(1.f);
-        prd.countEmitted = true;
-        prd.done = false;
-        prd.inside = false;
-        prd.seed = seed;
-        prd.depth = 0;
-        prd.importance = 1.0f;
-        prd.colour = make_float3(0.0, 0.0, 0.0);
-
-    for(;;) {
-        float3 jitter3 = make_float3(x-rnd(seed), y-rnd(seed), 0.0);
-        float3 jitterScale =  make_float3(jitter_scale.x, jitter_scale.y, 0.0);
-        ray_origin = pixelP;// + jitter3 * jitterScale;
-        ray_direction = normalize(P - ray_origin);
-        Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
-        rtTrace(top_object, ray, prd);
-        if(prd.done) {
-            prd.result += prd.radiance * prd.attenuation;
-            break;
-        }
-
-        // RR
-        if(prd.depth >= rr_begin_depth){
-            float pcont = fmaxf(prd.attenuation);
-            if(rnd(prd.seed) >= pcont)
-                break;
-                prd.attenuation /= pcont;
-            }
-            prd.depth++;
-            prd.result += prd.radiance * prd.attenuation;
-            ray_origin = prd.origin;
-            ray_direction = prd.direction;
-        } // eye ray
-
-        result += prd.result;
-        seed = prd.seed;
-    } while (--samples_per_pixel);
-
-    float3 pixel_color = result/(sqrt_num_samples*sqrt_num_samples);
-
-    if (frame_number > 1){
-        float a = 1.0f / (float)frame_number;
-        float b = ((float)frame_number - 1.0f) * a;
-        float3 old_color = make_float3(output_buffer[launch_index]);
-        output_buffer[launch_index] = make_float4(a * pixel_color + b * old_color, 0.0f);
-    }
-    else{
-        output_buffer[launch_index] = make_float4(pixel_color, 0.0f);
-    }
+__device__ void reflectionss(float3 _shadingNormal, float3 _geometricNormal){
+    float3 ffnormal = faceforward(_shadingNormal, -ray.direction, _geometricNormal);
+    current_prd.direction = reflect(ray.direction, ffnormal);
 }
 
 rtDeclareVariable(float3,        emission_color, , );
@@ -368,7 +316,7 @@ RT_PROGRAM void reflections(){
         current_prd.done = true;
         return;
     }
-    float3 colour = make_float3(0.0, 0.0, 0.0);
+//    float3 colour = make_float3(0.0, 0.0, 0.0);
     float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
     float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
     float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
@@ -376,14 +324,14 @@ RT_PROGRAM void reflections(){
 
     current_prd.origin = hitpoint;
 
-    float z1=rnd(current_prd.seed);
-    float z2=rnd(current_prd.seed);
+//    float z1=rnd(current_prd.seed);
+//    float z2=rnd(current_prd.seed);
 
-    float3 p;
-    cosine_sample_hemisphere(z1, z2, p);
-    float3 v1, v2;
+//    float3 p;
+//    cosine_sample_hemisphere(z1, z2, p);
+//    float3 v1, v2;
 
-    createONB(ffnormal, v1, v2);
+//    createONB(ffnormal, v1, v2);
 
     current_prd.direction = reflect(ray.direction, ffnormal);
 

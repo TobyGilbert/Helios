@@ -11,6 +11,7 @@ UI_HEADERS_DIR=ui
 MOC_DIR=moc
 
 CONFIG-=app_bundle
+CONFIG += c++11
 QT+=gui opengl core
 SOURCES += \
     src/main.cpp \
@@ -52,10 +53,11 @@ HEADERS += \
     include/optixmodel.h \
     include/TextureLoader.h \
     include/meshwidget.h \
-    include/Shading.h
+    include/Shading.h \
+    include/ShaderGlobals.h
 
-INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL
-LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lassimp -lboost_system
+INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
+LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO.1.5 -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
 DESTDIR=./
 
 CONFIG += console
@@ -91,7 +93,12 @@ OTHER_FILES += \
     shaders/pathTraceVert.vert \
     shaders/pathTraceFrag.frag \
     textures/CedarCity.hdr \
-    textures/map.png
+    textures/map.png \
+    shaders/OSL/metal.osl \
+    shaders/OSL/checkerboard.osl \
+    shaders/OSL/envmap.osl \
+    shaders/OSL/matte.osl \
+    shaders/OSL/ward.osl
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu

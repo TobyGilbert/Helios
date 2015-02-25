@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "TextureLoader.h"
+#include "ShaderGlobals.h"
 
 
 
@@ -105,7 +106,7 @@ void PathTracerScene::init(){
     m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
 
     // Our our map texture sample
-    m_mapTexSample = loadTexture(m_context, "textures/map.png");
+//    m_mapTexSample = loadTexture(m_context, "textures/map.png");
 
     // Create scene geometry
     createGeometry();
@@ -144,6 +145,13 @@ void PathTracerScene::createGeometry(){
       Program diffuse_em = m_context->createProgramFromPTXFile( ptx_path, "diffuseEmitter" );
       diffuse_light->setClosestHitProgram( 0, diffuse_em );
 
+      // Shader Globals material
+      Material shader_globals = m_context->createMaterial();
+      Program shader_globals_ch = m_context->createProgramFromPTXFile(ptx_path, "constructShaderGlobals");
+      Program shader_globals_ah = m_context->createProgramFromPTXFile(ptx_path, "shadow");
+      shader_globals->setClosestHitProgram(0, shader_globals_ch);
+      shader_globals->setAnyHitProgram(1, shader_globals_ah);
+
       // Reflective Material
       Material reflective_material = m_context->createMaterial();
       Program reflective_ch = m_context->createProgramFromPTXFile( ptx_path, "reflections");
@@ -178,10 +186,10 @@ void PathTracerScene::createGeometry(){
       const float3 blue = make_float3( 0.0, 0.0, 1.0);
 
       // Diffuse Sphere
-      gis.push_back(createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
-      gis.back()->addMaterial(diffuse);
-      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
+//      gis.push_back(createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
+//      gis.back()->addMaterial(diffuse);
+//      gis.back()["diffuse_color"]->setFloat(white);
+//      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
 
 //      // Glass Sphere
 //      gis.push_back( createSphere(make_float4(20.0, 30.0, 70.0, 8.0)));
@@ -190,7 +198,7 @@ void PathTracerScene::createGeometry(){
 //      gis.back()["index_of_refraction"]->setFloat(1.5);
 
 //      // Metal Sphere
-//      gis.push_back( createSphere(make_float4(-20.0, 30.0, 70.0, 8.0)));
+//      gis.push_back( createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
 //      gis.back()->addMaterial(reflective_material);
 //      gis.back()["diffuse_color"]->setFloat(white);
 //      gis.back()["max_depth"]->setInt(3);
@@ -200,10 +208,7 @@ void PathTracerScene::createGeometry(){
       gis.push_back( createParallelogram( make_float3( -50.0f, 5.0f, 100.0f ),
                                           make_float3( 0.0f, 0.0f, -200.0f ),
                                           make_float3( 100.0f, 0.0f, 0.0f ) ) );
-////      gis.back()->addMaterial(reflective_material);
-      gis.back()->addMaterial(diffuse);
-////      gis.back()["diffuse_color"]->setFloat(white);
-      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
+      gis.back()->addMaterial(reflective_material);
 
 ////      // Ceiling
 //      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
@@ -211,11 +216,11 @@ void PathTracerScene::createGeometry(){
 //                                          make_float3( 0.0f, 0.0f, -50.0f ) ) );
 //      gis.back()->addMaterial(reflective_material);
 
-//      // Back wall
-//      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 75.0f),
-//                                          make_float3( 0.0f, 50.0f, 0.0f),
-//                                          make_float3( 50.0f, 0.0f, 0.0f) ) );
-//      gis.back()->addMaterial(reflective_material);
+      // Back wall
+      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 75.0f),
+                                          make_float3( 0.0f, 50.0f, 0.0f),
+                                          make_float3( 50.0f, 0.0f, 0.0f) ) );
+      gis.back()->addMaterial(reflective_material);
 
 //      // Right wall
 //      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 25.0f ),
@@ -246,15 +251,16 @@ void PathTracerScene::createGeometry(){
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
       // Metal teapot
-//      m_model = new OptiXModel(m_context);
+      m_model = new OptiXModel(m_context);
+      m_model->addMaterial(shader_globals);
 //      m_model->addMaterial(reflective_material);
-//      m_model->createGeometry("models/newteapot.obj",m_context);
-//      glm::mat4 trans;
-//      trans = glm::scale(trans,glm::vec3(13.0));
-//      trans[3][0] = -23;
-//      trans[3][1] = 10;
-//      trans[3][2] = 50;
-//      m_model->setTrans(trans);
+      m_model->createGeometry("models/newteapot.obj",m_context);
+      glm::mat4 trans;
+      trans = glm::scale(trans,glm::vec3(13.0));
+      trans[3][0] = 0;
+      trans[3][1] = 10;
+      trans[3][2] = 50;
+      m_model->setTrans(trans);
 
 //      // Glass Teapot
 //      m_model2 = new OptiXModel(m_context);
@@ -285,10 +291,10 @@ void PathTracerScene::createGeometry(){
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
       m_topGroup->addChild(geometry_group);
-//      m_topGroup->addChild(m_model->getGeomAndTrans());
+      m_topGroup->addChild(m_model->getGeomAndTrans());
 //      m_topGroup->addChild(m_model2->getGeomAndTrans());
 //      m_topGroup->addChild(m_model3->getGeomAndTrans());
-//      m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+      m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
       m_topGroup->getAcceleration()->markDirty();
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -314,7 +320,6 @@ optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &ancho
     gi->setGeometry(parallelogram);
     return gi;
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createLightParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2, int lgt_instance){
     optix::Geometry parallelogram = m_context->createGeometry();
@@ -362,7 +367,7 @@ void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material m
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::importMesh(std::string _path){
     //import mesh
-    OptiXModel* model = new OptiXModel(m_context);
+    OptiXModel* model = new OptiXModel(m_context); // NEEDS TO BE DELETED!!
     model->createGeometry(_path,m_context);
     //add to our scene
     std::cout<<"has been called path: "<<_path<<std::endl;
@@ -371,7 +376,6 @@ void PathTracerScene::importMesh(std::string _path){
     m_meshArray.push_back(model);
     m_frame = 0;
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::trace(){
     //if our camera has changed then update it in our engine
@@ -380,34 +384,7 @@ void PathTracerScene::trace(){
     //launch it
     m_context["frame_number"]->setUint( m_frame++ );
     m_context->launch(0,m_width,m_height);
-
-//    QImage img(m_width,m_height,QImage::Format_RGB32);
-//    QColor color;
-//    int idx;
-//    void* data = m_outputBuffer->map();
-//    typedef struct { float r; float g; float b; float a;} rgb;
-//    rgb* rgb_data = (rgb*)data;
-//    if(rgb_data[0].r>0||rgb_data[0].g>0||rgb_data[0].b>0)
-////    std::cout<<rgb_data[0].r<<","<<rgb_data[0].g<<","<<rgb_data[0].b<<std::endl;
-
-//    for(unsigned int i=0; i<m_width*m_height; ++i){
-////        std::cout<<rgb_data[i].r<<","<<rgb_data[i].g<<","<<rgb_data[i].b<<std::endl;
-//        float red = rgb_data[i].r; if(red>1.0) red=1.0;
-//        float green = rgb_data[i].g; if(green>1.0) green=1.0;
-//        float blue = rgb_data[i].b; if(blue>1.0) blue=1.0;
-//        float alpha = rgb_data[i].a; if(alpha>1.0) alpha=1.0;
-//        color.setRgbF(red,green,blue,alpha);
-//        idx = floor((float)i/m_height);
-
-//        img.setPixel(i-(idx*m_height), idx, color.rgb());
-
-//    }
-//    m_outputBuffer->unmap();
-//    img.save("pathTraceTest.png","PNG");
-
-//    return img;
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::resize(int _width, int _height){
 //    m_width = _width/m_devicePixelRatio;
@@ -425,7 +402,6 @@ void PathTracerScene::resize(int _width, int _height){
     m_outputBuffer->registerGLBuffer();
 
     m_frame = 0;
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::updateCamera(){
@@ -442,7 +418,6 @@ void PathTracerScene::updateCamera(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 QImage PathTracerScene::saveImage(){
-    std::cout<<m_width<<","<<m_height<<std::endl;
     QImage img(m_width,m_height,QImage::Format_RGB32);
     QColor color;
     int idx;
@@ -450,11 +425,9 @@ QImage PathTracerScene::saveImage(){
     typedef struct { float r; float g; float b; float a;} rgb;
     rgb* rgb_data = (rgb*)data;
     if(rgb_data[0].r>0||rgb_data[0].g>0||rgb_data[0].b>0)
-//    std::cout<<rgb_data[0].r<<","<<rgb_data[0].g<<","<<rgb_data[0].b<<std::endl;
 
     for(unsigned int i=0; i<m_width*m_height; i++){
         int h = m_width * m_height;
-//        std::cout<<rgb_data[i].r<<","<<rgb_data[i].g<<","<<rgb_data[i].b<<std::endl;
         float red = rgb_data[h-i].r; if(red>1.0) red=1.0;
         float green = rgb_data[h-i].g; if(green>1.0) green=1.0;
         float blue = rgb_data[h-i].b; if(blue>1.0) blue=1.0;
@@ -466,7 +439,7 @@ QImage PathTracerScene::saveImage(){
 
     }
     m_outputBuffer->unmap();
-//    img.save("pathTraceTest.png","PNG");
 
     return img;
 }
+//----------------------------------------------------------------------------------------------------------------------

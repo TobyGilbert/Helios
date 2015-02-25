@@ -8,8 +8,9 @@
 #include "OpenGLWidget.h"
 #include <iostream>
 
+#include "Shading.h"
+
 const static float INCREMENT=0.02;
-const static int RESOLOUTION_SCALE = 1;
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -24,6 +25,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinXFace=0;
     m_spinYFace=0;
     m_zoom = 1.0;
+    m_resolutionScale = 1;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -129,6 +131,9 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
+    Shading shade;
+    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
+
     startTimer(0);
 
 }
@@ -136,7 +141,7 @@ void OpenGLWidget::initializeGL(){
 void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    m_pathTracer->resize(_w/RESOLOUTION_SCALE,_h/RESOLOUTION_SCALE);
+    m_pathTracer->resize(_w/m_resolutionScale,_h/m_resolutionScale);
     m_cam->setShape(width(), height());
 
 }
@@ -164,7 +169,7 @@ void OpenGLWidget::paintGL(){
     else                             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, height()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, height(), height(), 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
 
@@ -274,8 +279,11 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::saveImage(){
+
    QImage image = m_pathTracer->saveImage();
-   QString saveFile = QFileDialog::getSaveFileName();
+   QFileDialog fileDialog(this);
+   fileDialog.setDefaultSuffix(".png");
+   QString saveFile = fileDialog.getSaveFileName(this, tr("Save Image File"));
 
    image.save(saveFile+QString(".png"), "PNG");
 }
