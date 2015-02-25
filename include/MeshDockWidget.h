@@ -1,123 +1,111 @@
-#ifndef MeshWidget_H
-#define MeshWidget_H
+#ifndef MESHDOCKWIDGET_H
+#define MESHDOCKWIDGET_H
 
 /// @class MeshWidget
-/// @date 29/01/14
+/// @date 3/02/14
 /// @author Declan Russell
-/// @brief This class is an extention of QWidget that adds all our mesh properties controls as default
+/// @brief This class is an extention of QDockWidget that comes with managment of our MeshWidgets
+/// @todo Add functionality to the combo box so it changes the selected mesh to the one you want.
+/// @todo Link up all the signals of the the mesh widget to something usful in our scene
 
-#include <QWidget>
+#include <QDockWidget>
 #include <QGridLayout>
-#include <QLabel>
-#include <QDoubleSpinBox>
 #include <QSpacerItem>
 #include <QPushButton>
-#include <QFileDialog>
-#include <QString>
+#include <QGroupBox>
+#include <QComboBox>
+#include <QLabel>
+#include <map>
 
-class MeshWidget : public QWidget
+#include "meshwidget.h"
+
+class MeshDockWidget : public QDockWidget
 {
     Q_OBJECT
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor
+    /// @brief our defalut constructor
     //----------------------------------------------------------------------------------------------------------------------
-    explicit MeshWidget(int _id = 0);
+    explicit MeshDockWidget(QWidget *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our destructor
     //----------------------------------------------------------------------------------------------------------------------
-    ~MeshWidget();
+    ~MeshDockWidget();
     //----------------------------------------------------------------------------------------------------------------------
-signals:
 
+signals:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our signal to deliver our tranforms, called by signalTransformChange()
-    //----------------------------------------------------------------------------------------------------------------------
-    void meshTransform(int _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a signal to import mesh, called by signal import mesh if a mesh has been selected
+    /// @brief a signal to add a model to our scene
     /// @param _id - the id of our mesh widget
     /// @param _path - the path to our mesh
     //----------------------------------------------------------------------------------------------------------------------
-    void importMesh(int _id, std::string _path);
+    void signalImportModel(int _id, std::string _path);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a signal to transform a model in our scene
+    //----------------------------------------------------------------------------------------------------------------------
+    void signalMeshTransform(int _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
 public slots:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our signal to norify if any tranform spinbox have been changed
+    /// @brief adds a mesh widget to our dock widget
     //----------------------------------------------------------------------------------------------------------------------
-    void signalTransformChange();
+    void addMeshWidget();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief function called to import mesh when importMeshBtn pressed
+    /// @brief a slot to change the currently shown widget
+    /// @param _id the id of the widget that we want to show
     //----------------------------------------------------------------------------------------------------------------------
-    void signalImportMesh();
+    void changeCurrentWidget(int _id);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to be called by our mesh widget to import a model to our scene
+    /// @param _id - the id of our mesh widget
+    /// @param _path - the path to our mesh
+    //----------------------------------------------------------------------------------------------------------------------
+    void importModel(int _id, std::string _path);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to be called by our mesh widget to transform a model in our scene
+    /// @brieft this slot simply calls signalMeshTransform
+    //----------------------------------------------------------------------------------------------------------------------
+    void meshTransform(int _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our inport mesh push button
+    /// @brief a pointer to the current shown widget
     //----------------------------------------------------------------------------------------------------------------------
-    QPushButton* m_importMeshBtn;
+    MeshWidget *m_currentShownWidget;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spacer for the widget
+    /// @brief mesh widget count to be incremented to give our widgets unique Id's
     //----------------------------------------------------------------------------------------------------------------------
-    QSpacerItem* m_meshSpacer;
+    int m_meshCount;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for x rotation
+    /// @brief a map to store all our mesh widgets
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshRotateXDSpinBox;
+    std::map<int,MeshWidget*> m_meshWidgets;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for y rotation
+    /// @brief our add mesh button
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshRotateYDSpinBox;
+    QPushButton *m_addMeshBtn;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for z rotation
+    /// @brief our widget layout
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshRotateZDSpinBox;
+    QGridLayout *m_meshDockGridLayout;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our rotate label
+    /// @brief our widget spacer
     //----------------------------------------------------------------------------------------------------------------------
-    QLabel* m_meshRotateLabel;
+    QSpacerItem *m_meshDockSpacer;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for x translation
+    /// @brief our dock group box
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshTranslateXDSpinBox;
+    QGroupBox *m_meshDockGroupBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for y translation
+    /// @brief our combo box so we can access our different mesh's
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshTranslateYDSpinBox;
+    QComboBox *m_meshDockComboBox;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for z translation
+    /// @brief our combod box label
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshTranslateZDSpinBox;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our translate label
-    //----------------------------------------------------------------------------------------------------------------------
-    QLabel* m_meshTranslateLabel;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for x scale
-    //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshScaleXDSpinBox;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for Y scale
-    //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshScaleYDSpinBox;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for z scale
-    //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshScaleZDSpinBox;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our scale label
-    //----------------------------------------------------------------------------------------------------------------------
-    QLabel* m_meshScaleLabel;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our grid layour for our widget
-    //----------------------------------------------------------------------------------------------------------------------
-    QGridLayout* m_meshGridLayout;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the mesh id
-    //----------------------------------------------------------------------------------------------------------------------
-    int m_meshId;
+    QLabel *m_meshSelectLabel;
     //----------------------------------------------------------------------------------------------------------------------
 
 };
 
-#endif // MeshWidget_H
+#endif // MESHDOCKWIDGET_H

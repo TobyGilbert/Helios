@@ -30,7 +30,8 @@ SOURCES += \
     src/optixmodel.cpp \
     src/TextureLoader.cpp \
     src/meshwidget.cpp \
-    src/Shading.cpp
+    src/Shading.cpp \
+    src/MeshDockWidget.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -54,7 +55,8 @@ HEADERS += \
     include/TextureLoader.h \
     include/meshwidget.h \
     include/Shading.h \
-    include/ShaderGlobals.h
+    include/ShaderGlobals.h \
+    include/MeshDockWidget.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO.1.5 -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
