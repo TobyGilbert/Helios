@@ -36,5 +36,7 @@
 moc/
 obj/
 ptx/
+osl/
+include/OSL/
 
 Makefile
