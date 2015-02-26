@@ -76,7 +76,11 @@ public slots:
     /// @brief slot called to import a mesh to our path tracer
     /// @param _path - path to the mesh
     //----------------------------------------------------------------------------------------------------------------------
-    inline void importMesh(std::string _path){m_pathTracer->importMesh(_path);}
+    inline void importMesh(int _id, std::string _path){m_pathTracer->importMesh(_id,_path);}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief slot called to transform a mesh in our scene
+    //----------------------------------------------------------------------------------------------------------------------
+    void meshTransform(int _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief saves render to image file
     //----------------------------------------------------------------------------------------------------------------------
