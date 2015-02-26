@@ -156,7 +156,7 @@ void OpenGLWidget::timerEvent(QTimerEvent *){
     QTime currentTime = m_timeOutStart.currentTime();
     int secsPassed = m_timeOutStart.secsTo(currentTime);
     //if we haven't timed out then render another frame with our path tracer
-    if(secsPassed<m_timedOut){
+    if(secsPassed<m_timedOut||m_timedOut==0){
         updateGL();
     }
 }

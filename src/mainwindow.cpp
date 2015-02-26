@@ -163,6 +163,6 @@ void MainWindow::createMenus(){
 
     connect(generalSettings, SIGNAL(triggered()), m_genSetDockWidget, SLOT(show()));
     connect(m_genSetDockWidget, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
-
+    connect(m_genSetDockWidget, SIGNAL(signalSetTimeOutDur(int)),m_openGLWidget,SLOT(setTimeOutDur(int)));
 
 }
