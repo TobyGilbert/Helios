@@ -105,7 +105,7 @@ void PathTracerScene::init(){
     m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
 
     // Our our map texture sample
-//    m_mapTexSample = loadTexture(m_context, "textures/map.png");
+    m_mapTexSample = loadTexture(m_context, "textures/map.png");
 
     // Create scene geometry
     createGeometry();
@@ -435,7 +435,10 @@ QImage PathTracerScene::saveImage(){
     QImage img(m_width,m_height,QImage::Format_RGB32);
     QColor color;
     int idx;
-    void* data = m_outputBuffer->map();
+    // as we're using a openGL buffer rather than optix we must map it with openGL calls
+    GLint vboId = m_outputBuffer->getGLBOId();
+    glBindBuffer(GL_ARRAY_BUFFER, vboId);
+    void* data = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
     typedef struct { float r; float g; float b; float a;} rgb;
     rgb* rgb_data = (rgb*)data;
     if(rgb_data[0].r>0||rgb_data[0].g>0||rgb_data[0].b>0)
@@ -452,7 +455,8 @@ QImage PathTracerScene::saveImage(){
         img.setPixel(i-(idx*m_width), idx, color.rgb());
 
     }
-    m_outputBuffer->unmap();
+    //remember to unmap the buffer after or you're going to have a bad time!
+    glUnmapBuffer(GL_ARRAY_BUFFER);
 
     return img;
 }

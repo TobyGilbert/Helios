@@ -27,6 +27,8 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinYFace=0;
     m_zoom = 1.0;
     m_resolutionScale = 1;
+    m_moveRenderReduction = 4;
+    m_timedOut = 5;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -132,9 +134,11 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
-    Shading shade;
-    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
+//    Shading shade;
+//    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
 
+    //start our render time out
+    m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);
 
 }
@@ -149,7 +153,12 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
 //    m_pathTracer->trace();
-    updateGL();
+    QTime currentTime = m_timeOutStart.currentTime();
+    int secsPassed = m_timeOutStart.secsTo(currentTime);
+    //if we haven't timed out then render another frame with our path tracer
+    if(secsPassed<m_timedOut){
+        updateGL();
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -170,7 +179,7 @@ void OpenGLWidget::paintGL(){
     else                             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, height(), height(), 0, GL_RGBA, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, m_pathTracer->getWidth(), m_pathTracer->getHeight(), 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
 
@@ -202,6 +211,8 @@ void OpenGLWidget::meshTransform(int _id, float _transX, float _transY, float _t
     finalTrans[1][1] = _scaleY;
     finalTrans[2][2] = _scaleZ;
     m_pathTracer->transformModel(_id,finalTrans);
+    // our scene has cahnged so reset our timeout
+    resetTimeOut();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -221,6 +232,8 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     m_pathTracer->signalCameraChanged();
     m_origX = _event->x();
     m_origY = _event->y();
+    // our scene has cahnged so reset our timeout
+    resetTimeOut();
   }
         // right mouse translate code
   else if(m_translate && _event->buttons() == Qt::RightButton){
@@ -231,6 +244,8 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     m_origYPos=_event->y();
     m_pathTracer->getCamera()->translate(diffX,diffY);
     m_pathTracer->signalCameraChanged();
+    // our scene has cahnged so reset our timeout
+    resetTimeOut();
    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -243,6 +258,9 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origX = _event->x();
     m_origY = _event->y();
     m_rotate = true;
+    // resize our pathtracer for more responsive movement controls
+    // resize amount set in general settings widget
+    m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
   // right mouse translate mode
   else if(_event->button() == Qt::RightButton)
@@ -250,6 +268,7 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origXPos = _event->x();
     m_origYPos = _event->y();
     m_translate = true;
+    m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
 
 }
@@ -261,11 +280,13 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   if (_event->button() == Qt::LeftButton)
   {
     m_rotate=false;
+    m_pathTracer->resize(width(),height());
   }
         // right mouse translate mode
   if (_event->button() == Qt::RightButton)
   {
     m_translate=false;
+    m_pathTracer->resize(width(),height());
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -277,12 +298,16 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
         m_zoom=ZOOM;
         m_pathTracer->getCamera()->dolly(-m_zoom);
         m_pathTracer->signalCameraChanged();
+        // our scene has cahnged so reset our timeout
+        resetTimeOut();
     }
     else if(_event->delta() <0 )
     {
         m_zoom= ZOOM;
         m_pathTracer->getCamera()->dolly(m_zoom);
         m_pathTracer->signalCameraChanged();
+        // our scene has cahnged so reset our timeout
+        resetTimeOut();
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

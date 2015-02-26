@@ -101,7 +101,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow(){
     delete m_meshToolbarButton;
-    delete m_meshWidget;
     delete m_meshDockWidget;
 
     //    delete m_lightSpacer;
@@ -116,12 +115,14 @@ MainWindow::~MainWindow(){
     delete m_lightDockWidget;
     delete m_lightToolbarButton;
 
+
     delete m_toolBar;
 
     delete m_fileMenu;
 
     delete m_saveImage;
     delete m_renderMenu;
+    delete m_settingsMenu;
 
     delete m_menuBar;
 
@@ -147,4 +148,21 @@ void MainWindow::createMenus(){
 
     m_renderMenu->addAction(m_saveImage);
     m_menuBar->addAction(m_renderMenu->menuAction());
+
+    //add our settings button on our toolbar
+    m_settingsMenu = new QMenu("Settings");
+    m_menuBar->addAction(m_settingsMenu->menuAction());
+    QAction *generalSettings = new QAction(tr("&General Settings"),this);
+    generalSettings->setStatusTip(tr("Change general settings of Helios"));
+    m_settingsMenu->addAction(generalSettings);
+
+    // create our general settings widget
+    m_genSetDockWidget = new GenSetDockWidget(this);
+    m_genSetDockWidget->setHidden(true);
+    this->addDockWidget(Qt::RightDockWidgetArea, m_genSetDockWidget);
+
+    connect(generalSettings, SIGNAL(triggered()), m_genSetDockWidget, SLOT(show()));
+    connect(m_genSetDockWidget, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
+
+
 }
