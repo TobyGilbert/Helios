@@ -27,6 +27,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_spinYFace=0;
     m_zoom = 1.0;
     m_resolutionScale = 1;
+    m_moveRenderReduction = 4;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -170,7 +171,7 @@ void OpenGLWidget::paintGL(){
     else                             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, height(), height(), 0, GL_RGBA, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, m_pathTracer->getWidth(), m_pathTracer->getHeight(), 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
 
@@ -243,6 +244,7 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origX = _event->x();
     m_origY = _event->y();
     m_rotate = true;
+    m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
   // right mouse translate mode
   else if(_event->button() == Qt::RightButton)
@@ -250,6 +252,7 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origXPos = _event->x();
     m_origYPos = _event->y();
     m_translate = true;
+    m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
 
 }
@@ -261,11 +264,13 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   if (_event->button() == Qt::LeftButton)
   {
     m_rotate=false;
+    m_pathTracer->resize(width(),height());
   }
         // right mouse translate mode
   if (_event->button() == Qt::RightButton)
   {
     m_translate=false;
+    m_pathTracer->resize(width(),height());
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
