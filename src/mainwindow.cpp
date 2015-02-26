@@ -101,7 +101,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow(){
     delete m_meshToolbarButton;
-    delete m_meshWidget;
     delete m_meshDockWidget;
 
     //    delete m_lightSpacer;

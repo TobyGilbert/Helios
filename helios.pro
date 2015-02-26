@@ -59,7 +59,7 @@ HEADERS += \
     include/MeshDockWidget.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
-LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO.1.5 -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
+LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
 DESTDIR=./
 
 CONFIG += console

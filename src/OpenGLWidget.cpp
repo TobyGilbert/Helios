@@ -132,8 +132,8 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
-    Shading shade;
-    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
+//    Shading shade;
+//    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
 
     startTimer(0);
 
