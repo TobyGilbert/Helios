@@ -98,7 +98,9 @@ OTHER_FILES += \
     shaders/OSL/checkerboard.osl \
     shaders/OSL/envmap.osl \
     shaders/OSL/matte.osl \
-    shaders/OSL/ward.osl
+    shaders/OSL/ward.osl \
+    include/oso.y \
+    include/oso.l
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu
