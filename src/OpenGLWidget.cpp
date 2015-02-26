@@ -28,6 +28,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_zoom = 1.0;
     m_resolutionScale = 1;
     m_moveRenderReduction = 4;
+    m_timedOut = 5;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -136,6 +137,8 @@ void OpenGLWidget::initializeGL(){
 //    Shading shade;
 //    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
 
+    //start our render time out
+    m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);
 
 }
@@ -150,7 +153,12 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
 //    m_pathTracer->trace();
-    updateGL();
+    QTime currentTime = m_timeOutStart.currentTime();
+    int secsPassed = m_timeOutStart.secsTo(currentTime);
+    //if we haven't timed out then render another frame with our path tracer
+    if(secsPassed<m_timedOut){
+        updateGL();
+    }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -203,6 +211,8 @@ void OpenGLWidget::meshTransform(int _id, float _transX, float _transY, float _t
     finalTrans[1][1] = _scaleY;
     finalTrans[2][2] = _scaleZ;
     m_pathTracer->transformModel(_id,finalTrans);
+    // our scene has cahnged so reset our timeout
+    resetTimeOut();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -222,6 +232,8 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     m_pathTracer->signalCameraChanged();
     m_origX = _event->x();
     m_origY = _event->y();
+    // our scene has cahnged so reset our timeout
+    resetTimeOut();
   }
         // right mouse translate code
   else if(m_translate && _event->buttons() == Qt::RightButton){
@@ -232,6 +244,8 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     m_origYPos=_event->y();
     m_pathTracer->getCamera()->translate(diffX,diffY);
     m_pathTracer->signalCameraChanged();
+    // our scene has cahnged so reset our timeout
+    resetTimeOut();
    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -244,6 +258,8 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origX = _event->x();
     m_origY = _event->y();
     m_rotate = true;
+    // resize our pathtracer for more responsive movement controls
+    // resize amount set in general settings widget
     m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
   // right mouse translate mode
@@ -282,12 +298,16 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
         m_zoom=ZOOM;
         m_pathTracer->getCamera()->dolly(-m_zoom);
         m_pathTracer->signalCameraChanged();
+        // our scene has cahnged so reset our timeout
+        resetTimeOut();
     }
     else if(_event->delta() <0 )
     {
         m_zoom= ZOOM;
         m_pathTracer->getCamera()->dolly(m_zoom);
         m_pathTracer->signalCameraChanged();
+        // our scene has cahnged so reset our timeout
+        resetTimeOut();
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
