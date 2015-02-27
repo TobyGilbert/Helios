@@ -280,13 +280,13 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   if (_event->button() == Qt::LeftButton)
   {
     m_rotate=false;
-    m_pathTracer->resize(width(),height());
+    m_pathTracer->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
   }
         // right mouse translate mode
   if (_event->button() == Qt::RightButton)
   {
     m_translate=false;
-    m_pathTracer->resize(width(),height());
+    m_pathTracer->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
