@@ -182,22 +182,10 @@ RT_PROGRAM void constructShaderGlobals(){
     sg.v = texcoord.y;
 
     current_prd.origin = sg.P;
-    reflectionss(sg.N, sg.Ng);
+    reflection(sg.N, sg.Ng);
 }
 
-//__device__ void constructShaderGlobals(){
-//    ShaderGlobals sg;
-//    // Calcualte the shading and geometric normals for use with our OSL shaders
-//    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-//    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-//    // The shading position
-//    sg.P = ray.origin + t_hit * ray.direction;
-//    // Texture coordinates
-//    sg.u = texcoord.x;
-//    sg.v = texcoord.y;
-//}
-
-__device__ void reflectionss(float3 _shadingNormal, float3 _geometricNormal){
+__device__ void reflection(float3 _shadingNormal, float3 _geometricNormal){
     float3 ffnormal = faceforward(_shadingNormal, -ray.direction, _geometricNormal);
     current_prd.direction = reflect(ray.direction, ffnormal);
 }
