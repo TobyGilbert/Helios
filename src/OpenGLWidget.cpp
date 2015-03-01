@@ -156,7 +156,7 @@ void OpenGLWidget::timerEvent(QTimerEvent *){
     QTime currentTime = m_timeOutStart.currentTime();
     int secsPassed = m_timeOutStart.secsTo(currentTime);
     //if we haven't timed out then render another frame with our path tracer
-    if(secsPassed<m_timedOut){
+    if(secsPassed<m_timedOut||m_timedOut==0){
         updateGL();
     }
 }
@@ -280,13 +280,13 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   if (_event->button() == Qt::LeftButton)
   {
     m_rotate=false;
-    m_pathTracer->resize(width(),height());
+    m_pathTracer->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
   }
         // right mouse translate mode
   if (_event->button() == Qt::RightButton)
   {
     m_translate=false;
-    m_pathTracer->resize(width(),height());
+    m_pathTracer->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------

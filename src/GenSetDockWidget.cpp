@@ -15,7 +15,7 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     int rowCount=0;
 
     //add a label for our movement render speed increase
-    QLabel *mvRendSpeedLbl = new QLabel("Movement Render Reduction",this);
+    QLabel *mvRendSpeedLbl = new QLabel("Movement Render Reduction: ",this);
     mvRendSpeedLbl->setToolTip("This reduces the number of pixels rendered while moving for quicker interactibility");
     m_layout->addWidget(mvRendSpeedLbl,rowCount,0,1,1);
     m_widgetObjects.push_back(mvRendSpeedLbl);
@@ -38,12 +38,28 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     m_layout->addWidget(mvRedRudSpnBx,rowCount,2,1,1);
     rowCount++;
 
+    // connect our signals and slots
     connect(mvRenRudSldr,SIGNAL(sliderMoved(int)),mvRedRudSpnBx,SLOT(setValue(int)));
     connect(mvRedRudSpnBx,SIGNAL(valueChanged(int)),mvRenRudSldr,SLOT(setValue(int)));
     connect(mvRenRudSldr,SIGNAL(valueChanged(int)),this,SLOT(moveRenderReductionSlot(int)));
 
+    //setup a field for changing the timeout duration
+    //a label
+    QLabel *timeOutLbl = new QLabel("Rendering timeout duration: ",this);
+    m_widgetObjects.push_back(timeOutLbl);
+    m_layout->addWidget(timeOutLbl,rowCount,0,1,1);
+    //a spinbox
+    QSpinBox *timeOutSpnBx = new QSpinBox(this);
+    m_widgetObjects.push_back(timeOutSpnBx);
+    timeOutSpnBx->setValue(5);
+    m_layout->addWidget(timeOutSpnBx,rowCount,1,1,1);
+    rowCount++;
+    //connect our signals and slots
+    connect(timeOutSpnBx,SIGNAL(valueChanged(int)),this,SLOT(setTimeOutDurSlot(int)));
 
 
+    QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_layout->addItem(spacer,rowCount,0,1,1);
 }
 //----------------------------------------------------------------------------------------------------------------------
 GenSetDockWidget::~GenSetDockWidget(){
