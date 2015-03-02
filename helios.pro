@@ -104,7 +104,8 @@ OTHER_FILES += \
     shaders/OSL/matte.osl \
     shaders/OSL/ward.osl \
     include/oso.y \
-    include/oso.l
+    include/oso.l \
+    include/osolexer.l
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu

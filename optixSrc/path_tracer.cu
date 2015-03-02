@@ -42,7 +42,6 @@ struct PerRayData_pathtrace{
     float3 attenuation;
     float3 origin;
     float3 direction;
-    float3 colour;
     float importance;
     unsigned int seed;
     int depth;
@@ -129,7 +128,6 @@ RT_PROGRAM void pathtrace_camera(){
         prd.inside = false;
         prd.seed = seed;
         prd.depth = 0;
-        prd.colour = make_float3(0.0, 0.0, 0.0);
 
     for(;;) {
         Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
@@ -181,20 +179,53 @@ RT_PROGRAM void constructShaderGlobals(){
     sg.u = texcoord.x;
     sg.v = texcoord.y;
 
+    float3 ffnormal = faceforward(sg.N, -ray.direction, sg.Ng);
+
+
     current_prd.origin = sg.P;
-    reflection(sg.N, sg.Ng);
+    reflection(sg.N, ffnormal);
+
+    // Compute direct light...
+    // Or shoot one...
+    unsigned int num_lights = lights.size();
+    float3 result = make_float3(0.0f);
+
+    for(int i = 0; i < num_lights; ++i) {
+        ParallelogramLight light = lights[i];
+        float z1 = rnd(current_prd.seed);
+        float z2 = rnd(current_prd.seed);
+        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+
+        float Ldist = length(light_pos - sg.P);
+        float3 L = normalize(light_pos - sg.P);
+        float nDl = dot( ffnormal, L );
+        float LnDl = dot( light.normal, L );
+        float A = length(cross(light.v1, light.v2));
+
+        // cast shadow ray
+        if ( nDl > 0.0f && LnDl > 0.0f ) {
+            PerRayData_pathtrace_shadow shadow_prd;
+            shadow_prd.inShadow = false;
+            Ray shadow_ray = make_Ray( sg.P, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+            rtTrace(top_object, shadow_ray, shadow_prd);
+
+            if(!shadow_prd.inShadow){
+                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+                result += light.emission * weight;
+            }
+        }
+    }
+    current_prd.radiance = result;
 }
 
-__device__ void reflection(float3 _shadingNormal, float3 _geometricNormal){
-    float3 ffnormal = faceforward(_shadingNormal, -ray.direction, _geometricNormal);
-    current_prd.direction = reflect(ray.direction, ffnormal);
+__device__ void reflection(float3 _shadingNormal, float3 _geometricNormal, float3 _ffNormal){
+    current_prd.direction = reflect(ray.direction, _ffNormal);
 }
 
 rtDeclareVariable(float3,        emission_color, , );
 
 RT_PROGRAM void diffuseEmitter(){
     current_prd.radiance = current_prd.countEmitted? emission_color : make_float3(0.f);
-    current_prd.colour = emission_color;
     current_prd.done = true;
 }
 
@@ -203,7 +234,6 @@ rtDeclareVariable(float3,        diffuse_color, , );
 rtTextureSampler<float4, 2> map_texture;
 
 RT_PROGRAM void diffuse(){
-    current_prd.colour = make_float3(tex2D(map_texture, texcoord.x, texcoord.y));
     if (current_prd.depth > 10){
         current_prd.done = true;
         return;
@@ -290,7 +320,6 @@ RT_PROGRAM void glass_refract(){
     if (current_prd.inside) {
         // Compute Beer's law
         current_prd.attenuation = current_prd.attenuation * powf(glass_color, 1);
-        current_prd.colour = glass_color;
     }
     current_prd.inside = !current_prd.inside;
     current_prd.radiance = make_float3(0.0f);
@@ -304,22 +333,12 @@ RT_PROGRAM void reflections(){
         current_prd.done = true;
         return;
     }
-//    float3 colour = make_float3(0.0, 0.0, 0.0);
     float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
     float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
     float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
     float3 hitpoint = ray.origin + t_hit * ray.direction;
 
     current_prd.origin = hitpoint;
-
-//    float z1=rnd(current_prd.seed);
-//    float z2=rnd(current_prd.seed);
-
-//    float3 p;
-//    cosine_sample_hemisphere(z1, z2, p);
-//    float3 v1, v2;
-
-//    createONB(ffnormal, v1, v2);
 
     current_prd.direction = reflect(ray.direction, ffnormal);
 

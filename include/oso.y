@@ -1,55 +1,16 @@
-/*
-Copyright (c) 2009-2010 Sony Pictures Imageworks Inc., et al.
-All Rights Reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are
-met:
-* Redistributions of source code must retain the above copyright
-  notice, this list of conditions and the following disclaimer.
-* Redistributions in binary form must reproduce the above copyright
-  notice, this list of conditions and the following disclaimer in the
-  documentation and/or other materials provided with the distribution.
-* Neither the name of Sony Pictures Imageworks nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-"AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
-
-/** Parser for OpenShadingLanguage 'object' files
- **/
-
-
 %{
-
 // C++ declarations
 
 #include <iostream>
-#include <cstdlib>
 #include <vector>
 #include <string>
+extern int yylex();
+void yyerror(char *s);
 
-#include "FlexLexer.h"
-extern "C" int yylex(void);
-
-
-void yyerror (const char *err);
-#ifdef __clang__
+/*#ifdef __clang__
 #pragma clang diagnostic ignored "-Wparentheses-equality"
-#endif
-
+#endif*/
 %}
-
 
 // This is the definition for the union that defines YYSTYPE
 %union
@@ -62,7 +23,6 @@ void yyerror (const char *err);
 
 // Tell Bison to track locations for improved error messages
 %locations
-
 
 // Define the terminal symbols.
 %token <s> IDENTIFIER STRING_LITERAL HINT
@@ -101,14 +61,14 @@ oso_file
 version
         : IDENTIFIER FLOAT_LITERAL ENDOFLINE
                 {
-                    std::cout<<"shader version "<<std::endl;
+                    std::cout<<"shader version "<<$2<<std::endl;
                 }
         ;
 
 shader_declaration
         : shader_type IDENTIFIER
                 {
-                    std::cout<<"IDENTIFIER shader declaration "<<std::endl;
+                    std::cout<<"shader name: "<<$2<<std::endl;
                 }
             hints_opt ENDOFLINE
                 {
@@ -124,7 +84,7 @@ symbols_opt
 codemarker
         : CODE IDENTIFIER ENDOFLINE
                 {
-                    std::cout<<"CODE INDENTIFIER "<<std::endl;
+                    std::cout<<"CODE"<<" IDENTIFIER "<<$2<<std::endl;
                 }
         ;
 
@@ -148,6 +108,9 @@ instruction
 
 shader_type
         : IDENTIFIER
+                {
+                    std::cout<<"shader_type: "<<$1<<std::endl;
+                }
         ;
 
 symbols
@@ -158,7 +121,7 @@ symbols
 symbol
         : SYMTYPE typespec arraylen_opt IDENTIFIER
                 {
-                    ;
+                    std::cout<<"symbol IDENTIFIER: "<<$4;
                 }
             initial_values_opt hints_opt
                 {
@@ -176,24 +139,51 @@ typespec
                 }
         | CLOSURE simple_typename
                 {
-                    ;
+                    std::cout<<"closure ";
                 }
         | STRUCT IDENTIFIER
                 {
-                    ;
+                    std::cout<<"STRUCT "<<$1<<" IDENTIFIER "<<$2<<std::endl;
                 }
         ;
 
 simple_typename
         : COLORTYPE
+                {
+                     std::cout<<"colour: ";
+                }
         | FLOATTYPE
+                {
+                    std::cout<<"float: ";
+                }
         | INTTYPE
+                {
+                    std::cout<<"int: ";
+                }
         | MATRIXTYPE
+                {
+                    std::cout<<"matrix: ";
+                }
         | NORMALTYPE
+                {
+                    std::cout<<"normal: ";
+                }
         | POINTTYPE
+                {
+                    std::cout<<"point: ";
+                }
         | STRINGTYPE
+                {
+                    std::cout<<"string: ";
+                }
         | VECTORTYPE
+                {
+                    std::cout<<"vector: ";
+                }
         | VOIDTYPE
+                {
+                    std::cout<<"void ";
+                }
         ;
 
 arraylen_opt
@@ -214,25 +204,31 @@ initial_values
 initial_value
         : FLOAT_LITERAL
                 {
-                    std::cout<<"FLOAT_LITERALL initial value"<<std::endl;
+                    std::cout<<" initial value "<<$1<<std::endl;
                 }
         | INT_LITERAL
                 {
-                    std::cout<<"INT_LITERAL initial_value "<<std::endl;
+                    std::cout<<" initial_value "<<$1<<std::endl;
                 }
         | STRING_LITERAL
                 {
-                    std::cout<<"STRING_LITERALL initial_value "<<std::endl;
+                    std::cout<<" initial_value "<<$1<<std::endl;
                 }
         ;
 
 label
         : INT_LITERAL ':'
-        | /* empty */                   {; }
+                {
+                    std::cout<<"INT_LITERAL label: "<<$1<<std::endl;
+                }
+        | /* empty */                   { ; }
         ;
 
 opcode
-        : IDENTIFIER {std::cout<<"INDENTIFIER opcode "<<std::endl;}
+        : IDENTIFIER
+                {
+                    std::cout<<"INDENTIFIER opcode "<<$1<<std::endl;
+                }
         ;
 
 arguments_opt
@@ -248,7 +244,7 @@ arguments
 argument
         : IDENTIFIER
                 {
-                    std::cout<<"IDENTIFIER argument "<<std::endl;
+                    std::cout<<"IDENTIFIER argument: "<<$1<<std::endl;
                 }
         ;
 
@@ -265,7 +261,7 @@ jumptargets
 jumptarget
         : INT_LITERAL
                 {
-                    std::cout<<"INT_LITERAL jumptarget "<<std::endl;
+                    std::cout<<"INT_LITERAL jumptarget "<<$1<<std::endl;
                 }
         ;
 
@@ -282,53 +278,78 @@ hints
 hint
         : HINT hintcontents_opt
                 {
-                  ;
+                    std::cout<<"HINT "<<$1<<std::endl;
                 }
         ;
 
 hintcontents_opt
-        : '{' hintcontents '}'      { ; }
-        | /* empty */               { ;}
+        : '{' hintcontents '}'          { std::cout<<"{}"<<std::endl; }
+        | /* empty */                   { ; }
         ;
 
 hintcontents
         : hintcontents_item
         | hintcontents ',' hintcontents_item
-                {
+                 {
                     ;
-                }
-        | /* empty */    { ; }
+                 }
+        | /* empty */                   { ; }
         ;
 
 hintcontents_item
-        : INT_LITERAL       { std::cout<<"INT_LITERAL hintcontents_item "<<std::endl; }
-        | FLOAT_LITERAL     { std::cout<<"FLOAT_LITERAL hintcontents_item "<<std::endl; }
+        : INT_LITERAL
+                {
+                    std::cout<<" INT_LITERAL hintcontents_item "<<$1<<std::endl;
+                }
+        | FLOAT_LITERAL
+                {
+                    std::cout<<" FLOAT_LITERAL hintcontents_item "<<$1<<std::endl;
+                }
         | STRING_LITERAL
-            {
-                std::cout<<"STRING_LITERAL hintcontents_item"<<std::endl;
-            }
+                {
+                    std::cout<<" STRING_LITERAL hintcontents: "<<$1<<std::endl;
+                }
         | IDENTIFIER arraylen_opt
-            {
-                std::cout<<"INDENTIFIER hintcontents_item "<<std::endl;
-            }
+                {
+                    std::cout<<"IDENTIFIER hintcontents: "<<$1;
+                }
         | simple_typename arraylen_opt
-            {
-              ;
-            }
+                {
+                    ;
+                }
         ;
 
 %%
-void yyerror (const char *err)
-{
-      std::cerr<<"There was an error!!"<<std::endl;
+
+extern int yylex();
+extern int yyparse();
+extern FILE *yyin;
+
+void yyerror(char *s) {
+   std::cout << "EEK, parse error!  Message: " << s << std::endl;
+   // might as well halt now:
+   exit(-1);
 }
 
-int main (void){
-  return yyparse();
+int main() {
+  // open a file handle to a particular file:
+  FILE *myfile = fopen("metal.oso", "r");
+  // make sure it is valid:
+  if (!myfile) {
+     std::cout << "I can't open metal.oso!" << std::endl;
+     return -1;
+  }
+  // set lex to read from it instead of defaulting to STDIN:
+  yyin = myfile;
+
+  // parse through the input until there is no more:
+  do {
+     yyparse();
+  } while (!feof(yyin));
+
+return 0;
+
 }
 
-/*int yylex(void){
-  return 1;
-}*/
 
 

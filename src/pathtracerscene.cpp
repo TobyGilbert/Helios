@@ -184,23 +184,9 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
       const float3 blue = make_float3( 0.0, 0.0, 1.0);
 
-      // Diffuse Sphere
-//      gis.push_back(createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
-//      gis.back()->addMaterial(diffuse);
-//      gis.back()["diffuse_color"]->setFloat(white);
-//      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
-
-//      // Glass Sphere
-//      gis.push_back( createSphere(make_float4(20.0, 30.0, 70.0, 8.0)));
-//      gis.back()->addMaterial(glass_material);
-//      gis.back()["glass_color"]->setFloat(white);
-//      gis.back()["index_of_refraction"]->setFloat(1.5);
-
-//      // Metal Sphere
-//      gis.push_back( createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
-//      gis.back()->addMaterial(reflective_material);
-//      gis.back()["diffuse_color"]->setFloat(white);
-//      gis.back()["max_depth"]->setInt(3);
+      // Metal Sphere
+      gis.push_back( createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
+      gis.back()->addMaterial(shader_globals);
 
 
       // Floor
@@ -209,32 +195,11 @@ void PathTracerScene::createGeometry(){
                                           make_float3( 100.0f, 0.0f, 0.0f ) ) );
       gis.back()->addMaterial(reflective_material);
 
-////      // Ceiling
-//      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
-//                                          make_float3( -50.0f, 0.0f, 0.0f ),
-//                                          make_float3( 0.0f, 0.0f, -50.0f ) ) );
-//      gis.back()->addMaterial(reflective_material);
-
       // Back wall
       gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 75.0f),
                                           make_float3( 0.0f, 50.0f, 0.0f),
                                           make_float3( 50.0f, 0.0f, 0.0f) ) );
       gis.back()->addMaterial(reflective_material);
-
-//      // Right wall
-//      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 25.0f ),
-//                                          make_float3( 0.0f, 50.0f, 0.0f ),
-//                                          make_float3( 0.0f, 0.0f, 50.0f ) ) );
-////      setMaterial(gis.back(), diffuse, "diffuse_color", green);
-//      gis.back()->addMaterial(reflective_material);
-
-
-//      // Left wall
-//      gis.push_back( createParallelogram( make_float3( 25.0f, 50.0f, 75.0f ),
-//                                          make_float3( 0.0f, 0.0f, -50.0f ),
-//                                          make_float3( 0.0f, -50.0f, 0.0f ) ) );
-////      setMaterial(gis.back(), diffuse, "diffuse_color", blue);
-//      gis.back()->addMaterial(reflective_material);
 
       // Create shadow group (no light)
       GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
@@ -249,47 +214,47 @@ void PathTracerScene::createGeometry(){
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
-      // Metal teapot
-      m_model = new OptiXModel("models/newteapot.obj",m_context);
-      m_model->addMaterial(reflective_material);
-      glm::mat4 trans;
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = -23;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
-      m_model->setTrans(trans);
+//      // Metal teapot
+//      m_model = new OptiXModel("models/newteapot.obj",m_context);
+//      m_model->addMaterial(reflective_material);
+//      glm::mat4 trans;
+//      trans = glm::scale(trans,glm::vec3(13.0));
+//      trans[3][0] = -23;
+//      trans[3][1] = 10;
+//      trans[3][2] = 50;
+//      m_model->setTrans(trans);
 
-      // Glass Teapot
-      m_model2 = new OptiXModel(m_model,m_context);
-//      m_model2->createGeometry("models/newteapot.obj",m_context);
-      m_model2->addMaterial(glass_material);
-      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
-      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
-      trans = glm::mat4(1.0);
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 23;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
-      m_model2->setTrans(trans);
+//      // Glass Teapot
+//      m_model2 = new OptiXModel(m_model,m_context);
+////      m_model2->createGeometry("models/newteapot.obj",m_context);
+//      m_model2->addMaterial(glass_material);
+//      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
+//      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
+//      trans = glm::mat4(1.0);
+//      trans = glm::scale(trans,glm::vec3(13.0));
+//      trans[3][0] = 23;
+//      trans[3][1] = 10;
+//      trans[3][2] = 50;
+//      m_model2->setTrans(trans);
 
-      // Diffuse teapot
-      m_model3 = new OptiXModel("models/teapot.obj",m_context);
-      m_model3->addMaterial(diffuse);
-      m_model3->getGeometryInstance()["diffuse_color"]->setFloat(white);
-      m_model3->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
-      trans = glm::mat4(1.0);
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 0;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
-      m_model3->setTrans(trans);
+//      // Diffuse teapot
+//      m_model3 = new OptiXModel("models/teapot.obj",m_context);
+//      m_model3->addMaterial(diffuse);
+//      m_model3->getGeometryInstance()["diffuse_color"]->setFloat(white);
+//      m_model3->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
+//      trans = glm::mat4(1.0);
+//      trans = glm::scale(trans,glm::vec3(13.0));
+//      trans[3][0] = 0;
+//      trans[3][1] = 10;
+//      trans[3][2] = 50;
+//      m_model3->setTrans(trans);
 
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
       m_topGroup->addChild(geometry_group);
-      m_topGroup->addChild(m_model->getGeomAndTrans());
-      m_topGroup->addChild(m_model2->getGeomAndTrans());
-      m_topGroup->addChild(m_model3->getGeomAndTrans());
+//      m_topGroup->addChild(m_model->getGeomAndTrans());
+//      m_topGroup->addChild(m_model2->getGeomAndTrans());
+//      m_topGroup->addChild(m_model3->getGeomAndTrans());
       m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
       m_topGroup->getAcceleration()->markDirty();
 }
