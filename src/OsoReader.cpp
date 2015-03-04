@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 #include <FlexLexer.h>
-//#define yyFlexLexer osoFlexLexer
 extern FILE *yyin;
 //----------------------------------------------------------------------------------------------------------------------------------------
 OsoReader::OsoReader(){
