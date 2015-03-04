@@ -1,4 +1,5 @@
 #include "MeshDockWidget.h"
+#include <QMessageBox>
 #include <iostream>
 
 MeshDockWidget::MeshDockWidget(QWidget *parent) :
@@ -28,7 +29,7 @@ MeshDockWidget::MeshDockWidget(QWidget *parent) :
 MeshDockWidget::~MeshDockWidget(){
     delete(m_addMeshBtn);
     delete(m_meshDockComboBox);
-    for(std::map<int,MeshWidget*>::iterator it = m_meshWidgets.begin(); it!=m_meshWidgets.end();it++){
+    for(std::map<std::string,MeshWidget*>::iterator it = m_meshWidgets.begin(); it!=m_meshWidgets.end();it++){
         delete it->second;
     }
     delete m_meshDockGridLayout;
@@ -36,22 +37,43 @@ MeshDockWidget::~MeshDockWidget(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void MeshDockWidget::addMeshWidget(){
+
+    //Lets get the location of a mesh that we wish to import
+    QString location = QFileDialog::getOpenFileName(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj)"));
+    //if nothing selected then we dont want to do anything
+    if(location.isEmpty()){
+        QMessageBox::information(this,tr("Mesh Import"),tr("Nothing Selected"));
+        return;
+    }
+    //Get some file information
+    QFileInfo fileInfo(location);
+
     //if we dont have a combo box lets add one
     if(m_meshDockComboBox==0){
         m_meshSelectLabel = new QLabel("Select Model");
         m_meshDockGridLayout->addWidget(m_meshSelectLabel,1,0,1,1);
         m_meshDockComboBox = new QComboBox();
         m_meshDockGridLayout->addWidget(m_meshDockComboBox,2,0,1,1);
-        connect(m_meshDockComboBox,SIGNAL(currentIndexChanged(int)),this, SLOT(changeCurrentWidget(int)));
+        connect(m_meshDockComboBox,SIGNAL(currentIndexChanged(QString)),this, SLOT(changeCurrentWidget(QString)));
     }
-    MeshWidget *wgt = new MeshWidget(m_meshCount);
+
+    //create a new mesh widget
+    MeshWidget *wgt = new MeshWidget(fileInfo.fileName().toStdString());
     //---------connect our signals
-    connect(wgt,SIGNAL(importMesh(int,std::string)),this,SLOT(importModel(int,std::string)));
-    connect(wgt,SIGNAL(meshTransform(int,float,float,float,float,float,float,float,float,float)),this,SLOT(meshTransform(int,float,float,float,float,float,float,float,float,float)));
+    connect(wgt,SIGNAL(meshTransform(std::string,float,float,float,float,float,float,float,float,float)),this,SLOT(meshTransform(std::string,float,float,float,float,float,float,float,float,float)));
     //add to our map
-    m_meshWidgets[m_meshCount] = wgt;
+    //if something of this name already exists then we want to name it something else
+    std::map<std::string, MeshWidget*>::iterator it = m_meshWidgets.find(fileInfo.fileName().toStdString());
+    int idx = 0;
+    std::string finalName = fileInfo.fileName().toStdString();
+    while(it!=m_meshWidgets.end()){
+        idx++;
+        finalName = fileInfo.fileName().toStdString() + std::to_string(idx);
+        it = m_meshWidgets.find(finalName);
+    }
+    m_meshWidgets[finalName] = wgt;
     /// @todo you can use QVarient with custom types, if we do this with our meshWidget is means we dont need our map
-    m_meshDockComboBox->addItem(QString("Model %1").arg(m_meshCount),QVariant(m_meshCount));
+    m_meshDockComboBox->addItem(QString(finalName.c_str()),QVariant(m_meshCount));
     m_meshDockComboBox->setCurrentIndex(m_meshDockComboBox->count());
     m_meshCount++;
     if(m_currentShownWidget!=0){
@@ -66,13 +88,14 @@ void MeshDockWidget::addMeshWidget(){
         wgt->show();
         m_currentShownWidget = wgt;
     }
+    //finally send a signal to our path tracer to import the model to our scene
+    importModel(finalName,location.toStdString());
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void MeshDockWidget::changeCurrentWidget(int _id){
+void MeshDockWidget::changeCurrentWidget(QString _id){
     if(m_currentShownWidget!=0){
-        QVariant widgetId = m_meshDockComboBox->itemData(_id);
-        std::map<int,MeshWidget*>::iterator it = m_meshWidgets.find(widgetId.toInt());
+        std::map<std::string,MeshWidget*>::iterator it = m_meshWidgets.find(_id.toStdString());
         m_currentShownWidget->hide();
         m_meshDockGridLayout->removeWidget(m_currentShownWidget);
         m_currentShownWidget = it->second;
@@ -81,12 +104,12 @@ void MeshDockWidget::changeCurrentWidget(int _id){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshDockWidget::importModel(int _id, std::string _path){
+void MeshDockWidget::importModel(std::string _id, std::string _path){
     signalImportModel(_id,_path);
     std::cout<<"import: "<<_id<<std::endl;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshDockWidget::meshTransform(int _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
+void MeshDockWidget::meshTransform(std::string _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
     signalMeshTransform(_id,_transX,_transY,_transZ,_rotX,_rotY,_rotZ,_scaleX,_scaleY,_scaleZ);
 }
 //----------------------------------------------------------------------------------------------------------------------

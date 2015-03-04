@@ -134,8 +134,8 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
-//    Shading shade;
-//    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
+    Shading shade;
+    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
 
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
@@ -196,7 +196,7 @@ void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewM
     glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::meshTransform(int _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
+void OpenGLWidget::meshTransform(std::string _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
     glm::mat4 rotX,rotY,rotZ,finalRot;
     float DtoR = PI/180.0;
     rotX = glm::rotate(rotX,_rotX*DtoR,glm::vec3(1,0,0));

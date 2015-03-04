@@ -361,7 +361,7 @@ void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material m
     gi[color_name]->setFloat(color);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::importMesh(int _id, std::string _path){
+void PathTracerScene::importMesh(std::string _id, std::string _path){
     /// @todo maybe have all this stuff in a model management class rather than the scene
     /// @todo meshes are all set with detault diffuse texture, we need some sort of material management
     //import mesh
@@ -383,8 +383,8 @@ void PathTracerScene::importMesh(int _id, std::string _path){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::transformModel(int _id, glm::mat4 _trans){
-    std::map<int,OptiXModel*>::iterator it = m_meshArray.find(_id);
+void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
+    std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
     OptiXModel* mdl = it->second;
     mdl->setTrans(_trans);
     m_topGroup->getAcceleration()->markDirty();
