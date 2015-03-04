@@ -32,7 +32,11 @@ SOURCES += \
     src/meshwidget.cpp \
     src/Shading.cpp \
     src/MeshDockWidget.cpp \
-    src/GenSetDockWidget.cpp
+    src/GenSetDockWidget.cpp \
+    src/OsoReader.cpp \
+    src/OsoReaderManager.cpp \
+    src/lex.yy.cc \
+    src/y.tab.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -58,10 +62,12 @@ HEADERS += \
     include/Shading.h \
     include/ShaderGlobals.h \
     include/MeshDockWidget.h \
-    include/GenSetDockWidget.h
+    include/GenSetDockWidget.h \
+    include/OsoReader.h \
+    include/OsoReaderManager.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
-LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
+LIBS += -ll -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
 DESTDIR=./
 
 CONFIG += console
@@ -104,7 +110,6 @@ OTHER_FILES += \
     shaders/OSL/matte.osl \
     shaders/OSL/ward.osl \
     include/oso.y \
-    include/oso.l \
     include/osolexer.l
 
 #Optix Stuff

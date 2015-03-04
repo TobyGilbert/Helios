@@ -4,7 +4,11 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "OsoReader.h"
 extern int yylex();
+
+#include "FlexLexer.h"
+
 void yyerror(char *s);
 
 /*#ifdef __clang__
@@ -321,9 +325,9 @@ hintcontents_item
 
 %%
 
-extern int yylex();
-extern int yyparse();
-extern FILE *yyin;
+//extern int yylex();
+//extern int yyparse();
+//extern FILE *yyin;
 
 void yyerror(char *s) {
    std::cout << "EEK, parse error!  Message: " << s << std::endl;
@@ -331,7 +335,7 @@ void yyerror(char *s) {
    exit(-1);
 }
 
-int main() {
+/*int main() {
   // open a file handle to a particular file:
   FILE *myfile = fopen("metal.oso", "r");
   // make sure it is valid:
@@ -349,7 +353,7 @@ int main() {
 
 return 0;
 
-}
+}*/
 
 
 

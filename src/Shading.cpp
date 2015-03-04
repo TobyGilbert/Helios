@@ -1,5 +1,6 @@
 #include "Shading.h"
 #include <QDir>
+#include "OsoReader.h"
 
 //------------------------------------------------------------------------------------------------------------------------------------
 Shading::Shading(){
@@ -29,6 +30,8 @@ void Shading::compileOSL(QString _shaderName){
     else {
         std::cout << "FAILED " << oslfilename.toStdString() << "\n";
     }
+    OsoReader osoread;
+    osoread.parseFile("include/metal.oso");
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void Shading::compileOSLtoBuffer(QString _shaderName){
@@ -52,5 +55,6 @@ void Shading::compileOSLtoBuffer(QString _shaderName){
 //    if (! m_shadingSystem->LoadMemoryCompiledShader(oslfilename.toStdString(), osobuffer)){
 //        std::cerr << "Could not load compiled buffer from \"" << oslfilename.toStdString() << "\"\n";
 //    }
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------

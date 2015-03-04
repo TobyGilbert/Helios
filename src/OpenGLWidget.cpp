@@ -137,6 +137,7 @@ void OpenGLWidget::initializeGL(){
     Shading shade;
     shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
 
+
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);
