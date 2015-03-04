@@ -23,6 +23,9 @@ void OsoReader::shader(std::string _shaderType, std::string _shaderName){
 //----------------------------------------------------------------------------------------------------------------------------------------
 bool OsoReader::parseFile(const std::string &_filename){
     yyin = fopen(_filename.c_str(), "r");
+    if (!yyin){
+        std::cerr<<"Can't open "<<_filename<<std::endl;
+    }
     bool ok = !yyparse();
     if (ok){
         std::cout<<"shader passed"<<std::endl;
