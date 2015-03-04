@@ -12,7 +12,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,1,2,2);
 
-    createMenus();
 
     // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
     m_toolBar = new QToolBar();
@@ -88,15 +87,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //--------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
-    connect(m_meshDockWidget,SIGNAL(signalImportModel(int,std::string)),m_openGLWidget,SLOT(importMesh(int,std::string)));
-    connect(m_meshDockWidget,SIGNAL(signalMeshTransform(int,float,float,float,float,float,float,float,float,float)),m_openGLWidget,SLOT(meshTransform(int,float,float,float,float,float,float,float,float,float)));
+    connect(m_meshDockWidget,SIGNAL(signalImportModel(std::string,std::string)),m_openGLWidget,SLOT(importMesh(std::string,std::string)));
+    connect(m_meshDockWidget,SIGNAL(signalMeshTransform(std::string,float,float,float,float,float,float,float,float,float)),m_openGLWidget,SLOT(meshTransform(std::string,float,float,float,float,float,float,float,float,float)));
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
     connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
     connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
     connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));
 
-//    connect(m_renderMenu, SIGNAL(triggered(QAction*)),
+    //create our toolbar menu's
+    createMenus();
 }
 
 MainWindow::~MainWindow(){
@@ -135,7 +135,9 @@ void MainWindow::createMenus(){
     m_menuBar = new QMenuBar(this);
 
     m_fileMenu = new QMenu("File");
-    m_fileMenu->addAction("Import");
+    m_importAction = new QAction(tr("&Import"),this);
+    connect(m_importAction,SIGNAL(triggered()),m_meshDockWidget,SLOT(addMeshWidget()));
+    m_fileMenu->addAction(m_importAction);
     m_fileMenu->addAction("Save");
     m_menuBar->addAction(m_fileMenu->menuAction());
 
