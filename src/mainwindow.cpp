@@ -95,8 +95,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
     connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));
 
-//    connect(m_renderMenu, SIGNAL(triggered(QAction*)),
-
     //create our toolbar menu's
     createMenus();
 }

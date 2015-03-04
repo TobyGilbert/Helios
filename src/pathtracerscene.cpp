@@ -158,6 +158,8 @@ void PathTracerScene::createGeometry(){
       reflective_material->setClosestHitProgram(0, reflective_ch);
       reflective_material->setAnyHitProgram(1, reflective_ah);
 
+      std::cout<<"reflective mat varible count: "<<reflective_ch->getVariableCount()<<std::endl;
+
       // Glass material
       Material glass_material = m_context->createMaterial();
       Program glass_ch = m_context->createProgramFromPTXFile( ptx_path, "glass_refract");
