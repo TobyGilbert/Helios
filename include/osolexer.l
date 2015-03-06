@@ -79,30 +79,37 @@ extern YYSTYPE yylval;
 
 ^local                  {
                             BEGIN(DECLARATION);
+                            yylval.i = SymTypeLocal;
                             return SYMTYPE;
                         }
 
 ^temp                   {
                             BEGIN(DECLARATION);
+                            yylval.i = SymTypeTemp;
                             return SYMTYPE;
                         }
 
 ^global                 {
+                            BEGIN(DECLARATION);
+                            yylval.i = SymTypeGlobal;
                             return SYMTYPE;
                         }
 
 ^param                  {
                             BEGIN(DECLARATION);
+                            yylval.i = SymTypeParam;
                             return SYMTYPE;
                         }
 
 ^oparam                 {
                             BEGIN(DECLARATION);
+                            yylval.i = SymTypeOutputParam;
                             return SYMTYPE;
                         }
 
 ^const                  {
                             BEGIN(DECLARATION);
+                            yylval.i = SymTypeConst;
                             return SYMTYPE;
                         }
 

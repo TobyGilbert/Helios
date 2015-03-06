@@ -1,6 +1,6 @@
 TARGET=Helios.out
 OBJECTS_DIR=obj
-
+QMAKE_CXXFLAGS = -Wno-deprecated-register -Wno-c++11-compat-deprecated-writable-strings -Wno-unneeded-internal-declaration
 # as I want to support 4.8 and 5 this will set a flag for some of the mac stuff
 # mainly in the types.h file for the setMacVisual which is native in Qt5
 isEqual(QT_MAJOR_VERSION, 5) {
@@ -33,7 +33,6 @@ SOURCES += \
     src/MeshDockWidget.cpp \
     src/GenSetDockWidget.cpp \
     src/OsoReader.cpp \
-    src/OsoReaderManager.cpp \
     src/lex.yy.cc \
     src/y.tab.cpp \
     src/AbstractMaterialWidget.cpp \
@@ -65,7 +64,7 @@ HEADERS += \
     include/MeshDockWidget.h \
     include/GenSetDockWidget.h \
     include/OsoReader.h \
-    include/OsoReaderManager.h \
+    include/BRDFUtils.h \
     include/AbstractMaterialWidget.h \
     include/MeshWidget.h \
     include/MaterialLibrary.h

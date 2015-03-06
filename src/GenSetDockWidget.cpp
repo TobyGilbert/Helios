@@ -57,17 +57,15 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     //connect our signals and slots
     connect(timeOutSpnBx,SIGNAL(valueChanged(int)),this,SLOT(setTimeOutDurSlot(int)));
 
-
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addItem(spacer,rowCount,0,1,1);
 }
 //----------------------------------------------------------------------------------------------------------------------
 GenSetDockWidget::~GenSetDockWidget(){
-    delete m_layout;
-    delete m_genSetGroupBox;
-
     for(unsigned int i=0; i<m_widgetObjects.size(); i++){
         delete m_widgetObjects[i];
     }
+    delete m_layout;
+    delete m_genSetGroupBox;
 }
 //----------------------------------------------------------------------------------------------------------------------

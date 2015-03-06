@@ -33,9 +33,9 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
 //----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::~PathTracerScene(){
     delete m_camera;
-    delete m_model;
-    delete m_model2;
-    delete m_model3;
+//    delete m_model;
+//    delete m_model2;
+//    delete m_model3;
     m_outputBuffer->destroy();
     m_lightBuffer->destroy();
     m_mapTexSample->destroy();

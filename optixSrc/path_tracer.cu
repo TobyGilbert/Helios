@@ -24,8 +24,7 @@
 #include "helpers.h"
 #include "path_tracer.h"
 #include "random.h"
-//#include "ShaderGlobals.h"
-
+#include "BRDFUtils.h"
 using namespace optix;
 
 struct ShaderGlobals{
@@ -167,60 +166,45 @@ RT_PROGRAM void pathtrace_camera(){
     }
 }
 
-
+//rtDeclareVariable(ShaderGlobals, sg, , );
 // Construct the shader globals
 RT_PROGRAM void constructShaderGlobals(){
+    if (current_prd.depth > 10){
+        current_prd.done = true;
+        return;
+
+    }
     ShaderGlobals sg;
     // Calcualte the shading and geometric normals for use with our OSL shaders
     sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
     sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+    sg.I = ray.direction;
+    // The shading position
+    sg.P = ray.origin + t_hit * ray.direction;
+    // Texture coordinates
+    sg.u = texcoord.x;
+    sg.v = texcoord.y;
+    float3 ffnormal = faceforward(sg.N, -sg.I, sg.Ng);
+    current_prd.origin = sg.P;
+    metal(1, 10, optix::make_float3(1, 1, 1));
+
+}
+
+__device__ void metal( float Ks,  float eta,  optix::float3 Cs ){
+    ShaderGlobals sg;
+    // Calcualte the shading and geometric normals for use with our OSL shaders
+    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+    sg.I = ray.direction;
     // The shading position
     sg.P = ray.origin + t_hit * ray.direction;
     // Texture coordinates
     sg.u = texcoord.x;
     sg.v = texcoord.y;
 
-    float3 ffnormal = faceforward(sg.N, -ray.direction, sg.Ng);
-
-    current_prd.origin = sg.P;
-    reflection(sg.N, sg.Ng, ffnormal);
-    float Ks = 0.5;
-    float3 Cs = make_float3(1.0, 0.0, 0.0);
-    current_prd.attenuation *= Cs * Ks;
-
-    unsigned int num_lights = lights.size();
-    float3 result = make_float3(0.0f);
-
-    for(int i = 0; i < num_lights; ++i) {
-        ParallelogramLight light = lights[i];
-        float z1 = rnd(current_prd.seed);
-        float z2 = rnd(current_prd.seed);
-        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
-
-        float Ldist = length(light_pos - sg.P);
-        float3 L = normalize(light_pos - sg.P);
-        float nDl = dot( ffnormal, L );
-        float LnDl = dot( light.normal, L );
-        float A = length(cross(light.v1, light.v2));
-
-        // cast shadow ray
-        if ( nDl > 0.0f && LnDl > 0.0f ) {
-            PerRayData_pathtrace_shadow shadow_prd;
-            shadow_prd.inShadow = false;
-            Ray shadow_ray = make_Ray( sg.P, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-            rtTrace(top_object, shadow_ray, shadow_prd);
-
-            if(!shadow_prd.inShadow){
-                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-                result += light.emission * weight;
-            }
-        }
-    }
-    current_prd.radiance = result;
-}
-
-__device__ void reflection(float3 _shadingNormal, float3 _geometricNormal, float3 _ffNormal){
-    current_prd.direction = reflect(ray.direction, _ffNormal);
+    optix::float3 $tmp1 = reflection( sg.N, eta );
+    optix::float3 $tmp2 = Ks * Cs;
+    current_prd.attenuation = $tmp1 * $tmp2;
 }
 
 rtDeclareVariable(float3,        emission_color, , );
@@ -408,4 +392,18 @@ rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
 RT_PROGRAM void shadow(){
     current_prd_shadow.inShadow = true;
     rtTerminateRay();
+}
+
+// OSL device function
+
+__device__ optix::float3 reflection(optix::float3 _normal, float _eta){
+    ShaderGlobals sg;
+    sg.I = ray.direction;
+    current_prd.direction = reflect(sg.I, _normal);
+    float cosNO = optix::dot(-_normal,sg.I);
+    if (cosNO > 0){
+        float f = fresnel_dielectric(cosNO, _eta);
+        return optix::make_float3(f);
+    }
+    return optix::make_float3(1.0, 1.0, 1.0);
 }

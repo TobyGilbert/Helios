@@ -154,5 +154,7 @@ __device__ __inline__ void sampleUnitHemisphere( const optix::float2& sample,
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Reflection
 //----------------------------------------------------------------------------------------------------------------------
-__device__ void reflection(optix::float3 _shadingNormal, optix::float3 _geometricNormal, optix::float3 _ffNormal);
+//__device__ optix::float3 reflection(optix::float3 _shadingNormal, optix::float3 _geometricNormal, optix::float3 _ffNormal);
 //----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 reflection(optix::float3 _normal, float _eta);
+__device__ void metal( float Ks = 1,  float eta = 10,  optix::float3 Cs = optix::make_float3( 1,1,1) );
