@@ -65,6 +65,8 @@ oso_file
 version
         : IDENTIFIER FLOAT_LITERAL ENDOFLINE
                 {
+                    OsoReader* reader = getOsoReader();
+                    reader->version($2, 0.0);
                     std::cout<<"shader version "<<$2<<std::endl;
                 }
         ;
@@ -72,6 +74,8 @@ version
 shader_declaration
         : shader_type IDENTIFIER
                 {
+                    OsoReader* reader = getOsoReader();
+                    reader->shader($1, $2);
                     std::cout<<"shader name: "<<$2<<std::endl;
                 }
             hints_opt ENDOFLINE
@@ -100,11 +104,13 @@ instructions
 instruction
         : label opcode
                 {
-                    ;
+                    std::cout<<"Dollar 2: "<<$2<<std::endl;
+                    OsoReader* reader = getOsoReader();
+                    reader->instruction($2);
                 }
             arguments_opt jumptargets_opt hints_opt ENDOFLINE
                 {
-                    ;
+                    std::cout<<"end"<<std::endl;
                 }
         | codemarker
         | ENDOFLINE
@@ -125,6 +131,36 @@ symbols
 symbol
         : SYMTYPE typespec arraylen_opt IDENTIFIER
                 {
+                    OsoReader* reader = getOsoReader();
+                    Type t;
+                    if ($2 == FLOATTYPE){
+                       t = TypeFloat;
+                    }
+                    else if ($2 == INTTYPE){
+                       t = TypeInt;
+                    }
+                    else if ($2 == COLORTYPE){
+                       t = TypeColour;
+                    }
+                    else if ($2 == MATRIXTYPE){
+                       t = TypeMatrix;
+                    }
+                    else if ($2 == STRINGTYPE){
+                       t = TypeString;
+                    }
+                    else if ($2 == NORMALTYPE){
+                       t = TypeNormal;
+                    }
+                    else if ($2 == VECTORTYPE){
+                       t = TypeVector;
+                    }
+                    else if ($2 == POINTTYPE){
+                       t = TypePoint;
+                    }
+                    else if ($2 == VOIDTYPE){
+                       t = TypeVoid;
+                    }
+                    reader->addSymbols($1, t, $4);
                     std::cout<<"symbol IDENTIFIER: "<<$4;
                 }
             initial_values_opt hints_opt
@@ -208,14 +244,20 @@ initial_values
 initial_value
         : FLOAT_LITERAL
                 {
+                    OsoReader* reader = getOsoReader();
+                    reader->addSymbolDefaults(std::to_string($1));
                     std::cout<<" initial value "<<$1<<std::endl;
                 }
         | INT_LITERAL
                 {
+                    OsoReader* reader = getOsoReader();
+                    reader->addSymbolDefaults(std::to_string($1));
                     std::cout<<" initial_value "<<$1<<std::endl;
                 }
         | STRING_LITERAL
                 {
+                    OsoReader* reader = getOsoReader();
+                    reader->addSymbolDefaults($1);
                     std::cout<<" initial_value "<<$1<<std::endl;
                 }
         ;
@@ -248,6 +290,8 @@ arguments
 argument
         : IDENTIFIER
                 {
+                    OsoReader* reader = getOsoReader();
+                    reader->instructionArguments($1);
                     std::cout<<"IDENTIFIER argument: "<<$1<<std::endl;
                 }
         ;
