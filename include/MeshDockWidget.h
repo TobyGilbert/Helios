@@ -39,11 +39,11 @@ signals:
     /// @param _id - the id of our mesh widget
     /// @param _path - the path to our mesh
     //----------------------------------------------------------------------------------------------------------------------
-    void signalImportModel(int _id, std::string _path);
+    void signalImportModel(std::string _id, std::string _path);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a signal to transform a model in our scene
     //----------------------------------------------------------------------------------------------------------------------
-    void signalMeshTransform(int _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
+    void signalMeshTransform(std::string _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
 public slots:
     //----------------------------------------------------------------------------------------------------------------------
@@ -54,18 +54,18 @@ public slots:
     /// @brief a slot to change the currently shown widget
     /// @param _id the id of the widget that we want to show
     //----------------------------------------------------------------------------------------------------------------------
-    void changeCurrentWidget(int _id);
+    void changeCurrentWidget(QString _id);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to be called by our mesh widget to import a model to our scene
     /// @param _id - the id of our mesh widget
     /// @param _path - the path to our mesh
     //----------------------------------------------------------------------------------------------------------------------
-    void importModel(int _id, std::string _path);
+    void importModel(std::string _id, std::string _path);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to be called by our mesh widget to transform a model in our scene
     /// @brieft this slot simply calls signalMeshTransform
     //----------------------------------------------------------------------------------------------------------------------
-    void meshTransform(int _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
+    void meshTransform(std::string _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
@@ -79,7 +79,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a map to store all our mesh widgets
     //----------------------------------------------------------------------------------------------------------------------
-    std::map<int,MeshWidget*> m_meshWidgets;
+    std::map<std::string,MeshWidget*> m_meshWidgets;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our add mesh button
     //----------------------------------------------------------------------------------------------------------------------

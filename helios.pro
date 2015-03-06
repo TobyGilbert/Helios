@@ -66,7 +66,9 @@ HEADERS += \
     include/BRDFUtils.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
-LIBS += -ll -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
+macx:LIBS += -ll
+linux:LIBS += -lfl
+LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
 DESTDIR=./
 
 CONFIG += console

@@ -171,15 +171,11 @@ void OptiXModel::createBuffers(Context &_context){
     void *vertPtr = m_vertexBuffer->map();
     typedef struct { float x; float y; float z;} xyz;
     xyz* vertData = (xyz*)vertPtr;
-    float vertArray[m_vertices.size()*3];
     unsigned int i;
     for(i=0; i<m_vertices.size();i++){
         vertData[i].x = m_vertices[i].x;
         vertData[i].y = m_vertices[i].y;
         vertData[i].z = m_vertices[i].z;
-        vertArray[i*3] = m_vertices[i].x;
-        vertArray[i*3+1] = m_vertices[i].x;
-        vertArray[i*3+2] = m_vertices[i].x;
     }
     m_vertexBuffer->unmap();
 
