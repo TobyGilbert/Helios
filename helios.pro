@@ -29,14 +29,16 @@ SOURCES += \
     src/HDRLoader.cpp \
     src/optixmodel.cpp \
     src/TextureLoader.cpp \
-    src/meshwidget.cpp \
     src/Shading.cpp \
     src/MeshDockWidget.cpp \
     src/GenSetDockWidget.cpp \
     src/OsoReader.cpp \
     src/OsoReaderManager.cpp \
     src/lex.yy.cc \
-    src/y.tab.cpp
+    src/y.tab.cpp \
+    src/AbstractMaterialWidget.cpp \
+    src/MeshWidget.cpp \
+    src/MaterialLibrary.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -58,13 +60,15 @@ HEADERS += \
     include/HDRLoader.h \
     include/optixmodel.h \
     include/TextureLoader.h \
-    include/meshwidget.h \
     include/Shading.h \
     include/ShaderGlobals.h \
     include/MeshDockWidget.h \
     include/GenSetDockWidget.h \
     include/OsoReader.h \
-    include/OsoReaderManager.h
+    include/OsoReaderManager.h \
+    include/AbstractMaterialWidget.h \
+    include/MeshWidget.h \
+    include/MaterialLibrary.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

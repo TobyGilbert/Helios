@@ -8,7 +8,18 @@
 #include "TextureLoader.h"
 #include "ShaderGlobals.h"
 
+//Declare our static instance variable
+PathTracerScene* PathTracerScene::m_instance;
 
+//----------------------------------------------------------------------------------------------------------------------
+PathTracerScene* PathTracerScene::getInstance(){
+    if(!m_instance){
+        m_instance = new PathTracerScene();
+    }
+    return m_instance;
+}
+
+//----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
                                     , m_sqrt_num_samples( 2u )
                                     , m_width(512)
@@ -19,6 +30,7 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
     // create an instance of our OptiX engine
     m_context = optix::Context::create();
 }
+//----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::~PathTracerScene(){
     delete m_camera;
     delete m_model;
@@ -158,8 +170,6 @@ void PathTracerScene::createGeometry(){
       Program reflective_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow");
       reflective_material->setClosestHitProgram(0, reflective_ch);
       reflective_material->setAnyHitProgram(1, reflective_ah);
-
-      std::cout<<"reflective mat varible count: "<<reflective_ch->getVariableCount()<<std::endl;
 
       // Glass material
       Material glass_material = m_context->createMaterial();
@@ -342,7 +352,7 @@ void PathTracerScene::importMesh(std::string _id, std::string _path){
     diffuse->setAnyHitProgram( 1, diffuse_ah );
     diffuse["diffuse_color"]->setFloat(1.0,1.0,1.0);
     diffuse["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
-    model->addMaterial(diffuse);
+    model->setMaterial(diffuse);
     //add to our scene
     std::cout<<"has been called path: "<<_path<<std::endl;
     m_topGroup->addChild(model->getGeomAndTrans());
@@ -358,6 +368,14 @@ void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
     m_topGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::setModelMaterial(std::string _id, Material &_mat){
+    std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
+    OptiXModel* mdl = it->second;
+    mdl->setMaterial(_mat);
+    m_frame=0;
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::trace(){
     //if our camera has changed then update it in our engine

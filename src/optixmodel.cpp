@@ -309,8 +309,13 @@ void OptiXModel::createBuffers(Context &_context){
     m_trans->setChild(m_geometryGroup);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OptiXModel::addMaterial(Material &_mat){
-    m_geometryInstance->addMaterial(_mat);
+void OptiXModel::setMaterial(Material &_mat){
+    if(m_geometryInstance->getMaterialCount()==0){
+        m_geometryInstance->addMaterial(_mat);
+    }
+    else{
+        m_geometryInstance->setMaterial(1,_mat);
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 Material OptiXModel::createDefaultMat(Context &_context){

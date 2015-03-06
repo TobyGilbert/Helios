@@ -1,6 +1,7 @@
 #include "MeshDockWidget.h"
 #include <QMessageBox>
 #include <iostream>
+#include "pathtracerscene.h"
 
 MeshDockWidget::MeshDockWidget(QWidget *parent) :
     QDockWidget(parent)
@@ -60,7 +61,7 @@ void MeshDockWidget::addMeshWidget(){
     //create a new mesh widget
     MeshWidget *wgt = new MeshWidget(fileInfo.fileName().toStdString());
     //---------connect our signals
-    connect(wgt,SIGNAL(meshTransform(std::string,float,float,float,float,float,float,float,float,float)),this,SLOT(meshTransform(std::string,float,float,float,float,float,float,float,float,float)));
+    connect(wgt,SIGNAL(updateScene()),this,SLOT(signalUpdateScene()));
     //add to our map
     //if something of this name already exists then we want to name it something else
     std::map<std::string, MeshWidget*>::iterator it = m_meshWidgets.find(fileInfo.fileName().toStdString());
@@ -105,11 +106,6 @@ void MeshDockWidget::changeCurrentWidget(QString _id){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void MeshDockWidget::importModel(std::string _id, std::string _path){
-    signalImportModel(_id,_path);
+    PathTracerScene::getInstance()->importMesh(_id,_path);
     std::cout<<"import: "<<_id<<std::endl;
 }
-//----------------------------------------------------------------------------------------------------------------------
-void MeshDockWidget::meshTransform(std::string _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
-    signalMeshTransform(_id,_transX,_transY,_transZ,_rotX,_rotY,_rotZ,_scaleX,_scaleY,_scaleZ);
-}
-//----------------------------------------------------------------------------------------------------------------------
