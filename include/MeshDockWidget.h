@@ -17,7 +17,7 @@
 #include <QLabel>
 #include <map>
 
-#include "meshwidget.h"
+#include "MeshWidget.h"
 
 class MeshDockWidget : public QDockWidget
 {
@@ -35,17 +35,15 @@ public:
 
 signals:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a signal to add a model to our scene
-    /// @param _id - the id of our mesh widget
-    /// @param _path - the path to our mesh
+    /// @brief a signal called to notify that something has changed and our scene needs updating
     //----------------------------------------------------------------------------------------------------------------------
-    void signalImportModel(std::string _id, std::string _path);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a signal to transform a model in our scene
-    //----------------------------------------------------------------------------------------------------------------------
-    void signalMeshTransform(std::string _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
+    void updateScene();
     //----------------------------------------------------------------------------------------------------------------------
 public slots:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a slot to call update scene
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void signalUpdateScene(){updateScene();}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds a mesh widget to our dock widget
     //----------------------------------------------------------------------------------------------------------------------
@@ -61,12 +59,6 @@ public slots:
     /// @param _path - the path to our mesh
     //----------------------------------------------------------------------------------------------------------------------
     void importModel(std::string _id, std::string _path);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a slot to be called by our mesh widget to transform a model in our scene
-    /// @brieft this slot simply calls signalMeshTransform
-    //----------------------------------------------------------------------------------------------------------------------
-    void meshTransform(std::string _id, float _transX,float _transY,float _transZ,float _rotX,float _rotY,float _rotZ,float _scaleX,float _scaleY,float _scaleZ);
-    //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a pointer to the current shown widget

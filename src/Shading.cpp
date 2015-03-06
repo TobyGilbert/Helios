@@ -22,8 +22,7 @@ void Shading::compileOSL(QString _shaderName){
     }
     OSL::OSLCompiler compiler;
     std::vector<std::string> options;
-    std::cerr<<QDir::currentPath().toStdString() + "/include/stdosl.h\0"<<"\n";
-    bool ok = compiler.compile(oslfilename.toStdString(), options, /*QDir::currentPath().toStdString() + "/include/stdosl.h\0"*/ "/home/dexternation/OpenShadingLanguage/src/shaders/stdosl.h");
+    bool ok = compiler.compile(oslfilename.toStdString(), options, QDir::currentPath().toStdString() + "/include/stdosl.h\0" );
 
     if (ok) {
         std::cout << "Compiled " << oslfilename.toStdString() << " -> " << compiler.output_filename() << "\n";

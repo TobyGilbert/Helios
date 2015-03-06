@@ -35,7 +35,6 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
 }
 //----------------------------------------------------------------------------------------------------------------------
 OpenGLWidget::~OpenGLWidget(){
-    delete m_pathTracer;
     delete m_shaderProgram;
     delete m_cam;
     glDeleteVertexArrays(1, &m_VAO);
@@ -55,11 +54,11 @@ void OpenGLWidget::initializeGL(){
     // as re-size is not explicitly called we need to do this.
     glViewport(0,0,width(),height());
 
-    m_pathTracer = new PathTracerScene();
-    m_pathTracer->setNumSamples(2u);
-    m_pathTracer->setSize(width(),height());
-    m_pathTracer->setDevicePixelRatio(devicePixelRatio());
-    m_pathTracer->init();
+
+    PathTracerScene::getInstance()->setNumSamples(2u);
+    PathTracerScene::getInstance()->setSize(width(),height());
+    PathTracerScene::getInstance()->setDevicePixelRatio(devicePixelRatio());
+    PathTracerScene::getInstance()->init();
 
     //create our plane to project our scene onto
     float vertex[]={
@@ -135,8 +134,8 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
-    Shading shade;
-    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
+//    Shading shade;
+//    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
 
 
     //start our render time out
@@ -148,13 +147,13 @@ void OpenGLWidget::initializeGL(){
 void OpenGLWidget::resizeGL(const int _w, const int _h){
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    m_pathTracer->resize(_w/m_resolutionScale,_h/m_resolutionScale);
+    PathTracerScene::getInstance()->resize(_w/m_resolutionScale,_h/m_resolutionScale);
     m_cam->setShape(width(), height());
 
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
-//    m_pathTracer->trace();
+//    PathTracerScene::getInstance()->trace();
     QTime currentTime = m_timeOutStart.currentTime();
     int secsPassed = m_timeOutStart.secsTo(currentTime);
     //if we haven't timed out then render another frame with our path tracer
@@ -167,21 +166,21 @@ void OpenGLWidget::timerEvent(QTimerEvent *){
 void OpenGLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    m_pathTracer->trace();
-    GLuint vboId = m_pathTracer->getOutputBuffer()->getGLBOId();
+    PathTracerScene::getInstance()->trace();
+    GLuint vboId = PathTracerScene::getInstance()->getOutputBuffer()->getGLBOId();
 
     glBindTexture( GL_TEXTURE_2D, m_texID);
     // send pbo to texture
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, vboId);
 
-    RTsize elementSize = m_pathTracer->getOutputBuffer()->getElementSize();
+    RTsize elementSize = PathTracerScene::getInstance()->getOutputBuffer()->getElementSize();
     if      ((elementSize % 8) == 0) glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
     else if ((elementSize % 4) == 0) glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
     else if ((elementSize % 2) == 0) glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
     else                             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, m_pathTracer->getWidth(), m_pathTracer->getHeight(), 0, GL_RGBA, GL_FLOAT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, PathTracerScene::getInstance()->getWidth(), PathTracerScene::getInstance()->getHeight(), 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
 
@@ -204,25 +203,6 @@ void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewM
 
     glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 }
-//----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::meshTransform(std::string _id, float _transX, float _transY, float _transZ, float _rotX, float _rotY, float _rotZ, float _scaleX, float _scaleY, float _scaleZ){
-    glm::mat4 rotX,rotY,rotZ,finalRot;
-    float DtoR = PI/180.0;
-    rotX = glm::rotate(rotX,_rotX*DtoR,glm::vec3(1,0,0));
-    rotY = glm::rotate(rotY,_rotY*DtoR,glm::vec3(0,1,0));
-    rotZ = glm::rotate(rotZ,_rotZ*DtoR,glm::vec3(0,0,1));
-    finalRot = rotX * rotY * rotZ;
-    glm::mat4 finalTrans = finalRot;
-    finalTrans[3][0] = _transX;
-    finalTrans[3][1] = _transY;
-    finalTrans[3][2] = _transZ;
-    finalTrans[0][0] = _scaleX;
-    finalTrans[1][1] = _scaleY;
-    finalTrans[2][2] = _scaleZ;
-    m_pathTracer->transformModel(_id,finalTrans);
-    // our scene has cahnged so reset our timeout
-    resetTimeOut();
-}
 
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
@@ -237,12 +217,12 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     rotx = glm::rotate(rotx, 0.002f * diffy,glm::vec3(1.0,0.0,0.0));
     roty = glm::rotate(roty, 0.002f * diffx,glm::vec3(0.0,1.0,0.0));
     finalRot = rotx*roty;
-    m_pathTracer->getCamera()->rotate(finalRot);
-    m_pathTracer->signalCameraChanged();
+    PathTracerScene::getInstance()->getCamera()->rotate(finalRot);
+    PathTracerScene::getInstance()->signalCameraChanged();
     m_origX = _event->x();
     m_origY = _event->y();
     // our scene has cahnged so reset our timeout
-    resetTimeOut();
+    sceneChanged();
   }
         // right mouse translate code
   else if(m_translate && _event->buttons() == Qt::RightButton){
@@ -251,10 +231,10 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     diffX*=-1.0;
     m_origXPos=_event->x();
     m_origYPos=_event->y();
-    m_pathTracer->getCamera()->translate(diffX,diffY);
-    m_pathTracer->signalCameraChanged();
+    PathTracerScene::getInstance()->getCamera()->translate(diffX,diffY);
+    PathTracerScene::getInstance()->signalCameraChanged();
     // our scene has cahnged so reset our timeout
-    resetTimeOut();
+    sceneChanged();
    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -269,7 +249,7 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_rotate = true;
     // resize our pathtracer for more responsive movement controls
     // resize amount set in general settings widget
-    m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
+    PathTracerScene::getInstance()->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
   // right mouse translate mode
   else if(_event->button() == Qt::RightButton)
@@ -277,7 +257,7 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origXPos = _event->x();
     m_origYPos = _event->y();
     m_translate = true;
-    m_pathTracer->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
+    PathTracerScene::getInstance()->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
   }
 
 }
@@ -289,13 +269,13 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   if (_event->button() == Qt::LeftButton)
   {
     m_rotate=false;
-    m_pathTracer->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
+    PathTracerScene::getInstance()->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
   }
         // right mouse translate mode
   if (_event->button() == Qt::RightButton)
   {
     m_translate=false;
-    m_pathTracer->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
+    PathTracerScene::getInstance()->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -305,18 +285,18 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
     if(_event->delta() > 0)
     {
         m_zoom=ZOOM;
-        m_pathTracer->getCamera()->dolly(-m_zoom);
-        m_pathTracer->signalCameraChanged();
+        PathTracerScene::getInstance()->getCamera()->dolly(-m_zoom);
+        PathTracerScene::getInstance()->signalCameraChanged();
         // our scene has cahnged so reset our timeout
-        resetTimeOut();
+        sceneChanged();
     }
     else if(_event->delta() <0 )
     {
         m_zoom= ZOOM;
-        m_pathTracer->getCamera()->dolly(m_zoom);
-        m_pathTracer->signalCameraChanged();
+        PathTracerScene::getInstance()->getCamera()->dolly(m_zoom);
+        PathTracerScene::getInstance()->signalCameraChanged();
         // our scene has cahnged so reset our timeout
-        resetTimeOut();
+        sceneChanged();
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -332,7 +312,7 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::saveImage(){
 
-   QImage image = m_pathTracer->saveImage();
+   QImage image = PathTracerScene::getInstance()->saveImage();
    QFileDialog fileDialog(this);
    fileDialog.setDefaultSuffix(".png");
    QString saveFile = fileDialog.getSaveFileName(this, tr("Save Image File"));

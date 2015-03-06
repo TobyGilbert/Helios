@@ -87,13 +87,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //--------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
-    connect(m_meshDockWidget,SIGNAL(signalImportModel(std::string,std::string)),m_openGLWidget,SLOT(importMesh(std::string,std::string)));
-    connect(m_meshDockWidget,SIGNAL(signalMeshTransform(std::string,float,float,float,float,float,float,float,float,float)),m_openGLWidget,SLOT(meshTransform(std::string,float,float,float,float,float,float,float,float,float)));
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
     connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
     connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
     connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));
+    connect(m_meshDockWidget,SIGNAL(updateScene()),m_openGLWidget,SLOT(sceneChanged()));
 
     //create our toolbar menu's
     createMenus();
@@ -159,9 +158,8 @@ void MainWindow::createMenus(){
     m_settingsMenu->addAction(generalSettings);
 
     // create our general settings widget
-    m_genSetDockWidget = new GenSetDockWidget(this);
+    m_genSetDockWidget = new GenSetDockWidget();
     m_genSetDockWidget->setHidden(true);
-    this->addDockWidget(Qt::RightDockWidgetArea, m_genSetDockWidget);
 
     connect(generalSettings, SIGNAL(triggered()), m_genSetDockWidget, SLOT(show()));
     connect(m_genSetDockWidget, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
