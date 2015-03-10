@@ -1,5 +1,6 @@
 #include "MeshWidget.h"
 #include "pathtracerscene.h"
+#include "MaterialLibrary.h"
 #include <QMessageBox>
 #include <iostream>
 #define GLM_FORCE_RADIANS
@@ -71,12 +72,12 @@ MeshWidget::MeshWidget(std::string _id) :
     m_testMat->setName("Test button");
     m_currentMatWidget = new AbstractMaterialWidget(this);
     m_meshGridLayout->addWidget(m_currentMatWidget,6,0,1,4);
-    m_materialLibrary = new MaterialLibrary();
-    m_materialLibrary->hide();
-    m_materialLibrary->addMaterialToLibrary(m_testMat);
-    connect(m_materialLibrary,SIGNAL(signalMaterialSelected(AbstractMaterialWidget*)),this,SLOT(setMaterial(AbstractMaterialWidget*)));
+
+    MaterialLibrary::getInstance()->hide();
+    MaterialLibrary::getInstance()->addMaterialToLibrary(m_testMat);
+    connect(MaterialLibrary::getInstance(),SIGNAL(signalMaterialSelected(AbstractMaterialWidget*)),this,SLOT(setMaterial(AbstractMaterialWidget*)));
     m_setMatButton = new QPushButton("Set Material",this);
-    connect(m_setMatButton,SIGNAL(clicked()),m_materialLibrary,SLOT(show()));
+    connect(m_setMatButton,SIGNAL(clicked()),MaterialLibrary::getInstance(),SLOT(show()));
     m_meshGridLayout->addWidget(m_setMatButton,5,0,1,4);
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -100,7 +101,6 @@ MeshWidget::MeshWidget(std::string _id) :
 MeshWidget::~MeshWidget(){
     delete m_currentMatWidget;
     delete m_testMat;
-    delete m_materialLibrary;
     delete m_setMatButton;
     delete m_meshTranslateXDSpinBox;
     delete m_meshTranslateYDSpinBox;

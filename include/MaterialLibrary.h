@@ -6,6 +6,8 @@
 /// @date 05/03/15
 /// @brief A wigdet to store and allow the user to select between
 /// @brief optix materials availible in out program.
+/// @brief This is a singleton class as we want all instances of our
+/// @brief library to be the same.
 
 #include <QWidget>
 #include <QPushButton>
@@ -18,9 +20,9 @@ class MaterialLibrary : public QWidget
     Q_OBJECT
 public:
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief defalut constructor
+    /// @brief get an instance of our material library
     //------------------------------------------------------------------------------------------------------------------------------------
-    explicit MaterialLibrary(QWidget *parent = 0);
+    static MaterialLibrary *getInstance();
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief default destructor. Deals with our garbage collection
     //------------------------------------------------------------------------------------------------------------------------------------
@@ -44,11 +46,17 @@ public slots:
     //------------------------------------------------------------------------------------------------------------------------------------
 private:
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief a static member to store all the types of materials that we have
-    /// @brief must be static such that all instances of this class have access to the
-    /// @brief same materials.
+    /// @brief pointer to the instance of our singleton class
     //------------------------------------------------------------------------------------------------------------------------------------
-    static std::vector<AbstractMaterialWidget *> m_materials;
+    static MaterialLibrary* m_instance;
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief defalut constructor
+    //------------------------------------------------------------------------------------------------------------------------------------
+    explicit MaterialLibrary(QWidget *parent = 0);
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief member to store all the types of materials that we have
+    //------------------------------------------------------------------------------------------------------------------------------------
+    std::vector<AbstractMaterialWidget *> m_materials;
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief an array of all our buttons in our widget
     //------------------------------------------------------------------------------------------------------------------------------------

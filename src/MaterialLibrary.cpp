@@ -1,7 +1,15 @@
 #include "MaterialLibrary.h"
 
-std::vector<AbstractMaterialWidget *> MaterialLibrary::m_materials;
+//Declare our static instance variable
+MaterialLibrary* MaterialLibrary::m_instance;
 
+MaterialLibrary* MaterialLibrary::getInstance(){
+    if(!m_instance){
+        m_instance = new MaterialLibrary();
+    }
+    return m_instance;
+}
+//----------------------------------------------------------------------------------------------------------------------
 MaterialLibrary::MaterialLibrary(QWidget *parent) :
     QWidget(parent)
 {

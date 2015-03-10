@@ -37,7 +37,11 @@ SOURCES += \
     src/y.tab.cpp \
     src/AbstractMaterialWidget.cpp \
     src/MeshWidget.cpp \
-    src/MaterialLibrary.cpp
+    src/MaterialLibrary.cpp \
+    src/qneblock.cpp \
+    src/qneconnection.cpp \
+    src/qneport.cpp \
+    src/qnodeseditor.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -67,7 +71,11 @@ HEADERS += \
     include/BRDFUtils.h \
     include/AbstractMaterialWidget.h \
     include/MeshWidget.h \
-    include/MaterialLibrary.h
+    include/MaterialLibrary.h \
+    include/qneblock.h \
+    include/qneconnection.h \
+    include/qneport.h \
+    include/qnodeseditor.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
