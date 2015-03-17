@@ -173,6 +173,11 @@ RT_PROGRAM void pathtrace_camera(){
 
 // Construct the shader globals
 RT_PROGRAM void constructShaderGlobals(){
+    if (current_prd.depth > 10){
+        current_prd.done = true;
+        return;
+
+    }
     ShaderGlobals sg;
     // Calcualte the shading and geometric normals for use with our OSL shaders
     sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
@@ -224,7 +229,6 @@ RT_PROGRAM void constructShaderGlobals(){
         }
     }
     current_prd.radiance = result;
-
 }
 
 __device__ void metal( float Ks,  float eta,  optix::float3 Cs ){

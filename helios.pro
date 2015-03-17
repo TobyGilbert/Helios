@@ -29,13 +29,17 @@ SOURCES += \
     src/HDRLoader.cpp \
     src/optixmodel.cpp \
     src/TextureLoader.cpp \
-    src/meshwidget.cpp \
     src/MeshDockWidget.cpp \
     src/GenSetDockWidget.cpp \
     src/OsoReader.cpp \
-    src/lex.yy.cc \
-    src/y.tab.cpp \
-    src/OslReader.cpp
+    src/OslReader.cpp \
+    src/AbstractMaterialWidget.cpp \
+    src/MeshWidget.cpp \
+    src/MaterialLibrary.cpp \
+    src/qneblock.cpp \
+    src/qneconnection.cpp \
+    src/qneport.cpp \
+    src/qnodeseditor.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -57,14 +61,19 @@ HEADERS += \
     include/HDRLoader.h \
     include/optixmodel.h \
     include/TextureLoader.h \
-    include/meshwidget.h \
     include/ShaderGlobals.h \
     include/MeshDockWidget.h \
     include/GenSetDockWidget.h \
     include/OsoReader.h \
     include/BRDFUtils.h \
-    shaders/OSL/stdosl.h \
-    include/OslReader.h
+    include/OslReader.h \
+    include/AbstractMaterialWidget.h \
+    include/MeshWidget.h \
+    include/MaterialLibrary.h \
+    include/qneblock.h \
+    include/qneconnection.h \
+    include/qneport.h \
+    include/qnodeseditor.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
@@ -127,6 +136,11 @@ OTHER_FILES += \
     shaders/OSL/ifTest.osl \
     shaders/OSO/ifTest.oso
 
+#Sources we want compiled with bison
+BISONSOURCES = src/oso.y
+#Sources we want compiles with flex
+FLEXSOURCES = src/osolexer.l
+
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu
 
@@ -156,6 +170,56 @@ macx:QMAKE_LIBDIR += /Developer/OptiX/lib64
 linux:QMAKE_LIBDIR += /usr/local/OptiX/lib64
 LIBS += -lcudart  -loptix -loptixu
 
+##############################################################
+################# bison compiler set up ######################
+##############################################################
+#files we want bison to compile
+bison.input = BISONSOURCES
+#what we want our output files to be named
+bison.output = src/y.tab.cpp
+#commands for our compiler
+bison.commands = yacc -d -o src/y.tab.cpp ${QMAKE_FILE_IN}
+#Declare that we want the output to be added to our projects
+#sources
+bison.variable_out = SOURCES
+#this flag means that this compiler will be run before our main
+#c++ compiler
+bison.CONFIG += target_predeps
+#tells the make file what to remove on clean
+bison.clean = src/y.tab.cpp
+#name of the extra compiler used in the make file
+bison.name = bison
+#finally add this compiler to our qmake project
+QMAKE_EXTRA_COMPILERS += bison
+
+##############################################################
+################# flex compiler set up #######################
+##############################################################
+#files we want flex to compile
+flex.input = FLEXSOURCES
+#what we want our output files to be named
+flex.output = src/lex.yy.cc
+#commands for our compiler
+flex.commands = lex -o src/lex.yy.cc ${QMAKE_FILE_IN}
+#Declare that we want the outpur to be added to our projects
+#sources
+flex.variable_out = SOURCES
+#this flag means that this compiler will be run before our main
+#c++ compiler
+flex.CONFIG += target_predeps
+#tells the make file what to remove on clean
+flex.clean = src/lex.yy.cc
+#name of the extra compiler used in the make file
+flex.name = flex
+#finally add this compiler to our qmake project
+QMAKE_EXTRA_COMPILERS += flex
+
+
+##############################################################
+################# nvcc compiler set up #######################
+##############################################################
+
+
 # nvcc flags (ptxas option verbose is always useful)
 # add the PTX flags to compile optix files
 NVCCFLAGS = --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx
@@ -171,6 +235,9 @@ optix.input = CUDA_SOURCES
 
 #cuda.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}_cuda.o
 optix.output = $$PTX_DIR/${QMAKE_FILE_BASE}.cu.ptx
+
+#tell qt what the files to remove on clean
+optix.clean = $$PTX_DIR/*.ptx
 
 # Tweak arch according to your hw's compute capability
 #for optix you can only have one architechture when using the PTX flags when using the -ptx flag you dont want to have the -c flag for compiling

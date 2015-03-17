@@ -1,16 +1,12 @@
 %{
 // C++ declarations
-
 #include <iostream>
 #include <vector>
 #include <string>
 #include "OsoReader.h"
 extern int yylex();
-
 #include "FlexLexer.h"
-
 void yyerror(char *s);
-
 /*#ifdef __clang__
 #pragma clang diagnostic ignored "-Wparentheses-equality"
 #endif*/
@@ -398,6 +394,3 @@ void yyerror(char *s) {
 return 0;
 
 }*/
-
-
-

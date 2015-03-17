@@ -4,9 +4,8 @@
 /// @class PathTracerScene
 /// @date 06/01/15
 /// @author Declan Russell
-/// @brief A class to manage our OptiX path tracer converted and  extended from OptiX path tracer demo
-/// @todo All our imported geometry will have a our default diffuse texture material  applied to it
-/// @todo we need to add some way of applying your own material to it
+/// @brief A class to manage our OptiX path tracer.
+/// @brief This is a singleton class for easy access in other areas of the program
 
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_matrix_namespace.h>
@@ -28,13 +27,17 @@ protected:
     typedef optix::float4 float4;
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor
+    /// @brief returns an instance of our singleton class
     //----------------------------------------------------------------------------------------------------------------------
-    PathTracerScene();
+    static PathTracerScene *getInstance();
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief  dtor
     //----------------------------------------------------------------------------------------------------------------------
     ~PathTracerScene();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to our context
+    //----------------------------------------------------------------------------------------------------------------------
+    inline optix::Context &getContext(){return m_context;}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief initialise our class
     //----------------------------------------------------------------------------------------------------------------------
@@ -97,6 +100,12 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     void transformModel(std::string _id, glm::mat4 _trans);
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief sets the material of a model in our scene
+    /// @param _id - the id of the model in our map
+    /// @param _mat - the material that we wish to apply to the object
+    //----------------------------------------------------------------------------------------------------------------------
+    void setModelMaterial(std::string _id, Material &_mat);
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief render scene to image file
     //----------------------------------------------------------------------------------------------------------------------
     QImage saveImage();
@@ -108,6 +117,23 @@ protected:
     optix::Context m_context;
     //----------------------------------------------------------------------------------------------------------------------
 private:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our default constructor
+    /// @brief these must be private so that we dont have copies of our singleton class created
+    //----------------------------------------------------------------------------------------------------------------------
+    PathTracerScene();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief remove any access to copy constructor as we dont want copies of our singleton class
+    //----------------------------------------------------------------------------------------------------------------------
+    PathTracerScene(PathTracerScene const&){}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief remove access to our assignment operator as we dont want copies of our signton class
+    //----------------------------------------------------------------------------------------------------------------------
+    PathTracerScene& operator=(PathTracerScene const&){}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a pointer to our instance of our singleton class
+    //----------------------------------------------------------------------------------------------------------------------
+    static PathTracerScene* m_instance;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the top group of our scene
     //----------------------------------------------------------------------------------------------------------------------

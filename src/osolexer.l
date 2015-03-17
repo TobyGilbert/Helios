@@ -1,4 +1,4 @@
- /* Define regular expression macros
+/* Define regular expression macros
   ************************************************/
 
  /* white space, not counting newline */
