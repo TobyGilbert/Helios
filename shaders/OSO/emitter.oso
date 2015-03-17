@@ -1,0 +1,23 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+surface emitter	%meta{string,help,"Lambertian emitter material"} 
+param	float	power	1		%meta{string,help,"Total power of the light"}  %read{3,3} %write{2147483647,-1}
+param	color	Cs	1 1 1		%meta{string,help,"Base color"}  %read{4,4} %write{2147483647,-1}
+global	closure color	Ci	%read{2147483647,-1} %write{5,5}
+temp	closure color	$tmp1	%read{5,5} %write{0,0}
+const	string	$const1	"emission"		%read{0,0} %write{2147483647,-1}
+const	float	$const2	3.1415927		%read{2,2} %write{2147483647,-1}
+temp	float	$tmp2	%read{2,2} %write{1,1}
+temp	float	$tmp3	%read{3,3} %write{2,2}
+temp	float	$tmp4	%read{4,4} %write{3,3}
+temp	color	$tmp5	%read{5,5} %write{4,4}
+code ___main___
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/emitter.osl:44
+#     Ci = (power / (M_PI * surfacearea())) * Cs * emission();
+	closure		$tmp1 $const1 	%filename{"/Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/emitter.osl"} %line{44} %argrw{"wr"}
+	surfacearea	$tmp2 	%argrw{"w"}
+	mul		$tmp3 $const2 $tmp2 	%argrw{"wrr"}
+	div		$tmp4 power $tmp3 	%argrw{"wrr"}
+	mul		$tmp5 $tmp4 Cs 	%argrw{"wrr"}
+	mul		Ci $tmp1 $tmp5 	%argrw{"wrr"}
+	end

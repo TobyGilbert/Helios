@@ -30,12 +30,12 @@ SOURCES += \
     src/optixmodel.cpp \
     src/TextureLoader.cpp \
     src/meshwidget.cpp \
-    src/Shading.cpp \
     src/MeshDockWidget.cpp \
     src/GenSetDockWidget.cpp \
     src/OsoReader.cpp \
     src/lex.yy.cc \
-    src/y.tab.cpp
+    src/y.tab.cpp \
+    src/OslReader.cpp
 
 SOURCES -= optixSrc/*.cu
 
@@ -58,12 +58,13 @@ HEADERS += \
     include/optixmodel.h \
     include/TextureLoader.h \
     include/meshwidget.h \
-    include/Shading.h \
     include/ShaderGlobals.h \
     include/MeshDockWidget.h \
     include/GenSetDockWidget.h \
     include/OsoReader.h \
-    include/BRDFUtils.h
+    include/BRDFUtils.h \
+    shaders/OSL/stdosl.h \
+    include/OslReader.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
@@ -111,7 +112,20 @@ OTHER_FILES += \
     shaders/OSL/matte.osl \
     shaders/OSL/ward.osl \
     include/oso.y \
-    include/osolexer.l
+    include/osolexer.l \
+    shaders/OSO/emitter.oso \
+    shaders/OSO/glass.oso \
+    shaders/OSO/image.oso \
+    shaders/OSO/matte.oso \
+    shaders/OSO/metal.oso \
+    shaders/OSO/ubersurface.oso \
+    shaders/OSL/checkerboard.oso \
+    shaders/OSL/emitter.osl \
+    shaders/OSL/glass.osl \
+    shaders/OSL/image.osl \
+    shaders/OSL/ubersurface.osl \
+    shaders/OSL/ifTest.osl \
+    shaders/OSO/ifTest.oso
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu

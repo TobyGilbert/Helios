@@ -187,22 +187,23 @@ void PathTracerScene::createGeometry(){
       const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
       const float3 blue = make_float3( 0.0, 0.0, 1.0);
 
-      // Metal Sphere
+      // OSL Sphere
       gis.push_back( createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
       gis.back()->addMaterial(shader_globals);
+//      // Back wall
+//      gis.push_back( createParallelogram( make_float3( -50.0f, 5.0f, 100.0f),
+//                                          make_float3( 0.0f, 0.0f, -200.0f),
+//                                          make_float3( 100.0f, 0.0f, 0.0f) ) );
+//      gis.back()->addMaterial(diffuse);
+//      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
 
 
-      // Floor
+//       Floor
       gis.push_back( createParallelogram( make_float3( -50.0f, 5.0f, 100.0f ),
                                           make_float3( 0.0f, 0.0f, -200.0f ),
                                           make_float3( 100.0f, 0.0f, 0.0f ) ) );
       gis.back()->addMaterial(reflective_material);
 
-      // Back wall
-      gis.push_back( createParallelogram( make_float3( -25.0f, 0.0f, 75.0f),
-                                          make_float3( 0.0f, 50.0f, 0.0f),
-                                          make_float3( 50.0f, 0.0f, 0.0f) ) );
-      gis.back()->addMaterial(reflective_material);
 
       // Create shadow group (no light)
       GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
@@ -218,7 +219,7 @@ void PathTracerScene::createGeometry(){
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
 //      // Metal teapot
-//      m_model = new OptiXModel("models/newteapot.obj",m_context);
+//      m_model = new OptiXModel("models/Predator.obj",m_context);
 //      m_model->addMaterial(reflective_material);
 //      glm::mat4 trans;
 //      trans = glm::scale(trans,glm::vec3(13.0));

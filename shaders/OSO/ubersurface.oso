@@ -1,0 +1,518 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+surface ubersurface
+param	float	Opacity	1		%meta{string,help,"The overall opacity of the surface"} %meta{string,page,"Opacity"} %meta{float,UImin,0} %meta{float,UImax,1}  %read{17,17} %write{2147483647,-1}
+param	string	Texture_Opacity_Name	""		%meta{string,widget,"filename"} %meta{string,help,"A texture file name"} %meta{string,page,"Opacity.Texture"}  %read{6,16} %write{2147483647,-1}
+param	float	Texture_Opacity_Blur	0		%meta{string,help,"The blur amount, as a portion of the image size."} %meta{string,page,"Opacity.Texture"}  %read{16,16} %write{2147483647,-1}
+param	float	Texture_Opacity_Width	1		%meta{string,help,"A multiplier on the surface derivatives.  Lower            numbers cause larger resolution mip levels to be used."} %meta{string,page,"Opacity.Texture"}  %read{16,16} %write{2147483647,-1}
+param	string	Texture_Opacity_Wrap_Mode	"periodic"		%meta{string,widget,"popup"} %meta{string,options,"black|clamp|file|mirror|periodic"} %meta{string,help,"The U and V wrap mode for this texture. "} %meta{string,page,"Opacity.Texture"}  %read{16,16} %write{2147483647,-1}
+param	float	Texture_Opacity_Scale_U	1		%meta{string,help,"Scales the U texture coordinate prior to texture lookup."} %meta{string,page,"Opacity.Texture"}  %read{14,14} %write{2147483647,-1} %derivs
+param	float	Texture_Opacity_Scale_V	1		%meta{string,help,"Scales the V texture coordinate prior to texture lookup."} %meta{string,page,"Opacity.Texture"}  %read{15,15} %write{2147483647,-1} %derivs
+param	int	Texture_Opacity_Flip_U	0		%meta{string,help,"Flips the U texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Opacity.Texture"}  %read{10,10} %write{2147483647,-1}
+param	int	Texture_Opacity_Flip_V	0		%meta{string,help,"Flips the V texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Opacity.Texture"}  %read{12,12} %write{2147483647,-1}
+param	float	Kbump	0		%meta{string,help,"The amount to bump the surface by"} %meta{string,page,"Bump"}  %read{32,47} %write{2147483647,-1} %derivs
+param	string	Texture_Bump_Name	""		%meta{string,widget,"filename"} %meta{string,help,"A texture file name"} %meta{string,page,"Bump.Texture"}  %read{36,46} %write{2147483647,-1} %derivs
+param	float	Texture_Bump_Blur	0		%meta{string,help,"The blur amount, as a portion of the image size."} %meta{string,page,"Bump.Texture"}  %read{46,46} %write{2147483647,-1} %derivs
+param	float	Texture_Bump_Width	1		%meta{string,help,"A multiplier on the surface derivatives.  Lower            numbers cause larger resolution mip levels to be used."} %meta{string,page,"Bump.Texture"}  %read{46,46} %write{2147483647,-1} %derivs
+param	string	Texture_Bump_Wrap_Mode	"periodic"		%meta{string,widget,"popup"} %meta{string,options,"black|clamp|file|mirror|periodic"} %meta{string,help,"The U and V wrap mode for this texture. "} %meta{string,page,"Bump.Texture"}  %read{46,46} %write{2147483647,-1} %derivs
+param	float	Texture_Bump_Scale_U	1		%meta{string,help,"Scales the U texture coordinate prior to texture lookup."} %meta{string,page,"Bump.Texture"}  %read{44,44} %write{2147483647,-1} %derivs
+param	float	Texture_Bump_Scale_V	1		%meta{string,help,"Scales the V texture coordinate prior to texture lookup."} %meta{string,page,"Bump.Texture"}  %read{45,45} %write{2147483647,-1} %derivs
+param	int	Texture_Bump_Flip_U	0		%meta{string,help,"Flips the U texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Bump.Texture"}  %read{40,40} %write{2147483647,-1}
+param	int	Texture_Bump_Flip_V	0		%meta{string,help,"Flips the V texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Bump.Texture"}  %read{42,42} %write{2147483647,-1}
+param	float	Kd	0.5		%meta{string,help,"Diffuse closure weight"} %meta{string,page,"Diffuse"} %meta{float,UImin,0} %meta{float,UImax,1}  %read{55,71} %write{2147483647,-1}
+param	color	Diffuse_Color	1 1 1		%meta{string,help,"Diffuse closure color"} %meta{string,page,"Diffuse"}  %read{72,72} %write{2147483647,-1}
+param	string	Texture_Diffuse_Name	""		%meta{string,widget,"filename"} %meta{string,help,"A texture file name"} %meta{string,page,"Diffuse.Texture"}  %read{59,69} %write{2147483647,-1}
+param	float	Texture_Diffuse_Blur	0		%meta{string,help,"The blur amount, as a portion of the image size."} %meta{string,page,"Diffuse.Texture"}  %read{69,69} %write{2147483647,-1}
+param	float	Texture_Diffuse_Width	1		%meta{string,help,"A multiplier on the surface derivatives.  Lower            numbers cause larger resolution mip levels to be used."} %meta{string,page,"Diffuse.Texture"}  %read{69,69} %write{2147483647,-1}
+param	string	Texture_Diffuse_Wrap_Mode	"periodic"		%meta{string,widget,"popup"} %meta{string,options,"black|clamp|file|mirror|periodic"} %meta{string,help,"The U and V wrap mode for this texture. "} %meta{string,page,"Diffuse.Texture"}  %read{69,69} %write{2147483647,-1}
+param	float	Texture_Diffuse_Scale_U	1		%meta{string,help,"Scales the U texture coordinate prior to texture lookup."} %meta{string,page,"Diffuse.Texture"}  %read{67,67} %write{2147483647,-1} %derivs
+param	float	Texture_Diffuse_Scale_V	1		%meta{string,help,"Scales the V texture coordinate prior to texture lookup."} %meta{string,page,"Diffuse.Texture"}  %read{68,68} %write{2147483647,-1} %derivs
+param	int	Texture_Diffuse_Flip_U	0		%meta{string,help,"Flips the U texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Diffuse.Texture"}  %read{63,63} %write{2147483647,-1}
+param	int	Texture_Diffuse_Flip_V	0		%meta{string,help,"Flips the V texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Diffuse.Texture"}  %read{65,65} %write{2147483647,-1}
+param	float	IOR	1.33		%meta{string,help,"The index of refraction for specular effects."} %meta{string,page,"Specular"}  %read{28,31} %write{2147483647,-1}
+param	float	Roughness	0.2		%meta{string,help,"The surface roughness for specular effects. A value of 0 forces perfect reflection/refraction."} %meta{string,page,"Specular"} %meta{float,UImin,0} %meta{float,UImax,1}  %read{76,123} %write{2147483647,-1}
+param	float	Ks	0.5		%meta{string,help,"Specular closure weight"} %meta{string,page,"Specular"} %meta{float,UImin,0} %meta{float,UImax,1}  %read{74,94} %write{2147483647,-1}
+param	color	Specular_Color	1 1 1		%meta{string,help,"Specular closure color"} %meta{string,page,"Specular"}  %read{95,95} %write{2147483647,-1}
+param	string	Texture_Specular_Name	""		%meta{string,widget,"filename"} %meta{string,help,"A texture file name"} %meta{string,page,"Specular.Texture"}  %read{83,93} %write{2147483647,-1}
+param	float	Texture_Specular_Blur	0		%meta{string,help,"The blur amount, as a portion of the image size."} %meta{string,page,"Specular.Texture"}  %read{93,93} %write{2147483647,-1}
+param	float	Texture_Specular_Width	1		%meta{string,help,"A multiplier on the surface derivatives.  Lower            numbers cause larger resolution mip levels to be used."} %meta{string,page,"Specular.Texture"}  %read{93,93} %write{2147483647,-1}
+param	string	Texture_Specular_Wrap_Mode	"periodic"		%meta{string,widget,"popup"} %meta{string,options,"black|clamp|file|mirror|periodic"} %meta{string,help,"The U and V wrap mode for this texture. "} %meta{string,page,"Specular.Texture"}  %read{93,93} %write{2147483647,-1}
+param	float	Texture_Specular_Scale_U	1		%meta{string,help,"Scales the U texture coordinate prior to texture lookup."} %meta{string,page,"Specular.Texture"}  %read{91,91} %write{2147483647,-1} %derivs
+param	float	Texture_Specular_Scale_V	1		%meta{string,help,"Scales the V texture coordinate prior to texture lookup."} %meta{string,page,"Specular.Texture"}  %read{92,92} %write{2147483647,-1} %derivs
+param	int	Texture_Specular_Flip_U	0		%meta{string,help,"Flips the U texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Specular.Texture"}  %read{87,87} %write{2147483647,-1}
+param	int	Texture_Specular_Flip_V	0		%meta{string,help,"Flips the V texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Specular.Texture"}  %read{89,89} %write{2147483647,-1}
+param	float	Kt	0		%meta{string,help,"Transmissive, or refraction, closure weight."} %meta{string,page,"Refraction"} %meta{float,UImin,0} %meta{float,UImax,1}  %read{118,140} %write{2147483647,-1}
+param	color	Refraction_Color	1 1 1		%meta{string,help,"Refraction closure color"} %meta{string,page,"Refraction"}  %read{138,138} %write{2147483647,-1}
+param	string	Texture_Refraction_Name	""		%meta{string,widget,"filename"} %meta{string,help,"A texture file name"} %meta{string,page,"Refraction.Texture"}  %read{126,136} %write{2147483647,-1}
+param	float	Texture_Refraction_Blur	0		%meta{string,help,"The blur amount, as a portion of the image size."} %meta{string,page,"Refraction.Texture"}  %read{136,136} %write{2147483647,-1}
+param	float	Texture_Refraction_Width	1		%meta{string,help,"A multiplier on the surface derivatives.  Lower            numbers cause larger resolution mip levels to be used."} %meta{string,page,"Refraction.Texture"}  %read{136,136} %write{2147483647,-1}
+param	string	Texture_Refraction_Wrap_Mode	"periodic"		%meta{string,widget,"popup"} %meta{string,options,"black|clamp|file|mirror|periodic"} %meta{string,help,"The U and V wrap mode for this texture. "} %meta{string,page,"Refraction.Texture"}  %read{136,136} %write{2147483647,-1}
+param	float	Texture_Refraction_Scale_U	1		%meta{string,help,"Scales the U texture coordinate prior to texture lookup."} %meta{string,page,"Refraction.Texture"}  %read{134,134} %write{2147483647,-1} %derivs
+param	float	Texture_Refraction_Scale_V	1		%meta{string,help,"Scales the V texture coordinate prior to texture lookup."} %meta{string,page,"Refraction.Texture"}  %read{135,135} %write{2147483647,-1} %derivs
+param	int	Texture_Refraction_Flip_U	0		%meta{string,help,"Flips the U texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Refraction.Texture"}  %read{130,130} %write{2147483647,-1}
+param	int	Texture_Refraction_Flip_V	0		%meta{string,help,"Flips the V texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Refraction.Texture"}  %read{132,132} %write{2147483647,-1}
+param	color	Absorption_Color	0 0 0		%meta{string,help,"Color to absorb inside a refractive volume."} %meta{string,page,"Refraction"}  %read{122,123} %write{2147483647,-1}
+param	float	Ke	0		%meta{string,help,"Emissive, or incandescent, closure weight."} %meta{string,page,"Emission"}  %read{97,114} %write{2147483647,-1}
+param	color	Emission_Color	1 1 1		%meta{string,help,"Emissive closure color."} %meta{string,page,"Emission"}  %read{116,116} %write{2147483647,-1}
+param	string	Texture_Emission_Name	""		%meta{string,widget,"filename"} %meta{string,help,"A texture file name"} %meta{string,page,"Emission.Texture"}  %read{101,111} %write{2147483647,-1}
+param	float	Texture_Emission_Blur	0		%meta{string,help,"The blur amount, as a portion of the image size."} %meta{string,page,"Emission.Texture"}  %read{111,111} %write{2147483647,-1}
+param	float	Texture_Emission_Width	1		%meta{string,help,"A multiplier on the surface derivatives.  Lower            numbers cause larger resolution mip levels to be used."} %meta{string,page,"Emission.Texture"}  %read{111,111} %write{2147483647,-1}
+param	string	Texture_Emission_Wrap_Mode	"periodic"		%meta{string,widget,"popup"} %meta{string,options,"black|clamp|file|mirror|periodic"} %meta{string,help,"The U and V wrap mode for this texture. "} %meta{string,page,"Emission.Texture"}  %read{111,111} %write{2147483647,-1}
+param	float	Texture_Emission_Scale_U	1		%meta{string,help,"Scales the U texture coordinate prior to texture lookup."} %meta{string,page,"Emission.Texture"}  %read{109,109} %write{2147483647,-1} %derivs
+param	float	Texture_Emission_Scale_V	1		%meta{string,help,"Scales the V texture coordinate prior to texture lookup."} %meta{string,page,"Emission.Texture"}  %read{110,110} %write{2147483647,-1} %derivs
+param	int	Texture_Emission_Flip_U	0		%meta{string,help,"Flips the U texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Emission.Texture"}  %read{105,105} %write{2147483647,-1}
+param	int	Texture_Emission_Flip_V	0		%meta{string,help,"Flips the V texture coordinate prior to texture lookup."} %meta{string,widget,"checkBox"} %meta{string,page,"Emission.Texture"}  %read{107,107} %write{2147483647,-1}
+param	normal	In_Normal	0 0 0		%read{3,3} %write{0,0} %derivs %initexpr
+param	float	In_U	0		%read{8,128} %write{1,1} %derivs %initexpr
+param	float	In_V	0		%read{9,129} %write{2,2} %derivs %initexpr
+global	point	P	%read{52,52} %write{2147483647,-1} %derivs
+global	normal	N	%read{0,0} %write{2147483647,-1} %derivs
+global	float	u	%read{1,1} %write{2147483647,-1} %derivs
+global	float	v	%read{2,2} %write{2147483647,-1} %derivs
+global	closure color	Ci	%read{2147483647,-1} %write{23,146}
+local	float	___318_u_tex	%read{64,136} %write{61,134} %derivs
+local	float	___318_v_tex	%read{66,136} %write{62,135} %derivs
+local	float	___320_u_tex	%read{11,46} %write{8,44} %derivs
+local	float	___320_v_tex	%read{13,46} %write{9,45} %derivs
+local	normal	Nshading	%read{50,123} %write{3,54} %derivs
+local	float	opacity	%read{17,145} %write{4,17}
+local	closure color	transparencyClosure	%read{23,146} %write{20,20}
+local	closure color	___322_diffuseClosure	%read{141,142} %write{24,141}
+local	closure color	___322_specularClosure	%read{96,142} %write{25,96}
+local	closure color	___322_emissionClosure	%read{143,143} %write{26,117}
+local	closure color	___322_refractionClosure	%read{139,144} %write{27,139}
+local	float	___322_eta	%read{78,123} %write{28,31}
+local	float	___323_bumpTexture	%read{47,51} %write{34,47} %derivs
+local	point	___324_Pbump	%read{53,53} %write{52,52} %derivs
+local	color	___325_diffuseTexture	%read{73,73} %write{57,69}
+local	color	___326_specularTexture	%read{94,94} %write{81,93}
+local	color	___329_emissionTexture	%read{117,117} %write{99,111}
+local	color	___330_refractionTexture	%read{137,137} %write{124,136}
+const	int	$const1	1		%read{4,123} %write{2147483647,-1}
+const	string	$const2	"evaluateTexture"		%read{5,125} %write{2147483647,-1}
+const	string	$const3	""		%read{6,126} %write{2147483647,-1}
+temp	int	$tmp1	%read{7,7} %write{6,6}
+const	float	$const4	1		%read{11,140} %write{2147483647,-1}
+const	string	$const5	"width"		%read{16,136} %write{2147483647,-1}
+const	string	$const6	"blur"		%read{16,136} %write{2147483647,-1}
+const	string	$const7	"swrap"		%read{16,136} %write{2147483647,-1}
+const	string	$const8	"twrap"		%read{16,136} %write{2147483647,-1}
+temp	closure color	$tmp2	%read{20,20} %write{18,18}
+const	string	$const9	"transparent"		%read{18,18} %write{2147483647,-1}
+temp	float	$tmp3	%read{20,20} %write{19,19}
+temp	int	$tmp4	%read{22,22} %write{21,21}
+const	string	$const10	"shadow"		%read{21,21} %write{2147483647,-1}
+const	int	$const11	0		%read{24,80} %write{2147483647,-1}
+temp	int	$tmp5	%read{30,30} %write{29,29}
+temp	int	$tmp6	%read{33,33} %write{32,32}
+const	float	$const12	0		%read{32,118} %write{2147483647,-1}
+temp	int	$tmp7	%read{37,37} %write{36,36}
+temp	int	$tmp8	%read{49,49} %write{48,48}
+temp	normal	$tmp9	%read{51,51} %write{50,50} %derivs
+temp	normal	$tmp10	%read{52,52} %write{51,51} %derivs
+temp	vector	$tmp11	%read{54,54} %write{53,53} %derivs
+temp	int	$tmp12	%read{56,56} %write{55,55}
+const	color	$const13	1 1 1		%read{57,124} %write{2147483647,-1}
+temp	int	$tmp13	%read{60,60} %write{59,59}
+temp	closure color	$tmp14	%read{71,71} %write{70,70}
+const	string	$const14	"diffuse"		%read{70,70} %write{2147483647,-1}
+temp	closure color	$tmp15	%read{72,72} %write{71,71}
+temp	closure color	$tmp16	%read{73,73} %write{72,72}
+temp	int	$tmp17	%read{75,75} %write{74,74}
+const	float	$const15	0.0049999999		%read{76,120} %write{2147483647,-1}
+temp	int	$tmp18	%read{77,77} %write{76,76}
+const	string	$const16	"reflection"		%read{78,78} %write{2147483647,-1}
+const	string	$const17	"beckmann"		%read{80,123} %write{2147483647,-1}
+const	string	$const18	"microfacet"		%read{79,123} %write{2147483647,-1}
+const	vector	$const19	0 0 0		%read{80,123} %write{2147483647,-1}
+temp	int	$tmp20	%read{84,84} %write{83,83}
+temp	color	$tmp21	%read{95,95} %write{94,94}
+temp	color	$tmp22	%read{96,96} %write{95,95}
+temp	int	$tmp23	%read{98,98} %write{97,97}
+temp	int	$tmp24	%read{102,102} %write{101,101}
+temp	closure color	$tmp25	%read{115,115} %write{112,112}
+const	string	$const20	"emission"		%read{112,112} %write{2147483647,-1}
+temp	float	$tmp26	%read{114,114} %write{113,113}
+temp	float	$tmp27	%read{115,115} %write{114,114}
+temp	closure color	$tmp28	%read{116,116} %write{115,115}
+temp	closure color	$tmp29	%read{117,117} %write{116,116}
+temp	int	$tmp30	%read{119,119} %write{118,118}
+temp	int	$tmp31	%read{121,121} %write{120,120}
+const	string	$const21	"absorption"		%read{122,123} %write{2147483647,-1}
+const	string	$const22	"refraction"		%read{122,122} %write{2147483647,-1}
+temp	int	$tmp33	%read{127,127} %write{126,126}
+temp	color	$tmp34	%read{138,138} %write{137,137}
+temp	color	$tmp35	%read{139,139} %write{138,138}
+temp	float	$tmp36	%read{141,141} %write{140,140}
+temp	closure color	$tmp37	%read{143,143} %write{142,142}
+temp	closure color	$tmp38	%read{144,144} %write{143,143}
+temp	closure color	$tmp39	%read{145,145} %write{144,144}
+temp	closure color	$tmp40	%read{146,146} %write{145,145}
+code In_Normal
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:216
+#     normal In_Normal = N,
+	assign		In_Normal N 	%filename{"/Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl"} %line{216} %argrw{"wr"}
+code In_U
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:218
+#     float  In_U = u,
+	assign		In_U u 	%filename{"/Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl"} %line{218} %argrw{"wr"}
+code In_V
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:222
+# )
+	assign		In_V v 	%filename{"/Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl"} %line{222} %argrw{"wr"}
+code ___main___
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:226
+#     normal Nshading = In_Normal;
+	assign		Nshading In_Normal 	%filename{"/Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl"} %line{226} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:229
+#     float opacity = 1;
+	assign		opacity $const1 	%line{229} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:230
+#     TEXTURE_EVAL(Opacity, opacity)
+	functioncall	$const2 17 	%line{230} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:106
+#     if(texfile != "")
+	neq		$tmp1 Texture_Opacity_Name $const3 	%line{106} %argrw{"wrr"}
+	if		$tmp1 17 17 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:108
+#         float u_tex = uu ;
+	assign		___320_u_tex In_U 	%line{108} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:109
+#         float v_tex = vv ;
+	assign		___320_v_tex In_V 	%line{109} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:111
+#         if(flip_u)
+	if		Texture_Opacity_Flip_U 12 12 	%line{111} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:112
+#             u_tex = 1.0 - u_tex;
+	sub		___320_u_tex $const4 ___320_u_tex 	%line{112} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:114
+#         if(flip_v)
+	if		Texture_Opacity_Flip_V 14 14 	%line{114} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:115
+#             v_tex = 1.0 - v_tex;
+	sub		___320_v_tex $const4 ___320_v_tex 	%line{115} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:117
+#         u_tex *= scale_u;
+	mul		___320_u_tex ___320_u_tex Texture_Opacity_Scale_U 	%line{117} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:118
+#         v_tex *= scale_v;
+	mul		___320_v_tex ___320_v_tex Texture_Opacity_Scale_V 	%line{118} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:120
+#         result = texture(texfile, u_tex, v_tex, "width", width, "blur", blur, "swrap", wrap, "twrap", wrap);
+	texture		opacity Texture_Opacity_Name ___320_u_tex ___320_v_tex $const5 Texture_Opacity_Width $const6 Texture_Opacity_Blur $const7 Texture_Opacity_Wrap_Mode $const8 Texture_Opacity_Wrap_Mode 	%line{120} %argrw{"wrrrrrrrrrrr"} %argderivs{2,3}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:231
+#     opacity *= Opacity;
+	mul		opacity opacity Opacity 	%line{231} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:232
+#     closure color transparencyClosure =  transparent() * (1.0-opacity);
+	closure		$tmp2 $const9 	%line{232} %argrw{"wr"}
+	sub		$tmp3 $const4 opacity 	%argrw{"wrr"}
+	mul		transparencyClosure $tmp2 $tmp3 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:235
+#     if(raytype("shadow")) {
+	raytype		$tmp4 $const10 	%line{235} %argrw{"wr"}
+	if		$tmp4 24 147 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:236
+#         Ci = transparencyClosure;
+	assign		Ci transparencyClosure 	%line{236} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:240
+#         closure color diffuseClosure	= 0;
+	assign		___322_diffuseClosure $const11 	%line{240} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:241
+#     	closure color specularClosure	= 0;
+	assign		___322_specularClosure $const11 	%line{241} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:242
+# 	closure color emissionClosure	= 0;
+	assign		___322_emissionClosure $const11 	%line{242} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:243
+#     	closure color refractionClosure = 0;
+	assign		___322_refractionClosure $const11 	%line{243} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:246
+# 	float eta = IOR;
+	assign		___322_eta IOR 	%line{246} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:247
+# 	if(backfacing()) eta = 1.0/IOR;
+	backfacing	$tmp5 	%line{247} %argrw{"w"}
+	if		$tmp5 32 32 	%argrw{"r"}
+	div		___322_eta $const4 IOR 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:250
+# 	if(Kbump) {
+	neq		$tmp6 Kbump $const12 	%line{250} %argrw{"wrr"}
+	if		$tmp6 55 55 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:251
+#             float bumpTexture = 0;
+	assign		___323_bumpTexture $const11 	%line{251} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:252
+#     	    TEXTURE_EVAL(Bump, bumpTexture)
+	functioncall	$const2 47 	%line{252} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:106
+#     if(texfile != "")
+	neq		$tmp7 Texture_Bump_Name $const3 	%line{106} %argrw{"wrr"}
+	if		$tmp7 47 47 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:108
+#         float u_tex = uu ;
+	assign		___320_u_tex In_U 	%line{108} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:109
+#         float v_tex = vv ;
+	assign		___320_v_tex In_V 	%line{109} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:111
+#         if(flip_u)
+	if		Texture_Bump_Flip_U 42 42 	%line{111} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:112
+#             u_tex = 1.0 - u_tex;
+	sub		___320_u_tex $const4 ___320_u_tex 	%line{112} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:114
+#         if(flip_v)
+	if		Texture_Bump_Flip_V 44 44 	%line{114} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:115
+#             v_tex = 1.0 - v_tex;
+	sub		___320_v_tex $const4 ___320_v_tex 	%line{115} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:117
+#         u_tex *= scale_u;
+	mul		___320_u_tex ___320_u_tex Texture_Bump_Scale_U 	%line{117} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:118
+#         v_tex *= scale_v;
+	mul		___320_v_tex ___320_v_tex Texture_Bump_Scale_V 	%line{118} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:120
+#         result = texture(texfile, u_tex, v_tex, "width", width, "blur", blur, "swrap", wrap, "twrap", wrap);
+	texture		___323_bumpTexture Texture_Bump_Name ___320_u_tex ___320_v_tex $const5 Texture_Bump_Width $const6 Texture_Bump_Blur $const7 Texture_Bump_Wrap_Mode $const8 Texture_Bump_Wrap_Mode 	%line{120} %argrw{"wrrrrrrrrrrr"} %argderivs{2,3}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:253
+#             bumpTexture *= Kbump;
+	mul		___323_bumpTexture ___323_bumpTexture Kbump 	%line{253} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:254
+#             if(bumpTexture) {
+	neq		$tmp8 ___323_bumpTexture $const12 	%line{254} %argrw{"wrr"}
+	if		$tmp8 55 55 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:255
+# 	        point Pbump = P + normalize(Nshading) * bumpTexture;
+	normalize	$tmp9 Nshading 	%line{255} %argrw{"wr"}
+	mul		$tmp10 $tmp9 ___323_bumpTexture 	%argrw{"wrr"}
+	add		___324_Pbump P $tmp10 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:256
+#                 Nshading = normalize(calculatenormal(Pbump));
+	calculatenormal	$tmp11 ___324_Pbump 	%line{256} %argrw{"wr"} %argderivs{1}
+	normalize	Nshading $tmp11 	%argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:261
+# 	if(Kd) {
+	neq		$tmp12 Kd $const12 	%line{261} %argrw{"wrr"}
+	if		$tmp12 74 74 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:262
+#             color diffuseTexture = color(1);
+	assign		___325_diffuseTexture $const13 	%line{262} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:263
+#     	    TEXTURE_EVAL(Diffuse, diffuseTexture)
+	functioncall	$const2 70 	%line{263} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:83
+#     if(texfile != "")
+	neq		$tmp13 Texture_Diffuse_Name $const3 	%line{83} %argrw{"wrr"}
+	if		$tmp13 70 70 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:85
+#         float u_tex = uu ;
+	assign		___318_u_tex In_U 	%line{85} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:86
+#         float v_tex = vv ;
+	assign		___318_v_tex In_V 	%line{86} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:88
+#         if(flip_u)
+	if		Texture_Diffuse_Flip_U 65 65 	%line{88} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:89
+#             u_tex = 1.0 - u_tex;
+	sub		___318_u_tex $const4 ___318_u_tex 	%line{89} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:91
+#         if(flip_v)
+	if		Texture_Diffuse_Flip_V 67 67 	%line{91} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:92
+#             v_tex = 1.0 - v_tex;
+	sub		___318_v_tex $const4 ___318_v_tex 	%line{92} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:94
+#         u_tex *= scale_u;
+	mul		___318_u_tex ___318_u_tex Texture_Diffuse_Scale_U 	%line{94} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:95
+#         v_tex *= scale_v;
+	mul		___318_v_tex ___318_v_tex Texture_Diffuse_Scale_V 	%line{95} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:97
+#         result = texture(texfile, u_tex, v_tex, "width", width, "blur", blur, "swrap", wrap, "twrap", wrap);
+	texture		___325_diffuseTexture Texture_Diffuse_Name ___318_u_tex ___318_v_tex $const5 Texture_Diffuse_Width $const6 Texture_Diffuse_Blur $const7 Texture_Diffuse_Wrap_Mode $const8 Texture_Diffuse_Wrap_Mode 	%line{97} %argrw{"wrrrrrrrrrrr"} %argderivs{2,3}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:264
+#             diffuseClosure = diffuse(Nshading) * Kd * Diffuse_Color * diffuseTexture;
+	closure		$tmp14 $const14 Nshading 	%line{264} %argrw{"wrr"}
+	mul		$tmp15 $tmp14 Kd 	%argrw{"wrr"}
+	mul		$tmp16 $tmp15 Diffuse_Color 	%argrw{"wrr"}
+	mul		___322_diffuseClosure $tmp16 ___325_diffuseTexture 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:268
+#         if(Ks) {
+	neq		$tmp17 Ks $const12 	%line{268} %argrw{"wrr"}
+	if		$tmp17 97 97 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:269
+#             if(Roughness <= 0.005) {
+	le		$tmp18 Roughness $const15 	%line{269} %argrw{"wrr"}
+	if		$tmp18 79 81 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:270
+# 	        specularClosure = reflection(Nshading, eta);
+	closure		___322_specularClosure $const16 Nshading ___322_eta 	%line{270} %argrw{"wrrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:272
+#         	specularClosure = microfacet("beckmann", Nshading, Roughness, eta, 0);
+	functioncall	$const18 81 	%line{272} %argrw{"r"}
+# stdosl.h:489
+#         // gives us the same result as if the shader-writer called refract()
+	closure		___322_specularClosure $const18 $const17 Nshading $const19 Roughness Roughness ___322_eta $const11 	%filename{"stdosl.h"} %line{489} %argrw{"wrrrrrrrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:275
+#     	    color specularTexture = color(1);
+	assign		___326_specularTexture $const13 	%filename{"/Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl"} %line{275} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:276
+#             TEXTURE_EVAL(Specular, specularTexture)
+	functioncall	$const2 94 	%line{276} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:83
+#     if(texfile != "")
+	neq		$tmp20 Texture_Specular_Name $const3 	%line{83} %argrw{"wrr"}
+	if		$tmp20 94 94 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:85
+#         float u_tex = uu ;
+	assign		___318_u_tex In_U 	%line{85} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:86
+#         float v_tex = vv ;
+	assign		___318_v_tex In_V 	%line{86} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:88
+#         if(flip_u)
+	if		Texture_Specular_Flip_U 89 89 	%line{88} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:89
+#             u_tex = 1.0 - u_tex;
+	sub		___318_u_tex $const4 ___318_u_tex 	%line{89} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:91
+#         if(flip_v)
+	if		Texture_Specular_Flip_V 91 91 	%line{91} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:92
+#             v_tex = 1.0 - v_tex;
+	sub		___318_v_tex $const4 ___318_v_tex 	%line{92} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:94
+#         u_tex *= scale_u;
+	mul		___318_u_tex ___318_u_tex Texture_Specular_Scale_U 	%line{94} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:95
+#         v_tex *= scale_v;
+	mul		___318_v_tex ___318_v_tex Texture_Specular_Scale_V 	%line{95} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:97
+#         result = texture(texfile, u_tex, v_tex, "width", width, "blur", blur, "swrap", wrap, "twrap", wrap);
+	texture		___326_specularTexture Texture_Specular_Name ___318_u_tex ___318_v_tex $const5 Texture_Specular_Width $const6 Texture_Specular_Blur $const7 Texture_Specular_Wrap_Mode $const8 Texture_Specular_Wrap_Mode 	%line{97} %argrw{"wrrrrrrrrrrr"} %argderivs{2,3}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:277
+# 	    specularClosure *= specularTexture * Ks * Specular_Color;
+	mul		$tmp21 ___326_specularTexture Ks 	%line{277} %argrw{"wrr"}
+	mul		$tmp22 $tmp21 Specular_Color 	%argrw{"wrr"}
+	mul		___322_specularClosure ___322_specularClosure $tmp22 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:281
+# 	if(Ke) {
+	neq		$tmp23 Ke $const12 	%line{281} %argrw{"wrr"}
+	if		$tmp23 118 118 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:290
+# 	    color emissionTexture = color(1);
+	assign		___329_emissionTexture $const13 	%line{290} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:291
+#     	    TEXTURE_EVAL(Emission, emissionTexture)
+	functioncall	$const2 112 	%line{291} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:83
+#     if(texfile != "")
+	neq		$tmp24 Texture_Emission_Name $const3 	%line{83} %argrw{"wrr"}
+	if		$tmp24 112 112 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:85
+#         float u_tex = uu ;
+	assign		___318_u_tex In_U 	%line{85} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:86
+#         float v_tex = vv ;
+	assign		___318_v_tex In_V 	%line{86} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:88
+#         if(flip_u)
+	if		Texture_Emission_Flip_U 107 107 	%line{88} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:89
+#             u_tex = 1.0 - u_tex;
+	sub		___318_u_tex $const4 ___318_u_tex 	%line{89} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:91
+#         if(flip_v)
+	if		Texture_Emission_Flip_V 109 109 	%line{91} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:92
+#             v_tex = 1.0 - v_tex;
+	sub		___318_v_tex $const4 ___318_v_tex 	%line{92} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:94
+#         u_tex *= scale_u;
+	mul		___318_u_tex ___318_u_tex Texture_Emission_Scale_U 	%line{94} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:95
+#         v_tex *= scale_v;
+	mul		___318_v_tex ___318_v_tex Texture_Emission_Scale_V 	%line{95} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:97
+#         result = texture(texfile, u_tex, v_tex, "width", width, "blur", blur, "swrap", wrap, "twrap", wrap);
+	texture		___329_emissionTexture Texture_Emission_Name ___318_u_tex ___318_v_tex $const5 Texture_Emission_Width $const6 Texture_Emission_Blur $const7 Texture_Emission_Wrap_Mode $const8 Texture_Emission_Wrap_Mode 	%line{97} %argrw{"wrrrrrrrrrrr"} %argderivs{2,3}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:292
+# 	    emissionClosure = emission() * (Ke / surfacearea()) * Emission_Color * emissionTexture;
+	closure		$tmp25 $const20 	%line{292} %argrw{"wr"}
+	surfacearea	$tmp26 	%argrw{"w"}
+	div		$tmp27 Ke $tmp26 	%argrw{"wrr"}
+	mul		$tmp28 $tmp25 $tmp27 	%argrw{"wrr"}
+	mul		$tmp29 $tmp28 Emission_Color 	%argrw{"wrr"}
+	mul		___322_emissionClosure $tmp29 ___329_emissionTexture 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:296
+#     	if(Kt) {
+	neq		$tmp30 Kt $const12 	%line{296} %argrw{"wrr"}
+	if		$tmp30 142 142 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:297
+# 	    if(Roughness <= 0.005) {
+	le		$tmp31 Roughness $const15 	%line{297} %argrw{"wrr"}
+	if		$tmp31 123 124 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:298
+#                 refractionClosure = refraction(Nshading, eta, "absorption", Absorption_Color);
+	closure		___322_refractionClosure $const22 Nshading ___322_eta $const21 Absorption_Color 	%line{298} %argrw{"wrrrrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:300
+#                 refractionClosure = microfacet("beckmann", Nshading, vector(0), Roughness, Roughness,  eta, 1, "absorption", Absorption_Color);
+	closure		___322_refractionClosure $const18 $const17 Nshading $const19 Roughness Roughness ___322_eta $const1 $const21 Absorption_Color 	%line{300} %argrw{"wrrrrrrrrrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:303
+# 	    color refractionTexture = color(1);
+	assign		___330_refractionTexture $const13 	%line{303} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:304
+#     	    TEXTURE_EVAL(Refraction, refractionTexture)
+	functioncall	$const2 137 	%line{304} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:83
+#     if(texfile != "")
+	neq		$tmp33 Texture_Refraction_Name $const3 	%line{83} %argrw{"wrr"}
+	if		$tmp33 137 137 	%argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:85
+#         float u_tex = uu ;
+	assign		___318_u_tex In_U 	%line{85} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:86
+#         float v_tex = vv ;
+	assign		___318_v_tex In_V 	%line{86} %argrw{"wr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:88
+#         if(flip_u)
+	if		Texture_Refraction_Flip_U 132 132 	%line{88} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:89
+#             u_tex = 1.0 - u_tex;
+	sub		___318_u_tex $const4 ___318_u_tex 	%line{89} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:91
+#         if(flip_v)
+	if		Texture_Refraction_Flip_V 134 134 	%line{91} %argrw{"r"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:92
+#             v_tex = 1.0 - v_tex;
+	sub		___318_v_tex $const4 ___318_v_tex 	%line{92} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:94
+#         u_tex *= scale_u;
+	mul		___318_u_tex ___318_u_tex Texture_Refraction_Scale_U 	%line{94} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:95
+#         v_tex *= scale_v;
+	mul		___318_v_tex ___318_v_tex Texture_Refraction_Scale_V 	%line{95} %argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:97
+#         result = texture(texfile, u_tex, v_tex, "width", width, "blur", blur, "swrap", wrap, "twrap", wrap);
+	texture		___330_refractionTexture Texture_Refraction_Name ___318_u_tex ___318_v_tex $const5 Texture_Refraction_Width $const6 Texture_Refraction_Blur $const7 Texture_Refraction_Wrap_Mode $const8 Texture_Refraction_Wrap_Mode 	%line{97} %argrw{"wrrrrrrrrrrr"} %argderivs{2,3}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:305
+# 	    refractionClosure *= refractionTexture * Kt * Refraction_Color;
+	mul		$tmp34 ___330_refractionTexture Kt 	%line{305} %argrw{"wrr"}
+	mul		$tmp35 $tmp34 Refraction_Color 	%argrw{"wrr"}
+	mul		___322_refractionClosure ___322_refractionClosure $tmp35 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:307
+# 	    diffuseClosure *= 1.0-Kt;
+	sub		$tmp36 $const4 Kt 	%line{307} %argrw{"wrr"}
+	mul		___322_diffuseClosure ___322_diffuseClosure $tmp36 	%argrw{"wrr"}
+# /Users/Toby/Documents/University/Year_3/Assignments/Real_Time_Path_Tracer/osl/src/shaders/ubersurface.osl:311
+#     	Ci = ((diffuseClosure + specularClosure + emissionClosure + refractionClosure) * opacity) + transparencyClosure;
+	add		$tmp37 ___322_diffuseClosure ___322_specularClosure 	%line{311} %argrw{"wrr"}
+	add		$tmp38 $tmp37 ___322_emissionClosure 	%argrw{"wrr"}
+	add		$tmp39 $tmp38 ___322_refractionClosure 	%argrw{"wrr"}
+	mul		$tmp40 $tmp39 opacity 	%argrw{"wrr"}
+	add		Ci $tmp40 transparencyClosure 	%argrw{"wrr"}
+	end

@@ -8,7 +8,7 @@
 #include "OpenGLWidget.h"
 #include <iostream>
 
-#include "Shading.h"
+#include "OslReader.h"
 #include "OsoReader.h"
 
 const static float INCREMENT=0.02;
@@ -135,13 +135,26 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
-    Shading shade;
-    shade.compileOSL(QString("shaders/OSL/checkerboard.osl"));
+    OslReader shade;
+    shade.compileOSL(QString("shaders/OSL/ifTest.osl"));
 
 
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);
+
+    OsoReader* reader = getOsoReader();
+    reader->printVersion();
+    reader->printShader();
+    reader->printParams();
+//    reader->printInstructions();
+    reader->generateDeviceFunction();
+
+    // RETURNS THE INPUT PARAMS
+    std::vector<Symbol> m_symbols = reader->getInputParams();
+    for (unsigned int i=0; i<m_symbols.size(); i++){
+        std::cout<<m_symbols[i].m_name<<std::endl;
+    }
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -189,13 +202,6 @@ void OpenGLWidget::paintGL(){
     glBindVertexArray(m_VAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
-
-    OsoReader* reader = getOsoReader();
-    reader->printVersion();
-    reader->printShader();
-    reader->printParams();
-//    reader->printInstructions();
-    reader->generateDeviceFunction();
 }
 void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewMatrix, glm::mat4 _perspectiveMatrix){
     GLuint MVPLoc = m_shaderProgram->getUniformLoc("MVP");

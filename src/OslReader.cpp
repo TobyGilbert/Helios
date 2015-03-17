@@ -1,21 +1,20 @@
-#include "Shading.h"
+#include "OslReader.h"
 #include <QDir>
 #include "OsoReader.h"
 
 //------------------------------------------------------------------------------------------------------------------------------------
-Shading::Shading(){
+OslReader::OslReader(){
 //    initialise();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-Shading::~Shading(){
+OslReader::~OslReader(){
 //    delete m_shadingSystem;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void Shading::initialise(){
-//    m_shadingSystem = new OSL::ShadingSystem();
+void OslReader::initialise(){
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void Shading::compileOSL(QString _shaderName){
+void OslReader::compileOSL(QString _shaderName){
     QString oslfilename = _shaderName;
     if (! oslfilename.endsWith(".osl")){
         oslfilename += ".osl";
@@ -31,10 +30,10 @@ void Shading::compileOSL(QString _shaderName){
         std::cout << "FAILED " << oslfilename.toStdString() << "\n";
     }
     OsoReader osoread;
-    osoread.parseFile("shaders/OSL/metal.oso");
+    osoread.parseFile("shaders/OSO/matte.oso");
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void Shading::compileOSLtoBuffer(QString _shaderName){
+void OslReader::compileOSLtoBuffer(QString _shaderName){
     QString oslfilename = _shaderName;
     if (oslfilename.endsWith(".osl")){
         oslfilename = oslfilename.split(".", QString::SkipEmptyParts).at(0);

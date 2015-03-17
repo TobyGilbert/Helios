@@ -26,6 +26,7 @@
 #endif
 
 #include <optixu/optixu_math_namespace.h>
+#include <string>
 
 struct ParallelogramLight
 {
@@ -156,5 +157,14 @@ __device__ __inline__ void sampleUnitHemisphere( const optix::float2& sample,
 //----------------------------------------------------------------------------------------------------------------------
 //__device__ optix::float3 reflection(optix::float3 _shadingNormal, optix::float3 _geometricNormal, optix::float3 _ffNormal);
 //----------------------------------------------------------------------------------------------------------------------
+
+enum rayType{
+    cameraRay = 0,
+    shadowRay
+};
+int raytype(rayType _name);
 __device__ optix::float3 reflection(optix::float3 _normal, float _eta);
+__device__ optix::float3 diffuse(optix::float3 _normal);
 __device__ void metal( float Ks = 1,  float eta = 10,  optix::float3 Cs = optix::make_float3( 1,1,1) );
+__device__ void matte( float Kd = 1,  optix::float3 Cs = optix::make_float3( 1,1,1) );
+
