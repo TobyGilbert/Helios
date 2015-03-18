@@ -39,9 +39,13 @@ SOURCES += \
     src/qneblock.cpp \
     src/qneconnection.cpp \
     src/qneport.cpp \
-    src/qnodeseditor.cpp
+    src/qnodeseditor.cpp \
+    src/oso.y \
+    src/osolexer.l
 
-SOURCES -= optixSrc/*.cu
+SOURCES -= optixSrc/*.cu \
+           src/oso.y \
+           src/osolexer.l
 
 HEADERS += \
     include/mainwindow.h \
@@ -120,8 +124,6 @@ OTHER_FILES += \
     shaders/OSL/envmap.osl \
     shaders/OSL/matte.osl \
     shaders/OSL/ward.osl \
-    include/oso.y \
-    include/osolexer.l \
     shaders/OSO/emitter.oso \
     shaders/OSO/glass.oso \
     shaders/OSO/image.oso \
