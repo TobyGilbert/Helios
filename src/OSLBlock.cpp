@@ -46,6 +46,15 @@ void OSLBlock::mousePressEvent(QGraphicsSceneMouseEvent *_event)
             addInputPort(QString(symbols[i].m_name.c_str()),symbols[i].m_initialParams,(QNEPort::variableType)symbols[i].m_type);
         }
 
+        //add our input ports required by our shader
+        std::vector<Symbol> outputSymbols = reader->getOutputParams();
+        for (unsigned int i=0; i<outputSymbols.size(); i++){
+            std::cout<<outputSymbols[i].m_name<<std::endl;
+            addOutputPort(QString(outputSymbols[i].m_name.c_str()),outputSymbols[i].m_initialParams,(QNEPort::variableType)outputSymbols[i].m_type);
+        }
+
+
+
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
