@@ -21,7 +21,6 @@ void OslReader::compileOSL(QString _shaderName){
     }
     OSL::OSLCompiler compiler;
     std::vector<std::string> options;
-
     bool ok = compiler.compile(oslfilename.toStdString(), options, QDir::currentPath().toStdString() + "/include/stdosl.h");
 
 

@@ -26,7 +26,22 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #ifndef QNEBLOCK_H
 #define QNEBLOCK_H
 
+//----------------------------------------------------------------------------------------------------------------------
+/// @class QNEBlock
+/// @brief This class originally written by STANISLAW ADASZEWSKI has been modified
+/// @brief to be used for a node based user interface for creating OSL shaders.
+/// @brief Original source can be found at http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/
+/// @brief The parts modified will be specified
+/// @brief This Block class handles our node in our scene. It manages all inputs and
+/// @brief outputs to the node which will be determined by the OSL shader read in.
+/// @author STANISLAW ADASZEWSKI modified by Declan Russell
+/// @date Modifed 18/03/2015
+//----------------------------------------------------------------------------------------------------------------------
+
 #include <QGraphicsPathItem>
+#include <QGraphicsSceneMouseEvent>
+#include "OslReader.h"
+#include "OsoReader.h"
 
 class QNEPort;
 
@@ -50,6 +65,14 @@ public:
 
 	int type() const { return Type; }
 
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief overiding of mousePressEvent to add functionality to our import shader button
+    /// @brief written by Declan Russell
+    /// @param _event - event data managed by Qt
+    //----------------------------------------------------------------------------------------------------------------------
+    void mousePressEvent(QGraphicsSceneMouseEvent *_event);
+    //----------------------------------------------------------------------------------------------------------------------
+
 protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
 
@@ -58,6 +81,11 @@ private:
 	int vertMargin;
 	int width;
 	int height;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief A graphics path item to draw a button for importing
+    //----------------------------------------------------------------------------------------------------------------------
+    QGraphicsPathItem *m_importBtnGI;
+    //----------------------------------------------------------------------------------------------------------------------
 };
 
 #endif // QNEBLOCK_H

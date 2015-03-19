@@ -26,6 +26,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #ifndef QNODESEDITOR_H
 #define QNODESEDITOR_H
 
+//----------------------------------------------------------------------------------------------------------------------
+/// @class QNEBlock
+/// @brief This class originally written by STANISLAW ADASZEWSKI has been modified
+/// @brief to be used for a node based user interface for creating OSL shaders.
+/// @brief Original source can be found at http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/
+/// @brief The parts modified will be specified
+/// @author STANISLAW ADASZEWSKI modified by Declan Russell
+/// @date Modifed 18/03/2015
+//----------------------------------------------------------------------------------------------------------------------
+
 #include <QObject>
 
 class QGraphicsScene;

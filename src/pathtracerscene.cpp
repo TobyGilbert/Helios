@@ -347,7 +347,7 @@ void PathTracerScene::importMesh(std::string _id, std::string _path){
     OptiXModel* model = new OptiXModel(_path,m_context);
     Material diffuse = m_context->createMaterial();
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "diffuse" );
+    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "constructShaderGlobals" );
     Program diffuse_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
     diffuse->setClosestHitProgram( 0, diffuse_ch );
     diffuse->setAnyHitProgram( 1, diffuse_ah );

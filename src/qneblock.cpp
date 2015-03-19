@@ -29,22 +29,33 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <QGraphicsScene>
 #include <QFontMetrics>
 #include <QPainter>
+#include <QFileDialog>
+#include <QObject>
+#include <iostream>
 
 #include "qneport.h"
 
 QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
 {
-	QPainterPath p;
-	p.addRoundedRect(-50, -15, 100, 30, 5, 5);
-	setPath(p);
-	setPen(QPen(Qt::darkGreen));
+    QPainterPath p;
+    p.addRoundedRect(-50, -15, 100, 30, 5, 5);
+    setPath(p);
+    setPen(QPen(Qt::darkGreen));
 	setBrush(Qt::green);
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
-	horzMargin = 20;
-	vertMargin = 5;
+    horzMargin = 50;
+    vertMargin = 20;
 	width = horzMargin;
 	height = vertMargin;
+
+    //----mod by Declan Russell----
+    QPainterPath p2;
+    p2.addRoundedRect(-25,-10,30,10,5,5);
+    m_importBtnGI = new QGraphicsPathItem(this);
+    m_importBtnGI->setPath(p2);
+    m_importBtnGI->setPen(QPen(Qt::darkCyan));
+    m_importBtnGI->setBrush(Qt::cyan);
 }
 
 QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, int flags, int ptr)
@@ -171,8 +182,9 @@ void QNEBlock::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 		painter->setPen(QPen(Qt::darkGreen));
 		painter->setBrush(Qt::green);
 	}
+    painter->drawPath(path());
 
-	painter->drawPath(path());
+
 }
 
 QNEBlock* QNEBlock::clone()
@@ -200,8 +212,42 @@ QVector<QNEPort*> QNEBlock::ports()
 		if (port_->type() == QNEPort::Type)
 			res.append((QNEPort*) port_);
 	}
-	return res;
+    return res;
 }
+
+//----------------------------------------------------------------------------------------------------------------------
+void QNEBlock::mousePressEvent(QGraphicsSceneMouseEvent *_event)
+{
+    //get the possition of our button and the positions of our mouse
+    QRectF btnBB = m_importBtnGI->path().boundingRect();
+    QPointF pos = _event->pos();
+    //test for intersection of the two
+    if(pos.x()>btnBB.x()&&pos.x()<(btnBB.x()+btnBB.width())&&(pos.y()>btnBB.y()&&pos.y()<(btnBB.y()+btnBB.height()))){
+        //if we have an intersection lets allow the user to select a file in import
+        QString location = QFileDialog::getOpenFileName(0,QString("Import Shader"), QString("shaders/"), QString("OSL files (*.osl)"));
+        //if nothing selected then we dont want to do anything
+        if(location.isEmpty()) return;
+        //if we do have something selected lets run it through Toby Gilbert's OSL Compilotmatic 3000
+        OslReader shade;
+        shade.compileOSL(location);
+
+        OsoReader* reader = getOsoReader();
+        reader->printVersion();
+        reader->printShader();
+        reader->printParams();
+    //    reader->printInstructions();
+        reader->generateDeviceFunction();
+
+        // RETURNS THE INPUT PARAMS
+        std::vector<Symbol> symbols = reader->getInputParams();
+        for (unsigned int i=0; i<symbols.size(); i++){
+            std::cout<<symbols[i].m_name<<std::endl;
+            addInputPort(QString(symbols[i].m_name.c_str()));
+        }
+
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
 
 QVariant QNEBlock::itemChange(GraphicsItemChange change, const QVariant &value)
 {

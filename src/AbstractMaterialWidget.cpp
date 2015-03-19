@@ -34,18 +34,7 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     m_nodeInterfaceScene->addItem(b);
     b->addPort("test", 0, QNEPort::NamePort);
     b->addPort("TestBlock", 0, QNEPort::TypePort);
-    b->addInputPort("in1");
-    b->addInputPort("in2");
-    b->addInputPort("in3");
-    b->addOutputPort("out1");
-    b->addOutputPort("out2");
-    b->addOutputPort("out3");
 
-    b = b->clone();
-    b->setPos(150, 0);
-
-    b = b->clone();
-    b->setPos(150, 150);
 
     //create a material in our context
     m_material = PathTracerScene::getInstance()->getContext()->createMaterial();
