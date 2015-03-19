@@ -135,7 +135,7 @@ void OpenGLWidget::initializeGL(){
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
     OslReader shade;
-    shade.compileOSL(QString("shaders/OSL/ifTest.osl"));
+    shade.compileOSL(QString("shaders/OSL/ifTest"));
 
 
     //start our render time out

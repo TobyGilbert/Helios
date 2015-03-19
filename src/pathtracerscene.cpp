@@ -33,7 +33,7 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
 //----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::~PathTracerScene(){
     delete m_camera;
-//    delete m_model;
+    delete m_model;
 //    delete m_model2;
 //    delete m_model3;
     m_outputBuffer->destroy();
@@ -228,22 +228,20 @@ void PathTracerScene::createGeometry(){
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
-//      // Metal teapot
-//      m_model = new OptiXModel("models/Predator.obj",m_context);
-//      m_model->addMaterial(reflective_material);
-//      glm::mat4 trans;
-//      trans = glm::scale(trans,glm::vec3(13.0));
-//      trans[3][0] = -23;
-//      trans[3][1] = 10;
-//      trans[3][2] = 50;
-//      m_model->setTrans(trans);
+      m_model = new OptiXModel("models/newteapot.obj",m_context);
+      m_model->setMaterial(shader_globals);
+      glm::mat4 trans;
+      trans = glm::scale(trans,glm::vec3(13.0));
+      trans[3][0] = 0;
+      trans[3][1] = 10;
+      trans[3][2] = 50;
+      m_model->setTrans(trans);
 
-//      // Glass Teapot
 //      m_model2 = new OptiXModel(m_model,m_context);
 ////      m_model2->createGeometry("models/newteapot.obj",m_context);
-//      m_model2->addMaterial(glass_material);
-//      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
-//      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
+//      m_model2->addMaterial(shader_globals);
+////      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
+////      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
 //      trans = glm::mat4(1.0);
 //      trans = glm::scale(trans,glm::vec3(13.0));
 //      trans[3][0] = 23;
@@ -266,7 +264,7 @@ void PathTracerScene::createGeometry(){
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
       m_topGroup->addChild(geometry_group);
-//      m_topGroup->addChild(m_model->getGeomAndTrans());
+      m_topGroup->addChild(m_model->getGeomAndTrans());
 //      m_topGroup->addChild(m_model2->getGeomAndTrans());
 //      m_topGroup->addChild(m_model3->getGeomAndTrans());
       m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));

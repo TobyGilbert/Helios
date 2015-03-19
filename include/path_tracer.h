@@ -158,6 +158,7 @@ __device__ __inline__ void sampleUnitHemisphere( const optix::float2& sample,
 //__device__ optix::float3 reflection(optix::float3 _shadingNormal, optix::float3 _geometricNormal, optix::float3 _ffNormal);
 //----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 phong(optix::float3 _normal, float _exponant);
+__device__ optix::float3 oren_nayar(optix::float3 _normal, float _sigma);
 enum rayType{
     cameraRay = 0,
     shadowRay

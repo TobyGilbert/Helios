@@ -259,7 +259,7 @@ __device__ void matte( float Kd,  float3 Cs){
     // Texture coordinates
     sg.u = texcoord.x;
     sg.v = texcoord.y;
-    float3 $tmp1 = phong(sg.N , 10000);//diffuse( sg.N );
+    float3 $tmp1 = oren_nayar(sg.N, 0.2);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); phong(sg.N , 10);*///diffuse( sg.N );
     float3 $tmp2 = Kd * Cs;
      current_prd.attenuation = $tmp1 * $tmp2;
 }
@@ -476,52 +476,53 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
     cosine_sample_hemisphere(z1, z2, p);
     float3 v1, v2;
     createONB(_normal, v1, v2);
-    float3 ray_direction = current_prd.direction;
     current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
-    return make_float3(1);//optix::make_float3(max(optix::dot(_normal, ray_direction), 0.0f) * float(M_1_PI));
+    return optix::make_float3(max(optix::dot(_normal, current_prd.direction), 0.0f) * float(M_1_PI));
 }
 
 __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
-    float3 ray_direction = current_prd.direction;
-    float cosNO = optix::dot(-_normal ,(current_prd.origin - eye));
-    if (cosNO > 0){
-        float3 R = (2 * cosNO) * _normal + (current_prd.origin - eye);
-        float3 u = normalize((fabsf(R.x) >.01f ? make_float3(R.z, 0, -R.x) : make_float3(0, -R.z, R.y)));
-        float3 v = cross(R, u);
-        float z1 = rnd(current_prd.seed);
-        float z2 = rnd(current_prd.seed);
-        float phi = 2 * float(M_PI) * z1;
-        float sp, cp;
-        sincos(phi, &sp, &cp);
-        float cosTheta = pow(z2, 1 / (_exponant + 1));
-        float sinTheta2 = 1 - cosTheta * cosTheta;
-        float sinTheta = sinTheta2 > 0 ? sqrt(sinTheta2) : 0;
-        current_prd.direction = (cp * sinTheta * u) + (sp * sinTheta * v) + (cosTheta * R);
+    float z1 = rnd(current_prd.seed);
+    float z2 = rnd(current_prd.seed);
+    float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
+    float cosTheta= pow(z1, 1 / (_exponant + 1));
+    float sinPhi = sin(2*float(M_PI)*z2);
+    float cosPhi = cos(2*float(M_PI)*z2);
+    current_prd.direction = make_float3 (sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
+
+    // n + 2 / 2PI * cos^n (A);
+    float3 R = reflect((current_prd.origin - eye), _normal);
+    float A = optix::dot(R, current_prd.direction);
+
+    if (A > 0){
+        return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant))));
     }
-    return make_float3(1);
-//    float cosNI =  optix::dot(_normal,ray.direction);
-//    if (cosNI > 0 && cosNO > 0) {
-//       // reflect the view vector
-//       float3 R = (2 * cosNO) * _normal + (current_prd.origin - eye);
-//       float cosRI = optix::dot(R,ray.direction);
-//       if (cosRI > 0) {
-//           float common = 0.5f * float(M_1_PI) * pow(cosRI, _exponant);
-//           float out = cosNI * (_exponant + 2) * common;
-//           float pdf = (_exponant + 1) * common;
-//           return current_prd.attenuation;
-//       }
-//    }
-//     return optix::make_float3(max(optix::dot(_normal, ray_direction), 0.0f) * float(M_1_PI));
-//    float z1 = rnd(current_prd.seed);
-//    float z2 = rnd(current_prd.seed);
-//    float cosTheta = 1 / (pow(z1, (_exponant + 1)));
-//    float sinTheta = sin(acos(cosTheta));
-//    float cosPhi = cos(2*M_PI*z2);
-//    float sinPhi = sin(2*M_PI*z2);
-
-//    current_prd.direction = make_float3(cosPhi*sinTheta, sinPhi * cosTheta, cosTheta);
-
-//    return make_float3(1);
-
-
+    return make_float3(0.0);
 }
+
+__device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
+    float z1=rnd(current_prd.seed);
+    float z2=rnd(current_prd.seed);
+    float3 p;
+    cosine_sample_hemisphere(z1, z2, p);
+    float3 v1, v2;
+    createONB(_normal, v1, v2);
+    float3 ray_direction = current_prd.direction;
+    current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
+
+    float3 L = current_prd.direction;
+    float3 V = (current_prd.origin - eye);
+
+    float A = 1 / (M_PI + ((M_PI / 2) - (2/3)) * _sigma );
+    float B = _sigma / (M_PI + ( (M_PI /2) - (2/3)) * _sigma);
+    float s = optix::dot(L, V) - optix::dot(_normal, L) * optix::dot(_normal, V);
+    float t;
+    if ( s <= 0.0){
+        t = 1.0;
+    }
+    else{
+        t = max(optix::dot(_normal, L), optix::dot(_normal, V));
+    }
+
+    return make_float3(0.8 * optix::dot(_normal, L) * (A + B * (s / t)));
+}
+
