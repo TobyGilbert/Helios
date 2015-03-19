@@ -40,10 +40,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 #include <QGraphicsPathItem>
 #include <QGraphicsSceneMouseEvent>
-#include "OslReader.h"
-#include "OsoReader.h"
+#include "qneport.h"
 
-class QNEPort;
 
 class QNEBlock : public QGraphicsPathItem
 {
@@ -51,10 +49,19 @@ public:
 	enum { Type = QGraphicsItem::UserType + 3 };
 
     QNEBlock(QGraphicsItem *parent = 0);
-
-	QNEPort* addPort(const QString &name, bool isOutput, int flags = 0, int ptr = 0);
-	void addInputPort(const QString &name);
-	void addOutputPort(const QString &name);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief adds a port to our node. This has been modified to also set the varibel type and initial paramiters.
+    //----------------------------------------------------------------------------------------------------------------------
+    QNEPort* addPort(const QString &name, bool isOutput,std::vector<std::string> _initParams,QNEPort::variableType _type = QNEPort::TypeVoid, int flags = 0, int ptr = 0);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief adds an input port to our node. Modified to also set the varible type and initial paramiters.
+    //----------------------------------------------------------------------------------------------------------------------
+    void addInputPort(const QString &name,std::vector<std::string> _initParams,QNEPort::variableType _type = QNEPort::TypeVoid);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief adds an output port to our node. Modified to also set the varible type and initial paramiters.
+    //----------------------------------------------------------------------------------------------------------------------
+    void addOutputPort(const QString &name,std::vector<std::string> _initParams,QNEPort::variableType _type = QNEPort::TypeVoid);
+    //----------------------------------------------------------------------------------------------------------------------
 	void addInputPorts(const QStringList &names);
 	void addOutputPorts(const QStringList &names);
 	void save(QDataStream&);
@@ -65,13 +72,7 @@ public:
 
 	int type() const { return Type; }
 
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief overiding of mousePressEvent to add functionality to our import shader button
-    /// @brief written by Declan Russell
-    /// @param _event - event data managed by Qt
-    //----------------------------------------------------------------------------------------------------------------------
-    void mousePressEvent(QGraphicsSceneMouseEvent *_event);
-    //----------------------------------------------------------------------------------------------------------------------
+
 
 protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
@@ -81,11 +82,7 @@ private:
 	int vertMargin;
 	int width;
 	int height;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief A graphics path item to draw a button for importing
-    //----------------------------------------------------------------------------------------------------------------------
-    QGraphicsPathItem *m_importBtnGI;
-    //----------------------------------------------------------------------------------------------------------------------
+
 };
 
 #endif // QNEBLOCK_H

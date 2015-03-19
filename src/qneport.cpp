@@ -50,6 +50,9 @@ QNEPort::QNEPort(QGraphicsItem *parent):
 	setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
 
 	m_portFlags = 0;
+
+    //init our variable type - Dec
+    m_varibleType = TypeVoid;
 }
 
 QNEPort::~QNEPort()

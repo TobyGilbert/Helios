@@ -481,6 +481,7 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
 }
 
 __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
+
     float z1 = rnd(current_prd.seed);
     float z2 = rnd(current_prd.seed);
     float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
@@ -495,6 +496,7 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
 
     if (A > 0){
         return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant))));
+
     }
     return make_float3(0.0);
 }

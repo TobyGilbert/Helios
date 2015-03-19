@@ -119,7 +119,8 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 				QNEPort *port1 = conn->port1();
 				QNEPort *port2 = (QNEPort*) item;
 
-				if (port1->block() != port2->block() && port1->isOutput() != port2->isOutput() && !port1->isConnected(port2))
+                //modified to also check that the type is the same as we dont want to conflict osl standards
+                if (port1->block() != port2->block() && port1->isOutput() != port2->isOutput() && !port1->isConnected(port2) && port1->getVaribleType() == port2->getVaribleType())
 				{
 					conn->setPos2(port2->scenePos());
 					conn->setPort2(port2);

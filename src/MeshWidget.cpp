@@ -71,16 +71,17 @@ MeshWidget::MeshWidget(std::string _id) :
     m_testMat = new AbstractMaterialWidget();
     m_testMat->setName("Test button");
     m_currentMatWidget = new AbstractMaterialWidget(this);
+    m_currentMatWidget->setMinimumHeight(300);
     m_meshGridLayout->addWidget(m_currentMatWidget,6,0,1,4);
 
     MaterialLibrary::getInstance()->hide();
     MaterialLibrary::getInstance()->addMaterialToLibrary(m_testMat);
     connect(MaterialLibrary::getInstance(),SIGNAL(signalMaterialSelected(AbstractMaterialWidget*)),this,SLOT(setMaterial(AbstractMaterialWidget*)));
-    m_setMatButton = new QPushButton("Set Material",this);
+    m_setMatButton = new QPushButton("Select Material From Library",this);
     connect(m_setMatButton,SIGNAL(clicked()),MaterialLibrary::getInstance(),SLOT(show()));
     m_meshGridLayout->addWidget(m_setMatButton,5,0,1,4);
 
-    m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     m_meshGridLayout->addItem(m_meshSpacer, 7, 0, 2, 1);
 
     //-------------------------------------------------------------------------------------------------

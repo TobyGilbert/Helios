@@ -134,29 +134,10 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
-    OslReader shade;
-    shade.compileOSL(QString("shaders/OSL/metal.osl"));
-
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);
 
-    OsoReader* reader = getOsoReader();
-    reader->printVersion();
-    reader->printShader();
-    reader->printParams();
-    reader->generateDeviceFunction();
-
-    // RETURNS THE INPUT PARAMS
-    std::vector<Symbol> m_symbols = reader->getInputParams();
-    for (unsigned int i=0; i<m_symbols.size(); i++){
-        std::cout<<m_symbols[i].m_name<<std::endl;
-    }
-
-    std::vector<Symbol> m_outSyms = reader->getOutputParams();
-    for (unsigned int i=0; i<m_outSyms.size(); i++){
-        std::cout<<m_outSyms[i].m_name<<std::endl;
-    }
 
 }
 //----------------------------------------------------------------------------------------------------------------------

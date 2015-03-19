@@ -32,7 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <QFileDialog>
 #include <QObject>
 #include <iostream>
-
+#include <QColor>
 #include "qneport.h"
 
 QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
@@ -40,8 +40,8 @@ QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
     QPainterPath p;
     p.addRoundedRect(-50, -15, 100, 30, 5, 5);
     setPath(p);
-    setPen(QPen(Qt::darkGreen));
-	setBrush(Qt::green);
+    setPen(QPen(QColor(202.f/255.f,167.f/255.f,0.f)));
+    setBrush(QBrush(QColor(232.f/255.f,197.f/255.f,3.f/255.f)));
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
     horzMargin = 50;
@@ -49,16 +49,10 @@ QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
 	width = horzMargin;
 	height = vertMargin;
 
-    //----mod by Declan Russell----
-    QPainterPath p2;
-    p2.addRoundedRect(-25,-10,30,10,5,5);
-    m_importBtnGI = new QGraphicsPathItem(this);
-    m_importBtnGI->setPath(p2);
-    m_importBtnGI->setPen(QPen(Qt::darkCyan));
-    m_importBtnGI->setBrush(Qt::cyan);
+
 }
 
-QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, int flags, int ptr)
+QNEPort* QNEBlock::addPort(const QString &name, bool isOutput,std::vector<std::string> _initParams, QNEPort::variableType _type, int flags, int ptr)
 {
 	QNEPort *port = new QNEPort(this);
 	port->setName(name);
@@ -66,6 +60,7 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, int flags, int pt
 	port->setNEBlock(this);
 	port->setPortFlags(flags);
 	port->setPtr(ptr);
+    port->setVaribleType(_type);
 
 	QFontMetrics fm(scene()->font());
 	int w = fm.width(name);
@@ -95,26 +90,28 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, int flags, int pt
 	return port;
 }
 
-void QNEBlock::addInputPort(const QString &name)
+void QNEBlock::addInputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type)
 {
-	addPort(name, false);
+    addPort(name, false,_initParams, _type);
 }
 
-void QNEBlock::addOutputPort(const QString &name)
+void QNEBlock::addOutputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type)
 {
-	addPort(name, true);
+    addPort(name, true,_initParams, _type);
 }
 
 void QNEBlock::addInputPorts(const QStringList &names)
 {
+    std::vector<std::string>x;
 	foreach(QString n, names)
-		addInputPort(n);
+        addInputPort(n,x);
 }
 
 void QNEBlock::addOutputPorts(const QStringList &names)
 {
+    std::vector<std::string>x;
 	foreach(QString n, names)
-		addOutputPort(n);
+        addOutputPort(n,x);
 }
 
 void QNEBlock::save(QDataStream &ds)
@@ -164,7 +161,9 @@ void QNEBlock::load(QDataStream &ds, QMap<quint64, QNEPort*> &portMap)
 		ds >> name;
 		ds >> output;
 		ds >> flags;
-		portMap[ptr] = addPort(name, output, flags, ptr);
+        /// @todo add type and initial params loading
+        std::vector<std::string>x;
+        portMap[ptr] = addPort(name, output,x, QNEPort::TypeVoid, flags, ptr);
 	}
 }
 
@@ -175,13 +174,8 @@ void QNEBlock::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 	Q_UNUSED(option)
 	Q_UNUSED(widget)
 
-	if (isSelected()) {
-		painter->setPen(QPen(Qt::darkYellow));
-		painter->setBrush(Qt::yellow);
-	} else {
-		painter->setPen(QPen(Qt::darkGreen));
-		painter->setBrush(Qt::green);
-	}
+    painter->setPen(QPen(QColor(202,167,0)));
+    painter->setBrush(QBrush(QColor(232,197,3)));
     painter->drawPath(path());
 
 
@@ -197,7 +191,8 @@ QNEBlock* QNEBlock::clone()
 		if (port_->type() == QNEPort::Type)
 		{
 			QNEPort *port = (QNEPort*) port_;
-			b->addPort(port->portName(), port->isOutput(), port->portFlags(), port->ptr());
+            std::vector<std::string>x;
+            b->addPort(port->portName(), port->isOutput(),x,port->getVaribleType(), port->portFlags(), port->ptr());
 		}
 	}
 
@@ -214,39 +209,6 @@ QVector<QNEPort*> QNEBlock::ports()
 	}
     return res;
 }
-
-//----------------------------------------------------------------------------------------------------------------------
-void QNEBlock::mousePressEvent(QGraphicsSceneMouseEvent *_event)
-{
-    //get the possition of our button and the positions of our mouse
-    QRectF btnBB = m_importBtnGI->path().boundingRect();
-    QPointF pos = _event->pos();
-    //test for intersection of the two
-    if(pos.x()>btnBB.x()&&pos.x()<(btnBB.x()+btnBB.width())&&(pos.y()>btnBB.y()&&pos.y()<(btnBB.y()+btnBB.height()))){
-        //if we have an intersection lets allow the user to select a file in import
-        QString location = QFileDialog::getOpenFileName(0,QString("Import Shader"), QString("shaders/"), QString("OSL files (*.osl)"));
-        //if nothing selected then we dont want to do anything
-        if(location.isEmpty()) return;
-        //if we do have something selected lets run it through Toby Gilbert's OSL Compilotmatic 3000
-        OslReader shade;
-        shade.compileOSL(location);
-
-        OsoReader* reader = getOsoReader();
-        reader->printVersion();
-        reader->printShader();
-        reader->printParams();
-        reader->generateDeviceFunction();
-
-        // RETURNS THE INPUT PARAMS
-        std::vector<Symbol> symbols = reader->getInputParams();
-        for (unsigned int i=0; i<symbols.size(); i++){
-            std::cout<<symbols[i].m_name<<std::endl;
-            addInputPort(QString(symbols[i].m_name.c_str()));
-        }
-
-    }
-}
-//----------------------------------------------------------------------------------------------------------------------
 
 QVariant QNEBlock::itemChange(GraphicsItemChange change, const QVariant &value)
 {

@@ -46,6 +46,11 @@ class QNEPort : public QGraphicsPathItem
 public:
 	enum { Type = QGraphicsItem::UserType + 1 };
 	enum { NamePort = 1, TypePort = 2 };
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief enumorator to hold the variable type of the port
+    //----------------------------------------------------------------------------------------------------------------------
+    enum variableType{TypeInt,TypeFloat,TypeString, TypeColour, TypeMatrix, TypeNormal, TypePoint, TypeVoid, TypeVector};
+    //----------------------------------------------------------------------------------------------------------------------
 
     QNEPort(QGraphicsItem *parent = 0);
 	~QNEPort();
@@ -62,6 +67,17 @@ public:
 	int portFlags() const { return m_portFlags; }
 
 	int type() const { return Type; }
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief mutator for the variable type of the port
+    /// @brief added by Declan Russell
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setVaribleType(variableType _type){m_varibleType = _type;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to the varible type of the port
+    /// @brief added by Declan Russell
+    //----------------------------------------------------------------------------------------------------------------------
+    inline variableType getVaribleType(){return m_varibleType;}
+    //----------------------------------------------------------------------------------------------------------------------
 
 	QNEBlock* block() const;
 
@@ -83,6 +99,12 @@ private:
 	QVector<QNEConnection*> m_connections;
 	int m_portFlags;
 	quint64 m_ptr;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief a member to store the varible type of the port
+    /// @brief added by Declan Russell
+    //----------------------------------------------------------------------------------------------------------------------
+    variableType m_varibleType;
+    //----------------------------------------------------------------------------------------------------------------------
 };
 
 #endif // QNEPORT_H
