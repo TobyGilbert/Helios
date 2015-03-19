@@ -235,7 +235,6 @@ void QNEBlock::mousePressEvent(QGraphicsSceneMouseEvent *_event)
         reader->printVersion();
         reader->printShader();
         reader->printParams();
-    //    reader->printInstructions();
         reader->generateDeviceFunction();
 
         // RETURNS THE INPUT PARAMS
