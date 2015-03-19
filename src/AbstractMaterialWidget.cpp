@@ -1,8 +1,10 @@
 #include "AbstractMaterialWidget.h"
 #include "pathtracerscene.h"
 
-#include "qneblock.h"
+#include "OSLBlock.h"
 #include "qneport.h"
+#include <QMenu>
+#include <QPoint>
 
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QWidget(parent)
@@ -29,12 +31,11 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     m_nodeEditor = new QNodesEditor(this);
     m_nodeEditor->install(m_nodeInterfaceScene);
 
-    //lets do some testing
-    QNEBlock *b = new QNEBlock(0);
-    m_nodeInterfaceScene->addItem(b);
-    b->addPort("test", 0, QNEPort::NamePort);
-    b->addPort("TestBlock", 0, QNEPort::TypePort);
 
+
+    //Set up our menu for if you right click in our widget
+    setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(this, SIGNAL(customContextMenuRequested(QPoint)),this,SLOT(showContextMenu(QPoint)));
 
     //create a material in our context
     m_material = PathTracerScene::getInstance()->getContext()->createMaterial();
@@ -44,10 +45,51 @@ AbstractMaterialWidget::~AbstractMaterialWidget(){
     for(unsigned int i=0; i<m_widgetObjects.size();i++){
         delete m_widgetObjects[i];
     }
+    for(unsigned int i=0; i<m_nodes.size();i++){
+        delete m_nodes[i];
+    }
     delete m_graphicsView;
     delete m_nodeInterfaceScene;
 
     delete m_widgetLayout;
     delete m_widgetGroupBox;
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
+
+    QPoint globalPos = this->mapToGlobal(pos);
+
+    //our drop down menu
+    QMenu myMenu;
+    QAction *addShaderNodeBtn = new QAction(&myMenu);
+    addShaderNodeBtn->setText("Add Shader Node");
+    addShaderNodeBtn->setData(QVariant(0));
+    myMenu.addAction(addShaderNodeBtn);
+
+    //find out if something has been clicked
+    QAction* selectedItem = myMenu.exec(globalPos);
+    if(selectedItem){
+        switch(selectedItem->data().toInt())
+        {
+            case(0): addShaderNode(); break;
+            //if nothing do nothing
+            default: break;
+        }
+    }
+
+
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::addShaderNode()
+{
+    //create a new node in our ui
+    OSLBlock *b = new OSLBlock();
+    //add it to our list of nodes
+    m_nodes.push_back(b);
+    m_nodeInterfaceScene->addItem(b);
+    std::vector<std::string>x;
+    b->addPort("Shader Node", 0,x,QNEPort::TypeVoid, QNEPort::NamePort);
+    b->addPort("Shader Node", 0,x,QNEPort::TypeVoid, QNEPort::TypePort);
 }
 //------------------------------------------------------------------------------------------------------------------------------------

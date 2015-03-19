@@ -496,6 +496,7 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
         float cosTheta = pow(z2, 1 / (_exponant + 1));
         float sinTheta2 = 1 - cosTheta * cosTheta;
         float sinTheta = sinTheta2 > 0 ? sqrt(sinTheta2) : 0;
+
         current_prd.direction = (cp * sinTheta * u) + (sp * sinTheta * v) + (cosTheta * R);
     }
     return make_float3(1);
