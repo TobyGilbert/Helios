@@ -52,6 +52,7 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     QSpinBox *timeOutSpnBx = new QSpinBox(this);
     m_widgetObjects.push_back(timeOutSpnBx);
     timeOutSpnBx->setValue(5);
+    timeOutSpnBx->setMaximum(600);
     m_layout->addWidget(timeOutSpnBx,rowCount,1,1,1);
     rowCount++;
     //connect our signals and slots

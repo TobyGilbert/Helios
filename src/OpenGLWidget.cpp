@@ -139,6 +139,7 @@ void OpenGLWidget::initializeGL(){
 //    shade.compileOSL(QString("shaders/OSL/metal.osl"));
 
 
+
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);
