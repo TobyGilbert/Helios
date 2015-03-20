@@ -1,10 +1,11 @@
 #include "AbstractMaterialWidget.h"
 #include "pathtracerscene.h"
 
-#include "OSLBlock.h"
 #include "qneport.h"
+#include "OSLShaderBlock.h"
 #include <QMenu>
 #include <QPoint>
+#include <QFileDialog>
 
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QWidget(parent)
@@ -83,13 +84,18 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::addShaderNode()
 {
-    //create a new node in our ui
-    OSLBlock *b = new OSLBlock();
+    //let the user select a shader to load in
+    QString location = QFileDialog::getOpenFileName(0,QString("Import Shader"), QString("shaders/"), QString("OSL files (*.osl)"));
+    //if nothing selected then we dont want to do anything
+    if(location.isEmpty()) return;
+
+    //create a new shader node in our ui
+    OSLShaderBlock *b = new OSLShaderBlock();
+    //add it to out interface. This needs to be don before we add any
+    //ports or it will not work, should probably do something about this
+    m_nodeInterfaceScene->addItem(b);
+    b->loadShader(location);
     //add it to our list of nodes
     m_nodes.push_back(b);
-    m_nodeInterfaceScene->addItem(b);
-    std::vector<std::string>x;
-    b->addPort("Shader Node", 0,x,QNEPort::TypeVoid, QNEPort::NamePort);
-    b->addPort("Shader Node", 0,x,QNEPort::TypeVoid, QNEPort::TypePort);
 }
 //------------------------------------------------------------------------------------------------------------------------------------

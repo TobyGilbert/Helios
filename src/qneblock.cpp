@@ -45,7 +45,7 @@ QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
 	setFlag(QGraphicsItem::ItemIsMovable);
 	setFlag(QGraphicsItem::ItemIsSelectable);
     horzMargin = 50;
-    vertMargin = 20;
+    vertMargin = 5;
 	width = horzMargin;
 	height = vertMargin;
 

@@ -6,7 +6,6 @@
 OSLBlock::OSLBlock(QGraphicsItem *parent) : QNEBlock(parent)
 {
 
-    //----mod by Declan Russell----
     QPainterPath p2;
     p2.addRoundedRect(-25,-10,30,10,5,5);
     m_importBtnGI = new QGraphicsPathItem(this);

@@ -48,6 +48,7 @@ class QNEBlock : public QGraphicsPathItem
 public:
 	enum { Type = QGraphicsItem::UserType + 3 };
 
+
     QNEBlock(QGraphicsItem *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds a port to our node. This has been modified to also set the varibel type and initial paramiters.
@@ -82,6 +83,7 @@ private:
 	int vertMargin;
 	int width;
 	int height;
+
 
 };
 

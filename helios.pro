@@ -42,7 +42,8 @@ SOURCES += \
     src/qnodeseditor.cpp \
     src/oso.y \
     src/osolexer.l \
-    src/OSLBlock.cpp
+    src/OSLBlock.cpp \
+    src/OSLShaderBlock.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/oso.y \
@@ -79,7 +80,8 @@ HEADERS += \
     include/qneconnection.h \
     include/qneport.h \
     include/qnodeseditor.h \
-    include/OSLBlock.h
+    include/OSLBlock.h \
+    include/OSLShaderBlock.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
