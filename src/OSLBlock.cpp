@@ -36,7 +36,8 @@ void OSLBlock::mousePressEvent(QGraphicsSceneMouseEvent *_event)
         reader->printVersion();
         reader->printShader();
         reader->printParams();
-        reader->generateDeviceFunction();
+        std::string s = reader->generateDeviceFunction();
+//        std::cout<<s<<std::endl;
 
         //add our input ports required by our shader
         std::vector<Symbol> symbols = reader->getInputParams();

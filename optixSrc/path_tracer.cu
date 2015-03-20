@@ -259,7 +259,7 @@ __device__ void matte( float Kd,  float3 Cs){
     // Texture coordinates
     sg.u = texcoord.x;
     sg.v = texcoord.y;
-    float3 $tmp1 = oren_nayar(sg.N, 0.2);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); phong(sg.N , 10);*///diffuse( sg.N );
+    float3 $tmp1 = ward(sg.N, sg.N, 0.5, 0.5);//oren_nayar(sg.N, 0.2);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); phong(sg.N , 10);*///diffuse( sg.N );
     float3 $tmp2 = Kd * Cs;
      current_prd.attenuation = $tmp1 * $tmp2;
 }
@@ -458,8 +458,9 @@ __device__ int raytype(rayType _name){
         return 0;
     }
 }
-
-
+//----------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------- BRDFS -------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 reflection(optix::float3 _normal, float _eta){
     current_prd.direction = reflect(ray.direction, _normal);
     float cosNO = optix::dot(-_normal, eye - current_prd.origin);
@@ -468,7 +469,7 @@ __device__ optix::float3 reflection(optix::float3 _normal, float _eta){
     }
     return optix::make_float3(1.0);
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 diffuse(optix::float3 _normal){
     float z1=rnd(current_prd.seed);
     float z2=rnd(current_prd.seed);
@@ -479,9 +480,8 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
     current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
     return optix::make_float3(max(optix::dot(_normal, current_prd.direction), 0.0f) * float(M_1_PI));
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
-
     float z1 = rnd(current_prd.seed);
     float z2 = rnd(current_prd.seed);
     float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
@@ -496,11 +496,10 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
 
     if (A > 0){
         return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant))));
-
     }
     return make_float3(0.0);
 }
-
+//----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
     float z1=rnd(current_prd.seed);
     float z2=rnd(current_prd.seed);
@@ -527,4 +526,17 @@ __device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
 
     return make_float3(0.8 * optix::dot(_normal, L) * (A + B * (s / t)));
 }
-
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 ward(float3 _normal, float3 _t, float _xRough, float _yRough){
+    float3 direction = current_prd.direction;
+    float z1 = rnd(current_prd.seed);
+    float z2 = rnd(current_prd.seed);
+    float phi = atan((_yRough/_xRough) * tan(2*float(M_PI)*z2));
+    float theta = atan( sqrt( -log(1 -z1) / ( ((cos(phi)*cos(phi)) / (_xRough*_xRough)) + ((sin(phi)*sin(phi))/(_yRough*_yRough)) )));
+    float3 h = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
+    float3 o = 2 * dot(direction, h) * h + direction;
+    float ps = 1.0;
+    float w = ps * dot(h, direction)* pow(dot(h, _normal), 3) * sqrt(dot(o, _normal) / dot(direction, _normal));
+    current_prd.direction = o;
+    return make_float3((ps / ( 4 * float(M_PI) * _xRough * _yRough * sqrt(dot(current_prd.direction, _normal) * dot(direction, _normal)))) * exp(-( ((h.x / _xRough)*(h.x / _xRough)) + ((h.y / _yRough)*(h.y/_yRough)) / (dot(h,_normal)*dot(h,_normal))) ));
+}
