@@ -61,9 +61,7 @@ void OsoReader::instructionArguments(std::string _argument){
 }
 //----------------------------------------------------------------------------------------------------------------------------------------
 bool OsoReader::parseFile(const std::string &_filename){
-    m_iParams.clear();
-    m_symbols.clear();
-    m_instructionFunctions.clear();
+    resetVectors();
     yyin = fopen(_filename.c_str(), "r");
     if (!yyin){
         std::cerr<<"Can't open "<<_filename<<std::endl;
@@ -303,6 +301,13 @@ void OsoReader::printInstructions(){
         std::cout<<"\n";
     }
 }
+void OsoReader::resetVectors(){
+    getOsoReader()->m_symbols.clear();
+    m_instructionFunctions.clear();
+    m_iParams.clear();
+    m_instructions.clear();
+}
+
 //----------------------------------------------------------------------------------------------------------------------------------------
 OsoReader* getOsoReader(){
     if (!osoReader)

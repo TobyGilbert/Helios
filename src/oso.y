@@ -364,33 +364,9 @@ hintcontents_item
         ;
 
 %%
-
-//extern int yylex();
-//extern int yyparse();
-//extern FILE *yyin;
-
 void yyerror(char *s) {
    std::cout << "EEK, parse error!  Message: " << s << std::endl;
    // might as well halt now:
    exit(-1);
 }
 
-/*int main() {
-  // open a file handle to a particular file:
-  FILE *myfile = fopen("metal.oso", "r");
-  // make sure it is valid:
-  if (!myfile) {
-     std::cout << "I can't open metal.oso!" << std::endl;
-     return -1;
-  }
-  // set lex to read from it instead of defaulting to STDIN:
-  yyin = myfile;
-
-  // parse through the input until there is no more:
-  do {
-     yyparse();
-  } while (!feof(yyin));
-
-return 0;
-
-}*/

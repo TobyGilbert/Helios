@@ -31,7 +31,9 @@ void OslReader::compileOSL(QString _shaderName){
         std::cout << "FAILED " << oslfilename.toStdString() << "\n";
     }
     OsoReader osoread;
-    osoread.parseFile("shaders/OSO/metal.oso");
+    QFileInfo info(_shaderName);
+
+    osoread.parseFile((info.baseName()+QString(".oso")).toStdString());
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OslReader::compileOSLtoBuffer(QString _shaderName){

@@ -1,6 +1,5 @@
 /* Define regular expression macros
   ************************************************/
-
  /* white space, not counting newline */
 WHITE           [ \t\v\f\r]+
  /* alpha character */
@@ -26,10 +25,6 @@ COMMENT         \#[^\n]*\n
  /* Hints */
 HINTPATTERN     \%{IDENT}
 
-
- /* Note for lex newbies: the following '%{ .. %}' section contains literal
-  * C code that will be inserted at the top of code that flex generates.
-  */
 %{
 #include <iostream>
 #include <vector>
