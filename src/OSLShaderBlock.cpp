@@ -8,11 +8,6 @@ OSLShaderBlock::OSLShaderBlock(QGraphicsItem *parent) : QNEBlock(parent)
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OSLShaderBlock::loadShader(QString _path){
-
-    std::vector<std::string>x;
-    addPort("Shader Node",0,x,QNEPort::TypeVoid, QNEPort::NamePort);
-    addPort("Shader Node",0,x,QNEPort::TypeVoid, QNEPort::TypePort);
-
     //lets run our OSL shader through Toby Gilbert's OSL Compilotmatic 3000
     OslReader shade;
     shade.compileOSL(_path);
@@ -22,6 +17,9 @@ void OSLShaderBlock::loadShader(QString _path){
     reader->printShader();
     reader->printParams();
     reader->generateDeviceFunction();
+    std::vector<std::string>x;
+    addPort(reader->getShaderName().c_str(),0,x,QNEPort::TypeVoid, QNEPort::NamePort);
+    addPort(reader->getShaderType().c_str(),0,x,QNEPort::TypeVoid, QNEPort::TypePort);
 
     //add our input ports required by our shader
     std::vector<Symbol> symbols = reader->getInputParams();

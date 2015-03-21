@@ -43,7 +43,9 @@ SOURCES += \
     src/oso.y \
     src/osolexer.l \
     src/OSLBlock.cpp \
-    src/OSLShaderBlock.cpp
+    src/OSLShaderBlock.cpp \
+    src/OSLVarFloatBlock.cpp \
+    src/OSLNodesEditor.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/oso.y \
@@ -81,7 +83,9 @@ HEADERS += \
     include/qneport.h \
     include/qnodeseditor.h \
     include/OSLBlock.h \
-    include/OSLShaderBlock.h
+    include/OSLShaderBlock.h \
+    include/OSLVarFloatBlock.h \
+    include/OSLNodesEditor.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

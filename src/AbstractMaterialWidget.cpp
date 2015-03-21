@@ -3,9 +3,11 @@
 
 #include "qneport.h"
 #include "OSLShaderBlock.h"
+#include "OSLVarFloatBlock.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
+#include <QPushButton>
 
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QWidget(parent)
@@ -23,16 +25,19 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     //add this widget to our group box
     m_groupBoxLayout->addWidget(m_graphicsView,0,0,1,1);
     //create our node interface scene
-    m_nodeInterfaceScene = new QGraphicsScene();
+    m_nodeInterfaceScene = new QGraphicsScene(this);
     //set our graphics view scene to that of our node interface scene
     m_graphicsView->setScene(m_nodeInterfaceScene);
     //some stuff to make it look nicer
     m_graphicsView->setRenderHint(QPainter::Antialiasing, true);
     //create our node editor, could become useful in the future
-    m_nodeEditor = new QNodesEditor(this);
+    m_nodeEditor = new OSLNodesEditor(this);
     m_nodeEditor->install(m_nodeInterfaceScene);
 
-
+    //add a button to to launch the creation of our shader
+    QPushButton *createShaderBtn = new QPushButton("Create Shader",this);
+    m_groupBoxLayout->addWidget(createShaderBtn,0,1,1,1);
+    connect(createShaderBtn,SIGNAL(clicked()),m_nodeEditor,SLOT(createOptixMaterial()));
 
     //Set up our menu for if you right click in our widget
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -43,17 +48,11 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget(){
-    for(unsigned int i=0; i<m_widgetObjects.size();i++){
-        delete m_widgetObjects[i];
-    }
+    //delete all the nodes that we have created
     for(unsigned int i=0; i<m_nodes.size();i++){
         delete m_nodes[i];
     }
-    delete m_graphicsView;
-    delete m_nodeInterfaceScene;
 
-    delete m_widgetLayout;
-    delete m_widgetGroupBox;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
@@ -67,12 +66,18 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
     addShaderNodeBtn->setData(QVariant(0));
     myMenu.addAction(addShaderNodeBtn);
 
+    QAction *addFloatNodeBtn = new QAction(&myMenu);
+    addFloatNodeBtn->setText("Add Float Node");
+    addFloatNodeBtn->setData(QVariant(1));
+    myMenu.addAction(addFloatNodeBtn);
+
     //find out if something has been clicked
     QAction* selectedItem = myMenu.exec(globalPos);
     if(selectedItem){
         switch(selectedItem->data().toInt())
         {
             case(0): addShaderNode(); break;
+            case(1): addFloatNode(); break;
             //if nothing do nothing
             default: break;
         }
@@ -96,6 +101,16 @@ void AbstractMaterialWidget::addShaderNode()
     m_nodeInterfaceScene->addItem(b);
     b->loadShader(location);
     //add it to our list of nodes
+    m_nodes.push_back(b);
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::addFloatNode()
+{
+    //create a float block
+    OSLVarFloatBlock *b = new OSLVarFloatBlock();
+    //add it to our interface scene
+    m_nodeInterfaceScene->addItem(b);
+    b->setValue();
     m_nodes.push_back(b);
 }
 //------------------------------------------------------------------------------------------------------------------------------------

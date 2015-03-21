@@ -114,6 +114,8 @@ MainWindow::~MainWindow(){
     delete m_lightDockWidget;
     delete m_lightToolbarButton;
 
+    delete m_genSetDockWidget;
+
 
     delete m_toolBar;
 
