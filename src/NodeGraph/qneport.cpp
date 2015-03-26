@@ -69,14 +69,13 @@ void QNEPort::setNEBlock(QNEBlock *b)
 void QNEPort::setName(const QString &n)
 {
 	name = n;
-	label->setPlainText(n);
+    label->setPlainText(n + m_initParams);
 }
 
 void QNEPort::setIsOutput(bool o)
 {
 	isOutput_ = o;
-
-	QFontMetrics fm(scene()->font());
+    QFontMetrics fm(scene()->font());
 	QRect r = fm.boundingRect(name);
 
 	if (isOutput_)
@@ -94,7 +93,7 @@ bool QNEPort::isOutput()
 {
 	return isOutput_;
 }
-
+    //----mod by Declan Russell----
 QVector<QNEConnection*>& QNEPort::connections()
 {
 	return m_connections;

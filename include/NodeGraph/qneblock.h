@@ -42,25 +42,39 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <QGraphicsSceneMouseEvent>
 #include "NodeGraph/qneport.h"
 
+//#include <QObject>
 
-class QNEBlock : public QGraphicsPathItem
+
+/// @brief This class has been modified from inheriting QGraphicsPathItem to a QGraphicsPathObject
+/// @brief So that we have access to signals and slots
+class QNEBlock : public /*QObject,*/ QGraphicsPathItem
 {
+    //Q_OBJECT
 public:
-	enum { Type = QGraphicsItem::UserType + 3 };
+    //this means you can define a new QGraphicsItem type. Woudln't of done it like this myself.
+    enum { Type = QGraphicsItem::UserType + 3 };
 
     QNEBlock(QGraphicsItem *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds a port to our node. This has been modified to also set the varibel type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    QNEPort* addPort(const QString &name, bool isOutput,std::vector<std::string> _initParams,QNEPort::variableType _type = QNEPort::TypeVoid, int flags = 0, int ptr = 0);
+    QNEPort* addPort(const QString &name, bool isOutput, QString _initParams, QNEPort::variableType _type = QNEPort::TypeVoid, int flags = 0, int ptr = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds an input port to our node. Modified to also set the varible type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    void addInputPort(const QString &name,std::vector<std::string> _initParams,QNEPort::variableType _type = QNEPort::TypeVoid);
+    void addInputPort(const QString &name, QString _initParams = 0, QNEPort::variableType _type = QNEPort::TypeVoid);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds an output port to our node. Modified to also set the varible type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    void addOutputPort(const QString &name,std::vector<std::string> _initParams,QNEPort::variableType _type = QNEPort::TypeVoid);
+    void addOutputPort(const QString &name,QString _initParams = 0,QNEPort::variableType _type = QNEPort::TypeVoid);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief mutator to hard code the width of our node.
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setWidth(int _w){width = _w;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief mutator to hard code the height of our node.
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setHeight(int _h){height = _h;}
     //----------------------------------------------------------------------------------------------------------------------
 	void addInputPorts(const QStringList &names);
 	void addOutputPorts(const QStringList &names);
@@ -70,7 +84,11 @@ public:
 	QNEBlock* clone();
 	QVector<QNEPort*> ports();
 
-	int type() const { return Type; }
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief changed to virtual so we can overide this with our inherited classes
+    //----------------------------------------------------------------------------------------------------------------------
+    virtual int type() const { return Type; }
+    //----------------------------------------------------------------------------------------------------------------------
 
 
 
@@ -82,6 +100,7 @@ private:
 	int vertMargin;
 	int width;
 	int height;
+
 
 };
 

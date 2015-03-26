@@ -6,7 +6,6 @@
 OSLBlock::OSLBlock(QGraphicsItem *parent) : QNEBlock(parent)
 {
 
-    //----mod by Declan Russell----
     QPainterPath p2;
     p2.addRoundedRect(-25,-10,30,10,5,5);
     m_importBtnGI = new QGraphicsPathItem(this);
@@ -42,13 +41,25 @@ void OSLBlock::mousePressEvent(QGraphicsSceneMouseEvent *_event)
         //add our input ports required by our shader
         std::vector<Symbol> symbols = reader->getInputParams();
         for (unsigned int i=0; i<symbols.size(); i++){
-            addInputPort(QString(symbols[i].m_name.c_str()),symbols[i].m_initialParams,(QNEPort::variableType)symbols[i].m_type);
+            std::cout<<symbols[i].m_name<<std::endl;
+            std::string initParam;
+            for(unsigned int j=0; j<symbols[i].m_initialParams.size();j++){
+                initParam +=",";
+                initParam += symbols[i].m_initialParams[j];
+            }
+            addInputPort(QString(symbols[i].m_name.c_str()),initParam.c_str(),(QNEPort::variableType)symbols[i].m_type);
         }
 
         //add our input ports required by our shader
         std::vector<Symbol> outputSymbols = reader->getOutputParams();
         for (unsigned int i=0; i<outputSymbols.size(); i++){
-            addOutputPort(QString(outputSymbols[i].m_name.c_str()),outputSymbols[i].m_initialParams,(QNEPort::variableType)outputSymbols[i].m_type);
+            std::cout<<outputSymbols[i].m_name<<std::endl;
+            std::string initParam;
+            for(unsigned int j=0; j<outputSymbols[i].m_initialParams.size();j++){
+                initParam +=",";
+                initParam += outputSymbols[i].m_initialParams[j];
+            }
+            addOutputPort(QString(outputSymbols[i].m_name.c_str()),initParam.c_str(),(QNEPort::variableType)outputSymbols[i].m_type);
         }
 
     }

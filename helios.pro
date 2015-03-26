@@ -43,6 +43,9 @@ SOURCES += \
     src/NodeGraph/OSLBlock.cpp \
     src/OSLCompiler/osolexer.l \
     src/OSLCompiler/oso.y \
+    src/NodeGraph/OSLShaderBlock.cpp \
+    src/NodeGraph/OSLVarFloatBlock.cpp \
+    src/NodeGraph/OSLNodesEditor.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -79,6 +82,9 @@ HEADERS += \
     include/NodeGraph/qneport.h \
     include/NodeGraph/qnodeseditor.h \
     include/NodeGraph/OSLBlock.h \
+    include/NodeGraph/OSLShaderBlock.h \
+    include/NodeGraph/OSLVarFloatBlock.h \
+    include/NodeGraph/OSLNodesEditor.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
