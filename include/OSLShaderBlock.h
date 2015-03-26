@@ -14,6 +14,7 @@
 class OSLShaderBlock : public QNEBlock
 {
 public:
+    enum { Type = QGraphicsItem::UserType + 4 };
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief our default constructor, takes in a path to osl shader and sets up our ports accordingly
     /// @param _path - path to our shader program
@@ -34,7 +35,11 @@ public:
     /// @brief compiles our osl shader and sets up our ports and obtains required data about shader
     /// @param _path - path to our shader file
     //------------------------------------------------------------------------------------------------------------------------------------
-    void loadShader(QString _path);
+    bool loadShader(QString _path);
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief returns the type of our class
+    //------------------------------------------------------------------------------------------------------------------------------------
+    int type() const { return Type; }
     //------------------------------------------------------------------------------------------------------------------------------------
 private:
     //------------------------------------------------------------------------------------------------------------------------------------

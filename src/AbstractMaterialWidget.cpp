@@ -8,6 +8,8 @@
 #include <QPoint>
 #include <QFileDialog>
 #include <QPushButton>
+#include <QMessageBox>
+
 
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QWidget(parent)
@@ -99,7 +101,9 @@ void AbstractMaterialWidget::addShaderNode()
     //add it to out interface. This needs to be don before we add any
     //ports or it will not work, should probably do something about this
     m_nodeInterfaceScene->addItem(b);
-    b->loadShader(location);
+    if(!b->loadShader(location)){
+        QMessageBox::warning(this,"Compile Error","OSL Shader could not be compiled!");
+    }
     //add it to our list of nodes
     m_nodes.push_back(b);
 }
@@ -107,10 +111,7 @@ void AbstractMaterialWidget::addShaderNode()
 void AbstractMaterialWidget::addFloatNode()
 {
     //create a float block
-    OSLVarFloatBlock *b = new OSLVarFloatBlock();
-    //add it to our interface scene
-    m_nodeInterfaceScene->addItem(b);
-    b->setValue();
+    OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene);
     m_nodes.push_back(b);
 }
 //------------------------------------------------------------------------------------------------------------------------------------

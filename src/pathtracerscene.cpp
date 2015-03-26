@@ -73,8 +73,8 @@ void PathTracerScene::init(){
     m_outputBuffer->setSize(m_width/m_devicePixelRatio,m_height/m_devicePixelRatio);
     output_buffer->set(m_outputBuffer);
 
-    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 25.0f, -50.0f ),      //eye
-                                 optix::make_float3( 0.0f, 25.0f, 0.0f ),        //lookat
+    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
+                                 optix::make_float3( 0.0f, 0.0f, 0.0f ),        //lookat
                                  optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
                                  35.0f,                                          //hfov
                                  35.0f);                                         //vfov
@@ -263,12 +263,12 @@ void PathTracerScene::createGeometry(){
 
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
-      m_topGroup->addChild(geometry_group);
-      m_topGroup->addChild(m_model->getGeomAndTrans());
+      //m_topGroup->addChild(geometry_group);
+      //m_topGroup->addChild(m_model->getGeomAndTrans());
 //      m_topGroup->addChild(m_model2->getGeomAndTrans());
 //      m_topGroup->addChild(m_model3->getGeomAndTrans());
-      m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
-      m_topGroup->getAcceleration()->markDirty();
+      //m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+      //m_topGroup->getAcceleration()->markDirty();
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){

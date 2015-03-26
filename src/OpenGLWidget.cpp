@@ -142,6 +142,8 @@ void OpenGLWidget::initializeGL(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::resizeGL(const int _w, const int _h){
+    //some error handling cannot have an aspect ratio of 0/infinity
+    if(_w==0||_h==0)return;
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
     PathTracerScene::getInstance()->resize(_w/m_resolutionScale,_h/m_resolutionScale);

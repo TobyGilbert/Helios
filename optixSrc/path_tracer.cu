@@ -259,7 +259,7 @@ __device__ void matte( float Kd,  float3 Cs){
     // Texture coordinates
     sg.u = texcoord.x;
     sg.v = texcoord.y;
-    float3 $tmp1 = ward(sg.N, sg.N, 0.5, 0.5);//oren_nayar(sg.N, 0.2);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); phong(sg.N , 10);*///diffuse( sg.N );
+    float3 $tmp1 = oren_nayar(sg.N, 0.2);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); phong(sg.N , 10);*///diffuse( sg.N );
     float3 $tmp2 = Kd * Cs;
      current_prd.attenuation = $tmp1 * $tmp2;
 }

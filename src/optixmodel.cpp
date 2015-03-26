@@ -203,6 +203,7 @@ void OptiXModel::createBuffers(Context &_context){
     }
     m_texCoordsBuffer->unmap();
 
+    std::cout<<m_vertices.size()/3<<std::endl;
     //now lets set up our index buffers
     m_vertIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
     m_normIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );

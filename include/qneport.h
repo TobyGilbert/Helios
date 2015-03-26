@@ -48,6 +48,9 @@ public:
 	enum { NamePort = 1, TypePort = 2 };
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief enumorator to hold the variable type of the port
+    /// @brief These are used becuase OsoReaders Types are in global name space and clash wish Qt so I have type cast them
+    /// @brief to something else now. Bit of a hack :(
+    /// @todo Get toby to romove is types from global name space so this class can just use OsoReader::Type
     //----------------------------------------------------------------------------------------------------------------------
     enum variableType{TypeInt,TypeFloat,TypeString, TypeColour, TypeMatrix, TypeNormal, TypePoint, TypeVoid, TypeVector};
     //----------------------------------------------------------------------------------------------------------------------
@@ -78,6 +81,16 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline variableType getVaribleType(){return m_varibleType;}
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to the port name
+    /// @brief added by Declan Russell
+    //----------------------------------------------------------------------------------------------------------------------
+    inline QString getName(){return name;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief set initial paramiters string
+    /// @brief added by Declan Russell
+    //----------------------------------------------------------------------------------------------------------------------
+    inline void setInitParams(QString _initParams){m_initParams = _initParams; label->setPlainText(name + m_initParams);}
+    //----------------------------------------------------------------------------------------------------------------------
 
 	QNEBlock* block() const;
 
@@ -104,6 +117,11 @@ private:
     /// @brief added by Declan Russell
     //----------------------------------------------------------------------------------------------------------------------
     variableType m_varibleType;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Initial paramiters string
+    /// @brief added by Declan Russell
+    //----------------------------------------------------------------------------------------------------------------------
+    QString m_initParams;
     //----------------------------------------------------------------------------------------------------------------------
 };
 

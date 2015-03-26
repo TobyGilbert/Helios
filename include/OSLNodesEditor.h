@@ -9,7 +9,9 @@
 //------------------------------------------------------------------------------------------------------------------------------------
 
 #include <QObject>
+#include "OSLShaderBlock.h"
 #include "qnodeseditor.h"
+#include "qneport.h"
 
 class OSLNodesEditor : public QNodesEditor
 {
@@ -38,6 +40,21 @@ public slots:
     void createOptixMaterial();
     //------------------------------------------------------------------------------------------------------------------------------------
 private:
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief a recursive function to to evaluate our blocks to find there order
+    /// @param _block - the block we want to evaluate
+    /// @param _blockVector - the vector we wish to store our ordered blocks
+    //------------------------------------------------------------------------------------------------------------------------------------
+    void evaluateBlock(QNEBlock *_block, std::vector<QNEBlock*> &_blockVector);
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief iterates through our scenes children to the last block to be written in our material.
+    /// @brief this will be the first node found with Ci as an output.
+    //------------------------------------------------------------------------------------------------------------------------------------
+    QNEBlock *getLastBlock();
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief takes in an QNEPort::type and returns the type in string form
+    //------------------------------------------------------------------------------------------------------------------------------------
+    QString portTypeToString(QNEPort::variableType _type);
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief the destination that we wish to create our optix material. Defualt is OptixMaterials/tempMat.cu
     //------------------------------------------------------------------------------------------------------------------------------------

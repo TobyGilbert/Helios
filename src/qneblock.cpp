@@ -52,10 +52,11 @@ QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
 
 }
 
-QNEPort* QNEBlock::addPort(const QString &name, bool isOutput,std::vector<std::string> _initParams, QNEPort::variableType _type, int flags, int ptr)
+QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, QString _initParams = 0, QNEPort::variableType _type, int flags, int ptr)
 {
 	QNEPort *port = new QNEPort(this);
-	port->setName(name);
+    port->setName(name);
+    port->setInitParams(_initParams);
 	port->setIsOutput(isOutput);
 	port->setNEBlock(this);
 	port->setPortFlags(flags);
@@ -90,28 +91,26 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput,std::vector<std::s
 	return port;
 }
 
-void QNEBlock::addInputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type)
+void QNEBlock::addInputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
 {
     addPort(name, false,_initParams, _type);
 }
 
-void QNEBlock::addOutputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type)
+void QNEBlock::addOutputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
 {
     addPort(name, true,_initParams, _type);
 }
 
 void QNEBlock::addInputPorts(const QStringList &names)
 {
-    std::vector<std::string>x;
 	foreach(QString n, names)
-        addInputPort(n,x);
+        addInputPort(n);
 }
 
 void QNEBlock::addOutputPorts(const QStringList &names)
 {
-    std::vector<std::string>x;
 	foreach(QString n, names)
-        addOutputPort(n,x);
+        addOutputPort(n);
 }
 
 void QNEBlock::save(QDataStream &ds)
@@ -161,9 +160,7 @@ void QNEBlock::load(QDataStream &ds, QMap<quint64, QNEPort*> &portMap)
 		ds >> name;
 		ds >> output;
 		ds >> flags;
-        /// @todo add type and initial params loading
-        std::vector<std::string>x;
-        portMap[ptr] = addPort(name, output,x, QNEPort::TypeVoid, flags, ptr);
+        portMap[ptr] = addPort(name, output,"", QNEPort::TypeVoid, flags, ptr);
 	}
 }
 
@@ -191,8 +188,7 @@ QNEBlock* QNEBlock::clone()
 		if (port_->type() == QNEPort::Type)
 		{
 			QNEPort *port = (QNEPort*) port_;
-            std::vector<std::string>x;
-            b->addPort(port->portName(), port->isOutput(),x,port->getVaribleType(), port->portFlags(), port->ptr());
+            b->addPort(port->portName(), port->isOutput(),"",port->getVaribleType(), port->portFlags(), port->ptr());
 		}
 	}
 

@@ -1,7 +1,19 @@
 #ifndef OSLVARFLOATBLOCK_H
 #define OSLVARFLOATBLOCK_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class OSLVarFloatBlock
+/// @brief This class is used for creating a Float variable node in our node graphics interface.
+
+/// @author Declan Russell
+/// @date 21/03/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include "qneblock.h"
+#include <QDoubleSpinBox>
+#include <QGraphicsScene>
+
+/// @todo ask Jon/Richard about multiple inheritance
 
 class OSLVarFloatBlock : public QNEBlock
 {
@@ -9,22 +21,12 @@ public:
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief default constructor
     //------------------------------------------------------------------------------------------------------------------------------------
-    OSLVarFloatBlock(QGraphicsItem * parent = 0);
+    OSLVarFloatBlock(QGraphicsScene *_scene,QGraphicsItem * parent = 0);
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief mutator of the value of our block
-    /// @brief this is also where all our ports and variable are set.
+    /// @brief QDoubleSpinBox to store and mutate the value of our block
+    /// @brief This is public so it can be easily connected to other QObjects with signals and slots
     //------------------------------------------------------------------------------------------------------------------------------------
-    void setValue(float _value = 0.0f);
-    //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief accessor of the value of our block
-    //------------------------------------------------------------------------------------------------------------------------------------
-    float getValue(){return m_value;}
-    //------------------------------------------------------------------------------------------------------------------------------------
-private:
-    //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief the value held by our block
-    //------------------------------------------------------------------------------------------------------------------------------------
-    float m_value;
+    QDoubleSpinBox *m_value;
     //------------------------------------------------------------------------------------------------------------------------------------
 };
 

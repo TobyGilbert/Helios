@@ -69,7 +69,7 @@ void QNEPort::setNEBlock(QNEBlock *b)
 void QNEPort::setName(const QString &n)
 {
 	name = n;
-	label->setPlainText(n);
+    label->setPlainText(n + m_initParams);
 }
 
 void QNEPort::setIsOutput(bool o)
