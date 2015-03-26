@@ -15,71 +15,70 @@ CONFIG += c++11
 QT+=gui opengl core
 SOURCES += \
     src/main.cpp \
-    src/mainwindow.cpp \
-    src/Camera.cpp \
-    src/ShaderUtils.cpp \
-    src/TextureUtils.cpp \
-    src/ShaderProgram.cpp \
-    src/Texture.cpp \
-    src/OpenGLWidget.cpp \
-    src/Shader.cpp \
-    src/pathtracerscene.cpp \
-    src/pinholecamera.cpp \
+    src/Core/mainwindow.cpp \
+    src/Core/Camera.cpp \
+    src/Core/ShaderUtils.cpp \
+    src/Core/TextureUtils.cpp \
+    src/Core/ShaderProgram.cpp \
+    src/Core/Texture.cpp \
+    src/Core/OpenGLWidget.cpp \
+    src/Core/Shader.cpp \
+    src/Core/pathtracerscene.cpp \
+    src/Core/pinholecamera.cpp \
     optixSrc/*.cu \
-    src/HDRLoader.cpp \
-    src/optixmodel.cpp \
-    src/TextureLoader.cpp \
-    src/MeshDockWidget.cpp \
-    src/GenSetDockWidget.cpp \
-    src/OsoReader.cpp \
-    src/OslReader.cpp \
-    src/AbstractMaterialWidget.cpp \
-    src/MeshWidget.cpp \
-    src/MaterialLibrary.cpp \
-    src/qneblock.cpp \
-    src/qneconnection.cpp \
-    src/qneport.cpp \
-    src/qnodeseditor.cpp \
-    src/oso.y \
-    src/osolexer.l \
-    src/OSLBlock.cpp
+    src/Core/HDRLoader.cpp \
+    src/Core/optixmodel.cpp \
+    src/Core/TextureLoader.cpp \
+    src/UI/MeshDockWidget.cpp \
+    src/UI/GenSetDockWidget.cpp \
+    src/OSLCompiler/OsoReader.cpp \
+    src/OSLCompiler/OslReader.cpp \
+    src/UI/AbstractMaterialWidget.cpp \
+    src/UI/MeshWidget.cpp \
+    src/Core/MaterialLibrary.cpp \
+    src/NodeGraph/qneblock.cpp \
+    src/NodeGraph/qneconnection.cpp \
+    src/NodeGraph/qneport.cpp \
+    src/NodeGraph/qnodeseditor.cpp \
+    src/NodeGraph/OSLBlock.cpp \
+    src/OSLCompiler/osolexer.l \
+    src/OSLCompiler/oso.y \
 
 SOURCES -= optixSrc/*.cu \
-           src/oso.y \
-           src/osolexer.l
+           src/OSLCompiler/oso.y \
+           src/OSLCompiler/osolexer.l
 
 HEADERS += \
-    include/mainwindow.h \
-    include/Camera.h \
-    include/ShaderUtils.h \
-    include/TextureUtils.h \
-    include/ShaderProgram.h \
-    include/Texture.h \
-    include/OpenGLWidget.h \
-    include/Shader.h \
+    include/Core/mainwindow.h \
+    include/Core/Camera.h \
+    include/Core/ShaderUtils.h \
+    include/Core/TextureUtils.h \
+    include/Core/ShaderProgram.h \
+    include/Core/Texture.h \
+    include/Core/OpenGLWidget.h \
+    include/Core/Shader.h \
     include/ui_mainwindow.h \
     include/helpers.h \
-    include/random.h \
-    include/path_tracer.h \
-    include/pathtracerscene.h \
-    include/pinholecamera.h \
-    include/HDRLoader.h \
-    include/optixmodel.h \
-    include/TextureLoader.h \
-    include/ShaderGlobals.h \
-    include/MeshDockWidget.h \
-    include/GenSetDockWidget.h \
-    include/OsoReader.h \
+    include/Core/random.h \
+    include/Core/path_tracer.h \
+    include/Core/pathtracerscene.h \
+    include/Core/pinholecamera.h \
+    include/Core/HDRLoader.h \
+    include/Core/optixmodel.h \
+    include/Core/TextureLoader.h \
+    include/UI/MeshDockWidget.h \
+    include/UI/GenSetDockWidget.h \
+    include/OSLCompiler/OsoReader.h \
     include/BRDFUtils.h \
-    include/OslReader.h \
-    include/AbstractMaterialWidget.h \
-    include/MeshWidget.h \
-    include/MaterialLibrary.h \
-    include/qneblock.h \
-    include/qneconnection.h \
-    include/qneport.h \
-    include/qnodeseditor.h \
-    include/OSLBlock.h
+    include/OSLCompiler/OslReader.h \
+    include/UI/AbstractMaterialWidget.h \
+    include/UI/MeshWidget.h \
+    include/Core/MaterialLibrary.h \
+    include/NodeGraph/qneblock.h \
+    include/NodeGraph/qneconnection.h \
+    include/NodeGraph/qneport.h \
+    include/NodeGraph/qnodeseditor.h \
+    include/NodeGraph/OSLBlock.h \
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
@@ -142,9 +141,9 @@ OTHER_FILES += \
     styleSheet/darkOrange
 
 #Sources we want compiled with bison
-BISONSOURCES = src/oso.y
+BISONSOURCES = src/OSLCompiler/oso.y
 #Sources we want compiles with flex
-FLEXSOURCES = src/osolexer.l
+FLEXSOURCES = src/OSLCompiler/osolexer.l
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu

@@ -21,6 +21,7 @@
 
 #include <optix.h>
 #include <optixu/optixu_math_namespace.h>
+#include <optixu/optixu_matrix_namespace.h>
 #include "helpers.h"
 #include "path_tracer.h"
 #include "random.h"
@@ -34,6 +35,8 @@ struct ShaderGlobals{
     float3 N;
     float3 Ng;
     float u, v;
+    float3 dPdu;
+    float3 dPdv;
 };
 
 struct PerRayData_pathtrace{
@@ -171,6 +174,7 @@ RT_PROGRAM void pathtrace_camera(){
     }
 }
 
+
 // Construct the shader globals
 RT_PROGRAM void constructShaderGlobals(){
     if (current_prd.depth > 10){
@@ -188,6 +192,29 @@ RT_PROGRAM void constructShaderGlobals(){
     // Texture coordinates
     sg.u = texcoord.x;
     sg.v = texcoord.y;
+    float normalZ = sg.N.z;
+    if (normalZ > 1.0){
+        normalZ = -normalZ;
+    }
+    float normalX = sg.N.x;
+    if (normalX < 0.0){
+        normalX = -normalX;
+    }
+    float xzAngle = acos(dot(make_float3(sg.N.x, 0.0, normalZ), make_float3(1.0, 0.0, 0.0)));
+    float xyAngle = acos(dot(make_float3(sg.N.x, sg.N.y, 0.0), make_float3(0.0, 1.0, 0.0)));
+    Matrix4x4 rotx;
+    rotx.setRow(0, make_float4(1, 0, 0, 0));
+    rotx.setRow(1, make_float4(0, cos(xzAngle), -sin(xzAngle), 0));
+    rotx.setRow(2, make_float4(0, sin(xzAngle), cos(xzAngle), 0));
+    rotx.setRow(3, make_float4(0, 0, 0,1));
+    
+    Matrix4x4 roty;
+    rotx.setRow(0, make_float4(cos(xyAngle), 0, sin(xyAngle), 0));
+    rotx.setRow(1, make_float4(0, 1, 0, 0));
+    rotx.setRow(2, make_float4(-sin(xyAngle), 0, cos(xyAngle), 0));
+    rotx.setRow(3, make_float4(0, 0, 0,1));
+
+//    sg.dPdu = make_float3(1.0, 0.0, 0.0) * rotx * roty;
     if (current_prd.depth > 10){
         current_prd.done = true;
         return;
@@ -195,7 +222,8 @@ RT_PROGRAM void constructShaderGlobals(){
     }
     current_prd.origin = ray.origin + t_hit * ray.direction;
 //    metal(1, 10, optix::make_float3(1, 1, 1));
-    matte();
+//    matte();
+    ifTest();
 
     // Compute direct light...
     // Or shoot one...
@@ -259,10 +287,66 @@ __device__ void matte( float Kd,  float3 Cs){
     // Texture coordinates
     sg.u = texcoord.x;
     sg.v = texcoord.y;
-    float3 $tmp1 = ward(sg.N, sg.N, 0.5, 0.5);//oren_nayar(sg.N, 0.2);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); phong(sg.N , 10);*///diffuse( sg.N );
+    float3 $tmp1 = oren_nayar(sg.N, 0.5);/*ward(sg.N, normalize(cross(sg.N, make_float3(0.0, 1.0, 0.0))), 0.1, 0.1); *///phong(sg.N , 10); ///diffuse( sg.N );
     float3 $tmp2 = Kd * Cs;
-     current_prd.attenuation = $tmp1 * $tmp2;
+    current_prd.attenuation = $tmp1 * $tmp2;
 }
+
+__device__ void ifTest( ){
+    ShaderGlobals sg;
+    // Calcualte the shading and geometric normals for use with our OSL shaders
+    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+    sg.I = ray.direction;
+    // The shading position
+    sg.P = ray.origin + t_hit * ray.direction;
+    // Texture coordinates
+    sg.u = texcoord.x;
+    sg.v = texcoord.y;
+    float ___317_e;
+    float3 ___317_g;
+    int ___317_q;
+    float ___318_t;
+    float f;
+    float $const1 = 0;
+    float $const2 = 1;
+    char* $const3 = "diffuse";
+    int $const4 = 10;
+    float3 $const5 = make_float3( 5,5,5);
+    int $const6 = 1;
+    int $const7 = 100;
+    float $const8 = 100;
+    char* $const9 = "phong";
+    L1:
+    int $tmp1;
+    if ($const1 == $const2){
+        $tmp1 = 1;
+    }
+    else{
+        $tmp1 = 0;
+    }
+    L2:
+    if (!$tmp1){
+        goto L7;
+    }
+    L3:
+     current_prd.attenuation = diffuse( sg.N );
+    L4:
+    ___317_e = $const4;
+    L5:
+    ___317_g = $const5;
+    L6:
+    ___317_q = $const6;
+    goto L9;
+    L7:
+     current_prd.attenuation = phong( sg.N,$const8 );
+    L8:
+    ___318_t = $const4;
+    L9:
+    f = $const7;
+    L10:
+}
+
 
 rtDeclareVariable(float3,        emission_color, , );
 
@@ -531,12 +615,91 @@ __device__ optix::float3 ward(float3 _normal, float3 _t, float _xRough, float _y
     float3 direction = current_prd.direction;
     float z1 = rnd(current_prd.seed);
     float z2 = rnd(current_prd.seed);
+    float3 v = cross(_normal, _t);
+    float3 u = cross(v, _normal);
+
     float phi = atan((_yRough/_xRough) * tan(2*float(M_PI)*z2));
-    float theta = atan( sqrt( -log(1 -z1) / ( ((cos(phi)*cos(phi)) / (_xRough*_xRough)) + ((sin(phi)*sin(phi))/(_yRough*_yRough)) )));
+    float theta = atan( sqrt( -log(1 - z1) / ( ((cos(phi)*cos(phi)) / (_xRough*_xRough)) + ((sin(phi)*sin(phi)) / (_yRough*_yRough)) ) ) );
     float3 h = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
+    h = h.x * u + h.y * v + h.z * _normal;
     float3 o = 2 * dot(direction, h) * h + direction;
     float ps = 1.0;
     float w = ps * dot(h, direction)* pow(dot(h, _normal), 3) * sqrt(dot(o, _normal) / dot(direction, _normal));
     current_prd.direction = o;
     return make_float3((ps / ( 4 * float(M_PI) * _xRough * _yRough * sqrt(dot(current_prd.direction, _normal) * dot(direction, _normal)))) * exp(-( ((h.x / _xRough)*(h.x / _xRough)) + ((h.y / _yRough)*(h.y/_yRough)) / (dot(h,_normal)*dot(h,_normal))) ));
+}
+
+__device__ optix::float3 microfacet(char* _distribution, float3 _normal, float3 _u, float _xAlpha, float _yAlpha, float _eta, int _refract){
+    if (_distribution == "beckmann" || _distribution == "Beckmann"){
+        if (!_refract){
+            // Generate two random numbers
+            float z1 = rnd(current_prd.seed);
+            float z2 = rnd(current_prd.seed);
+
+            // Generate our microsurface normal m
+            float3 m;
+            float a2 = _xAlpha * _xAlpha;
+            float theta = atan(sqrt(-a2 * log(1 - z1)));
+            float phi = 2 * M_PI * z2;
+            m = optix::normalize(make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta)));
+//            printf("m.x: %f, m.y: %f, m.z: %f\n", m.x, m.y, m.z);
+
+            float3 direction = current_prd.direction;
+
+            // Set the new ray direction
+            current_prd.direction = 2 * optix::dot(m, current_prd.origin - eye) * m - (current_prd.origin - eye);
+            float chi;
+            if (optix::dot(m, _normal) <= 0.0){
+                chi = 0.0;
+            }
+            else{
+                chi = 1.0;
+            }
+
+            // Calculate the fresnel term
+            float F = fresnel_dielectric(optix::dot(m, (current_prd.origin - eye)), _eta);
+
+            // Calculate the distribution
+            float D;
+            float mLen, nLen;
+            mLen = sqrt((m.x*m.x) + (m.y*m.y) + (m.z*m.z));
+            nLen = sqrt((_normal.x*_normal.x) + (_normal.y*_normal.y) + (_normal.z*_normal.z));
+            float thetaM = optix::dot(m, _normal) / (mLen*nLen);
+            D  = chi / (float(M_PI) * -a2 * pow(cos(thetaM), 4));
+            D *= exp(-(tan(thetaM)*tan(thetaM)) / a2);
+//            printf("%f\n", D);
+
+            // Calculate the geometric distribution
+            float G1 = beckmannDistibution(direction, m, _normal, _xAlpha);
+            float G2 = beckmannDistibution(current_prd.direction, m, _normal, _xAlpha);
+            float G = G1 * G2;
+
+            return make_float3((F * G * D) / (4 * optix::dot(current_prd.origin - eye, _normal) * optix::dot(current_prd.direction, _normal)));
+//            return make_float3(D);
+        }
+    }
+}
+
+__device__ float beckmannDistibution(float3 _v, float3 _m, float3 _normal, float _a){
+    float chi;
+    if (optix::dot(_v, _m) / optix::dot(_v, _normal) <= 0.0){
+        chi = 0.0;
+    }
+    else{
+        chi = 1.0;
+    }
+    float vLen = sqrt((_v.x*_v.x) + (_v.y*_v.y) + (_v.z*_v.z));
+    float nLen = sqrt((_normal.x*_normal.x) + (_normal.y*_normal.y) + (_normal.z*_normal.z));
+    float thetaV = optix::dot(_v, _normal) / (vLen * nLen);
+    float a = 1.0 / ( _a * tan(thetaV));//(optix::dot(_normal, (current_prd.origin - eye)) /( _a * sqrt(1 - (optix::dot(_normal, (current_prd.origin - eye))* optix::dot(_normal, (current_prd.origin - eye))))));
+    float G1;
+    // Supposedly cheaper
+    if (a < 1.6){
+        G1 = chi * ((3.535*a + 2.18*a*a) / (1 + 2.276*a + 2.577*a*a));
+    }
+    else{
+        G1 = chi;
+    }
+
+    return G1;
 }
