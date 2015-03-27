@@ -96,6 +96,9 @@ std::vector<Symbol> OsoReader::getOutputParams(){
         if (m_symbols[i].m_symType == 1){ // If input parameter
             m_outputParams.push_back(m_symbols[i]);
         }
+        if (m_symbols[i].m_name == std::string("Ci")){
+            m_outputParams.push_back(m_symbols[i]);
+        }
     }
     return m_outputParams;
 }

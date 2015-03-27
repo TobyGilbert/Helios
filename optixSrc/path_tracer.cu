@@ -23,8 +23,8 @@
 #include <optixu/optixu_math_namespace.h>
 #include <optixu/optixu_matrix_namespace.h>
 #include "helpers.h"
-#include "path_tracer.h"
-#include "random.h"
+#include "Core/path_tracer.h"
+#include "Core/random.h"
 #include "BRDFUtils.h"
 using namespace optix;
 
@@ -221,9 +221,9 @@ RT_PROGRAM void constructShaderGlobals(){
 
     }
     current_prd.origin = ray.origin + t_hit * ray.direction;
-//    metal(1, 10, optix::make_float3(1, 1, 1));
+    metal(1, 10, optix::make_float3(1, 1, 1));
 //    matte();
-    ifTest();
+//    ifTest();
 
     // Compute direct light...
     // Or shoot one...
@@ -309,7 +309,7 @@ __device__ void ifTest( ){
     float ___318_t;
     float f;
     float $const1 = 0;
-    float $const2 = 1;
+    float $const2 = 0;
     char* $const3 = "diffuse";
     int $const4 = 10;
     float3 $const5 = make_float3( 5,5,5);
@@ -626,6 +626,7 @@ __device__ optix::float3 ward(float3 _normal, float3 _t, float _xRough, float _y
     float ps = 1.0;
     float w = ps * dot(h, direction)* pow(dot(h, _normal), 3) * sqrt(dot(o, _normal) / dot(direction, _normal));
     current_prd.direction = o;
+
     return make_float3((ps / ( 4 * float(M_PI) * _xRough * _yRough * sqrt(dot(current_prd.direction, _normal) * dot(direction, _normal)))) * exp(-( ((h.x / _xRough)*(h.x / _xRough)) + ((h.y / _yRough)*(h.y/_yRough)) / (dot(h,_normal)*dot(h,_normal))) ));
 }
 
