@@ -1,6 +1,6 @@
 #include <QApplication>
 #include <QFile>
-#include "mainwindow.h"
+#include "Core/mainwindow.h"
 
 //#define FULLSCREEN
 

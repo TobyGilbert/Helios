@@ -104,7 +104,7 @@ void AbstractMaterialWidget::addShaderNode()
 void AbstractMaterialWidget::addFloatNode()
 {
     //create a float block
-    OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene);
+    OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene, m_material);
     m_nodes.push_back(b);
 }
 //------------------------------------------------------------------------------------------------------------------------------------

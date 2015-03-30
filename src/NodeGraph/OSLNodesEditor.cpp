@@ -102,6 +102,9 @@ void OSLNodesEditor::createOptixMaterial()
         //add our includes and namespaces
         stream<<"#include <optix.h>"<<endl;
         stream<<"#include <optixu/optixu_math_namespace.h>"<<endl;
+        stream<<"#include \"Core/path_tracer.h\""<<endl;
+        stream<<"#include \"Core/random.h\""<<endl;
+        stream<<"#include \"BRDFUtils.h\""<<endl;
         stream<<"#include \"helpers.h\""<<endl;
         stream<<"using namespace optix;"<<endl;
         stream<<"\n\n";
