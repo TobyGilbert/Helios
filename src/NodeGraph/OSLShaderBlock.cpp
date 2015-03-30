@@ -29,11 +29,15 @@ bool OSLShaderBlock::loadShader(QString _path){
     for (unsigned int i=0; i<symbols.size(); i++){
         std::cout<<symbols[i].m_name<<std::endl;
         std::string initParam;
-        for(unsigned int j=0; j<symbols[i].m_initialParams.size();j++){
-            if(j==0) initParam+="="; else initParam +=",";
-            initParam += symbols[i].m_initialParams[j];
+        std::string name = symbols[i].m_name;
+
+        if(symbols[i].m_initialParams.size()==1){
+            initParam = symbols[i].m_initialParams[0];
         }
-        addInputPort(QString(symbols[i].m_name.c_str()),initParam.c_str(),(QNEPort::variableType)symbols[i].m_type);
+        else if(symbols[i].m_initialParams.size()==3){
+            initParam = "make_float3(" + symbols[i].m_initialParams[0] + "," + symbols[i].m_initialParams[1] + "," + symbols[i].m_initialParams[2] + ")";
+        }
+        addInputPort(name.c_str(),initParam.c_str(),(QNEPort::variableType)symbols[i].m_type);
     }
 
     //add our input ports required by our shader
@@ -42,10 +46,14 @@ bool OSLShaderBlock::loadShader(QString _path){
     for (unsigned int i=0; i<outputSymbols.size(); i++){
         std::cout<<outputSymbols[i].m_name<<std::endl;
         std::string initParam;
-        for(unsigned int j=0; j<outputSymbols[i].m_initialParams.size();j++){
-            if(j==0) initParam+="="; else initParam +=",";
-            initParam += outputSymbols[i].m_initialParams[j];
+
+        if(outputSymbols[i].m_initialParams.size()==1){
+            initParam = outputSymbols[i].m_initialParams[0];
         }
+        else if(outputSymbols[i].m_initialParams.size()==3){
+            initParam = "make_float3(" + outputSymbols[i].m_initialParams[0] + "," + outputSymbols[i].m_initialParams[1] + "," + outputSymbols[i].m_initialParams[2] + ")";
+        }
+
         addOutputPort(QString(outputSymbols[i].m_name.c_str()),initParam.c_str(),(QNEPort::variableType)outputSymbols[i].m_type);
     }
     return true;
