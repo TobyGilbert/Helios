@@ -2,7 +2,7 @@
 #include <QGraphicsProxyWidget>
 #include "NodeGraph/qneconnection.h"
 #include "NodeGraph/OSLShaderBlock.h"
-
+#include <math.h>
 //------------------------------------------------------------------------------------------------------------------------------------
 OSLVarFloatBlock::OSLVarFloatBlock(QGraphicsScene *_scene, optix::Material &_mat, QGraphicsItem *parent) : QNEBlock(parent)
 {
