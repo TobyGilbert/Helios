@@ -1,7 +1,7 @@
 #include "UI/AbstractMaterialWidget.h"
 #include "Core/pathtracerscene.h"
-#include "OSLShaderBlock.h"
-#include "OSLVarFloatBlock.h"
+#include "NodeGraph/OSLShaderBlock.h"
+#include "NodeGraph/OSLVarFloatBlock.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
@@ -48,11 +48,6 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget(){
-    //delete all the nodes that we have created
-    for(unsigned int i=0; i<m_nodes.size();i++){
-        delete m_nodes[i];
-    }
-
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
@@ -109,7 +104,7 @@ void AbstractMaterialWidget::addShaderNode()
 void AbstractMaterialWidget::addFloatNode()
 {
     //create a float block
-    OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene);
+    OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene, m_material);
     m_nodes.push_back(b);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
