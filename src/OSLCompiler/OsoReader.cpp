@@ -85,6 +85,9 @@ std::vector<Symbol> OsoReader::getInputParams(){
         if (m_symbols[i].m_symType == 0){ // If input parameter
             m_inputParams.push_back(m_symbols[i]);
         }
+        if (m_symbols[i].m_symType == 1){
+            m_inputParams.push_back(m_symbols[i]);
+        }
     }
     return m_inputParams;
 }
@@ -160,6 +163,55 @@ std::string OsoReader::generateDeviceFunction(){
             }
             else{
                 s+="void ";
+                s+=m_symbols[i].m_name.c_str();
+                s+=" = ";
+                s+=m_symbols[i].m_initialParams[0].c_str();
+            }
+            init = true;
+        }
+        if (m_symbols[i].m_symType == 1){
+            if (init){
+                s+=", ";
+            }
+            // Append the correct varible type, name and initial parameters
+            if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
+                s+=" float3 &";
+                s+=m_symbols[i].m_name.c_str();
+                s+=" = make_float3( ";
+                for (unsigned int j=0; j<m_symbols[i].m_initialParams.size(); j++){
+                    s+=m_symbols[i].m_initialParams[j].c_str();
+                    if (j != m_symbols[i].m_initialParams.size()-1){
+                        s+=",";
+                    }
+                }
+                s+=")";
+            }
+            else if (m_symbols[i].m_type == 1){
+                s+=" float &";
+                s+=m_symbols[i].m_name.c_str();
+                s+=" = ";
+                s+=m_symbols[i].m_initialParams[0].c_str();
+            }
+            else if (m_symbols[i].m_type == 2){
+                s+=" int &";
+                s+=m_symbols[i].m_name.c_str();
+                s+=" = ";
+                s+=m_symbols[i].m_initialParams[0].c_str();
+            }
+            else if (m_symbols[i].m_type == 4){
+                s+=" matrix? &";
+                s+=m_symbols[i].m_name.c_str();
+                s+=" = ";
+                s+=m_symbols[i].m_initialParams[0].c_str();
+            }
+            else if (m_symbols[i].m_type == 6){
+                s+=" char* &";
+                s+=m_symbols[i].m_name.c_str();
+                s+=" = ";
+                s+=m_symbols[i].m_initialParams[0].c_str();
+            }
+            else{
+                s+="void &";
                 s+=m_symbols[i].m_name.c_str();
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
