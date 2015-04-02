@@ -64,7 +64,7 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, QString _initPara
     port->setVaribleType(_type);
 
 	QFontMetrics fm(scene()->font());
-	int w = fm.width(name);
+    int w = fm.width(port->getLabelText());
 	int h = fm.height();
 	// port->setPos(0, height + h/2);
 	if (w > width - horzMargin)

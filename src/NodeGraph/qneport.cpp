@@ -115,7 +115,18 @@ void QNEPort::setPortFlags(int f)
 		font.setBold(true);
 		label->setFont(font);
 		setPath(QPainterPath());
-	}
+    }
+}
+
+void QNEPort::setInitParams(QString _initParams)
+{
+    m_initParams = _initParams;
+    if(m_initParams.size()>0){
+        label->setPlainText(name + "=" + m_initParams);
+    }
+    else{
+        label->setPlainText(name);
+    }
 }
 
 QNEBlock* QNEPort::block() const

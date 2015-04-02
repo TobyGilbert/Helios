@@ -18,7 +18,7 @@
 #include <QGraphicsScene>
 #include "NodeGraph/qnodeseditor.h"
 #include "NodeGraph/qneblock.h"
-#include "OSLNodesEditor.h"
+#include "NodeGraph/OSLNodesEditor.h"
 
 
 

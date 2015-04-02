@@ -89,7 +89,15 @@ public:
     /// @brief set initial paramiters string
     /// @brief added by Declan Russell
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setInitParams(QString _initParams){m_initParams = _initParams; label->setPlainText(name + m_initParams);}
+    void setInitParams(QString _initParams);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to initial paramiters to port
+    //----------------------------------------------------------------------------------------------------------------------
+    inline QString getInitParams(){return m_initParams;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief accessor to the the ports label text
+    //----------------------------------------------------------------------------------------------------------------------
+    inline QString getLabelText(){return label->toPlainText();}
     //----------------------------------------------------------------------------------------------------------------------
 
 	QNEBlock* block() const;

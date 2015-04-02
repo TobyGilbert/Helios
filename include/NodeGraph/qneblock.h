@@ -45,9 +45,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 //#include <QObject>
 
 
-/// @brief This class has been modified from inheriting QGraphicsPathItem to a QGraphicsPathObject
-/// @brief So that we have access to signals and slots
-class QNEBlock : public /*QObject,*/ QGraphicsPathItem
+/// @brief This class has been modified from inheriting from both QGraphicsPathItem and QGObject
+/// @brief so that we have access to signals and slots. Qt does a similar thing in there QGraphicsObject.
+class QNEBlock : public QGraphicsPathItem//, QObject
 {
     //Q_OBJECT
 public:
