@@ -25,27 +25,27 @@ SOURCES += \
     src/Core/Shader.cpp \
     src/Core/pathtracerscene.cpp \
     src/Core/pinholecamera.cpp \
-    optixSrc/*.cu \
     src/Core/HDRLoader.cpp \
     src/Core/optixmodel.cpp \
     src/Core/TextureLoader.cpp \
-    src/UI/MeshDockWidget.cpp \
-    src/UI/GenSetDockWidget.cpp \
-    src/OSLCompiler/OsoReader.cpp \
-    src/OSLCompiler/OslReader.cpp \
-    src/UI/AbstractMaterialWidget.cpp \
-    src/UI/MeshWidget.cpp \
     src/Core/MaterialLibrary.cpp \
     src/NodeGraph/qneblock.cpp \
     src/NodeGraph/qneconnection.cpp \
     src/NodeGraph/qneport.cpp \
     src/NodeGraph/qnodeseditor.cpp \
     src/NodeGraph/OSLBlock.cpp \
-    src/OSLCompiler/osolexer.l \
-    src/OSLCompiler/oso.y \
     src/NodeGraph/OSLShaderBlock.cpp \
     src/NodeGraph/OSLVarFloatBlock.cpp \
-    src/NodeGraph/OSLNodesEditor.cpp
+    src/NodeGraph/OSLNodesEditor.cpp \
+    src/UI/MeshDockWidget.cpp \
+    src/UI/GenSetDockWidget.cpp \
+    src/UI/AbstractMaterialWidget.cpp \
+    src/UI/MeshWidget.cpp \
+    src/OSLCompiler/OsoReader.cpp \
+    src/OSLCompiler/OslReader.cpp \
+    src/OSLCompiler/osolexer.l \
+    src/OSLCompiler/oso.y  \
+    optixSrc/*.cu
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \

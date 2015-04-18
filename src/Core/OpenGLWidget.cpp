@@ -309,3 +309,10 @@ void OpenGLWidget::saveImage(){
 
    image.save(saveFile+QString(".png"), "PNG");
 }
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::loadEnvironmentMap(){
+    QFileDialog fileDialog;
+    m_environmentMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
+    PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
+}
+//----------------------------------------------------------------------------------------------------------------------

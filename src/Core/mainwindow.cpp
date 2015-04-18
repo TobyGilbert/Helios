@@ -86,24 +86,58 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     this->addDockWidget(Qt::RightDockWidgetArea, m_meshDockWidget);
 
     //--------------------------------------------------------------------------------------------------------------------
+    // ------------------------------------------------Environment map----------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+    // Set up toolbar button
+    QPixmap environ("icons/environment.png");
+    QIcon environBtnIcon(environ);
+    m_environmentToolbarButton = new QToolButton();
+    m_environmentToolbarButton->setIcon(environBtnIcon);
+    m_environmentToolbarButton->setToolTip("Environment Map Options");
+    m_toolBar->addWidget(m_environmentToolbarButton);
+    m_toolBar->addSeparator();
+
+    // Set up widget
+    m_environmentDockWidget = new QDockWidget();
+    m_environmentDockWidget->setWindowTitle("Environment Map Attributes");
+    m_environmentDockWidget->setHidden(true);
+    m_environmentGroupBox = new QGroupBox();
+    m_environmentGroupBox->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    m_environmentDockWidget->setWidget(m_environmentGroupBox);
+    m_environmentGridLayout = new QGridLayout();
+    m_environmentGroupBox->setLayout(m_environmentGridLayout);
+    m_environmentLineEdit = new QLineEdit();
+    m_environmentGridLayout->addWidget(m_environmentLineEdit, 0, 0, 1, 1);
+    m_environmentButton = new QPushButton("Load");
+    m_environmentGridLayout->addWidget(m_environmentButton, 0, 1, 1, 1);
+    this->addDockWidget(Qt::RightDockWidgetArea, m_environmentDockWidget);
+
+    //--------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
     connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
     connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
+
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
     connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));
     connect(m_meshDockWidget,SIGNAL(updateScene()),m_openGLWidget,SLOT(sceneChanged()));
+
+    connect(m_environmentToolbarButton, SIGNAL(clicked(bool)), m_environmentToolbarButton, SLOT(setChecked(bool)));
+    connect(m_environmentToolbarButton, SIGNAL(clicked()), m_environmentDockWidget, SLOT(show()));
+    connect(m_environmentButton, SIGNAL(clicked()), m_openGLWidget, SLOT(loadEnvironmentMap()));
+    connect(m_environmentButton, SIGNAL(clicked()), this, SLOT(displayEnvironmentMap()));
 
     //create our toolbar menu's
     createMenus();
 }
 
 MainWindow::~MainWindow(){
+    // delete mesh UI
     delete m_meshToolbarButton;
     delete m_meshDockWidget;
 
-    //    delete m_lightSpacer;
+    // delete light UI
     delete m_lightIntensityLabel;
     delete m_lightIntensitySlider;
     delete m_lightColourButton;
@@ -115,6 +149,13 @@ MainWindow::~MainWindow(){
     delete m_lightDockWidget;
     delete m_lightToolbarButton;
 
+    // delete environment map UI
+    delete m_environmentToolbarButton;
+    delete m_environmentButton;
+    delete m_environmentLineEdit;
+    delete m_environmentGridLayout;
+    delete m_environmentGroupBox;
+    delete m_environmentDockWidget;
 
     delete m_genSetDockWidget;
     delete m_toolBar;
@@ -167,4 +208,8 @@ void MainWindow::createMenus(){
     connect(m_genSetDockWidget, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
     connect(m_genSetDockWidget, SIGNAL(signalSetTimeOutDur(int)),m_openGLWidget,SLOT(setTimeOutDur(int)));
 
+}
+
+void MainWindow::displayEnvironmentMap(){
+    m_environmentLineEdit->setText(m_openGLWidget->getEnvironmentMap());
 }

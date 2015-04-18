@@ -32,9 +32,6 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
 //----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::~PathTracerScene(){
     delete m_camera;
-    delete m_model;
-//    delete m_model2;
-//    delete m_model3;
     m_outputBuffer->destroy();
     m_lightBuffer->destroy();
     m_mapTexSample->destroy();
@@ -102,7 +99,6 @@ void PathTracerScene::init(){
     optix::Program exception_program = m_context->createProgramFromPTXFile( ptx_path, "exception" );
     m_context->setExceptionProgram( 0, exception_program );
     m_context->setMissProgram( 0, m_context->createProgramFromPTXFile( ptx_path, "envi_miss" ) );
-//    m_context->setMissProgram(0, m_context->createProgramFromPTXFile(ptx_path, "miss"));
 
     //init our frame number
     m_context["frame_number"]->setUint(1);
@@ -144,13 +140,7 @@ void PathTracerScene::createGeometry(){
       m_lightBuffer->unmap();
       m_context["lights"]->setBuffer( m_lightBuffer );
 
-      // Set up diffuse material
-      Material diffuse = m_context->createMaterial();
       std::string ptx_path = "ptx/path_tracer.cu.ptx";
-      Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "diffuse" );
-      Program diffuse_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
-      diffuse->setClosestHitProgram( 0, diffuse_ch );
-      diffuse->setAnyHitProgram( 1, diffuse_ah );
 
       Material diffuse_light = m_context->createMaterial();
       Program diffuse_em = m_context->createProgramFromPTXFile( ptx_path, "diffuseEmitter" );
@@ -162,20 +152,6 @@ void PathTracerScene::createGeometry(){
       Program shader_globals_ah = m_context->createProgramFromPTXFile(ptx_path, "shadow");
       shader_globals->setClosestHitProgram(0, shader_globals_ch);
       shader_globals->setAnyHitProgram(1, shader_globals_ah);
-
-      // Reflective Material
-      Material reflective_material = m_context->createMaterial();
-      Program reflective_ch = m_context->createProgramFromPTXFile( ptx_path, "reflections");
-      Program reflective_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow");
-      reflective_material->setClosestHitProgram(0, reflective_ch);
-      reflective_material->setAnyHitProgram(1, reflective_ah);
-
-      // Glass material
-      Material glass_material = m_context->createMaterial();
-      Program glass_ch = m_context->createProgramFromPTXFile( ptx_path, "glass_refract");
-      Program glass_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow");
-      glass_material->setClosestHitProgram(0, glass_ch);
-      glass_material->setAnyHitProgram(1, glass_ah);
 
       // Set up parallelogram programs
       ptx_path = "ptx/parallelogram.cu.ptx";
@@ -190,29 +166,11 @@ void PathTracerScene::createGeometry(){
       // create geometry instances
       std::vector<GeometryInstance> gis;
 
-      const float3 white = make_float3( 1.0f, 1.0f, 1.0f );
-      const float3 green = make_float3( 0.05f, 0.8f, 0.05f );
-      const float3 red   = make_float3( 0.8f, 0.05f, 0.05f );
       const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
-      const float3 blue = make_float3( 0.0, 0.0, 1.0);
 
       // OSL Sphere
       gis.push_back( createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
       gis.back()->addMaterial(shader_globals);
-//      // Back wall
-//      gis.push_back( createParallelogram( make_float3( -50.0f, 5.0f, 100.0f),
-//                                          make_float3( 0.0f, 0.0f, -200.0f),
-//                                          make_float3( 100.0f, 0.0f, 0.0f) ) );
-//      gis.back()->addMaterial(diffuse);
-//      gis.back()["map_texture"]->setTextureSampler(m_mapTexSample);
-
-
-//       Floor
-//      gis.push_back( createParallelogram( make_float3( -50.0f, 5.0f, 100.0f ),
-//                                          make_float3( 0.0f, 0.0f, -200.0f ),
-//                                          make_float3( 100.0f, 0.0f, 0.0f ) ) );
-//      gis.back()->addMaterial(reflective_material);
-
 
       // Create shadow group (no light)
       GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
@@ -227,47 +185,7 @@ void PathTracerScene::createGeometry(){
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
-      m_model = new OptiXModel("models/newteapot.obj",m_context);
-      m_model->setMaterial(shader_globals);
-      glm::mat4 trans;
-      trans = glm::scale(trans,glm::vec3(13.0));
-      trans[3][0] = 0;
-      trans[3][1] = 10;
-      trans[3][2] = 50;
-      m_model->setTrans(trans);
-
-//      m_model2 = new OptiXModel(m_model,m_context);
-////      m_model2->createGeometry("models/newteapot.obj",m_context);
-//      m_model2->addMaterial(shader_globals);
-////      m_model2->getGeometryInstance()["glass_color"]->setFloat(white);
-////      m_model2->getGeometryInstance()["index_of_refraction"]->setFloat(1.5);
-//      trans = glm::mat4(1.0);
-//      trans = glm::scale(trans,glm::vec3(13.0));
-//      trans[3][0] = 23;
-//      trans[3][1] = 10;
-//      trans[3][2] = 50;
-//      m_model2->setTrans(trans);
-
-//      // Diffuse teapot
-//      m_model3 = new OptiXModel("models/teapot.obj",m_context);
-//      m_model3->addMaterial(diffuse);
-//      m_model3->getGeometryInstance()["diffuse_color"]->setFloat(white);
-//      m_model3->getGeometryInstance()["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
-//      trans = glm::mat4(1.0);
-//      trans = glm::scale(trans,glm::vec3(13.0));
-//      trans[3][0] = 0;
-//      trans[3][1] = 10;
-//      trans[3][2] = 50;
-//      m_model3->setTrans(trans);
-
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
-
-      //m_topGroup->addChild(geometry_group);
-      //m_topGroup->addChild(m_model->getGeomAndTrans());
-//      m_topGroup->addChild(m_model2->getGeomAndTrans());
-//      m_topGroup->addChild(m_model3->getGeomAndTrans());
-      //m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
-      //m_topGroup->getAcceleration()->markDirty();
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
@@ -443,5 +361,12 @@ QImage PathTracerScene::saveImage(){
     glUnmapBuffer(GL_ARRAY_BUFFER);
 
     return img;
+}
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::setEnvironmentMap(std::string _environmentMap){
+    const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
+    m_enviSampler->destroy();
+    m_enviSampler = loadHDRTexture(m_context, _environmentMap, default_color);
+    m_context["envmap"]->setTextureSampler(m_enviSampler);
 }
 //----------------------------------------------------------------------------------------------------------------------
