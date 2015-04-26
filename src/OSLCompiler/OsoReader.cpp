@@ -117,13 +117,14 @@ std::string OsoReader::generateDeviceFunction(){
     s+=m_shaderName.c_str();
     s+="(";
     // Veriable for use with commas between function parameters (maybe better way to do this)
-    bool init = 0;
+    //bool init = 0;
     // Go through all symbols looking for function parameters
+    s+="ShaderGlobals _sg,";
     for (unsigned int i=0; i<m_symbols.size(); i++){
         if (m_symbols[i].m_symType == 0){
-            if (init){
-                s+=", ";
-            }
+//            if (init){
+//                s+=", ";
+//            }
             // Append the correct varible type, name and initial parameters
             if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 ";
@@ -167,12 +168,12 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-            init = true;
+            //init = true;
         }
         if (m_symbols[i].m_symType == 1){
-            if (init){
-                s+=", ";
-            }
+//            if (init){
+//                s+=", ";
+//            }
             // Append the correct varible type, name and initial parameters
             if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 &";
@@ -216,20 +217,11 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-            init = true;
+        //    init = true;
         }
     }
     s+=" ){\n";
-    s+="\tShaderGlobals sg;\n";
-    s+="\t// Calcualte the shading and geometric normals for use with our OSL shaders\n";
-    s+="\tsg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );\n";
-    s+="\tsg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );\n";
-    s+="\tsg.I = ray.direction;\n";
-    s+="\t// The shading position\n";
-    s+="\tsg.P = ray.origin + t_hit * ray.direction;\n";
-    s+="\t// Texture coordinates\n";
-    s+="\tsg.u = texcoord.x;\n";
-    s+="\tsg.v = texcoord.y;\n";
+
 
     // Define all of the const and local variables defined in the shader
     for (unsigned int i=0; i<m_symbols.size(); i++){

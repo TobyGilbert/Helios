@@ -91,6 +91,10 @@ void PathTracerScene::init(){
     m_enviSampler = loadHDRTexture(m_context, "./textures/CedarCity.hdr", default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
 
+    // Load normalmap
+    optix::TextureSampler normalMap = loadTexture(m_context, "./textures/normalMap2.jpg");
+    m_context["normalMap"]->setTextureSampler(normalMap);
+
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
     optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "pathtrace_camera" );
