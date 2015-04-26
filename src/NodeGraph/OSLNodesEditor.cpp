@@ -1,6 +1,7 @@
 #include "NodeGraph/OSLNodesEditor.h"
 #include <iostream>
 #include <QFile>
+#include <QTextStream>
 #include <QDir>
 #include <QFileInfo>
 #include <QTextStream>
@@ -120,7 +121,7 @@ void OSLNodesEditor::compileMaterial()
         stream<<"// Geometry Variables "<<endl;
         stream<<"rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); "<<endl;
         stream<<"rtDeclareVariable(float3, shading_normal,   attribute shading_normal, );"<<endl;
-        stream<<"rtDeclareVariable(float3, texcoord, attribute texcoord, );"<<endl;
+        stream<<"rtDeclareVariable(float3, texcoord, attribute teQTextStream in(&inputFile);xcoord, );"<<endl;
         stream<<"// Our current ray and payload variables"<<endl;
         stream<<"rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );"<<endl;
         stream<<"rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );"<<endl;
@@ -161,6 +162,17 @@ void OSLNodesEditor::compileMaterial()
             }
         }
         stream<<"\n\n";
+
+        //our BRDF functions
+        QFile brdfsLib("brdfs/brdfs.txt");
+        if(brdfsLib.open(QIODevice::ReadOnly)){
+            QTextStream in(&brdfsLib);
+            while(!in.atEnd()){
+                stream<<in.readLine()<<endl;
+            }
+            brdfsLib.close();
+        }
+
 
         //add all the device functions that we need in our material program
         stream<<"//Our OSL device functions"<<endl;
@@ -250,13 +262,13 @@ void OSLNodesEditor::compileMaterial()
                     if(p->connections().size()==0){
                         //if there is nothing connected we just stick in our default paramiter
                         stream<<p->getInitParams();
-                        if(i!=(ports.size()-1)){
+                        if(i<(ports.size()-2)){
                             stream<<",";
                         }
                     }
                     else if(!p->isOutput()){
                         QVector<QNEConnection*> con = p->connections();
-                        if(con.size()!=1){
+                        if(con.size()>1){
                             std::cerr<<"Error: Input to shader has multiple input connections"<<std::endl;
                             return;
                         }
@@ -270,7 +282,7 @@ void OSLNodesEditor::compileMaterial()
                                 OSLShaderBlock* b = (OSLShaderBlock*)con[0]->port2()->block();
                                 stream<<b->getShaderName().c_str()<<con[0]->port2()->getName();
                             }
-                            if(i!=(ports.size()-1)){
+                            if(i<(ports.size()-2)){
                                 stream<<",";
                             }
                         }

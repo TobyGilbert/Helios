@@ -92,41 +92,11 @@ void AbstractMaterialWidget::createOptixMaterial(){
     QFileInfo file = QString(path.c_str());
     std::string output = "/ptx/"+file.fileName().toStdString()+".ptx";
     std::cout<<"output "<<output<<std::endl;
-
     std::string nvccCallString = nvcc+nvccFlags+includePaths+libDirs+libs+" ./"+path+" -o "+output;
     std::cout<<"calling nvcc with: "<<nvccCallString<<std::endl;
 
-    std::string test = "/usr/local/cuda-6.5/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx -I./include -I/opt/local/include -I/usr/local/include -I./include/OSL -I/usr/local/oiio/src/include -I/usr/local/OptiX/SDK/sutil -I/usr/local/OptiX/SDK -I/usr/local/cuda-6.5/include -I/usr/local/cuda-6.5/common/inc/ -I/usr/local/cuda-6.5/../shared/inc/ -I/usr/local/OptiX/include  -lfl -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp -L/usr/local/lib -lGLEW -lcudart -loptix -loptixu optixSrc/tempMat.cu -o ptx/tempMat.cu.ptx";
-    std::cout<<"test version     : "<<test<<std::endl;
     system(nvccCallString.c_str());
-    //system(test.c_str());
 
-
-//# Path to cuda SDK install
-//macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
-//linux:CUDA_DIR = /usr/local/cuda-6.5
-//# Path to cuda toolkit install
-//macx:CUDA_SDK = /Developer/NVIDIA/CUDA-6.5/samples
-//linux:CUDA_SDK = /usr/local/cuda-6.5/samples
-
-//# include paths
-//macx:INCLUDEPATH += /Developer/OptiX/SDK/sutil
-//macx:INCLUDEPATH += /Developer/OptiX/SDK
-//linux:INCLUDEPATH += /usr/local/OptiX/SDK/sutil
-//linux:INCLUDEPATH += /usr/local/OptiX/SDK
-//INCLUDEPATH += $$CUDA_DIR/include
-//INCLUDEPATH += $$CUDA_DIR/common/inc/
-//INCLUDEPATH += $$CUDA_DIR/../shared/inc/
-//macx:INCLUDEPATH += /Developer/OptiX/include
-//linux:INCLUDEPATH += /usr/local/OptiX/include
-//# lib dirs
-//#QMAKE_LIBDIR += $$CUDA_DIR/lib64
-//macx:QMAKE_LIBDIR += $$CUDA_DIR/lib
-//linux:QMAKE_LIBDIR += $$CUDA_DIR/lib64
-//QMAKE_LIBDIR += $$CUDA_SDK/common/lib
-//macx:QMAKE_LIBDIR += /Developer/OptiX/lib64
-//linux:QMAKE_LIBDIR += /usr/local/OptiX/lib64
-//LIBS += -lcudart  -loptix -loptixu
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
