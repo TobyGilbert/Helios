@@ -7,6 +7,13 @@
 /// @brief A class to manage our OptiX path tracer.
 /// @brief This is a singleton class for easy access in other areas of the program
 
+#ifdef DARWIN
+    #include <OpenGL/gl3.h>
+#else
+    #include <GL/glew.h>
+    #include <GL/gl.h>
+#endif
+
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_matrix_namespace.h>
 

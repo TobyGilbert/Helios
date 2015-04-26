@@ -18,16 +18,61 @@
  * SUCH DAMAGES
  */
 
-#ifdef DARWIN
-    #include <OpenGL/gl3.h>
-#else
-    #include <GL/glew.h>
-    #include <GL/gl.h>
-#endif
+#ifndef PATH_TRACER_H
+#define PATH_TRACER_H
 
 #include <optixu/optixu_math_namespace.h>
 #include <string>
 
+using namespace optix;
+
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief Structure used by raytype();
+//----------------------------------------------------------------------------------------------------------------------
+enum rayType{
+    cameraRay = 0,
+    shadowRay
+};
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief OSL shader globals. You can think of these as the equivilent to the geomety properties in OSL
+//----------------------------------------------------------------------------------------------------------------------
+struct ShaderGlobals{
+    float3 P;
+    float3 I;
+    float3 N;
+    float3 Ng;
+    float u, v;
+    float3 dPdu;
+    float3 dPdv;
+};
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief our per ray payload data for our path tracer
+//----------------------------------------------------------------------------------------------------------------------
+struct PerRayData_pathtrace{
+    float3 result;
+    float3 radiance;
+    float3 attenuation;
+    float3 origin;
+    float3 direction;
+    float importance;
+    unsigned int seed;
+    int depth;
+    int countEmitted;
+    int done;
+    int inside;
+//    std::string type;
+    rayType type;
+};
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief our per shadow ray payload for our path tracer
+//----------------------------------------------------------------------------------------------------------------------
+struct PerRayData_pathtrace_shadow{
+    bool inShadow;
+    rayType type;
+};
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief Parallelogram light properties
+//----------------------------------------------------------------------------------------------------------------------
 struct ParallelogramLight
 {
   optix::float3 corner;
@@ -177,13 +222,6 @@ __device__ optix::float3 microfacet(char* _distribution, optix::float3 _normal, 
 //----------------------------------------------------------------------------------------------------------------------
 __device__ float beckmannDistibution(optix::float3 _v, optix::float3 _m, optix::float3 _normal, float _a);
 //----------------------------------------------------------------------------------------------------------------------
-/// @brief Structure used by raytype();
-//----------------------------------------------------------------------------------------------------------------------
-enum rayType{
-    cameraRay = 0,
-    shadowRay
-};
-//----------------------------------------------------------------------------------------------------------------------
 /// @brief Returns 1 if raytype = _name
 //----------------------------------------------------------------------------------------------------------------------
 __device__ int raytype(rayType _name);
@@ -198,3 +236,4 @@ __device__ void metal( float Ks = 1,  float eta = 10,  optix::float3 Cs = optix:
 __device__ void matte( float Kd = 1,  optix::float3 Cs = optix::make_float3( 1,1,1) );
 __device__ void ifTest( );
 
+#endif

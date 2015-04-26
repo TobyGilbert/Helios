@@ -16,6 +16,7 @@ OSLNodesEditor::OSLNodesEditor(QObject *parent) :
 {
     //set our material destination
     m_optixMatDest = "OptixMaterials/tempMat.cu";
+    m_materialName = "tempMat";
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -85,7 +86,7 @@ void OSLNodesEditor::evaluateBlock(QNEBlock *_block, std::vector<QNEBlock *> &_b
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLNodesEditor::createOptixMaterial()
+void OSLNodesEditor::compileMaterial()
 {
     QFileInfo fileInfo(m_optixMatDest.c_str());
     if(!QDir(fileInfo.absoluteDir()).exists()){
@@ -108,33 +109,13 @@ void OSLNodesEditor::createOptixMaterial()
         stream<<"#include \"helpers.h\""<<endl;
         stream<<"using namespace optix;"<<endl;
         stream<<"\n\n";
-        //declare our structures
-        /// @todo Might be worth having these in a header file as they are common structs to have
-        stream<<"struct ShaderGlobals{"<<endl;
-        stream<<"   float3 P;"<<endl;
-        stream<<"   float3 I;"<<endl;
-        stream<<"   float3 N;"<<endl;
-        stream<<"   float3 Ng;"<<endl;
-        stream<<"   float u, v;"<<endl;
-        stream<<"};"<<endl;
-        stream<<endl;
-        stream<<"struct PerRayData_pathtrace{"<<endl;
-        stream<<"   float3 result;"<<endl;
-        stream<<"   float3 radiance;"<<endl;
-        stream<<"   float3 attenuation;"<<endl;
-        stream<<"   float3 origin;"<<endl;
-        stream<<"   float3 direction;"<<endl;
-        stream<<"   float importance;"<<endl;
-        stream<<"   unsigned int seed;"<<endl;
-        stream<<"   int depth;"<<endl;
-        stream<<"   int countEmitted;"<<endl;
-        stream<<"   int done;"<<endl;
-        stream<<"   int inside;"<<endl;
-        stream<<"   rayType type;"<<endl;
-        stream<<"};"<<endl;
 
-        //Declare our variables
-        stream<<"// Camera Variables"<<endl;
+        //Declare our path tracer variables
+        stream<<"rtDeclareVariable(float,         scene_epsilon, , );\n"<<endl;
+        stream<<"rtDeclareVariable(rtObject,      top_object, , );\n"<<endl;
+        stream<<"rtBuffer<ParallelogramLight>     lights;\n"<<endl;
+        stream<<"rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );\n"<<endl;
+        stream<<"// Camera Variables\n"<<endl;
         stream<<"rtDeclareVariable(float3,        eye, , );"<<endl;
         stream<<"// Geometry Variables "<<endl;
         stream<<"rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); "<<endl;
@@ -142,6 +123,7 @@ void OSLNodesEditor::createOptixMaterial()
         stream<<"rtDeclareVariable(float3, texcoord, attribute texcoord, );"<<endl;
         stream<<"// Our current ray and payload variables"<<endl;
         stream<<"rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );"<<endl;
+        stream<<"rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );"<<endl;
         stream<<"rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );"<<endl;
         stream<<"\n\n";
 
@@ -196,6 +178,19 @@ void OSLNodesEditor::createOptixMaterial()
         stream<<"RT_PROGRAM void "<<m_materialName.c_str()<<"(){"<<endl;
 
 
+        //set up our shader globals, These are the equivilent to globals about our surface in OSL
+        stream<<"ShaderGlobals sg;\n"<<endl;
+        stream<<"// Calcualte the shading and geometric normals for use with our OSL shaders\n"<<endl;
+        stream<<"sg.N = normalize( rtTransformNormal(RT_OBJECT_TO_WORLD, shading_normal));\n"<<endl;
+        stream<<"sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );\n"<<endl;
+        stream<<"sg.I = ray.direction;\n"<<endl;
+        stream<<"// The shading position\n"<<endl;
+        stream<<"sg.P = ray.origin + t_hit * ray.direction;\n"<<endl;
+        stream<<"// Texture coordinates\n"<<endl;
+        stream<<"sg.u = texcoord.x;\n"<<endl;
+        stream<<"sg.v = texcoord.y;\n"<<endl;
+
+
         //Retrieve and print out any variables that we need for our kernal functions
         foreach(QGraphicsItem *item, getScene()->items()){
             if (item->type() == OSLShaderBlock::Type)
@@ -223,7 +218,6 @@ void OSLNodesEditor::createOptixMaterial()
 
         stream<<"\n\n";
 
-
         //get our last shader block;
         QNEBlock *lastBlock = getLastBlock();
         //check that we have found a last block
@@ -241,6 +235,8 @@ void OSLNodesEditor::createOptixMaterial()
             if(orderedBlocks[i]->type() == OSLShaderBlock::Type){
                 //note the shader name is always the same as the device function we need to call
                 stream<<((OSLShaderBlock*)orderedBlocks[i])->getShaderName().c_str()<<"(";
+                //put in our shader globals
+                stream<<"sg,";
                 //now lets print out our the paramiters we need in the function
                 QVector<QNEPort*> ports = ((OSLShaderBlock*)orderedBlocks[i])->ports();
                 for(int i=0; i<ports.size(); i++){
@@ -291,6 +287,37 @@ void OSLNodesEditor::createOptixMaterial()
 
 
 
+
+        //calculate our shadows
+        stream<<"// Compute our shadows\n"<<endl;
+        stream<<"unsigned int num_lights = lights.size();\n"<<endl;
+        stream<<"float3 result = make_float3(0.0f);\n"<<endl;
+
+        stream<<"for(int i = 0; i < num_lights; ++i) {\n"<<endl;
+        stream<<"   ParallelogramLight light = lights[i];\n"<<endl;
+        stream<<"   float z1 = rnd(current_prd.seed);\n"<<endl;
+        stream<<"   float z2 = rnd(current_prd.seed);\n"<<endl;
+        stream<<"   float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2; \n"<<endl;
+        stream<<"    float Ldist = length(light_pos - sg.P);\n"<<endl;
+        stream<<"    float3 L = normalize(light_pos - sg.P);\n"<<endl;
+        stream<<"    float nDl = dot( sg.N, L );\n"<<endl;
+        stream<<"    float LnDl = dot( light.normal, L );\n"<<endl;
+        stream<<"    float A = length(cross(light.v1, light.v2));\n"<<endl;
+        stream<<"    // cast shadow ray\n"<<endl;
+        stream<<"    if ( nDl > 0.0f && LnDl > 0.0f ) {\n"<<endl;
+        stream<<"       PerRayData_pathtrace_shadow shadow_prd;\n"<<endl;
+        stream<<"        shadow_prd.inShadow = false;\n"<<endl;
+        stream<<"        shadow_prd.type = shadowRay;\n"<<endl;
+        stream<<"        Ray shadow_ray = make_Ray( sg.P, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );\n"<<endl;
+        stream<<"        rtTrace(top_object, shadow_ray, shadow_prd);\n"<<endl;
+
+        stream<<"        if(!shadow_prd.inShadow){\n"<<endl;
+        stream<<"            float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);\n"<<endl;
+        stream<<"            result += light.emission * weight;\n"<<endl;
+        stream<<"        }\n"<<endl;
+        stream<<"    }\n"<<endl;
+        stream<<"}\n"<<endl;
+        stream<<"current_prd.radiance = result;\n"<<endl;
 
 
         //end of our material program

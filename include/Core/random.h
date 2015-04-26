@@ -18,7 +18,8 @@
  * INABILITY TO USE THIS SOFTWARE, EVEN IF NVIDIA HAS BEEN ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGES
  */
-
+#ifndef RANDOM_H
+#define RANDOM_H
 #include <optixu/optixu_math_namespace.h>
 
 template<unsigned int N>
@@ -112,3 +113,5 @@ static __host__ __device__ __inline__ unsigned int rot_seed( unsigned int seed, 
 {
     return seed ^ frame;
 }
+
+#endif

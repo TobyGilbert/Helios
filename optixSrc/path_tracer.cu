@@ -26,39 +26,7 @@
 #include "Core/path_tracer.h"
 #include "Core/random.h"
 #include "BRDFUtils.h"
-using namespace optix;
 
-
-struct ShaderGlobals{
-    float3 P;
-    float3 I;
-    float3 N;
-    float3 Ng;
-    float u, v;
-    float3 dPdu;
-    float3 dPdv;
-};
-
-struct PerRayData_pathtrace{
-    float3 result;
-    float3 radiance;
-    float3 attenuation;
-    float3 origin;
-    float3 direction;
-    float importance;
-    unsigned int seed;
-    int depth;
-    int countEmitted;
-    int done;
-    int inside;
-//    std::string type;
-    rayType type;
-};
-
-struct PerRayData_pathtrace_shadow{
-    bool inShadow;
-    rayType type;
-};
 
 // Scene wide
 rtDeclareVariable(float,         scene_epsilon, , );
@@ -79,8 +47,8 @@ rtDeclareVariable(unsigned int,  pathtrace_ray_type, , );
 rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );
 rtDeclareVariable(unsigned int,  rr_begin_depth, , );
 
-rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
-rtDeclareVariable(float3, shading_normal,   attribute shading_normal, ); 
+rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, );
+rtDeclareVariable(float3, shading_normal,   attribute shading_normal, );
 rtDeclareVariable(float3, texcoord, attribute texcoord, );
 
 rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
@@ -245,8 +213,8 @@ RT_PROGRAM void constructShaderGlobals(){
 
     }
     current_prd.origin = ray.origin + t_hit * ray.direction;
-    metal(1, 10, optix::make_float3(1, 1, 1));
-//    matte();
+//    metal(1, 10, optix::make_float3(1, 1, 1));
+    matte();
 //    ifTest();
 
     // Compute direct light...

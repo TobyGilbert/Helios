@@ -152,7 +152,10 @@ BISONSOURCES = src/OSLCompiler/oso.y
 FLEXSOURCES = src/OSLCompiler/osolexer.l
 
 #Optix Stuff
-CUDA_SOURCES += optixSrc/*.cu
+CUDA_SOURCES += optixSrc/*.cu \
+                optixSrc/tempMat.cu
+
+
 
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
@@ -251,8 +254,10 @@ optix.clean = $$PTX_DIR/*.ptx
 
 # Tweak arch according to your hw's compute capability
 #for optix you can only have one architechture when using the PTX flags when using the -ptx flag you dont want to have the -c flag for compiling
-macx:optix.commands = $$CUDA_DIR/bin/nvcc -m64 -gencode arch=compute_30,code=sm_30 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
-linux:optix.commands = $$CUDA_DIR/bin/nvcc -m64 -gencode arch=compute_50,code=sm_50 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+macx:GENCODE = -gencode arch=compute_30,code=sm_30
+macx:optix.commands = $$CUDA_DIR/bin/nvcc -m64 $$GENCODE $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
+linux:GENCODE = -gencode arch=compute_50,code=sm_50
+linux:optix.commands = $$CUDA_DIR/bin/nvcc -m64 $$GENCODE $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}
 
 #use this line for debug code
 #optix.commands = $$CUDA_DIR/bin/nvcc -m64 -g -G -gencode arch=compute_52,code=sm_52 $$NVCCFLAGS $$CUDA_INC $$LIBS  ${QMAKE_FILE_NAME} -o ${QMAKE_FILE_OUT}

@@ -1,3 +1,4 @@
+
 #define GLM_FORCE_RADIANS
 #include "Core/pathtracerscene.h"
 #include <QColor>
@@ -118,6 +119,9 @@ void PathTracerScene::init(){
 
     // Our our map texture sample
     m_mapTexSample = loadTexture(m_context, "textures/map.png");
+
+    ptx_path = "ptx/tempMat.cu.ptx";
+    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "tempMat" );
 
     // Create scene geometry
     createGeometry();
@@ -265,8 +269,9 @@ void PathTracerScene::importMesh(std::string _id, std::string _path){
     //import mesh
     OptiXModel* model = new OptiXModel(_path,m_context);
     Material diffuse = m_context->createMaterial();
-    std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "constructShaderGlobals" );
+    std::string ptx_path = "ptx/tempMat.cu.ptx";
+    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "tempMat" );
+    ptx_path = "ptx/path_tracer.cu.ptx";
     Program diffuse_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
     diffuse->setClosestHitProgram( 0, diffuse_ch );
     diffuse->setAnyHitProgram( 1, diffuse_ah );
