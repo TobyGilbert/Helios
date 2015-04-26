@@ -144,7 +144,8 @@ OTHER_FILES += \
     shaders/OSL/ubersurface.osl \
     shaders/OSL/ifTest.osl \
     shaders/OSO/ifTest.oso \
-    styleSheet/darkOrange
+    styleSheet/darkOrange \
+    brdfs/brdfs.txt
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y
