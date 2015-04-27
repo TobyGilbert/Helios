@@ -119,12 +119,10 @@ std::string OsoReader::generateDeviceFunction(){
     // Veriable for use with commas between function parameters (maybe better way to do this)
     //bool init = 0;
     // Go through all symbols looking for function parameters
-    s+="ShaderGlobals _sg,";
+    s+="ShaderGlobals sg";
     for (unsigned int i=0; i<m_symbols.size(); i++){
         if (m_symbols[i].m_symType == 0){
-//            if (init){
-                s+=", ";
-//            }
+            s+=", ";
             // Append the correct varible type, name and initial parameters
             if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 ";
@@ -168,12 +166,9 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-            //init = true;
         }
         if (m_symbols[i].m_symType == 1){
-//            if (init){
-                s+=", ";
-//            }
+            s+=", ";
             // Append the correct varible type, name and initial parameters
             if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 &";
@@ -217,7 +212,6 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-        //    init = true;
         }
     }
     s+=" ){\n";

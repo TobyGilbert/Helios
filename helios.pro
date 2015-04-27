@@ -154,7 +154,7 @@ FLEXSOURCES = src/OSLCompiler/osolexer.l
 
 #Optix Stuff
 CUDA_SOURCES += optixSrc/*.cu \
-                optixSrc/tempMat.cu
+                OptixMaterials/tempMat.cu
 
 
 

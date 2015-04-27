@@ -69,8 +69,8 @@ void AbstractMaterialWidget::createOptixMaterial(){
     std::cout<<"version "<<version<<std::endl;
     std::string cudaDir,optixDir;
 #ifdef DARWIN
-    cudaDir = "/Developer/NVIDIA/CUDA-"+version
-    optixDir = "/Developer/OptiX"
+    cudaDir = "/Developer/NVIDIA/CUDA-"+version;
+    optixDir = "/Developer/OptiX";
 #else
     cudaDir = "/usr/local/cuda-"+version;
     optixDir = "/usr/local/OptiX";
@@ -90,7 +90,7 @@ void AbstractMaterialWidget::createOptixMaterial(){
     std::string nvccFlags =" -m64"+gencodeFlag+" --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx";
 
     QFileInfo file = QString(path.c_str());
-    std::string output = "/ptx/"+file.fileName().toStdString()+".ptx";
+    std::string output = "./ptx/"+file.fileName().toStdString()+".ptx";
     std::cout<<"output "<<output<<std::endl;
     std::string nvccCallString = nvcc+nvccFlags+includePaths+libDirs+libs+" ./"+path+" -o "+output;
     std::cout<<"calling nvcc with: "<<nvccCallString<<std::endl;

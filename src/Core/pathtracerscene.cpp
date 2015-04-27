@@ -120,8 +120,8 @@ void PathTracerScene::init(){
     // Our our map texture sample
     m_mapTexSample = loadTexture(m_context, "textures/map.png");
 
-    ptx_path = "ptx/tempMat.cu.ptx";
-    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "tempMat" );
+//    ptx_path = "ptx/tempMat.cu.ptx";
+//    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "tempMat" );
 
     // Create scene geometry
     createGeometry();

@@ -323,9 +323,9 @@ Material OptiXModel::createDefaultMat(Context &_context){
     //create our closest hit and any hit programs
     // Set up diffuse material
     Material diffuse = _context->createMaterial();
-    std::string ptx_path = "ptx/tempMat.cu.ptx";
-    Program diffuse_ch = _context->createProgramFromPTXFile( ptx_path, "tempMat" );
-    ptx_path = "ptx/path_tracer.cu.ptx";
+//    std::string ptx_path = "ptx/tempMat.cu.ptx";
+    std::string ptx_path = "ptx/path_tracer.cu.ptx";
+    Program diffuse_ch = _context->createProgramFromPTXFile( ptx_path, "constructShaderGlobals" );
     Program diffuse_ah = _context->createProgramFromPTXFile( ptx_path, "shadow" );
     diffuse->setClosestHitProgram( 0, diffuse_ch );
     diffuse->setAnyHitProgram( 1, diffuse_ah );
