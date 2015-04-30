@@ -102,11 +102,13 @@ void AbstractMaterialWidget::createOptixMaterial(){
         optix::Program closestHitProgram = optiXEngine->createProgramFromPTXFile(output,m_nodeEditor->getMaterialName());
         Program anyHitProgram = optiXEngine->createProgramFromPTXFile( "ptx/path_tracer.cu.ptx", "shadow" );
         m_material->setClosestHitProgram(0,closestHitProgram);
-        m_material->setAnyHitProgram(0,anyHitProgram);
+        m_material->setAnyHitProgram(1,anyHitProgram);
+        m_material->validate();
         m_matCreated = true;
     }
     else{
         QMessageBox::warning(this,tr("Shader Compilation"),tr("Compilation Failed"));
+        m_matCreated = false;
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------

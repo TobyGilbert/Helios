@@ -111,7 +111,7 @@ public:
     /// @param _id - the id of the model in our map
     /// @param _mat - the material that we wish to apply to the object
     //----------------------------------------------------------------------------------------------------------------------
-    void setModelMaterial(std::string _id, Material _mat);
+    void setModelMaterial(std::string _id, Material &_mat);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief render scene to image file
     //----------------------------------------------------------------------------------------------------------------------

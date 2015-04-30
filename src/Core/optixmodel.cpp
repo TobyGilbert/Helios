@@ -90,7 +90,7 @@ OptiXModel::~OptiXModel(){
 void OptiXModel::createGeometry(std::string _loc, Context &_context){
     //import our mesh
     Assimp::Importer importer;
-    const aiScene* scene = importer.ReadFile(_loc.c_str(), aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace);
+    const aiScene* scene = importer.ReadFile(_loc.c_str(), aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_Triangulate);
 
     if(scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {

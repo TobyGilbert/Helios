@@ -232,7 +232,7 @@ __device__ optix::float3 text(char* _filename, float _s, float _t);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief optix models - WILL BE REMOVED
 //----------------------------------------------------------------------------------------------------------------------
-__device__ void metal(ShaderGlobals &sg, float Ks = 1,  float eta = 10,  optix::float3 Cs = optix::make_float3( 1,1,1) );
+//__device__ void metal(ShaderGlobals &sg, float Ks = 1,  float eta = 10,  optix::float3 Cs = optix::make_float3( 1,1,1) );
 //__device__ void matte(ShaderGlobals &sg, float Kd = 1,  optix::float3 Cs = optix::make_float3( 1,1,1) );
 __device__ void ifTest( );
 

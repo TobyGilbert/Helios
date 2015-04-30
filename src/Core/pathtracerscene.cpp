@@ -269,9 +269,9 @@ void PathTracerScene::importMesh(std::string _id, std::string _path){
     //import mesh
     OptiXModel* model = new OptiXModel(_path,m_context);
     Material diffuse = m_context->createMaterial();
-    std::string ptx_path = "ptx/tempMat.cu.ptx";
-    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "tempMat" );
-    ptx_path = "ptx/path_tracer.cu.ptx";
+
+    std::string ptx_path = "ptx/path_tracer.cu.ptx";
+    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "constructShaderGlobals" );
     Program diffuse_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
     diffuse->setClosestHitProgram( 0, diffuse_ch );
     diffuse->setAnyHitProgram( 1, diffuse_ah );
@@ -284,6 +284,7 @@ void PathTracerScene::importMesh(std::string _id, std::string _path){
     m_topGroup->getAcceleration()->markDirty();
     m_meshArray[_id] = model;
     m_frame = 0;
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
@@ -294,7 +295,7 @@ void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::setModelMaterial(std::string _id, Material _mat){
+void PathTracerScene::setModelMaterial(std::string _id, Material &_mat){
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
     OptiXModel* mdl = it->second;
     mdl->setMaterial(_mat);

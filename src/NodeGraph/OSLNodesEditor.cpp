@@ -121,7 +121,7 @@ void OSLNodesEditor::compileMaterial()
         stream<<"// Geometry Variables "<<endl;
         stream<<"rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); "<<endl;
         stream<<"rtDeclareVariable(float3, shading_normal,   attribute shading_normal, );"<<endl;
-        stream<<"rtDeclareVariable(float3, texcoord, attribute teQTextStream in(&inputFile);xcoord, );"<<endl;
+        stream<<"rtDeclareVariable(float3, texcoord, attribute texcoord, );"<<endl;
         stream<<"// Our current ray and payload variables"<<endl;
         stream<<"rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );"<<endl;
         stream<<"rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );"<<endl;
@@ -189,18 +189,23 @@ void OSLNodesEditor::compileMaterial()
         stream<<"//-------Main Material Program-----------"<<endl;
         stream<<"RT_PROGRAM void "<<m_materialName.c_str()<<"(){"<<endl;
 
+        stream<<"if (current_prd.depth > 20){"<<endl;
+        stream<<"   current_prd.done = true;"<<endl;
+        stream<<"   return;"<<endl;
+        stream<<"}"<<endl;
 
         //set up our shader globals, These are the equivilent to globals about our surface in OSL
-        stream<<"ShaderGlobals sg;\n"<<endl;
-        stream<<"// Calcualte the shading and geometric normals for use with our OSL shaders\n"<<endl;
-        stream<<"sg.N = normalize( rtTransformNormal(RT_OBJECT_TO_WORLD, shading_normal));\n"<<endl;
-        stream<<"sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );\n"<<endl;
-        stream<<"sg.I = ray.direction;\n"<<endl;
-        stream<<"// The shading position\n"<<endl;
-        stream<<"sg.P = ray.origin + t_hit * ray.direction;\n"<<endl;
-        stream<<"// Texture coordinates\n"<<endl;
-        stream<<"sg.u = texcoord.x;\n"<<endl;
-        stream<<"sg.v = texcoord.y;\n"<<endl;
+        stream<<"ShaderGlobals sg;"<<endl;
+        stream<<"// Calcualte the shading and geometric normals for use with our OSL shaders"<<endl;
+        stream<<"sg.N = normalize( rtTransformNormal(RT_OBJECT_TO_WORLD, shading_normal));"<<endl;
+        stream<<"sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );"<<endl;
+        stream<<"sg.I = ray.direction;"<<endl;
+        stream<<"// The shading position"<<endl;
+        stream<<"current_prd.origin = ray.origin + t_hit * ray.direction;"<<endl;
+        stream<<"sg.P = ray.origin + t_hit * ray.direction;"<<endl;
+        stream<<"// Texture coordinates"<<endl;
+        stream<<"sg.u = texcoord.x;"<<endl;
+        stream<<"sg.v = texcoord.y;"<<endl;
 
 
         //Retrieve and print out any variables that we need for our kernal functions
@@ -329,7 +334,8 @@ void OSLNodesEditor::compileMaterial()
         stream<<"        }\n"<<endl;
         stream<<"    }\n"<<endl;
         stream<<"}\n"<<endl;
-        stream<<"current_prd.radiance = result;\n"<<endl;
+
+        stream<<"current_prd.radiance = result;"<<endl;
 
 
         //end of our material program

@@ -37,7 +37,7 @@ public:
     /// @brief accessor to our material name
     /// @return material name
     //------------------------------------------------------------------------------------------------------------------------------------
-    inline std::string getMaterialName(){return m_materialName;}
+    inline std::string &getMaterialName(){return m_materialName;}
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief creates an optix material program from our OSL node graph.
     /// @brief The file will default be created in OptixMaterials/tempMat.cu unless specified otherwise

@@ -204,9 +204,9 @@ RT_PROGRAM void constructShaderGlobals(){
     TBN.setRow(1, sg.dPdv);
     TBN.setRow(2, sg.N);
 
-    sg.N = normalize(make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
-                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
-                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z));
+//    sg.N = normalize(make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
+//                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
+//                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z));
 
 
 //    sg.N = rtTransformNormal(RT_OBJECT_TO_WORLD, normal);
@@ -218,6 +218,7 @@ RT_PROGRAM void constructShaderGlobals(){
 
     }
     current_prd.origin = ray.origin + t_hit * ray.direction;
+    current_prd.direction = reflect(ray.direction, sg.N);
 //    metal(sg, 1, 10, optix::make_float3(1, 1, 1));
 //    matte(sg, 10);
 //    ifTest();
@@ -256,11 +257,11 @@ RT_PROGRAM void constructShaderGlobals(){
     current_prd.radiance = result;
 }
 
-__device__ void metal(ShaderGlobals &sg, float Ks,  float eta,  optix::float3 Cs ){
-    optix::float3 $tmp1 = reflection( sg.N, eta );
-    optix::float3 $tmp2 = Ks * Cs;
-    current_prd.attenuation = $tmp1 * $tmp2;
-}
+//__device__ void metal(ShaderGlobals &sg, float Ks,  float eta,  optix::float3 Cs ){
+//    optix::float3 $tmp1 = reflection( sg.N, eta );
+//    optix::float3 $tmp2 = Ks * Cs;
+//    current_prd.attenuation = $tmp1 * $tmp2;
+//}
 
 //__device__ void matte(ShaderGlobals &sg, float Kd,  float3 Cs){
 //    float3 $tmp1 = diffuse( sg.N );

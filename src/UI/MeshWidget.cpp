@@ -155,8 +155,9 @@ void MeshWidget::signalTransformChange(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::applyOSLMaterial(){
-    if(m_testMat->materialCreated()){
-        PathTracerScene::getInstance()->setModelMaterial(m_meshId,m_testMat->getMaterial());
+    if(m_currentMatWidget->materialCreated()){
+        std::cerr<<"Adding material "<<m_currentMatWidget->getName()<<" to mesh "<<m_meshId<<std::endl;
+        PathTracerScene::getInstance()->setModelMaterial(m_meshId,m_currentMatWidget->getMaterial());
     }
 }
 
