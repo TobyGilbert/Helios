@@ -66,24 +66,18 @@ MeshWidget::MeshWidget(std::string _id) :
     m_meshScaleZDSpinBox->setValue(1.0);
     m_meshGridLayout->addWidget(m_meshScaleZDSpinBox, 3, 3, 1, 1);
 
-
-    //add our material controls
-    m_testMat = new AbstractMaterialWidget();
-    m_testMat->setName("Test button");
-    m_currentMatWidget = new AbstractMaterialWidget(this);
-    m_currentMatWidget->setMinimumHeight(300);
-    m_meshGridLayout->addWidget(m_currentMatWidget,6,0,1,4);
+    QPushButton *openOSLHyperShaderBtn = new QPushButton("Open OSL hypershader",this);
+    connect(openOSLHyperShaderBtn,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
+    m_meshGridLayout->addWidget(openOSLHyperShaderBtn,4,0,1,1);
 
     QPushButton *applyShaderBtn = new QPushButton("Apply shader to mesh",this);
     connect(applyShaderBtn,SIGNAL(clicked()),this,SLOT(applyOSLMaterial()));
-    m_meshGridLayout->addWidget(applyShaderBtn,11,0,1,1);
+    m_meshGridLayout->addWidget(applyShaderBtn,4,1,1,1);
 
     MaterialLibrary::getInstance()->hide();
-    MaterialLibrary::getInstance()->addMaterialToLibrary(m_testMat);
-    connect(MaterialLibrary::getInstance(),SIGNAL(signalMaterialSelected(AbstractMaterialWidget*)),this,SLOT(setMaterial(AbstractMaterialWidget*)));
-    m_setMatButton = new QPushButton("Select Material From Library",this);
-    connect(m_setMatButton,SIGNAL(clicked()),MaterialLibrary::getInstance(),SLOT(show()));
-    m_meshGridLayout->addWidget(m_setMatButton,5,0,1,4);
+    QPushButton *openMatLibBtn = new QPushButton("Select Material From Library",this);
+    connect(openMatLibBtn,SIGNAL(clicked()),MaterialLibrary::getInstance(),SLOT(show()));
+    m_meshGridLayout->addWidget(openMatLibBtn,5,0,1,4);
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     m_meshGridLayout->addItem(m_meshSpacer, 12, 0, 2, 1);
@@ -104,9 +98,6 @@ MeshWidget::MeshWidget(std::string _id) :
 }
 //----------------------------------------------------------------------------------------------------------------------
 MeshWidget::~MeshWidget(){
-    delete m_currentMatWidget;
-    delete m_testMat;
-    delete m_setMatButton;
     delete m_meshTranslateXDSpinBox;
     delete m_meshTranslateYDSpinBox;
     delete m_meshTranslateZDSpinBox;
@@ -155,25 +146,7 @@ void MeshWidget::signalTransformChange(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::applyOSLMaterial(){
-    if(m_currentMatWidget->materialCreated()){
-        std::cerr<<"Adding material "<<m_currentMatWidget->getName()<<" to mesh "<<m_meshId<<std::endl;
-        PathTracerScene::getInstance()->setModelMaterial(m_meshId,m_currentMatWidget->getMaterial());
-    }
+    AbstractMaterialWidget::getInstance()->applyMaterialToMesh(m_meshId);
 }
-
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::setMaterial(AbstractMaterialWidget *_mat){
-    //change our current material widget
-    m_currentMatWidget = _mat;
-    //refresh how it looks (bit of a hack)
-    m_meshGridLayout->removeWidget(m_currentMatWidget);
-    m_meshGridLayout->addWidget(m_currentMatWidget,6,0,1,4);
 
-
-    //atm we cannot do this step becuase our material widgets do not
-    //contain a valid material.
-//    set the material of our model
-//    PathTracerScene::getInstance()->setModelMaterial(m_meshId, m_currentMatWidget->getMaterial());
-}
-
-//----------------------------------------------------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 #include "Core/mainwindow.h"
 #include "ui_mainwindow.h"
+#include "UI/AbstractMaterialWidget.h"
 #include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -17,6 +18,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_toolBar = new QToolBar();
     m_toolBar->setOrientation(Qt::Vertical);
     ui->gridLayout->addWidget(m_toolBar, 0, 0, 2, 1);
+
+    //--------------------------------------------------------------------------------------------------------------------
+    //----------------------------Create our node graph widget instance---------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+
+    //init our instance with this as the parent. this means when this class is deleted it also will be deleted
+    AbstractMaterialWidget::getInstance(this);
+    AbstractMaterialWidget::getInstance()->hide();
 
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Light functionality------------------------------------------------

@@ -101,12 +101,12 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::loadMesh(const aiNode* _node, const aiScene *_scene,Context &_context){
-    for (int i=0; i<_node->mNumMeshes; i++){
+    for (unsigned int i=0; i<_node->mNumMeshes; i++){
         aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
         processMesh(mesh, _context);
     }
 
-    for (int i=0; i<_node->mNumChildren; i++){
+    for (unsigned int i=0; i<_node->mNumChildren; i++){
         loadMesh(_node->mChildren[i], _scene, _context);
     }
 

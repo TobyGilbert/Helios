@@ -11,9 +11,15 @@
 #include <cuda_runtime.h>
 #include <iostream>
 
+//declare our static class instance
+AbstractMaterialWidget* AbstractMaterialWidget::m_instance;
+
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
-    QWidget(parent)
+    QWidget(parent,Qt::Window)
 {
+    this->setMinimumHeight(500);
+    this->setMinimumWidth(700);
+    this->setTitle("OSL Hypershader 3000");
     m_matCreated = false;
     //set our widget layout
     m_widgetLayout = new QGridLayout(this);
@@ -52,6 +58,19 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget(){
+    //remove our instance
+    delete m_instance;
+}
+
+AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
+{
+    if(m_instance){
+        if(parent) std::cerr<<"AbstractMaterialWidget already has a parent"<<std::endl;
+        return m_instance;
+    }
+    else{
+        m_instance = new AbstractMaterialWidget(parent);
+    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::createOptixMaterial(){
@@ -109,6 +128,17 @@ void AbstractMaterialWidget::createOptixMaterial(){
     else{
         QMessageBox::warning(this,tr("Shader Compilation"),tr("Compilation Failed"));
         m_matCreated = false;
+    }
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::applyMaterialToMesh(std::string _mesh)
+{
+    if(m_matCreated){
+        std::cerr<<"Adding material "<<m_materialName<<" to mesh "<<_mesh<<std::endl;
+        PathTracerScene::getInstance()->setModelMaterial(_mesh,m_material);
+    }
+    else{
+        QMessageBox::warning(this,"Add Material","No OSL shader created");
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
