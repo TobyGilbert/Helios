@@ -163,48 +163,53 @@ RT_PROGRAM void constructShaderGlobals(){
     sg.u = texcoord.x;
     sg.v = texcoord.y;
 
-//    float normalZ = sg.N.z;
-//    if (normalZ > 1.0){
-//        normalZ = -normalZ;
-//    }
-//    float normalX = sg.N.x;
-//    if (normalX < 0.0){
-//        normalX = -normalX;
-//    }
-    float xzAngle = acos(dot(make_float3(sg.N.x, 0.0, sg.N.z), make_float3(1.0, 0.0, 0.0)));
-    float xyAngle = acos(dot(make_float3(sg.N.x, sg.N.y, 0.0), make_float3(0.0, 1.0, 0.0)));
+    float normalZ = sg.N.z;
+    if (normalZ > 1.0){
+        normalZ = -normalZ;
+    }
+    float normalX = sg.N.x;
+    if (normalX < 0.0){
+        normalX = -normalX;
+    }
+
+    float xAngle = acos(dot(make_float3(0.0, sg.N.y, sg.N.z), make_float3(0.0, 0.0, 1.0)));
+    float yAngle = acos(dot(make_float3(sg.N.x, 0.0, sg.N.z), make_float3(1.0, 0.0, 0.0)));
+
     Matrix4x4 rotx;
     rotx.setRow(0, make_float4(1, 0, 0, 0));
-    rotx.setRow(1, make_float4(0, cos(xzAngle), -sin(xzAngle), 0));
-    rotx.setRow(2, make_float4(0, sin(xzAngle), cos(xzAngle), 0));
+    rotx.setRow(1, make_float4(0, cos(xAngle), -sin(xAngle), 0));
+    rotx.setRow(2, make_float4(0, sin(xAngle), cos(xAngle), 0));
     rotx.setRow(3, make_float4(0, 0, 0,1));
 
     Matrix4x4 roty;
-    roty.setRow(0, make_float4(cos(xyAngle), 0, sin(xyAngle), 0));
+    roty.setRow(0, make_float4(cos(yAngle), 0, sin(yAngle), 0));
     roty.setRow(1, make_float4(0, 1, 0, 0));
-    roty.setRow(2, make_float4(-sin(xyAngle), 0, cos(xyAngle), 0));
+    roty.setRow(2, make_float4(-sin(yAngle), 0, cos(yAngle), 0));
     roty.setRow(3, make_float4(0, 0, 0,1));
 
     // rotate around the x axis
     sg.dPdu = make_float3(rotx.getRow(0).x, rotx.getRow(1).x, rotx.getRow(2).x);//  make_float4(1.0, 0.0, 0.0, 1.0)
     // rotate around the y axis
-    sg.dPdu = normalize(make_float3(roty.getRow(0).x*sg.dPdu.x + roty.getRow(0).y *sg.dPdu.y + roty.getRow(0).z *sg.dPdu.z,
+    sg.dPdu = make_float3(roty.getRow(0).x*sg.dPdu.x + roty.getRow(0).y *sg.dPdu.y + roty.getRow(0).z *sg.dPdu.z,
                           roty.getRow(1).x*sg.dPdu.x + roty.getRow(1).y *sg.dPdu.y + roty.getRow(1).z *sg.dPdu.z,
-                          roty.getRow(2).x*sg.dPdu.x + roty.getRow(2).y *sg.dPdu.y + roty.getRow(2).z *sg.dPdu.z));
+                          roty.getRow(2).x*sg.dPdu.x + roty.getRow(2).y *sg.dPdu.y + roty.getRow(2).z *sg.dPdu.z);
 
     sg.dPdv = normalize(cross(sg.N, sg.dPdu));
 
-    float3 normal = 2.0 * text("void", sg.u, sg.v) - make_float3(1.0, 1.0, 1.0);
+    float3 normal = 2.0 * text((char*)"void", sg.u, sg.v) - make_float3(1.0);
+//    float3 normal = text((char*)"void", sg.u, sg.v);
 
     Matrix3x3 TBN;
     TBN.setRow(0, sg.dPdu);
     TBN.setRow(1, sg.dPdv);
     TBN.setRow(2, sg.N);
 
-//    sg.N = make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
-//                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
-//                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z);
+    sg.N = normalize(make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
+                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
+                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z));
 
+
+//    sg.N = rtTransformNormal(RT_OBJECT_TO_WORLD, normal);
 
 
     if (current_prd.depth > 10){
@@ -213,8 +218,8 @@ RT_PROGRAM void constructShaderGlobals(){
 
     }
     current_prd.origin = ray.origin + t_hit * ray.direction;
-//    metal(1, 10, optix::make_float3(1, 1, 1));
-    matte();
+//    metal(sg, 1, 10, optix::make_float3(1, 1, 1));
+//    matte(sg, 10);
 //    ifTest();
 
     // Compute direct light...
@@ -251,110 +256,18 @@ RT_PROGRAM void constructShaderGlobals(){
     current_prd.radiance = result;
 }
 
-__device__ void metal( float Ks,  float eta,  optix::float3 Cs ){
-    ShaderGlobals sg;
-    // Calcualte the shading and geometric normals for use with our OSL shaders
-    // Texture coordinates
-    sg.u = texcoord.x;
-    sg.v = texcoord.y;
-    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal));
-    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-    sg.I = ray.direction;
-    // The shading position
-    sg.P = ray.origin + t_hit * ray.direction;
-
-    float xzAngle = acos(dot(make_float3(sg.N.x, 0.0, sg.N.z), make_float3(1.0, 0.0, 0.0)));
-    float xyAngle = acos(dot(make_float3(sg.N.x, sg.N.y, 0.0), make_float3(0.0, 1.0, 0.0)));
-    Matrix4x4 rotx;
-    rotx.setRow(0, make_float4(1, 0, 0, 0));
-    rotx.setRow(1, make_float4(0, cos(xzAngle), -sin(xzAngle), 0));
-    rotx.setRow(2, make_float4(0, sin(xzAngle), cos(xzAngle), 0));
-    rotx.setRow(3, make_float4(0, 0, 0,1));
-
-    Matrix4x4 roty;
-    roty.setRow(0, make_float4(cos(xyAngle), 0, sin(xyAngle), 0));
-    roty.setRow(1, make_float4(0, 1, 0, 0));
-    roty.setRow(2, make_float4(-sin(xyAngle), 0, cos(xyAngle), 0));
-    roty.setRow(3, make_float4(0, 0, 0,1));
-
-    // rotate around the x axis
-    sg.dPdu = make_float3(rotx.getRow(0).x, rotx.getRow(1).x, rotx.getRow(2).x);//  make_float4(1.0, 0.0, 0.0, 1.0)
-    // rotate around the y axis
-    sg.dPdu = normalize(make_float3(roty.getRow(0).x*sg.dPdu.x + roty.getRow(0).y *sg.dPdu.y + roty.getRow(0).z *sg.dPdu.z,
-                          roty.getRow(1).x*sg.dPdu.x + roty.getRow(1).y *sg.dPdu.y + roty.getRow(1).z *sg.dPdu.z,
-                          roty.getRow(2).x*sg.dPdu.x + roty.getRow(2).y *sg.dPdu.y + roty.getRow(2).z *sg.dPdu.z));
-
-    sg.dPdv = normalize(cross(sg.N, sg.dPdu));
-
-    float3 normal = text((char*)"void", sg.u, sg.v);
-
-    Matrix3x3 TBN;
-    TBN.setRow(0, sg.dPdu);
-    TBN.setRow(1, sg.dPdv);
-    TBN.setRow(2, sg.N);
-
-//    sg.N = normalize(make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
-//                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
-//                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z));
-
-
+__device__ void metal(ShaderGlobals &sg, float Ks,  float eta,  optix::float3 Cs ){
     optix::float3 $tmp1 = reflection( sg.N, eta );
     optix::float3 $tmp2 = Ks * Cs;
     current_prd.attenuation = $tmp1 * $tmp2;
 }
 
-__device__ void matte( float Kd,  float3 Cs){
-    ShaderGlobals sg;
-    // Calcualte the shading and geometric normals for use with our OSL shaders
-    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal));
-    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-    sg.I = ray.direction;
-    // The shading position
-    sg.P = ray.origin + t_hit * ray.direction;
-    // Texture coordinates
-    sg.u = texcoord.x;
-    sg.v = texcoord.y;
+//__device__ void matte(ShaderGlobals &sg, float Kd,  float3 Cs){
+//    float3 $tmp1 = diffuse( sg.N );
 
-    float xzAngle = acos(dot(make_float3(sg.Ng.x, 0.0, sg.Ng.z), make_float3(1.0, 0.0, 0.0)));
-    float xyAngle = acos(dot(make_float3(sg.Ng.x, sg.Ng.y, 0.0), make_float3(0.0, 1.0, 0.0)));
-
-    Matrix4x4 rotx;
-    rotx.setRow(0, make_float4(1, 0, 0, 0));
-    rotx.setRow(1, make_float4(0, cos(xzAngle), -sin(xzAngle), 0));
-    rotx.setRow(2, make_float4(0, sin(xzAngle), cos(xzAngle), 0));
-    rotx.setRow(3, make_float4(0, 0, 0,1));
-
-    Matrix4x4 roty;
-    roty.setRow(0, make_float4(cos(xyAngle), 0, sin(xyAngle), 0));
-    roty.setRow(1, make_float4(0, 1, 0, 0));
-    roty.setRow(2, make_float4(-sin(xyAngle), 0, cos(xyAngle), 0));
-    roty.setRow(3, make_float4(0, 0, 0,1));
-
-    // rotate around the x axis
-    sg.dPdu = make_float3(rotx.getRow(0).x, rotx.getRow(1).x, rotx.getRow(2).x);//  make_float4(1.0, 0.0, 0.0, 1.0)
-    // rotate around the y axis
-    sg.dPdu = normalize(make_float3(roty.getRow(0).x*sg.dPdu.x + roty.getRow(0).y *sg.dPdu.y + roty.getRow(0).z *sg.dPdu.z,
-                          roty.getRow(1).x*sg.dPdu.x + roty.getRow(1).y *sg.dPdu.y + roty.getRow(1).z *sg.dPdu.z,
-                          roty.getRow(2).x*sg.dPdu.x + roty.getRow(2).y *sg.dPdu.y + roty.getRow(2).z *sg.dPdu.z));
-
-    sg.dPdv = normalize(cross(sg.N, sg.dPdu));
-
-    float3 normal = 2.0* text("void", sg.u, sg.v) -make_float3(1.0, 1.0, 1.0);// normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-
-    Matrix3x3 TBN;
-    TBN.setRow(0, sg.dPdu);
-    TBN.setRow(1, sg.dPdv);
-    TBN.setRow(2, sg.N);
-
-//    sg.N =  normalize(make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
-//                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
-//                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z));
-
-    float3 $tmp1 = diffuse( sg.N );
-
-    float3 $tmp2 = Kd * Cs;
-    current_prd.attenuation = $tmp1 * $tmp2;
-}
+//    float3 $tmp2 = Kd * Cs;
+//    current_prd.attenuation = 0.5 + 0.5 * sg.N;//$tmp1 * $tmp2;
+//}
 
 __device__ void ifTest( ){
     ShaderGlobals sg;
@@ -419,9 +332,9 @@ RT_PROGRAM void diffuseEmitter(){
     current_prd.done = true;
 }
 
-rtDeclareVariable(float3,        diffuse_color, , );
+//rtDeclareVariable(float3,        diffuse_color, , );
 
-rtTextureSampler<float4, 2> map_texture;
+//rtTextureSampler<float4, 2> map_texture;
 
 //RT_PROGRAM void diffuse(){
 //    if (current_prd.depth > 10){
@@ -483,84 +396,84 @@ rtTextureSampler<float4, 2> map_texture;
 //    current_prd.radiance = result;
 //}
 
-rtDeclareVariable(float3,        glass_color, , );
-rtDeclareVariable(float,         index_of_refraction, , );
+//rtDeclareVariable(float3,        glass_color, , );
+//rtDeclareVariable(float,         index_of_refraction, , );
 
-RT_PROGRAM void glass_refract(){
-    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+//RT_PROGRAM void glass_refract(){
+//    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+//    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
 
-    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
+//    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
 
-    float3 hitpoint = ray.origin + t_hit * ray.direction;
-    current_prd.origin = hitpoint;
-    current_prd.countEmitted = true;
-    float iof;
-    if (current_prd.inside) {
-        // Shoot outgoing ray
-        iof = 1.0f/index_of_refraction;
-    }
-    else {
-        iof = index_of_refraction;
-    }
-        refract(current_prd.direction, ray.direction, ffnormal, iof);
-        //prd.direction = reflect(ray.direction, ffnormal);
+//    float3 hitpoint = ray.origin + t_hit * ray.direction;
+//    current_prd.origin = hitpoint;
+//    current_prd.countEmitted = true;
+//    float iof;
+//    if (current_prd.inside) {
+//        // Shoot outgoing ray
+//        iof = 1.0f/index_of_refraction;
+//    }
+//    else {
+//        iof = index_of_refraction;
+//    }
+//        refract(current_prd.direction, ray.direction, ffnormal, iof);
+//        //prd.direction = reflect(ray.direction, ffnormal);
 
-    if (current_prd.inside) {
-        // Compute Beer's law
-        current_prd.attenuation = current_prd.attenuation * powf(glass_color, 1);
-    }
-    current_prd.inside = !current_prd.inside;
-    current_prd.radiance = make_float3(0.0f);
-}
+//    if (current_prd.inside) {
+//        // Compute Beer's law
+//        current_prd.attenuation = current_prd.attenuation * powf(glass_color, 1);
+//    }
+//    current_prd.inside = !current_prd.inside;
+//    current_prd.radiance = make_float3(0.0f);
+//}
 
-rtDeclareVariable(float, reflectivity, , );
-rtDeclareVariable(int, max_depth, , );
+//rtDeclareVariable(float, reflectivity, , );
+//rtDeclareVariable(int, max_depth, , );
 
-RT_PROGRAM void reflections(){
-    if (current_prd.depth > 10){
-        current_prd.done = true;
-        return;
-    }
-    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
-    float3 hitpoint = ray.origin + t_hit * ray.direction;
+//RT_PROGRAM void reflections(){
+//    if (current_prd.depth > 10){
+//        current_prd.done = true;
+//        return;
+//    }
+//    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+//    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+//    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
+//    float3 hitpoint = ray.origin + t_hit * ray.direction;
 
-    current_prd.origin = hitpoint;
+//    current_prd.origin = hitpoint;
 
-    current_prd.direction = reflect(ray.direction, ffnormal);
+//    current_prd.direction = reflect(ray.direction, ffnormal);
 
-    unsigned int num_lights = lights.size();
-    float3 result = make_float3(0.0f);
+//    unsigned int num_lights = lights.size();
+//    float3 result = make_float3(0.0f);
 
-    for(int i = 0; i < num_lights; ++i) {
-        ParallelogramLight light = lights[i];
-        float z1 = rnd(current_prd.seed);
-        float z2 = rnd(current_prd.seed);
-        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+//    for(int i = 0; i < num_lights; ++i) {
+//        ParallelogramLight light = lights[i];
+//        float z1 = rnd(current_prd.seed);
+//        float z2 = rnd(current_prd.seed);
+//        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
 
-        float Ldist = length(light_pos - hitpoint);
-        float3 L = normalize(light_pos - hitpoint);
-        float nDl = dot( ffnormal, L );
-        float LnDl = dot( light.normal, L );
-        float A = length(cross(light.v1, light.v2));
+//        float Ldist = length(light_pos - hitpoint);
+//        float3 L = normalize(light_pos - hitpoint);
+//        float nDl = dot( ffnormal, L );
+//        float LnDl = dot( light.normal, L );
+//        float A = length(cross(light.v1, light.v2));
 
-        // cast shadow ray
-        if ( nDl > 0.0f && LnDl > 0.0f ) {
-            PerRayData_pathtrace_shadow shadow_prd;
-            shadow_prd.inShadow = false;
-            Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-            rtTrace(top_object, shadow_ray, shadow_prd);
+//        // cast shadow ray
+//        if ( nDl > 0.0f && LnDl > 0.0f ) {
+//            PerRayData_pathtrace_shadow shadow_prd;
+//            shadow_prd.inShadow = false;
+//            Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+//            rtTrace(top_object, shadow_ray, shadow_prd);
 
-            if(!shadow_prd.inShadow){
-                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-                result += light.emission * weight;
-            }
-        }
-    }
-    current_prd.radiance = result;
-}
+//            if(!shadow_prd.inShadow){
+//                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+//                result += light.emission * weight;
+//            }
+//        }
+//    }
+//    current_prd.radiance = result;
+//}
 //-----------------------------------------------------------------------------
 //
 //  Exception program
