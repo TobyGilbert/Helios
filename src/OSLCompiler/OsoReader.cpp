@@ -119,7 +119,7 @@ std::string OsoReader::generateDeviceFunction(){
     // Veriable for use with commas between function parameters (maybe better way to do this)
     //bool init = 0;
     // Go through all symbols looking for function parameters
-    s+="ShaderGlobals sg";
+    s+="ShaderGlobals &sg";
     for (unsigned int i=0; i<m_symbols.size(); i++){
         if (m_symbols[i].m_symType == 0){
             s+=", ";
