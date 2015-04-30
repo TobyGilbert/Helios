@@ -45,7 +45,8 @@ SOURCES += \
     src/OSLCompiler/OslReader.cpp \
     src/OSLCompiler/osolexer.l \
     src/OSLCompiler/oso.y  \
-    optixSrc/*.cu
+    optixSrc/*.cu \
+    src/Lights/LightManager.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -84,7 +85,8 @@ HEADERS += \
     include/NodeGraph/OSLBlock.h \
     include/NodeGraph/OSLShaderBlock.h \
     include/NodeGraph/OSLVarFloatBlock.h \
-    include/NodeGraph/OSLNodesEditor.h
+    include/NodeGraph/OSLNodesEditor.h \
+    include/Lights/LightManager.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
@@ -153,8 +155,7 @@ BISONSOURCES = src/OSLCompiler/oso.y
 FLEXSOURCES = src/OSLCompiler/osolexer.l
 
 #Optix Stuff
-CUDA_SOURCES += optixSrc/*.cu \
-                optixSrc/tempMat.cu
+CUDA_SOURCES += optixSrc/*.cu
 
 
 

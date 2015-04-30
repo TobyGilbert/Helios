@@ -89,7 +89,7 @@ void PathTracerScene::init(){
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( make_float3(0.0f) );
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
-    m_enviSampler = loadHDRTexture(m_context, "./textures/CedarCity.hdr", default_color);
+    m_enviSampler = loadHDRTexture(m_context, "./HDRMaps/Refmap.hdr", default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
 
     // Load normalmap
@@ -120,9 +120,6 @@ void PathTracerScene::init(){
     // Our our map texture sample
     m_mapTexSample = loadTexture(m_context, "textures/map.png");
 
-//    ptx_path = "ptx/tempMat.cu.ptx";
-//    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "tempMat" );
-
     // Create scene geometry
     createGeometry();
 
@@ -134,11 +131,11 @@ void PathTracerScene::init(){
 void PathTracerScene::createGeometry(){
     // Light buffer
       ParallelogramLight light;
-      light.corner   = make_float3( 10.0f, 60.9f, 70.0f);
-      light.v1       = make_float3( -20.0f, 0.0f, 0.0f);
-      light.v2       = make_float3( 0.0f, 0.0f, 10.0f);
+      light.corner   = make_float3( 2.0f, 5.0f, 0.0f);
+      light.v1       = make_float3( -4.0f, 0.0f, 0.0f);
+      light.v2       = make_float3( 0.0f, 0.0f, 2.0f);
       light.normal   = normalize( cross(light.v1, light.v2) );
-      light.emission = make_float3( 25.0f, 25.0f, 25.0f );
+      light.emission = make_float3( 5.0f, 5.0f, 5.0f );
 
       m_lightBuffer = m_context->createBuffer( RT_BUFFER_INPUT );
       m_lightBuffer->setFormat( RT_FORMAT_USER );
@@ -154,46 +151,33 @@ void PathTracerScene::createGeometry(){
       Program diffuse_em = m_context->createProgramFromPTXFile( ptx_path, "diffuseEmitter" );
       diffuse_light->setClosestHitProgram( 0, diffuse_em );
 
-      // Shader Globals material
-      Material shader_globals = m_context->createMaterial();
-      Program shader_globals_ch = m_context->createProgramFromPTXFile(ptx_path, "constructShaderGlobals");
-      Program shader_globals_ah = m_context->createProgramFromPTXFile(ptx_path, "shadow");
-      shader_globals->setClosestHitProgram(0, shader_globals_ch);
-      shader_globals->setAnyHitProgram(1, shader_globals_ah);
-
       // Set up parallelogram programs
       ptx_path = "ptx/parallelogram.cu.ptx";
       m_pgram_bounding_box = m_context->createProgramFromPTXFile( ptx_path, "bounds" );
       m_pgram_intersection = m_context->createProgramFromPTXFile( ptx_path, "intersect" );
 
-      // Set up sphere programs
-      ptx_path = "ptx/sphere.cu.ptx";
-      m_pgram_bounding_sphere = m_context->createProgramFromPTXFile(ptx_path, "bounds_sphere");
-      m_pgram_sphereIntersection = m_context->createProgramFromPTXFile(ptx_path, "intersect_sphere");
+//      // Set up sphere programs
+//      ptx_path = "ptx/sphere.cu.ptx";
+//      m_pgram_bounding_sphere = m_context->createProgramFromPTXFile(ptx_path, "bounds_sphere");
+//      m_pgram_sphereIntersection = m_context->createProgramFromPTXFile(ptx_path, "intersect_sphere");
 
       // create geometry instances
       std::vector<GeometryInstance> gis;
 
       const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
 
-      // OSL Sphere
-      gis.push_back( createSphere(make_float4(0.0, 30.0, 70.0, 8.0)));
-      gis.back()->addMaterial(shader_globals);
-
-      // Create shadow group (no light)
-      GeometryGroup shadow_group = m_context->createGeometryGroup(gis.begin(), gis.end());
-      shadow_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
-      m_context["top_shadower"]->set( shadow_group );
-
-      gis.push_back( createParallelogram( make_float3( 10.0f, 49.99f, 50.0f),
-                                          make_float3( -20.0f, 0.0f, 0.0f),
-                                          make_float3( 0.0f, 0.0f, 10.0f) ) );
+      gis.push_back( createParallelogram( make_float3( 2.0f, 5.0f, 0.0f),
+                                          make_float3( -4.0f, 0.0f, 0.0f),
+                                          make_float3( 0.0f, 0.0f, 2.0f) ) );
       setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
 
       // Create geometry group
       GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
       geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
+
+      m_topGroup->addChild(geometry_group);
+      m_topGroup->getAcceleration()->markDirty();
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
@@ -268,23 +252,20 @@ void PathTracerScene::importMesh(std::string _id, std::string _path){
     /// @todo meshes are all set with detault diffuse texture, we need some sort of material management
     //import mesh
     OptiXModel* model = new OptiXModel(_path,m_context);
-    Material diffuse = m_context->createMaterial();
+    Material defaultMaterial = m_context->createMaterial();
 
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    Program diffuse_ch = m_context->createProgramFromPTXFile( ptx_path, "constructShaderGlobals" );
-    Program diffuse_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
-    diffuse->setClosestHitProgram( 0, diffuse_ch );
-    diffuse->setAnyHitProgram( 1, diffuse_ah );
-    diffuse["diffuse_color"]->setFloat(1.0,1.0,1.0);
-    diffuse["map_texture"]->setTextureSampler(loadTexture( m_context, "textures/map.png") );
-    model->setMaterial(diffuse);
+    Program default_ch = m_context->createProgramFromPTXFile( ptx_path, "defaultMaterial" );
+    Program default_ah = m_context->createProgramFromPTXFile( ptx_path, "shadow" );
+    defaultMaterial->setClosestHitProgram( 0, default_ch );
+    defaultMaterial->setAnyHitProgram( 1, default_ah );
+    model->setMaterial(defaultMaterial);
     //add to our scene
     std::cout<<"has been called path: "<<_path<<std::endl;
     m_topGroup->addChild(model->getGeomAndTrans());
     m_topGroup->getAcceleration()->markDirty();
     m_meshArray[_id] = model;
     m_frame = 0;
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
