@@ -14,6 +14,7 @@
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QWidget(parent)
 {
+    m_matCreated = false;
     //set our widget layout
     m_widgetLayout = new QGridLayout(this);
     this->setLayout(m_widgetLayout);
@@ -40,6 +41,7 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QPushButton *createShaderBtn = new QPushButton("Create Shader",this);
     m_groupBoxLayout->addWidget(createShaderBtn,0,1,1,1);
     connect(createShaderBtn,SIGNAL(clicked()),this,SLOT(createOptixMaterial()));
+
 
     //Set up our menu for if you right click in our widget
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -95,8 +97,17 @@ void AbstractMaterialWidget::createOptixMaterial(){
     std::string nvccCallString = nvcc+nvccFlags+includePaths+libDirs+libs+" ./"+path+" -o "+output;
     std::cout<<"calling nvcc with: "<<nvccCallString<<std::endl;
 
-    system(nvccCallString.c_str());
-
+    if(system(nvccCallString.c_str())==NULL){
+        optix::Context optiXEngine = PathTracerScene::getInstance()->getContext();
+        optix::Program closestHitProgram = optiXEngine->createProgramFromPTXFile(output,m_nodeEditor->getMaterialName());
+        Program anyHitProgram = optiXEngine->createProgramFromPTXFile( "ptx/path_tracer.cu.ptx", "shadow" );
+        m_material->setClosestHitProgram(0,closestHitProgram);
+        m_material->setAnyHitProgram(0,anyHitProgram);
+        m_matCreated = true;
+    }
+    else{
+        QMessageBox::warning(this,tr("Shader Compilation"),tr("Compilation Failed"));
+    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
