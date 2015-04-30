@@ -294,7 +294,7 @@ void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::setModelMaterial(std::string _id, Material &_mat){
+void PathTracerScene::setModelMaterial(std::string _id, Material _mat){
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
     OptiXModel* mdl = it->second;
     mdl->setMaterial(_mat);

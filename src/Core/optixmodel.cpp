@@ -315,7 +315,7 @@ void OptiXModel::setMaterial(Material &_mat){
         m_geometryInstance->addMaterial(_mat);
     }
     else{
-        m_geometryInstance->setMaterial(1,_mat);
+        m_geometryInstance->setMaterial(0,_mat);
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

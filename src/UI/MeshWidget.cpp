@@ -74,6 +74,10 @@ MeshWidget::MeshWidget(std::string _id) :
     m_currentMatWidget->setMinimumHeight(300);
     m_meshGridLayout->addWidget(m_currentMatWidget,6,0,1,4);
 
+    QPushButton *applyShaderBtn = new QPushButton("Apply shader to mesh",this);
+    connect(applyShaderBtn,SIGNAL(clicked()),this,SLOT(applyOSLMaterial()));
+    m_meshGridLayout->addWidget(applyShaderBtn,11,0,1,1);
+
     MaterialLibrary::getInstance()->hide();
     MaterialLibrary::getInstance()->addMaterialToLibrary(m_testMat);
     connect(MaterialLibrary::getInstance(),SIGNAL(signalMaterialSelected(AbstractMaterialWidget*)),this,SLOT(setMaterial(AbstractMaterialWidget*)));
@@ -82,7 +86,7 @@ MeshWidget::MeshWidget(std::string _id) :
     m_meshGridLayout->addWidget(m_setMatButton,5,0,1,4);
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
-    m_meshGridLayout->addItem(m_meshSpacer, 7, 0, 2, 1);
+    m_meshGridLayout->addItem(m_meshSpacer, 12, 0, 2, 1);
 
     //-------------------------------------------------------------------------------------------------
     //-------------------------Connect up our signals and slots----------------------------------------
@@ -149,6 +153,13 @@ void MeshWidget::signalTransformChange(){
 
 
 }
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::applyOSLMaterial(){
+    if(m_testMat->materialCreated()){
+        PathTracerScene::getInstance()->setModelMaterial(m_meshId,m_testMat->getMaterial());
+    }
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::setMaterial(AbstractMaterialWidget *_mat){
     //change our current material widget
