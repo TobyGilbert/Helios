@@ -75,8 +75,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_lightDockGridLayout->addItem(m_lightSpacer, 3, 0, 1, 1);
     m_lightDockWidget->setWidget(m_lightWidget);
     m_lightDockWidget->setHidden(true);
-    this->addDockWidget(Qt::RightDockWidgetArea, m_lightDockWidget);
+//    this->addDockWidget(Qt::RightDockWidgetArea, m_lightDockWidget);
 
+    LightManager::getInstance()->setHidden(true);
+    this->addDockWidget(Qt::RightDockWidgetArea, LightManager::getInstance());
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Mesh functionality-------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
@@ -125,8 +127,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
     connect(m_lightToolbarButton, SIGNAL(clicked(bool)), m_lightToolbarButton, SLOT(setChecked(bool)));
-    connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
-    connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
+//    connect(m_lightToolbarButton, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
+//    connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
+    connect(m_lightToolbarButton, SIGNAL(clicked()), LightManager::getInstance(), SLOT(show()));
+
 
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
     connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));

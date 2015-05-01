@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Core/TextureLoader.h"
+#include "Lights/LightManager.h"
 
 //Declare our static instance variable
 PathTracerScene* PathTracerScene::m_instance;
@@ -121,7 +122,7 @@ void PathTracerScene::init(){
     m_mapTexSample = loadTexture(m_context, "textures/map.png");
 
     // Create scene geometry
-    createGeometry();
+//    createGeometry();
 
     // Finalize
     m_context->validate();
@@ -129,55 +130,49 @@ void PathTracerScene::init(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::createGeometry(){
-    // Light buffer
-      ParallelogramLight light;
-      light.corner   = make_float3( 2.0f, 5.0f, 0.0f);
-      light.v1       = make_float3( -4.0f, 0.0f, 0.0f);
-      light.v2       = make_float3( 0.0f, 0.0f, 2.0f);
-      light.normal   = normalize( cross(light.v1, light.v2) );
-      light.emission = make_float3( 5.0f, 5.0f, 5.0f );
 
-      m_lightBuffer = m_context->createBuffer( RT_BUFFER_INPUT );
-      m_lightBuffer->setFormat( RT_FORMAT_USER );
-      m_lightBuffer->setElementSize( sizeof( ParallelogramLight ) );
-      m_lightBuffer->setSize( 1u );
-      memcpy( m_lightBuffer->map(), &light, sizeof( light ) );
-      m_lightBuffer->unmap();
-      m_context["lights"]->setBuffer( m_lightBuffer );
+    float3 corner = make_float3(2.0f, 5.0f, 0.0f);
+    float3 v1 = make_float3( -4.0f, 0.0f, 0.0f);
+    float3 v2 =  make_float3( 0.0f, 0.0f, 2.0f);
+    float3 emission = make_float3(5.0f, 5.0f, 5.0f);
 
-      std::string ptx_path = "ptx/path_tracer.cu.ptx";
+    LightManager::getInstance()->createParollelogramLight(corner,
+                                                          v1,
+                                                          v2,
+                                                          emission);
 
-      Material diffuse_light = m_context->createMaterial();
-      Program diffuse_em = m_context->createProgramFromPTXFile( ptx_path, "diffuseEmitter" );
-      diffuse_light->setClosestHitProgram( 0, diffuse_em );
+    m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
-      // Set up parallelogram programs
-      ptx_path = "ptx/parallelogram.cu.ptx";
-      m_pgram_bounding_box = m_context->createProgramFromPTXFile( ptx_path, "bounds" );
-      m_pgram_intersection = m_context->createProgramFromPTXFile( ptx_path, "intersect" );
+    // create geometry instances
+    std::vector<GeometryInstance> gis = LightManager::getInstance()->getLightsGeometry();
 
-//      // Set up sphere programs
-//      ptx_path = "ptx/sphere.cu.ptx";
-//      m_pgram_bounding_sphere = m_context->createProgramFromPTXFile(ptx_path, "bounds_sphere");
-//      m_pgram_sphereIntersection = m_context->createProgramFromPTXFile(ptx_path, "intersect_sphere");
+    // Create geometry group
+    GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
-      // create geometry instances
-      std::vector<GeometryInstance> gis;
+    geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
-      const float3 light_em = make_float3( 5.0f, 5.0f, 5.0f );
+    m_topGroup->addChild(geometry_group);
+    m_topGroup->getAcceleration()->markDirty();
+}
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::addLight(float3 _corner, float3 _v1, float3 _v2, float3 _emission){
+    LightManager::getInstance()->createParollelogramLight(_corner,
+                                                          _v1,
+                                                          _v2,
+                                                          _emission);
+    m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
-      gis.push_back( createParallelogram( make_float3( 2.0f, 5.0f, 0.0f),
-                                          make_float3( -4.0f, 0.0f, 0.0f),
-                                          make_float3( 0.0f, 0.0f, 2.0f) ) );
-      setMaterial(gis.back(), diffuse_light, "emission_color", light_em);
+    // create geometry instances
+    std::vector<GeometryInstance> gis = LightManager::getInstance()->getLightsGeometry();
 
-      // Create geometry group
-      GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
+    // Create geometry group
+    GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
 
-      geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
+    geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
 
-      m_topGroup->addChild(geometry_group);
-      m_topGroup->getAcceleration()->markDirty();
+    m_topGroup->addChild(geometry_group);
+    m_topGroup->getAcceleration()->markDirty();
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){

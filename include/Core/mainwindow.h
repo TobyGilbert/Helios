@@ -21,6 +21,7 @@
 #include "UI/MeshWidget.h"
 #include "UI/MeshDockWidget.h"
 #include "UI/GenSetDockWidget.h"
+#include "Lights/LightManager.h"
 //----------------------------------------------------------------------------------------------------------------------------------------
 namespace Ui {
 class MainWindow;
