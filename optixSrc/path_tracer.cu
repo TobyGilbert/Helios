@@ -169,36 +169,38 @@ RT_PROGRAM void defaultMaterial(){
 
     // Compute direct light...
     // Or shoot one...
-    unsigned int num_lights = lights.size();
-    float3 result = make_float3(0.0f);
+    if (lights.size() != 0.0){
+        unsigned int num_lights = lights.size();
+        float3 result = make_float3(0.0f);
 
-    for(int i = 0; i < num_lights; ++i) {
-        ParallelogramLight light = lights[i];
-        float z1 = rnd(current_prd.seed);
-        float z2 = rnd(current_prd.seed);
-        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+        for(int i = 0; i < num_lights; ++i) {
+            ParallelogramLight light = lights[i];
+            float z1 = rnd(current_prd.seed);
+            float z2 = rnd(current_prd.seed);
+            float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
 
-        float Ldist = length(light_pos - hitpoint);
-        float3 L = normalize(light_pos - hitpoint);
-        float nDl = dot( world_shading_normal, L );
-        float LnDl = dot( light.normal, L );
-        float A = length(cross(light.v1, light.v2));
+            float Ldist = length(light_pos - hitpoint);
+            float3 L = normalize(light_pos - hitpoint);
+            float nDl = dot( world_shading_normal, L );
+            float LnDl = dot( light.normal, L );
+            float A = length(cross(light.v1, light.v2));
 
-        // cast shadow ray
-        if ( nDl > 0.0f && LnDl > 0.0f ) {
-            PerRayData_pathtrace_shadow shadow_prd;
-            shadow_prd.inShadow = false;
-            shadow_prd.type = shadowRay;
-            Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-            rtTrace(top_object, shadow_ray, shadow_prd);
+            // cast shadow ray
+            if ( nDl > 0.0f && LnDl > 0.0f ) {
+                PerRayData_pathtrace_shadow shadow_prd;
+                shadow_prd.inShadow = false;
+                shadow_prd.type = shadowRay;
+                Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+                rtTrace(top_object, shadow_ray, shadow_prd);
 
-            if(!shadow_prd.inShadow){
-                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-                result += light.emission * weight;
+                if(!shadow_prd.inShadow){
+                    float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+                    result += light.emission * weight;
+                }
             }
         }
+        current_prd.radiance = result;
     }
-    current_prd.radiance = result;
 }
 //-----------------------------------------------------------------------------
 rtDeclareVariable(float3,        emission_color, , );
@@ -251,170 +253,7 @@ __device__ int raytype(rayType _name){
         return 0;
     }
 }
-//-----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 __device__ optix::float3 text(char* _filename, float _s, float _t){
     return make_float3(tex2D(normalMap, _s, _t));
-}
-//----------------------------------------------------------------------------------------------------------------------
-//-------------------------------------------------------- BRDFS -------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
-//__device__ optix::float3 reflection(optix::float3 _normal, float _eta){
-//    current_prd.direction = reflect(ray.direction, _normal);
-//    float cosNO = optix::dot(-_normal, eye - current_prd.origin);
-//    if (cosNO > 0){
-//        return optix::make_float3(fresnel_dielectric(cosNO, _eta));
-//    }
-//    return optix::make_float3(1.0);
-//}
-////----------------------------------------------------------------------------------------------------------------------
-//__device__ optix::float3 diffuse(optix::float3 _normal){
-//    float z1=rnd(current_prd.seed);
-//    float z2=rnd(current_prd.seed);
-//    float3 p;
-//    cosine_sample_hemisphere(z1, z2, p);
-//    float3 v1, v2;
-//    createONB(_normal, v1, v2);
-//    current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
-//    return optix::make_float3(max(optix::dot(_normal, current_prd.direction), 0.0f) * float(M_1_PI));
-//}
-////----------------------------------------------------------------------------------------------------------------------
-//__device__ optix::float3 phong(optix::float3 _normal, float _exponant){
-//    float z1 = rnd(current_prd.seed);
-//    float z2 = rnd(current_prd.seed);
-//    float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
-//    float cosTheta= pow(z1, 1 / (_exponant + 1));
-//    float sinPhi = sin(2*float(M_PI)*z2);
-//    float cosPhi = cos(2*float(M_PI)*z2);
-//    current_prd.direction = make_float3 (sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
-
-//    // n + 2 / 2PI * cos^n (A);
-//    float3 R = reflect((current_prd.origin - eye), _normal);
-//    float A = optix::dot(R, current_prd.direction);
-
-//    if (A > 0){
-//        return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant))));
-//    }
-//    return make_float3(0.0);
-//}
-////----------------------------------------------------------------------------------------------------------------------
-//__device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
-//    float z1=rnd(current_prd.seed);
-//    float z2=rnd(current_prd.seed);
-//    float3 p;
-//    cosine_sample_hemisphere(z1, z2, p);
-//    float3 v1, v2;
-//    createONB(_normal, v1, v2);
-//    float3 ray_direction = current_prd.direction;
-//    current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
-
-//    float3 L = current_prd.direction;
-//    float3 V = (current_prd.origin - eye);
-
-//    float A = 1 / (M_PI + ((M_PI / 2) - (2/3)) * _sigma );
-//    float B = _sigma / (M_PI + ( (M_PI /2) - (2/3)) * _sigma);
-//    float s = optix::dot(L, V) - optix::dot(_normal, L) * optix::dot(_normal, V);
-//    float t;
-//    if ( s <= 0.0){
-//        t = 1.0;
-//    }
-//    else{
-//        t = max(optix::dot(_normal, L), optix::dot(_normal, V));
-//    }
-
-//    return make_float3(0.8 * optix::dot(_normal, L) * (A + B * (s / t)));
-//}
-////----------------------------------------------------------------------------------------------------------------------
-//__device__ optix::float3 ward(float3 _normal, float3 _t, float _xRough, float _yRough){
-//    float3 direction = current_prd.direction;
-//    float z1 = rnd(current_prd.seed);
-//    float z2 = rnd(current_prd.seed);
-//    float3 v = cross(_normal, _t);
-//    float3 u = cross(v, _normal);
-
-//    float phi = atan((_yRough/_xRough) * tan(2*float(M_PI)*z2));
-//    float theta = atan( sqrt( -log(1 - z1) / ( ((cos(phi)*cos(phi)) / (_xRough*_xRough)) + ((sin(phi)*sin(phi)) / (_yRough*_yRough)) ) ) );
-//    float3 h = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
-//    h = h.x * u + h.y * v + h.z * _normal;
-//    float3 o = 2 * dot(direction, h) * h + direction;
-//    float ps = 1.0;
-//    float w = ps * dot(h, direction)* pow(dot(h, _normal), 3) * sqrt(dot(o, _normal) / dot(direction, _normal));
-//    current_prd.direction = o;
-
-//    return make_float3((ps / ( 4 * float(M_PI) * _xRough * _yRough * sqrt(dot(current_prd.direction, _normal) * dot(direction, _normal)))) * exp(-( ((h.x / _xRough)*(h.x / _xRough)) + ((h.y / _yRough)*(h.y/_yRough)) / (dot(h,_normal)*dot(h,_normal))) ));
-//}
-
-//__device__ optix::float3 microfacet(char* _distribution, float3 _normal, float3 _u, float _xAlpha, float _yAlpha, float _eta, int _refract){
-//    if (_distribution == "beckmann" || _distribution == "Beckmann"){
-//        if (!_refract){
-//            // Generate two random numbers
-//            float z1 = rnd(current_prd.seed);
-//            float z2 = rnd(current_prd.seed);
-
-//            // Generate our microsurface normal m
-//            float3 m;
-//            float a2 = _xAlpha * _xAlpha;
-//            float theta = atan(sqrt(-a2 * log(1 - z1)));
-//            float phi = 2 * M_PI * z2;
-//            m = optix::normalize(make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta)));
-////            printf("m.x: %f, m.y: %f, m.z: %f\n", m.x, m.y, m.z);
-
-//            float3 direction = current_prd.direction;
-
-//            // Set the new ray direction
-//            current_prd.direction = 2 * optix::dot(m, current_prd.origin - eye) * m - (current_prd.origin - eye);
-//            float chi;
-//            if (optix::dot(m, _normal) <= 0.0){
-//                chi = 0.0;
-//            }
-//            else{
-//                chi = 1.0;
-//            }
-
-//            // Calculate the fresnel term
-//            float F = fresnel_dielectric(optix::dot(m, (current_prd.origin - eye)), _eta);
-
-//            // Calculate the distribution
-//            float D;
-//            float mLen, nLen;
-//            mLen = sqrt((m.x*m.x) + (m.y*m.y) + (m.z*m.z));
-//            nLen = sqrt((_normal.x*_normal.x) + (_normal.y*_normal.y) + (_normal.z*_normal.z));
-//            float thetaM = optix::dot(m, _normal) / (mLen*nLen);
-//            D  = chi / (float(M_PI) * -a2 * pow(cos(thetaM), 4));
-//            D *= exp(-(tan(thetaM)*tan(thetaM)) / a2);
-////            printf("%f\n", D);
-
-//            // Calculate the geometric distribution
-//            float G1 = beckmannDistibution(direction, m, _normal, _xAlpha);
-//            float G2 = beckmannDistibution(current_prd.direction, m, _normal, _xAlpha);
-//            float G = G1 * G2;
-
-//            return make_float3((F * G * D) / (4 * optix::dot(current_prd.origin - eye, _normal) * optix::dot(current_prd.direction, _normal)));
-////            return make_float3(D);
-//        }
-//    }
-//}
-
-//__device__ float beckmannDistibution(float3 _v, float3 _m, float3 _normal, float _a){
-//    float chi;
-//    if (optix::dot(_v, _m) / optix::dot(_v, _normal) <= 0.0){
-//        chi = 0.0;
-//    }
-//    else{
-//        chi = 1.0;
-//    }
-//    float vLen = sqrt((_v.x*_v.x) + (_v.y*_v.y) + (_v.z*_v.z));
-//    float nLen = sqrt((_normal.x*_normal.x) + (_normal.y*_normal.y) + (_normal.z*_normal.z));
-//    float thetaV = optix::dot(_v, _normal) / (vLen * nLen);
-//    float a = 1.0 / ( _a * tan(thetaV));//(optix::dot(_normal, (current_prd.origin - eye)) /( _a * sqrt(1 - (optix::dot(_normal, (current_prd.origin - eye))* optix::dot(_normal, (current_prd.origin - eye))))));
-//    float G1;
-//    // Supposedly cheaper
-//    if (a < 1.6){
-//        G1 = chi * ((3.535*a + 2.18*a*a) / (1 + 2.276*a + 2.577*a*a));
-//    }
-//    else{
-//        G1 = chi;
-//    }
-
-//    return G1;
-//}
-
+}//-----------------------------------------------------------------------------

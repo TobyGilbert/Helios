@@ -36,7 +36,6 @@ PathTracerScene::~PathTracerScene(){
     delete m_camera;
     m_outputBuffer->destroy();
     m_lightBuffer->destroy();
-    m_mapTexSample->destroy();
     m_enviSampler->destroy();
     m_context->destroy();
 }
@@ -113,46 +112,18 @@ void PathTracerScene::init(){
     m_sampling_strategy = 0;
     m_context["sampling_stategy"]->setInt(m_sampling_strategy);
 
+    // Lights buffer
+    m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
+
+
     //create our top group and set it in our engine
     m_topGroup = m_context->createGroup();
     m_context["top_object"]->set(m_topGroup);
     m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
 
-    // Our our map texture sample
-    m_mapTexSample = loadTexture(m_context, "textures/map.png");
-
-    // Create scene geometry
-//    createGeometry();
-
     // Finalize
     m_context->validate();
     m_context->compile();
-}
-//----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::createGeometry(){
-
-    float3 corner = make_float3(2.0f, 5.0f, 0.0f);
-    float3 v1 = make_float3( -4.0f, 0.0f, 0.0f);
-    float3 v2 =  make_float3( 0.0f, 0.0f, 2.0f);
-    float3 emission = make_float3(5.0f, 5.0f, 5.0f);
-
-    LightManager::getInstance()->createParollelogramLight(corner,
-                                                          v1,
-                                                          v2,
-                                                          emission);
-
-    m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
-
-    // create geometry instances
-    std::vector<GeometryInstance> gis = LightManager::getInstance()->getLightsGeometry();
-
-    // Create geometry group
-    GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
-
-    geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
-
-    m_topGroup->addChild(geometry_group);
-    m_topGroup->getAcceleration()->markDirty();
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::addLight(float3 _corner, float3 _v1, float3 _v2, float3 _emission){
@@ -173,73 +144,6 @@ void PathTracerScene::addLight(float3 _corner, float3 _v1, float3 _v2, float3 _e
     m_topGroup->addChild(geometry_group);
     m_topGroup->getAcceleration()->markDirty();
 
-}
-//----------------------------------------------------------------------------------------------------------------------
-optix::GeometryInstance PathTracerScene::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
-    optix::Geometry parallelogram = m_context->createGeometry();
-    parallelogram->setPrimitiveCount( 1u );
-    parallelogram->setIntersectionProgram( m_pgram_intersection );
-    parallelogram->setBoundingBoxProgram( m_pgram_bounding_box );
-
-    float3 normal = normalize( cross( offset1, offset2 ) );
-    float d = dot( normal, anchor );
-    float4 plane = optix::make_float4( normal, d );
-
-    float3 v1 = offset1 / dot( offset1, offset1 );
-    float3 v2 = offset2 / dot( offset2, offset2 );
-
-    parallelogram["plane"]->setFloat( plane );
-    parallelogram["anchor"]->setFloat( anchor );
-    parallelogram["v1"]->setFloat( v1 );
-    parallelogram["v2"]->setFloat( v2 );
-
-    optix::GeometryInstance gi = m_context->createGeometryInstance();
-    gi->setGeometry(parallelogram);
-    return gi;
-}
-//----------------------------------------------------------------------------------------------------------------------
-optix::GeometryInstance PathTracerScene::createLightParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2, int lgt_instance){
-    optix::Geometry parallelogram = m_context->createGeometry();
-    parallelogram->setPrimitiveCount( 1u );
-    parallelogram->setIntersectionProgram( m_pgram_intersection );
-    parallelogram->setBoundingBoxProgram( m_pgram_bounding_box );
-
-    float3 normal = normalize( cross( offset1, offset2 ) );
-    float d = dot( normal, anchor );
-    float4 plane = optix::make_float4( normal, d );
-
-    float3 v1 = offset1 / dot( offset1, offset1 );
-    float3 v2 = offset2 / dot( offset2, offset2 );
-
-    parallelogram["plane"]->setFloat( plane );
-    parallelogram["anchor"]->setFloat( anchor );
-    parallelogram["v1"]->setFloat( v1 );
-    parallelogram["v2"]->setFloat( v2 );
-    parallelogram["lgt_instance"]->setInt( lgt_instance );
-
-    optix::GeometryInstance gi = m_context->createGeometryInstance();
-    gi->setGeometry(parallelogram);
-    return gi;
-}
-//----------------------------------------------------------------------------------------------------------------------
-optix::GeometryInstance PathTracerScene::createSphere(const float4 &sphereLoc){
-    Geometry sphere = m_context->createGeometry();
-
-    sphere->setPrimitiveCount( 1u );
-    sphere->setIntersectionProgram( m_pgram_sphereIntersection );
-    sphere->setBoundingBoxProgram( m_pgram_bounding_sphere );
-
-    sphere["sphere"]->setFloat( sphereLoc );
-
-    GeometryInstance gi = m_context->createGeometryInstance();
-    gi->setGeometry(sphere);
-
-    return gi;
-}
-//----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::setMaterial(optix::GeometryInstance &gi, optix::Material material, const std::string &color_name, const float3 &color){
-    gi->addMaterial(material);
-    gi[color_name]->setFloat(color);
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::importMesh(std::string _id, std::string _path){

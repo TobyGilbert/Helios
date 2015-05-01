@@ -123,6 +123,7 @@ void LightManager::initialise(){
     m_lightBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT);
     m_lightBuffer->setFormat( RT_FORMAT_USER);
     m_lightBuffer->setElementSize(sizeof(ParallelogramLight));
+    m_lightBuffer->setSize(0u);
 
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
     m_lightMaterial = PathTracerScene::getInstance()->getContext()->createMaterial();
