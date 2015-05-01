@@ -34,6 +34,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
 }
 //----------------------------------------------------------------------------------------------------------------------
 OpenGLWidget::~OpenGLWidget(){
+    PathTracerScene::getInstance()->destroy();
     delete m_shaderProgram;
     delete m_cam;
     glDeleteVertexArrays(1, &m_VAO);

@@ -142,6 +142,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 }
 
 MainWindow::~MainWindow(){
+
+    //delete our node graph singlton class
+    AbstractMaterialWidget::getInstance()->destroy();
+
     // delete mesh UI
     delete m_meshToolbarButton;
     delete m_meshDockWidget;

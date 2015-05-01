@@ -15,11 +15,11 @@
 AbstractMaterialWidget* AbstractMaterialWidget::m_instance;
 
 AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
-    QWidget(parent,Qt::Window)
+    QDockWidget(parent,Qt::Window)
 {
     this->setMinimumHeight(500);
     this->setMinimumWidth(700);
-    this->setTitle("OSL Hypershader 3000");
+    this->setWindowTitle("OSL Hypershader 3000");
     m_matCreated = false;
     //set our widget layout
     m_widgetLayout = new QGridLayout(this);
@@ -58,8 +58,6 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget(){
-    //remove our instance
-    delete m_instance;
 }
 
 AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
