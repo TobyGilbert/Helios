@@ -75,7 +75,6 @@ rtDeclareVariable(float3,       bg_color, , );
 //  Camera program -- main ray tracing loop
 //
 //-----------------------------------------------------------------------------
-
 RT_PROGRAM void pathtrace_camera(){
     size_t2 screen = output_buffer.size();
 
@@ -143,338 +142,73 @@ RT_PROGRAM void pathtrace_camera(){
         output_buffer[launch_index] = make_float4(pixel_color, 0.0f);
     }
 }
-
-
-// Construct the shader globals
-RT_PROGRAM void constructShaderGlobals(){
+//-----------------------------------------------------------------------------
+RT_PROGRAM void defaultMaterial(){
     if (current_prd.depth > 50){
         current_prd.done = true;
         return;
 
-    }
-    ShaderGlobals sg;
-    // Calcualte the shading and geometric normals for use with our OSL shaders
-    sg.N = normalize( rtTransformNormal(RT_OBJECT_TO_WORLD, shading_normal));
-    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-    sg.I = ray.direction;
-    // The shading position
-    sg.P = ray.origin + t_hit * ray.direction;
-    // Texture coordinates
-    sg.u = texcoord.x;
-    sg.v = texcoord.y;
+    }    
+    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
+    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
 
-    float normalZ = sg.N.z;
-    if (normalZ > 1.0){
-        normalZ = -normalZ;
-    }
-    float normalX = sg.N.x;
-    if (normalX < 0.0){
-        normalX = -normalX;
-    }
+    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
 
-    float xAngle = acos(dot(make_float3(0.0, sg.N.y, sg.N.z), make_float3(0.0, 0.0, 1.0)));
-    float yAngle = acos(dot(make_float3(sg.N.x, 0.0, sg.N.z), make_float3(1.0, 0.0, 0.0)));
+    float3 hitpoint = ray.origin + t_hit * ray.direction;
+    current_prd.origin = hitpoint;
 
-    Matrix4x4 rotx;
-    rotx.setRow(0, make_float4(1, 0, 0, 0));
-    rotx.setRow(1, make_float4(0, cos(xAngle), -sin(xAngle), 0));
-    rotx.setRow(2, make_float4(0, sin(xAngle), cos(xAngle), 0));
-    rotx.setRow(3, make_float4(0, 0, 0,1));
+    float z1=rnd(current_prd.seed);
+    float z2=rnd(current_prd.seed);
+    float3 p;
+    cosine_sample_hemisphere(z1, z2, p);
+    float3 v1, v2;
+    createONB(ffnormal, v1, v2);
+    current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
 
-    Matrix4x4 roty;
-    roty.setRow(0, make_float4(cos(yAngle), 0, sin(yAngle), 0));
-    roty.setRow(1, make_float4(0, 1, 0, 0));
-    roty.setRow(2, make_float4(-sin(yAngle), 0, cos(yAngle), 0));
-    roty.setRow(3, make_float4(0, 0, 0,1));
-
-    // rotate around the x axis
-    sg.dPdu = make_float3(rotx.getRow(0).x, rotx.getRow(1).x, rotx.getRow(2).x);//  make_float4(1.0, 0.0, 0.0, 1.0)
-    // rotate around the y axis
-    sg.dPdu = make_float3(roty.getRow(0).x*sg.dPdu.x + roty.getRow(0).y *sg.dPdu.y + roty.getRow(0).z *sg.dPdu.z,
-                          roty.getRow(1).x*sg.dPdu.x + roty.getRow(1).y *sg.dPdu.y + roty.getRow(1).z *sg.dPdu.z,
-                          roty.getRow(2).x*sg.dPdu.x + roty.getRow(2).y *sg.dPdu.y + roty.getRow(2).z *sg.dPdu.z);
-
-    sg.dPdv = normalize(cross(sg.N, sg.dPdu));
-
-    float3 normal = 2.0 * text((char*)"void", sg.u, sg.v) - make_float3(1.0);
-//    float3 normal = text((char*)"void", sg.u, sg.v);
-
-    Matrix3x3 TBN;
-    TBN.setRow(0, sg.dPdu);
-    TBN.setRow(1, sg.dPdv);
-    TBN.setRow(2, sg.N);
-
-//    sg.N = normalize(make_float3(TBN.getRow(0).x*normal.x + TBN.getRow(0).y *normal.y + TBN.getRow(0).z *normal.z,
-//                       TBN.getRow(1).x*normal.x + TBN.getRow(1).y *normal.y + TBN.getRow(1).z *normal.z,
-//                       TBN.getRow(2).x*normal.x + TBN.getRow(2).y *normal.y + TBN.getRow(2).z *normal.z));
-
-
-//    sg.N = rtTransformNormal(RT_OBJECT_TO_WORLD, normal);
-
-
-    if (current_prd.depth > 10){
-        current_prd.done = true;
-        return;
-
-    }
-    current_prd.origin = ray.origin + t_hit * ray.direction;
-    current_prd.direction = reflect(ray.direction, sg.N);
-//    metal(sg, 1, 10, optix::make_float3(1, 1, 1));
-//    matte(sg, 10);
-//    ifTest();
+//    current_prd.countEmitted = false;
 
     // Compute direct light...
     // Or shoot one...
-    unsigned int num_lights = lights.size();
-    float3 result = make_float3(0.0f);
+    if (lights.size() != 0.0){
+        unsigned int num_lights = lights.size();
+        float3 result = make_float3(0.0f);
 
-    for(int i = 0; i < num_lights; ++i) {
-        ParallelogramLight light = lights[i];
-        float z1 = rnd(current_prd.seed);
-        float z2 = rnd(current_prd.seed);
-        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+        for(int i = 0; i < num_lights; ++i) {
+            ParallelogramLight light = lights[i];
+            float z1 = rnd(current_prd.seed);
+            float z2 = rnd(current_prd.seed);
+            float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
 
-        float Ldist = length(light_pos - sg.P);
-        float3 L = normalize(light_pos - sg.P);
-        float nDl = dot( sg.N, L );
-        float LnDl = dot( light.normal, L );
-        float A = length(cross(light.v1, light.v2));
+            float Ldist = length(light_pos - hitpoint);
+            float3 L = normalize(light_pos - hitpoint);
+            float nDl = dot( world_shading_normal, L );
+            float LnDl = dot( light.normal, L );
+            float A = length(cross(light.v1, light.v2));
 
-        // cast shadow ray
-        if ( nDl > 0.0f && LnDl > 0.0f ) {
-            PerRayData_pathtrace_shadow shadow_prd;
-            shadow_prd.inShadow = false;
-            shadow_prd.type = shadowRay;
-            Ray shadow_ray = make_Ray( sg.P, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-            rtTrace(top_object, shadow_ray, shadow_prd);
+            // cast shadow ray
+            if ( nDl > 0.0f && LnDl > 0.0f ) {
+                PerRayData_pathtrace_shadow shadow_prd;
+                shadow_prd.inShadow = false;
+                shadow_prd.type = shadowRay;
+                Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+                rtTrace(top_object, shadow_ray, shadow_prd);
 
-            if(!shadow_prd.inShadow){
-                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-                result += light.emission * weight;
+                if(!shadow_prd.inShadow){
+                    float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+                    result += light.emission * weight;
+                }
             }
         }
+        current_prd.radiance = result;
     }
-    current_prd.radiance = result;
 }
-
-//__device__ void metal(ShaderGlobals &sg, float Ks,  float eta,  optix::float3 Cs ){
-//    optix::float3 $tmp1 = reflection( sg.N, eta );
-//    optix::float3 $tmp2 = Ks * Cs;
-//    current_prd.attenuation = $tmp1 * $tmp2;
-//}
-
-//__device__ void matte(ShaderGlobals &sg, float Kd,  float3 Cs){
-//    float3 $tmp1 = diffuse( sg.N );
-
-//    float3 $tmp2 = Kd * Cs;
-//    current_prd.attenuation = 0.5 + 0.5 * sg.N;//$tmp1 * $tmp2;
-//}
-
-__device__ void ifTest( ){
-    ShaderGlobals sg;
-    // Calcualte the shading and geometric normals for use with our OSL shaders
-    sg.N = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-    sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-    sg.I = ray.direction;
-    // The shading position
-    sg.P = ray.origin + t_hit * ray.direction;
-    // Texture coordinates
-    sg.u = texcoord.x;
-    sg.v = texcoord.y;
-    float ___317_e;
-    float3 ___317_g;
-    int ___317_q;
-    float ___318_t;
-    float f;
-    float $const1 = 0;
-    float $const2 = 0;
-    char* $const3 = "diffuse";
-    int $const4 = 10;
-    float3 $const5 = make_float3( 5,5,5);
-    int $const6 = 1;
-    int $const7 = 100;
-    float $const8 = 100;
-    char* $const9 = "phong";
-    L1:
-    int $tmp1;
-    if ($const1 == $const2){
-        $tmp1 = 1;
-    }
-    else{
-        $tmp1 = 0;
-    }
-    L2:
-    if (!$tmp1){
-        goto L7;
-    }
-    L3:
-     current_prd.attenuation = diffuse( sg.N );
-    L4:
-    ___317_e = $const4;
-    L5:
-    ___317_g = $const5;
-    L6:
-    ___317_q = $const6;
-    goto L9;
-    L7:
-     current_prd.attenuation = phong( sg.N,$const8 );
-    L8:
-    ___318_t = $const4;
-    L9:
-    f = $const7;
-    L10:
-}
-
-
+//-----------------------------------------------------------------------------
 rtDeclareVariable(float3,        emission_color, , );
 
 RT_PROGRAM void diffuseEmitter(){
     current_prd.radiance = current_prd.countEmitted? emission_color : make_float3(0.f);
     current_prd.done = true;
 }
-
-//rtDeclareVariable(float3,        diffuse_color, , );
-
-//rtTextureSampler<float4, 2> map_texture;
-
-//RT_PROGRAM void diffuse(){
-//    if (current_prd.depth > 10){
-//        current_prd.done = true;
-//        return;
-
-//    }
-//    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-//    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-
-//    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
-
-//    float3 hitpoint = ray.origin + t_hit * ray.direction;
-//    current_prd.origin = hitpoint;
-
-//    float z1=rnd(current_prd.seed);
-//    float z2=rnd(current_prd.seed);
-//    float3 p;
-//    cosine_sample_hemisphere(z1, z2, p);
-//    float3 v1, v2;
-//    createONB(ffnormal, v1, v2);
-//    current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
-//    float3 normal_color = (normalize(world_shading_normal)*0.5f + 0.5f)*0.9;
-
-//    current_prd.attenuation = current_prd.attenuation * make_float3(tex2D(map_texture, texcoord.x, texcoord.y)); // use the diffuse_color as the diffuse response
-
-//    current_prd.countEmitted = false;
-
-//    // Compute direct light...
-//    // Or shoot one...
-//    unsigned int num_lights = lights.size();
-//    float3 result = make_float3(0.0f);
-
-//    for(int i = 0; i < num_lights; ++i) {
-//        ParallelogramLight light = lights[i];
-//        float z1 = rnd(current_prd.seed);
-//        float z2 = rnd(current_prd.seed);
-//        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
-
-//        float Ldist = length(light_pos - hitpoint);
-//        float3 L = normalize(light_pos - hitpoint);
-//        float nDl = dot( ffnormal, L );
-//        float LnDl = dot( light.normal, L );
-//        float A = length(cross(light.v1, light.v2));
-
-//        // cast shadow ray
-//        if ( nDl > 0.0f && LnDl > 0.0f ) {
-//            PerRayData_pathtrace_shadow shadow_prd;
-//            shadow_prd.inShadow = false;
-//            Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-//            rtTrace(top_object, shadow_ray, shadow_prd);
-
-//            if(!shadow_prd.inShadow){
-//                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-//                result += light.emission * weight;
-//            }
-//        }
-//    }
-//    current_prd.radiance = result;
-//}
-
-//rtDeclareVariable(float3,        glass_color, , );
-//rtDeclareVariable(float,         index_of_refraction, , );
-
-//RT_PROGRAM void glass_refract(){
-//    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-//    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-
-//    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
-
-//    float3 hitpoint = ray.origin + t_hit * ray.direction;
-//    current_prd.origin = hitpoint;
-//    current_prd.countEmitted = true;
-//    float iof;
-//    if (current_prd.inside) {
-//        // Shoot outgoing ray
-//        iof = 1.0f/index_of_refraction;
-//    }
-//    else {
-//        iof = index_of_refraction;
-//    }
-//        refract(current_prd.direction, ray.direction, ffnormal, iof);
-//        //prd.direction = reflect(ray.direction, ffnormal);
-
-//    if (current_prd.inside) {
-//        // Compute Beer's law
-//        current_prd.attenuation = current_prd.attenuation * powf(glass_color, 1);
-//    }
-//    current_prd.inside = !current_prd.inside;
-//    current_prd.radiance = make_float3(0.0f);
-//}
-
-//rtDeclareVariable(float, reflectivity, , );
-//rtDeclareVariable(int, max_depth, , );
-
-//RT_PROGRAM void reflections(){
-//    if (current_prd.depth > 10){
-//        current_prd.done = true;
-//        return;
-//    }
-//    float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
-//    float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-//    float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
-//    float3 hitpoint = ray.origin + t_hit * ray.direction;
-
-//    current_prd.origin = hitpoint;
-
-//    current_prd.direction = reflect(ray.direction, ffnormal);
-
-//    unsigned int num_lights = lights.size();
-//    float3 result = make_float3(0.0f);
-
-//    for(int i = 0; i < num_lights; ++i) {
-//        ParallelogramLight light = lights[i];
-//        float z1 = rnd(current_prd.seed);
-//        float z2 = rnd(current_prd.seed);
-//        float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
-
-//        float Ldist = length(light_pos - hitpoint);
-//        float3 L = normalize(light_pos - hitpoint);
-//        float nDl = dot( ffnormal, L );
-//        float LnDl = dot( light.normal, L );
-//        float A = length(cross(light.v1, light.v2));
-
-//        // cast shadow ray
-//        if ( nDl > 0.0f && LnDl > 0.0f ) {
-//            PerRayData_pathtrace_shadow shadow_prd;
-//            shadow_prd.inShadow = false;
-//            Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-//            rtTrace(top_object, shadow_ray, shadow_prd);
-
-//            if(!shadow_prd.inShadow){
-//                float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-//                result += light.emission * weight;
-//            }
-//        }
-//    }
-//    current_prd.radiance = result;
-//}
 //-----------------------------------------------------------------------------
 //
 //  Exception program
@@ -493,7 +227,7 @@ RT_PROGRAM void miss(){
     current_prd.radiance = bg_color;
     current_prd.done = true;
 }
-
+//-----------------------------------------------------------------------------
 RT_PROGRAM void envi_miss(){
     float theta = atan2f(ray.direction.x, ray.direction.z);
     float phi = M_PIf * 0.5f - acos(ray.direction.y);
@@ -502,14 +236,14 @@ RT_PROGRAM void envi_miss(){
     current_prd.radiance = make_float3(tex2D(envmap, u, v));
     current_prd.done = true;
 }
-
+//-----------------------------------------------------------------------------
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
 
 RT_PROGRAM void shadow(){
     current_prd_shadow.inShadow = true;
     rtTerminateRay();
 }
-
+//-----------------------------------------------------------------------------
 // OSL device function
 __device__ int raytype(rayType _name){
     if (current_prd.type == _name){
@@ -519,171 +253,7 @@ __device__ int raytype(rayType _name){
         return 0;
     }
 }
-
+//----------------------------------------------------------------------------
 __device__ optix::float3 text(char* _filename, float _s, float _t){
     return make_float3(tex2D(normalMap, _s, _t));
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-//-------------------------------------------------------- BRDFS -------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 reflection(optix::float3 _normal, float _eta){
-    current_prd.direction = reflect(ray.direction, _normal);
-    float cosNO = optix::dot(-_normal, eye - current_prd.origin);
-    if (cosNO > 0){
-        return optix::make_float3(fresnel_dielectric(cosNO, _eta));
-    }
-    return optix::make_float3(1.0);
-}
-//----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 diffuse(optix::float3 _normal){
-    float z1=rnd(current_prd.seed);
-    float z2=rnd(current_prd.seed);
-    float3 p;
-    cosine_sample_hemisphere(z1, z2, p);
-    float3 v1, v2;
-    createONB(_normal, v1, v2);
-    current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
-    return optix::make_float3(max(optix::dot(_normal, current_prd.direction), 0.0f) * float(M_1_PI));
-}
-//----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 phong(optix::float3 _normal, float _exponant){
-    float z1 = rnd(current_prd.seed);
-    float z2 = rnd(current_prd.seed);
-    float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
-    float cosTheta= pow(z1, 1 / (_exponant + 1));
-    float sinPhi = sin(2*float(M_PI)*z2);
-    float cosPhi = cos(2*float(M_PI)*z2);
-    current_prd.direction = make_float3 (sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
-
-    // n + 2 / 2PI * cos^n (A);
-    float3 R = reflect((current_prd.origin - eye), _normal);
-    float A = optix::dot(R, current_prd.direction);
-
-    if (A > 0){
-        return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant))));
-    }
-    return make_float3(0.0);
-}
-//----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
-    float z1=rnd(current_prd.seed);
-    float z2=rnd(current_prd.seed);
-    float3 p;
-    cosine_sample_hemisphere(z1, z2, p);
-    float3 v1, v2;
-    createONB(_normal, v1, v2);
-    float3 ray_direction = current_prd.direction;
-    current_prd.direction = v1 * p.x + v2 * p.y + _normal * p.z;
-
-    float3 L = current_prd.direction;
-    float3 V = (current_prd.origin - eye);
-
-    float A = 1 / (M_PI + ((M_PI / 2) - (2/3)) * _sigma );
-    float B = _sigma / (M_PI + ( (M_PI /2) - (2/3)) * _sigma);
-    float s = optix::dot(L, V) - optix::dot(_normal, L) * optix::dot(_normal, V);
-    float t;
-    if ( s <= 0.0){
-        t = 1.0;
-    }
-    else{
-        t = max(optix::dot(_normal, L), optix::dot(_normal, V));
-    }
-
-    return make_float3(0.8 * optix::dot(_normal, L) * (A + B * (s / t)));
-}
-//----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 ward(float3 _normal, float3 _t, float _xRough, float _yRough){
-    float3 direction = current_prd.direction;
-    float z1 = rnd(current_prd.seed);
-    float z2 = rnd(current_prd.seed);
-    float3 v = cross(_normal, _t);
-    float3 u = cross(v, _normal);
-
-    float phi = atan((_yRough/_xRough) * tan(2*float(M_PI)*z2));
-    float theta = atan( sqrt( -log(1 - z1) / ( ((cos(phi)*cos(phi)) / (_xRough*_xRough)) + ((sin(phi)*sin(phi)) / (_yRough*_yRough)) ) ) );
-    float3 h = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
-    h = h.x * u + h.y * v + h.z * _normal;
-    float3 o = 2 * dot(direction, h) * h + direction;
-    float ps = 1.0;
-    float w = ps * dot(h, direction)* pow(dot(h, _normal), 3) * sqrt(dot(o, _normal) / dot(direction, _normal));
-    current_prd.direction = o;
-
-    return make_float3((ps / ( 4 * float(M_PI) * _xRough * _yRough * sqrt(dot(current_prd.direction, _normal) * dot(direction, _normal)))) * exp(-( ((h.x / _xRough)*(h.x / _xRough)) + ((h.y / _yRough)*(h.y/_yRough)) / (dot(h,_normal)*dot(h,_normal))) ));
-}
-
-__device__ optix::float3 microfacet(char* _distribution, float3 _normal, float3 _u, float _xAlpha, float _yAlpha, float _eta, int _refract){
-    if (_distribution == "beckmann" || _distribution == "Beckmann"){
-        if (!_refract){
-            // Generate two random numbers
-            float z1 = rnd(current_prd.seed);
-            float z2 = rnd(current_prd.seed);
-
-            // Generate our microsurface normal m
-            float3 m;
-            float a2 = _xAlpha * _xAlpha;
-            float theta = atan(sqrt(-a2 * log(1 - z1)));
-            float phi = 2 * M_PI * z2;
-            m = optix::normalize(make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta)));
-//            printf("m.x: %f, m.y: %f, m.z: %f\n", m.x, m.y, m.z);
-
-            float3 direction = current_prd.direction;
-
-            // Set the new ray direction
-            current_prd.direction = 2 * optix::dot(m, current_prd.origin - eye) * m - (current_prd.origin - eye);
-            float chi;
-            if (optix::dot(m, _normal) <= 0.0){
-                chi = 0.0;
-            }
-            else{
-                chi = 1.0;
-            }
-
-            // Calculate the fresnel term
-            float F = fresnel_dielectric(optix::dot(m, (current_prd.origin - eye)), _eta);
-
-            // Calculate the distribution
-            float D;
-            float mLen, nLen;
-            mLen = sqrt((m.x*m.x) + (m.y*m.y) + (m.z*m.z));
-            nLen = sqrt((_normal.x*_normal.x) + (_normal.y*_normal.y) + (_normal.z*_normal.z));
-            float thetaM = optix::dot(m, _normal) / (mLen*nLen);
-            D  = chi / (float(M_PI) * -a2 * pow(cos(thetaM), 4));
-            D *= exp(-(tan(thetaM)*tan(thetaM)) / a2);
-//            printf("%f\n", D);
-
-            // Calculate the geometric distribution
-            float G1 = beckmannDistibution(direction, m, _normal, _xAlpha);
-            float G2 = beckmannDistibution(current_prd.direction, m, _normal, _xAlpha);
-            float G = G1 * G2;
-
-            return make_float3((F * G * D) / (4 * optix::dot(current_prd.origin - eye, _normal) * optix::dot(current_prd.direction, _normal)));
-//            return make_float3(D);
-        }
-    }
-}
-
-__device__ float beckmannDistibution(float3 _v, float3 _m, float3 _normal, float _a){
-    float chi;
-    if (optix::dot(_v, _m) / optix::dot(_v, _normal) <= 0.0){
-        chi = 0.0;
-    }
-    else{
-        chi = 1.0;
-    }
-    float vLen = sqrt((_v.x*_v.x) + (_v.y*_v.y) + (_v.z*_v.z));
-    float nLen = sqrt((_normal.x*_normal.x) + (_normal.y*_normal.y) + (_normal.z*_normal.z));
-    float thetaV = optix::dot(_v, _normal) / (vLen * nLen);
-    float a = 1.0 / ( _a * tan(thetaV));//(optix::dot(_normal, (current_prd.origin - eye)) /( _a * sqrt(1 - (optix::dot(_normal, (current_prd.origin - eye))* optix::dot(_normal, (current_prd.origin - eye))))));
-    float G1;
-    // Supposedly cheaper
-    if (a < 1.6){
-        G1 = chi * ((3.535*a + 2.18*a*a) / (1 + 2.276*a + 2.577*a*a));
-    }
-    else{
-        G1 = chi;
-    }
-
-    return G1;
-}
-
+}//-----------------------------------------------------------------------------

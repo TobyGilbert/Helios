@@ -59,7 +59,6 @@ void OpenGLWidget::initializeGL(){
     PathTracerScene::getInstance()->setSize(width(),height());
     PathTracerScene::getInstance()->setDevicePixelRatio(devicePixelRatio());
     PathTracerScene::getInstance()->init();
-
     //create our plane to project our scene onto
     float vertex[]={
         //bottom left
@@ -134,6 +133,8 @@ void OpenGLWidget::initializeGL(){
 
     m_cam = new Camera(glm::vec3(0.0, 0.0, -20.0));
 
+    //notify any dependencies that the path tracer has now been created
+    pathTracerCreated();
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
     startTimer(0);

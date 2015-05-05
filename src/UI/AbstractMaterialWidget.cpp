@@ -63,12 +63,19 @@ AbstractMaterialWidget::~AbstractMaterialWidget(){
 AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
 {
     if(m_instance){
-        if(parent) std::cerr<<"AbstractMaterialWidget already has a parent"<<std::endl;
-        return m_instance;
+        if(parent){
+            if(m_instance->parent()){
+                std::cerr<<"AbstractMaterialWidget already has a parent"<<std::endl;
+            }
+            else{
+                m_instance->setParent(parent);
+            }
+        }
     }
     else{
         m_instance = new AbstractMaterialWidget(parent);
     }
+    return m_instance;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::createOptixMaterial(){

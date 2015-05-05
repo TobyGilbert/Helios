@@ -1,114 +1,130 @@
-#ifndef MeshWidget_H
-#define MeshWidget_H
-
-/// @class MeshWidget
-/// @date 29/01/14
-/// @author Declan Russell
-/// @brief This class is an extention of QWidget that adds all our mesh properties controls as default
-
+#ifndef LIGHTMANAGER_H_
+#define LIGHTMANAGER_H_
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief A class to manage all the lights in our scene
+/// @author Toby Gilbert
+/// @date 30/05/15
+//----------------------------------------------------------------------------------------------------------------------
+#include <QDockWidget>
 #include <QWidget>
+#include <vector>
+#include <optixu/optixpp_namespace.h>
+#include <optixu/optixu_math_namespace.h>
+
+//----------------------------------------------------------------------------------------------------------------------
+// QT GUI includes
+//----------------------------------------------------------------------------------------------------------------------
 #include <QGridLayout>
+#include <QGroupBox>
 #include <QLabel>
-#include <QDoubleSpinBox>
 #include <QSpacerItem>
+#include <QDoubleSpinBox>
 #include <QPushButton>
-#include <QFileDialog>
-#include <QString>
 
-#include "UI/AbstractMaterialWidget.h"
 
-class MeshWidget : public QWidget
-{
+class LightManager : public QDockWidget{
     Q_OBJECT
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor
+    /// @brief A structure to hold information about our parallelogram area lights
     //----------------------------------------------------------------------------------------------------------------------
-    explicit MeshWidget(std::string _id = 0);
+    struct ParallelogramLight{
+        optix::float3 corner;
+        optix::float3 v1, v2;
+        optix::float3 normal;
+        optix::float3 emission;
+        bool textured;
+    };
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our destructor
+    /// @brief returns an instance of our singleton class
     //----------------------------------------------------------------------------------------------------------------------
-    ~MeshWidget();
+    static LightManager *getInstance(QWidget *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
-signals:
+    /// @brief Destructor
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a signal called when something has changed to promt the update of our scene
+    ~LightManager();
     //----------------------------------------------------------------------------------------------------------------------
-    void updateScene();
+    /// @brief Initialise the light buffer
     //----------------------------------------------------------------------------------------------------------------------
-public slots:
+    void initialise();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our signal to norify if any tranform spinbox have been changed
+    /// @brief Create a new parallelogram light
     //----------------------------------------------------------------------------------------------------------------------
-    void signalTransformChange();
+    void createParollelogramLight(optix::float3 _corner, optix::float3 _v1, optix::float3 _v2, optix::float3 _emission);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief applys the material from our node graph to our mesh
+    /// @brief Returns our optix buffer containing information about our lights
     //----------------------------------------------------------------------------------------------------------------------
-    void applyOSLMaterial();
+    inline optix::Buffer getLightsBuffer(){return m_lightBuffer;}
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Returns the geometry for our lights
+    //----------------------------------------------------------------------------------------------------------------------
+    inline std::vector<optix::GeometryInstance> getLightsGeometry(){return m_lightGeometry;}
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spacer for the widget
+    /// @brief Constructor
     //----------------------------------------------------------------------------------------------------------------------
-    QSpacerItem* m_meshSpacer;
+    explicit LightManager(QWidget *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for x rotation
+    /// @brief a pointer to our instance of our singleton class
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshRotateXDSpinBox;
+    static LightManager* m_instance;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for y rotation
+    /// @brief Creates our GUI elements
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshRotateYDSpinBox;
+    void createGUI();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for z rotation
+    /// @brief A buffer to hold our lights
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshRotateZDSpinBox;
+    optix::Buffer m_lightBuffer;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our rotate label
+    /// @brief A variable to store the number of lights in our buffer
     //----------------------------------------------------------------------------------------------------------------------
-    QLabel* m_meshRotateLabel;
+    unsigned int m_numLights;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for x translation
+    /// @brief A vector containing the geometry for our lights
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshTranslateXDSpinBox;
+    std::vector<optix::GeometryInstance> m_lightGeometry;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for y translation
+    /// @brief Create the geometry for our lights
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshTranslateYDSpinBox;
+    optix::GeometryInstance createParallelogram(const optix::float3 &anchor, const optix::float3 &offset1, const optix::float3 &offset2);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for z translation
+    /// @brief A material to add to our lights
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshTranslateZDSpinBox;
+    optix::Material m_lightMaterial;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our translate label
+    /// @brief AABB bounding box program for our lights geometry
     //----------------------------------------------------------------------------------------------------------------------
-    QLabel* m_meshTranslateLabel;
+    optix::Program m_pgram_bounding_box;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for x scale
+    /// @brief Our full intersection program for our lights geometry
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshScaleXDSpinBox;
+    optix::Program m_pgram_intersection;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for Y scale
+    /// @brief A vector to hold all our GUI widgets
     //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshScaleYDSpinBox;
+    std::vector<QObject*> m_guiWidgets;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our spinbox for z scale
-    //----------------------------------------------------------------------------------------------------------------------
-    QDoubleSpinBox* m_meshScaleZDSpinBox;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our scale label
-    //----------------------------------------------------------------------------------------------------------------------
-    QLabel* m_meshScaleLabel;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our grid layour for our widget
-    //----------------------------------------------------------------------------------------------------------------------
-    QGridLayout* m_meshGridLayout;
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief the mesh id
-    //----------------------------------------------------------------------------------------------------------------------
-    std::string m_meshId;
-    //----------------------------------------------------------------------------------------------------------------------
+    QDoubleSpinBox* m_cornerX;
+    QDoubleSpinBox* m_cornerY;
+    QDoubleSpinBox* m_cornerZ;
+    QDoubleSpinBox* m_v1X;
+    QDoubleSpinBox* m_v1Y;
+    QDoubleSpinBox* m_v1Z;
+    QDoubleSpinBox* m_v2X;
+    QDoubleSpinBox* m_v2Y;
+    QDoubleSpinBox* m_v2Z;
+    QDoubleSpinBox* m_emissionX;
+    QDoubleSpinBox* m_emissionY;
+    QDoubleSpinBox* m_emissionZ;
 
+public slots:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Adds a light to the scene
+    //----------------------------------------------------------------------------------------------------------------------
+    void addLight();
+    //----------------------------------------------------------------------------------------------------------------------
 };
 
-#endif // MeshWidget_H
+#endif
