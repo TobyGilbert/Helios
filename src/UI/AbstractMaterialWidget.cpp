@@ -19,7 +19,6 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 {
     this->setMinimumHeight(500);
     this->setMinimumWidth(700);
-//    this->setTitle("OSL Hypershader 3000");
     m_matCreated = false;
     //set our widget layout
     m_widgetLayout = new QGridLayout(this);

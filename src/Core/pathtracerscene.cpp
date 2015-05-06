@@ -126,11 +126,8 @@ void PathTracerScene::init(){
     m_context->compile();
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::addLight(float3 _corner, float3 _v1, float3 _v2, float3 _emission){
-    LightManager::getInstance()->createParollelogramLight(_corner,
-                                                          _v1,
-                                                          _v2,
-                                                          _emission);
+void PathTracerScene::addLight(){
+    LightManager::getInstance()->createParollelogramLight();
     m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
     // create geometry instances
@@ -143,6 +140,10 @@ void PathTracerScene::addLight(float3 _corner, float3 _v1, float3 _v2, float3 _e
 
     m_topGroup->addChild(geometry_group);
     m_topGroup->getAcceleration()->markDirty();
+    m_frame = 0;
+}
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::transformLight(glm::mat4 _trans){
 
 }
 //----------------------------------------------------------------------------------------------------------------------

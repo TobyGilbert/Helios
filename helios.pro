@@ -46,7 +46,8 @@ SOURCES += \
     src/OSLCompiler/osolexer.l \
     src/OSLCompiler/oso.y  \
     optixSrc/*.cu \
-    src/Lights/LightManager.cpp
+    src/Lights/LightManager.cpp \
+    src/Lights/Light.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -86,7 +87,8 @@ HEADERS += \
     include/NodeGraph/OSLShaderBlock.h \
     include/NodeGraph/OSLVarFloatBlock.h \
     include/NodeGraph/OSLNodesEditor.h \
-    include/Lights/LightManager.h
+    include/Lights/LightManager.h \
+    include/Lights/Light.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
