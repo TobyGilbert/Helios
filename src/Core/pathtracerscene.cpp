@@ -130,15 +130,9 @@ void PathTracerScene::addLight(){
     LightManager::getInstance()->createParollelogramLight();
     m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
-    // create geometry instances
-    std::vector<GeometryInstance> gis = LightManager::getInstance()->getLightsGeometry();
+    // Only add the last one on the vector to avoid duplicates
+    m_topGroup->addChild(LightManager::getInstance()->getGeomAndTrans().back());
 
-    // Create geometry group
-    GeometryGroup geometry_group = m_context->createGeometryGroup(gis.begin(), gis.end());
-
-    geometry_group->setAcceleration( m_context->createAcceleration("Bvh","Bvh") );
-
-    m_topGroup->addChild(geometry_group);
     m_topGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
@@ -261,3 +255,7 @@ void PathTracerScene::setEnvironmentMap(std::string _environmentMap){
     m_context["envmap"]->setTextureSampler(m_enviSampler);
 }
 //----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::cleanTopAcceleration(){
+    m_topGroup->getAcceleration()->markDirty();
+    m_frame = 0;
+}

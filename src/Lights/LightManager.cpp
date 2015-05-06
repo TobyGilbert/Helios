@@ -1,8 +1,9 @@
+/// @brief A class to manage all the lights in our scene
+/// @author Toby Gilbert
+
 #include "Lights/LightManager.h"
 #include "Core/pathtracerscene.h"
 #include <iostream>
-
-
 
 // Declare our static instance of our class
 LightManager* LightManager::m_instance;
@@ -148,29 +149,52 @@ void LightManager::initialise(){
     m_lightBuffer->setFormat( RT_FORMAT_USER);
     m_lightBuffer->setElementSize(sizeof(ParallelogramLight));
     m_lightBuffer->setSize(0u);
-
 }
 //----------------------------------------------------------------------------------------------------------------------
 void LightManager::createParollelogramLight(){
     // Add our light to the buffer of lights
     Light *tmpLight = new Light();
-    m_lights.push_back(tmpLight->getParallelogromLight());
+//    m_lights.push_back(tmpLight);
+    m_parallelogramLights.push_back(tmpLight->getParallelogromLight());
 
+
+    // Add the default information for our gui defaults vector, resize and reset the gui
+    m_lightTransforms.resize((unsigned int)m_numLights+1);
+    m_lightTransforms.back().m_translate = glm::vec3(0.0, 0.0, 0.0);
+    m_lightTransforms.back().m_rotate = glm::vec3(0.0, 0.0, 0.0);
+    m_lightTransforms.back().m_scale = glm::vec3(1.0, 1.0, 1.0);
+    setGuiDefaults();
+
+    // Resize the light information buffer and copy back the data
     m_lightBuffer->setSize((unsigned int)m_numLights+1);
-    memcpy(m_lightBuffer->map(), &(m_lights[0]), m_lights.size()*sizeof(ParallelogramLight));
+    memcpy(m_lightBuffer->map(), &(m_parallelogramLights[0]), m_parallelogramLights.size()*sizeof(ParallelogramLight));
     m_lightBuffer->unmap();
 
-    // Add the lights geometry
-    m_lightGeometry.push_back(tmpLight->getGeometryInstance());
-
-    m_lightGeometry.back()->addMaterial(tmpLight->getMaterial());
-    m_lightGeometry.back()["emission_color"]->setFloat(tmpLight->getParallelogromLight().emission);
+    // Add the transform-geometry node to the vector for use when drawing the light geometry
+    m_geoAndTrans.push_back(tmpLight->getGeomAndTrans());
 
     m_lightIndexListWidget->addItem(tr((std::string("light") + std::to_string(m_numLights+1)).c_str()));
     m_lightIndexListWidget->item(m_numLights)->setSelected(true);
     m_selectedLight = m_numLights;
 
     m_numLights++;
+
+    delete tmpLight;
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void LightManager::setGuiDefaults(){
+    m_translateX->setValue(0.0);
+    m_translateY->setValue(0.0);
+    m_translateZ->setValue(0.0);
+    m_rotateX->setValue(0.0);
+    m_rotateY->setValue(0.0);
+    m_rotateZ->setValue(0.0);
+    m_scaleX->setValue(1.0);
+    m_scaleY->setValue(1.0);
+    m_scaleZ->setValue(1.0);
+    m_emissionX->setValue(5.0);
+    m_emissionY->setValue(5.0);
+    m_emissionZ->setValue(5.0);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::addLight(){
@@ -178,16 +202,70 @@ void LightManager::addLight(){
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::updateLight(){
-    std::cout<<"selection light index: "<<m_selectedLight<<std::endl;
     // Changes the light parameters for the actual light
     // A pointer to the start of the buffer of lights
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
     lightBuffer[m_selectedLight].emission.x = m_emissionX->value();
     lightBuffer[m_selectedLight].emission.y = m_emissionY->value();
     lightBuffer[m_selectedLight].emission.z = m_emissionZ->value();
+
+    // Scale by the default values no need to scale in as the light is flat
+    // Scale in x
+//    lightBuffer[m_selectedLight].corner.x = 0.5 * m_scaleX->value();
+//    lightBuffer[m_selectedLight].v1.x = -1.0 * m_scaleX->value();
+//    // Scale in z
+//    lightBuffer[m_selectedLight].corner.z = -0.5 * m_scaleZ->value();
+//    lightBuffer[m_selectedLight].v2.z = 1.0 * m_scaleZ->value();
+
+    // Translate using the scaled values
+    lightBuffer[m_selectedLight].corner.x = (0.5 * m_scaleX->value()) + m_translateX->value();
+    lightBuffer[m_selectedLight].v1.x = (-1.0 * m_scaleX->value()) + m_translateX->value();
+
+    lightBuffer[m_selectedLight].corner.y = m_translateY->value();
+
+    lightBuffer[m_selectedLight].corner.z = (-0.5 * m_scaleZ->value()) + m_translateZ->value();
+    lightBuffer[m_selectedLight].v2.z = (1.0 * m_scaleZ->value()) + m_translateZ->value();
+
+
     m_lightBuffer->unmap();
+
+    // Update the vector to store transforms
+    LightTransforms lightTrans;
+    lightTrans.m_translate = glm::vec3(m_translateX->value(), m_translateY->value(), m_translateZ->value());
+    lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
+    lightTrans.m_scale = glm::vec3(m_scaleX->value(), m_scaleY->value(), m_scaleZ->value());
+    m_lightTransforms[m_selectedLight]= lightTrans;
+
+    glm::mat4 transform = glm::mat4();
+
+    // Rotate
+    float DtoR = 3.14159265359/180.0;
+    glm::mat4 rotx = glm::mat4();
+    glm::mat4 roty = glm::mat4();
+    glm::mat4 rotz = glm::mat4();
+    rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
+    roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
+    rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
+    transform = rotx * roty * rotz;
+
+    // Scale
+    transform[0][0] = m_scaleX->value();
+    transform[1][1] = m_scaleY->value();
+    transform[2][2] = m_scaleZ->value();
+
+    // Translate
+    transform[3][0] = m_translateX->value();
+    transform[3][1] = m_translateY->value();
+    transform[3][2] = m_translateZ->value();
+
+    // Translate the optix::Translate node using the new transform matrix
+    setTrans(m_geoAndTrans[m_selectedLight], transform);
+
     // Changes the emission paramters for the light
-    m_lightGeometry[m_selectedLight]["emission_color"]->setFloat(make_float3(m_emissionX->value(), m_emissionY->value(), m_emissionZ->value()));
+    m_geoAndTrans[m_selectedLight]->getChild<optix::GeometryGroup>()->getChild(0)["emission_color"]->setFloat(m_emissionX->value(), m_emissionY->value(), m_emissionZ->value());
+
+    // Update accelleration structure
+    PathTracerScene::getInstance()->cleanTopAcceleration();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::updateGUI(QModelIndex _index){
@@ -197,9 +275,40 @@ void LightManager::updateGUI(QModelIndex _index){
     // A pointer to the start of the buffer of lights
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
 
+    m_translateX->setValue(m_lightTransforms[m_selectedLight].m_translate.x);
+    m_translateY->setValue(m_lightTransforms[m_selectedLight].m_translate.y);
+    m_translateZ->setValue(m_lightTransforms[m_selectedLight].m_translate.z);
+
+    m_rotateX->setValue(m_lightTransforms[m_selectedLight].m_rotate.x);
+    m_rotateY->setValue(m_lightTransforms[m_selectedLight].m_rotate.y);
+    m_rotateZ->setValue(m_lightTransforms[m_selectedLight].m_rotate.z);
+
+    m_scaleX->setValue(m_lightTransforms[m_selectedLight].m_scale.x);
+    m_scaleY->setValue(m_lightTransforms[m_selectedLight].m_scale.y);
+    m_scaleZ->setValue(m_lightTransforms[m_selectedLight].m_scale.z);
+
     m_emissionX->setValue(lightBuffer[m_selectedLight].emission.x);
     m_emissionY->setValue(lightBuffer[m_selectedLight].emission.y);
     m_emissionZ->setValue(lightBuffer[m_selectedLight].emission.z);
 
     m_lightBuffer->unmap();
 }
+//------------------------------------------------------------------------------------------------------------------------------------
+void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose){
+    // identity matrix to init our transformation
+    float m[16];
+    m[ 0] = _trans[0][0];  m[ 1] = _trans[1][0];  m[ 2] = _trans[2][0];  m[ 3] = _trans[3][0];
+    m[ 4] = _trans[0][1];  m[ 5] = _trans[1][1];  m[ 6] = _trans[2][1];  m[ 7] = _trans[3][1];
+    m[ 8] = _trans[0][2];  m[ 9] = _trans[1][2];  m[ 10] = _trans[2][2];  m[ 11] = _trans[3][2];
+    m[ 12] = _trans[0][3];  m[ 13] = _trans[1][3];  m[ 14] = _trans[2][3];  m[ 15] = _trans[3][3];
+    // create our inverse transform
+    float invM[16];
+    glm::mat4 inv = glm::inverse(_trans);
+    invM[ 0] = inv[0][0];  invM[ 1] = inv[1][0];  invM[ 2] = inv[2][0];  invM[ 3] = inv[3][0];
+    invM[ 4] = inv[0][1];  invM[ 5] = inv[1][1];  invM[ 6] = inv[2][1];  invM[ 7] = inv[3][1];
+    invM[ 8] = inv[0][2];  invM[ 9] = inv[1][2];  invM[ 10] = inv[2][2];  invM[ 11] = inv[3][2];
+    invM[ 12] = inv[0][3];  invM[ 13] = inv[1][3];  invM[ 14] = inv[2][3];  invM[ 15] = inv[3][3];
+    // set our transform
+    _transform->setMatrix(_transpose,m,invM);
+}
+//------------------------------------------------------------------------------------------------------------------------------------

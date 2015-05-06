@@ -4,6 +4,8 @@
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_math_namespace.h>
 
+#include <glm/glm.hpp>
+
 class Light{
 public:
     //----------------------------------------------------------------------------------------------------------------------
@@ -41,6 +43,9 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline optix::Material getMaterial(){return m_lightMaterial;}
     //----------------------------------------------------------------------------------------------------------------------
+    void setTrans(glm::mat4 _trans, bool _transpose = 0);
+    inline optix::Transform getGeomAndTrans(){return m_trans;}
+    inline optix::Acceleration getAcceleration(){return m_acceleration;}
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Create the parallelogram geometry used by the light
@@ -67,6 +72,13 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     optix::Program m_pgram_bounding_box;
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief A translation
+    //----------------------------------------------------------------------------------------------------------------------
+    optix::Transform m_trans;
+    //----------------------------------------------------------------------------------------------------------------------
+    optix::GeometryGroup m_geometryGroup;
+    optix::Acceleration m_acceleration;
+
 };
 
 #endif

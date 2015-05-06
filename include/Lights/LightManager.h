@@ -10,6 +10,8 @@
 #include <vector>
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_math_namespace.h>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 //----------------------------------------------------------------------------------------------------------------------
 // QT GUI includes
@@ -27,6 +29,11 @@
 class LightManager : public QDockWidget{
     Q_OBJECT
 public:
+    struct LightTransforms{
+        glm::vec3 m_translate;
+        glm::vec3 m_scale;
+        glm::vec3 m_rotate;
+    };
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief returns an instance of our singleton class
     //----------------------------------------------------------------------------------------------------------------------
@@ -50,8 +57,11 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Returns the geometry for our lights
     //----------------------------------------------------------------------------------------------------------------------
-    inline std::vector<optix::GeometryInstance> getLightsGeometry(){return m_lightGeometry;}
+//    inline std::vector<optix::GeometryInstance> getLightsGeometry(){return m_lightGeometry;}
     //----------------------------------------------------------------------------------------------------------------------
+    inline std::vector<optix::Transform> getGeomAndTrans(){return m_geoAndTrans;}
+    void setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose=0);
+    void setGuiDefaults();
 private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Constructor
@@ -76,7 +86,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief A vector containing the geometry for our lights
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<optix::GeometryInstance> m_lightGeometry;
+//    std::vector<optix::GeometryInstance> m_lightGeometry;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief A list to hold all our lights
     //----------------------------------------------------------------------------------------------------------------------
@@ -141,8 +151,11 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief A vector to hold pointers to all the lights in our scene
     //----------------------------------------------------------------------------------------------------------------------
-    std::vector<Light::ParallelogramLight> m_lights;
+    std::vector<Light*> m_lights;
+    std::vector<Light::ParallelogramLight> m_parallelogramLights;
     //----------------------------------------------------------------------------------------------------------------------
+    std::vector<optix::Transform> m_geoAndTrans;
+    std::vector<LightTransforms> m_lightTransforms;
 public slots:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Adds a light to the scene
