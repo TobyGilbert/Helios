@@ -91,14 +91,14 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, QString _initPara
 	return port;
 }
 
-void QNEBlock::addInputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
+QNEPort* QNEBlock::addInputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
 {
-    addPort(name, false,_initParams, _type);
+    return addPort(name, false,_initParams, _type);
 }
 
-void QNEBlock::addOutputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
+QNEPort* QNEBlock::addOutputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
 {
-    addPort(name, true,_initParams, _type);
+    return addPort(name, true,_initParams, _type);
 }
 
 void QNEBlock::addInputPorts(const QStringList &names)

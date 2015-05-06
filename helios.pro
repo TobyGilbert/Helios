@@ -47,7 +47,11 @@ SOURCES += \
     src/OSLCompiler/oso.y  \
     optixSrc/*.cu \
     src/Lights/LightManager.cpp \
-    src/NodeGraph/AbstractNodeProxyWidget.cpp
+    src/NodeGraph/AbstractNodeProxyWidget.cpp \
+    src/NodeGraph/FloatNodeProxyWidget.cpp \
+    src/NodeGraph/OSLAbstractVarBlock.cpp \
+    src/NodeGraph/FloatThreeNodeProxyWidget.cpp \
+    src/NodeGraph/OSLVarFloatThreeBlock.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -88,7 +92,11 @@ HEADERS += \
     include/NodeGraph/OSLVarFloatBlock.h \
     include/NodeGraph/OSLNodesEditor.h \
     include/Lights/LightManager.h \
-    include/NodeGraph/AbstractNodeProxyWidget.h
+    include/NodeGraph/AbstractNodeProxyWidget.h \
+    include/NodeGraph/FloatNodeProxyWidget.h \
+    include/NodeGraph/OSLAbstractVarBlock.h \
+    include/NodeGraph/FloatThreeNodeProxyWidget.h \
+    include/NodeGraph/OSLVarFloatThreeBlock.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

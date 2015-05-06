@@ -1,36 +1,35 @@
-#ifndef ABSTRACTNODEPROXYWIDGET_H
-#define ABSTRACTNODEPROXYWIDGET_H
+#ifndef FLOATNODEPROXYWIDGET_H
+#define FLOATNODEPROXYWIDGET_H
 
-#include <QGraphicsProxyWidget>
+#include <QGraphicsItem>
 #include <optixu/optixpp_namespace.h>
-#include "Core/pathtracerscene.h"
-#include "NodeGraph/qneport.h"
-class AbstractNodeProxyWidget : public QGraphicsProxyWidget
+#include "AbstractNodeProxyWidget.h"
+#include <QDoubleSpinBox>
+#include <NodeGraph/qneport.h>
+
+class FloatNodeProxyWidget : public AbstractNodeProxyWidget
 {
     Q_OBJECT
 public:
+    FloatNodeProxyWidget(QNEPort *_portConnected,optix::Material &_mat,QGraphicsItem *parent = 0);
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor
+    /// @brief default destructor
     //------------------------------------------------------------------------------------------------------------------------------------
-    AbstractNodeProxyWidget(QNEPort *_connectedPort,optix::Material &_mat, QGraphicsItem *_parent = 0);
+    ~FloatNodeProxyWidget();
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief returns the linked varible name connected to desired port
-    /// @param _linkedVarNames - vector of strings to store linked variable names
+public slots:
     //------------------------------------------------------------------------------------------------------------------------------------
-    void getLinkedVarName(std::vector<std::string> &_linkedVarNames);
+    /// @brief slot to set the varible in our material when our spin box value is changed
+    /// @param _val the value to set the variables in our material
     //------------------------------------------------------------------------------------------------------------------------------------
-protected:
-    //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief a member to hold the material to be edited
-    //------------------------------------------------------------------------------------------------------------------------------------
-    optix::Material m_material;
+    void setMaterialVariables(double _val);
     //------------------------------------------------------------------------------------------------------------------------------------
 private:
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief a pointer to the port linked to our spin box
+    /// @brief a member for our spin box
     //------------------------------------------------------------------------------------------------------------------------------------
-    QNEPort *m_connectedPort;
+    QDoubleSpinBox *m_spinBox;
     //------------------------------------------------------------------------------------------------------------------------------------
 };
 
-#endif // ABSTRACTNODEPROXYWIDGET_H
+#endif // FLOATNODEPROXYWIDGET_H

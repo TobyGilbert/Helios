@@ -3,13 +3,14 @@
 #include "NodeGraph/qneconnection.h"
 
 //------------------------------------------------------------------------------------------------------------------------------------
-AbstractNodeProxyWidget::AbstractNodeProxyWidget(Material &_mat, QGraphicsItem *_parent) : QGraphicsProxyWidget(_parent)
+AbstractNodeProxyWidget::AbstractNodeProxyWidget(QNEPort *_connectedPort, Material &_mat, QGraphicsItem *_parent) : QGraphicsProxyWidget(_parent)
 {
     m_material = _mat;
+    m_connectedPort = _connectedPort;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void AbstractNodeProxyWidget::getLinkedVarName(QNEPort *_port, std::vector<std::string> &_linkedVarNames){
-    foreach(QNEConnection *c,_port->connections()){
+void AbstractNodeProxyWidget::getLinkedVarName(std::vector<std::string> &_linkedVarNames){
+    foreach(QNEConnection *c,m_connectedPort->connections()){
         std::string name;
         //find the input variable we are setting
         if(!c->port1()->isOutput()){

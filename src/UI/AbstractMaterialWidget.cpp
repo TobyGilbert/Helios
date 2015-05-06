@@ -2,6 +2,7 @@
 #include "Core/pathtracerscene.h"
 #include "NodeGraph/OSLShaderBlock.h"
 #include "NodeGraph/OSLVarFloatBlock.h"
+#include "NodeGraph/OSLVarFloatThreeBlock.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
@@ -21,12 +22,9 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     this->setMinimumWidth(700);
     this->setWindowTitle("OSL Hypershader 3000");
     m_matCreated = false;
-    //set our widget layout
-    m_widgetLayout = new QGridLayout(this);
-    this->setLayout(m_widgetLayout);
     //add our groupbox
     m_widgetGroupBox = new QGroupBox(this);
-    m_widgetLayout->addWidget(m_widgetGroupBox,0,0,1,1);
+    this->setWidget(m_widgetGroupBox);
     m_groupBoxLayout = new QGridLayout(this);
     m_widgetGroupBox->setLayout(m_groupBoxLayout);
     //create our graphics view to hold our node interface scene
@@ -163,6 +161,11 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
     addFloatNodeBtn->setData(QVariant(1));
     myMenu.addAction(addFloatNodeBtn);
 
+    QAction *addFloatThreeNodeBtn = new QAction(&myMenu);
+    addFloatThreeNodeBtn->setText("Add Float3 Node");
+    addFloatThreeNodeBtn->setData(QVariant(2));
+    myMenu.addAction(addFloatThreeNodeBtn);
+
     //find out if something has been clicked
     QAction* selectedItem = myMenu.exec(globalPos);
     if(selectedItem){
@@ -170,6 +173,7 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
         {
             case(0): addShaderNode(); break;
             case(1): addFloatNode(); break;
+            case(2): addFloatThreeNode(); break;
             //if nothing do nothing
             default: break;
         }
@@ -204,4 +208,10 @@ void AbstractMaterialWidget::addFloatNode()
     OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene, m_material);
     m_nodes.push_back(b);
 }
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::addFloatThreeNode(){
+    OSLVarFloatThreeBlock *b = new OSLVarFloatThreeBlock(m_nodeInterfaceScene,m_material);
+    m_nodes.push_back(b);
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------

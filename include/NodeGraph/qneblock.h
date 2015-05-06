@@ -62,11 +62,11 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds an input port to our node. Modified to also set the varible type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    void addInputPort(const QString &name, QString _initParams = 0, QNEPort::variableType _type = QNEPort::TypeVoid);
+    QNEPort *addInputPort(const QString &name, QString _initParams = 0, QNEPort::variableType _type = QNEPort::TypeVoid);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds an output port to our node. Modified to also set the varible type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    void addOutputPort(const QString &name,QString _initParams = 0,QNEPort::variableType _type = QNEPort::TypeVoid);
+    QNEPort *addOutputPort(const QString &name,QString _initParams = 0,QNEPort::variableType _type = QNEPort::TypeVoid);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief mutator to hard code the width of our node.
     //----------------------------------------------------------------------------------------------------------------------
@@ -76,8 +76,8 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setHeight(int _h){height = _h;}
     //----------------------------------------------------------------------------------------------------------------------
-	void addInputPorts(const QStringList &names);
-	void addOutputPorts(const QStringList &names);
+    void addInputPorts(const QStringList &names);
+    void addOutputPorts(const QStringList &names);
 	void save(QDataStream&);
 	void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);

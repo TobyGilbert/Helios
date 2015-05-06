@@ -1,36 +1,37 @@
-#ifndef ABSTRACTNODEPROXYWIDGET_H
-#define ABSTRACTNODEPROXYWIDGET_H
+#ifndef OSLABSTRACTVARBLOCK_H
+#define OSLABSTRACTVARBLOCK_H
 
-#include <QGraphicsProxyWidget>
+#include "NodeGraph/qneblock.h"
 #include <optixu/optixpp_namespace.h>
-#include "Core/pathtracerscene.h"
-#include "NodeGraph/qneport.h"
-class AbstractNodeProxyWidget : public QGraphicsProxyWidget
+#include <QDoubleSpinBox>
+#include <QGraphicsScene>
+
+class OSLAbstractVarBlock : public QNEBlock
 {
-    Q_OBJECT
 public:
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief our default constructor
+    /// @brief default constructor
     //------------------------------------------------------------------------------------------------------------------------------------
-    AbstractNodeProxyWidget(QNEPort *_connectedPort,optix::Material &_mat, QGraphicsItem *_parent = 0);
+    OSLAbstractVarBlock(QGraphicsScene *_scene,optix::Material &_mat,QGraphicsItem * parent = 0);
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief returns the linked varible name connected to desired port
-    /// @param _linkedVarNames - vector of strings to store linked variable names
+    /// @brief default destuctor
     //------------------------------------------------------------------------------------------------------------------------------------
-    void getLinkedVarName(std::vector<std::string> &_linkedVarNames);
+    ~OSLAbstractVarBlock(){}
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief Set the name of our variable block
+    /// @param _name - desired name
+    //------------------------------------------------------------------------------------------------------------------------------------
+    void setBlockName(std::string _name);
     //------------------------------------------------------------------------------------------------------------------------------------
 protected:
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief a member to hold the material to be edited
+    /// @brief the material which out variable belongs to
     //------------------------------------------------------------------------------------------------------------------------------------
     optix::Material m_material;
     //------------------------------------------------------------------------------------------------------------------------------------
-private:
-    //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief a pointer to the port linked to our spin box
-    //------------------------------------------------------------------------------------------------------------------------------------
-    QNEPort *m_connectedPort;
-    //------------------------------------------------------------------------------------------------------------------------------------
+
+
 };
 
-#endif // ABSTRACTNODEPROXYWIDGET_H
+
+#endif // OSLABSTRACTVARBLOCK_H
