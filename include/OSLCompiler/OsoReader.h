@@ -20,7 +20,15 @@ enum SymType {
 /// @brief Types used in OSL
 //----------------------------------------------------------------------------------------------------------------------------------------
 enum Type{
-    TypeInt,TypeFloat,TypeString, TypeColour, TypeMatrix, TypeNormal, TypePoint, TypeVoid, TypeVector
+    TypeInt = 0,
+    TypeFloat,
+    TypeString,
+    TypeColour,
+    TypeMatrix,
+    TypeNormal,
+    TypePoint,
+    TypeVoid,
+    TypeVector
 };
 //----------------------------------------------------------------------------------------------------------------------------------------
 /// @brief An instruction within the OSO code section

@@ -100,10 +100,9 @@ RT_PROGRAM void pathtrace_camera(){
         prd.attenuation = make_float3(1.f);
         prd.countEmitted = true;
         prd.done = false;
-        prd.inside = false;
         prd.seed = seed;
         prd.depth = 0;
-        prd.type = cameraRay;
+        prd.type = (char*)"camera";
 
     for(;;) {
         Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
@@ -245,7 +244,7 @@ RT_PROGRAM void shadow(){
 }
 //-----------------------------------------------------------------------------
 // OSL device function
-__device__ int raytype(rayType _name){
+__device__ int OSLraytype(char* _name){
     if (current_prd.type == _name){
         return 1;
     }
@@ -253,7 +252,12 @@ __device__ int raytype(rayType _name){
         return 0;
     }
 }
+
+__device__ int OSLbackfacing(){
+    return 1;
+}
+
 //----------------------------------------------------------------------------
-__device__ optix::float3 text(char* _filename, float _s, float _t){
+__device__ optix::float3 OSLtexture(char* _filename, float _s, float _t){
     return make_float3(tex2D(normalMap, _s, _t));
 }//-----------------------------------------------------------------------------

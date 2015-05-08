@@ -158,6 +158,9 @@ symbol
                     else if ($2 == VOIDTYPE){
                        t = TypeVoid;
                     }
+                    else if ($2 == CLOSURE){
+                       t = TypeColour;
+                    }
                     reader->addSymbols($1, t, $4);
                     std::cout<<"symbol IDENTIFIER: "<<$4;
                 }

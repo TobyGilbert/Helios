@@ -54,14 +54,11 @@ struct PerRayData_pathtrace{
     float3 attenuation;
     float3 origin;
     float3 direction;
-    float importance;
     unsigned int seed;
     int depth;
     int countEmitted;
     int done;
-    int inside;
-//    std::string type;
-    rayType type;
+    char* type;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief our per shadow ray payload for our path tracer
@@ -224,16 +221,18 @@ __device__ float beckmannDistibution(optix::float3 _v, optix::float3 _m, optix::
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Returns 1 if raytype = _name
 //----------------------------------------------------------------------------------------------------------------------
-__device__ int raytype(rayType _name);
+__device__ int OSLraytype(char *_name);
+//----------------------------------------------------------------------------------------------------------------------
+/// @brief Returns 1 is facing is backfacing
+//----------------------------------------------------------------------------------------------------------------------
+__device__ int OSLbackfacing();
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Perform texture lookup indexed by 2d coordinates (_s, _t);
 //----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 text(char* _filename, float _s, float _t);
+__device__ optix::float3 OSLtexture(char* _filename, float _s, float _t);
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief optix models - WILL BE REMOVED
 //----------------------------------------------------------------------------------------------------------------------
-//__device__ void metal(ShaderGlobals &sg, float Ks = 1,  float eta = 10,  optix::float3 Cs = optix::make_float3( 1,1,1) );
-//__device__ void matte(ShaderGlobals &sg, float Kd = 1,  optix::float3 Cs = optix::make_float3( 1,1,1) );
 __device__ void ifTest( );
 
 #endif

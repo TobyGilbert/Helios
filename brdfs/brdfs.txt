@@ -1,13 +1,32 @@
+rtDeclareVariable(unsigned int,  pathtrace_ray_type, , );
+
 //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------- BRDFS -------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 reflection(optix::float3 _normal, float _eta){
+//    PerRayData_pathtrace prd;
+//    prd.result = current_prd.result;
+//    prd.attenuation = current_prd.attenuation;
+//    prd.countEmitted = current_prd.countEmitted;
+//    prd.done = current_prd.done;
+//    prd.seed = current_prd.seed;
+//    prd.depth = current_prd.depth;
+//    prd.type = (char*)"glossy";
     current_prd.direction = reflect(ray.direction, _normal);
+    //prd.direction = reflect(ray.direction, _normal);
+//    Ray reflection_ray = make_Ray( current_prd.origin, reflect(ray.direction, _normal), pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+//   rtTrace(top_object, reflection_ray, prd);
+
     float cosNO = optix::dot(-_normal, eye - current_prd.origin);
     if (cosNO > 0){
         return optix::make_float3(fresnel_dielectric(cosNO, _eta));
     }
     return optix::make_float3(1.0);
+}
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 refraction(optix::float3 _normal, float _eta){
+    refract(current_prd.direction, ray.direction, _normal, _eta);
+    return make_float3(1.0, 1.0, 1.0);
 }
 //----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 diffuse(optix::float3 _normal){
@@ -159,5 +178,23 @@ __device__ float beckmannDistibution(float3 _v, float3 _m, float3 _normal, float
     }
 
     return G1;
+}
+
+__device__ int OSLbackfacing(ShaderGlobals sg){
+    if (optix::dot(-ray.direction, sg.N) > 0.0){
+      return 0;
+    }
+    else{
+      return 1;
+    }
+}
+
+__device__ int OSLraytype(char* _name){
+    if (current_prd.type == _name){
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 

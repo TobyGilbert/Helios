@@ -23,6 +23,7 @@
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QListWidget>
+//#define GLM_FORCE_RADIANS
 #include "Lights/Light.h"
 
 

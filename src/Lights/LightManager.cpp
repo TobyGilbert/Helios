@@ -209,22 +209,44 @@ void LightManager::updateLight(){
     lightBuffer[m_selectedLight].emission.y = m_emissionY->value();
     lightBuffer[m_selectedLight].emission.z = m_emissionZ->value();
 
-    // Scale by the default values no need to scale in as the light is flat
-    // Scale in x
-//    lightBuffer[m_selectedLight].corner.x = 0.5 * m_scaleX->value();
-//    lightBuffer[m_selectedLight].v1.x = -1.0 * m_scaleX->value();
-//    // Scale in z
-//    lightBuffer[m_selectedLight].corner.z = -0.5 * m_scaleZ->value();
-//    lightBuffer[m_selectedLight].v2.z = 1.0 * m_scaleZ->value();
+    float DtoR = 3.14159265359/180.0;
+    glm::mat4 rotx = glm::mat4(1.0);
+    glm::mat4 roty = glm::mat4(1.0);
+    glm::mat4 rotz = glm::mat4(1.0);
+    rotx = glm::rotate(rotx, 1.5f, glm::vec3(1.0, 0.0, 0.0));
+    roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
+    rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
+
+    glm::vec4 corner;
+    glm::vec4 v1;
+    glm::vec4 v2;
+    corner.x = lightBuffer[m_selectedLight].corner.x;
+    corner.y = lightBuffer[m_selectedLight].corner.y;
+    corner.z = lightBuffer[m_selectedLight].corner.z;
+    v1.x = lightBuffer[m_selectedLight].v1.x;
+    v1.y = lightBuffer[m_selectedLight].v1.y;
+    v1.z = lightBuffer[m_selectedLight].v1.z;
+    v2.x = lightBuffer[m_selectedLight].v2.x;
+    v2.y = lightBuffer[m_selectedLight].v2.y;
+    v2.z = lightBuffer[m_selectedLight].v2.z;
+
+    corner = ( rotx * roty * rotz) * corner;
+    v1 = ( rotx * roty * rotz) * v1;
+    v2 = ( rotx * roty * rotz) * v2;
+
+    lightBuffer[m_selectedLight].corner = make_float3(corner.x, corner.y, corner.z);
+    lightBuffer[m_selectedLight].v1 = make_float3(v1.x, v1.y, v1.z);
+    lightBuffer[m_selectedLight].v2 = make_float3(v2.x, v2.y, v2.z);
+
 
     // Translate using the scaled values
-    lightBuffer[m_selectedLight].corner.x = (0.5 * m_scaleX->value()) + m_translateX->value();
-    lightBuffer[m_selectedLight].v1.x = (-1.0 * m_scaleX->value()) + m_translateX->value();
+//    lightBuffer[m_selectedLight].corner.x = (0.5 * m_scaleX->value()) + m_translateX->value();
+//    lightBuffer[m_selectedLight].v1.x = (-1.0 * m_scaleX->value()) + m_translateX->value();
 
-    lightBuffer[m_selectedLight].corner.y = m_translateY->value();
+//    lightBuffer[m_selectedLight].corner.y = m_translateY->value();
 
-    lightBuffer[m_selectedLight].corner.z = (-0.5 * m_scaleZ->value()) + m_translateZ->value();
-    lightBuffer[m_selectedLight].v2.z = (1.0 * m_scaleZ->value()) + m_translateZ->value();
+//    lightBuffer[m_selectedLight].corner.z = (-0.5 * m_scaleZ->value()) + m_translateZ->value();
+//    lightBuffer[m_selectedLight].v2.z = (1.0 * m_scaleZ->value()) + m_translateZ->value();
 
 
     m_lightBuffer->unmap();
@@ -239,13 +261,6 @@ void LightManager::updateLight(){
     glm::mat4 transform = glm::mat4();
 
     // Rotate
-    float DtoR = 3.14159265359/180.0;
-    glm::mat4 rotx = glm::mat4();
-    glm::mat4 roty = glm::mat4();
-    glm::mat4 rotz = glm::mat4();
-    rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
-    roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
-    rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
     transform = rotx * roty * rotz;
 
     // Scale

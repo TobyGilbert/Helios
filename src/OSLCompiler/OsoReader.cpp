@@ -117,14 +117,13 @@ std::string OsoReader::generateDeviceFunction(){
     s+=m_shaderName.c_str();
     s+="(";
     // Veriable for use with commas between function parameters (maybe better way to do this)
-    //bool init = 0;
     // Go through all symbols looking for function parameters
     s+="ShaderGlobals &sg";
     for (unsigned int i=0; i<m_symbols.size(); i++){
         if (m_symbols[i].m_symType == 0){
             s+=", ";
             // Append the correct varible type, name and initial parameters
-            if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
+            if (m_symbols[i].m_type == 2 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 ";
                 s+=m_symbols[i].m_name.c_str();
                 s+=" = make_float3( ";
@@ -142,7 +141,7 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-            else if (m_symbols[i].m_type == 2){
+            else if (m_symbols[i].m_type == 0){
                 s+=" int ";
                 s+=m_symbols[i].m_name.c_str();
                 s+=" = ";
@@ -217,9 +216,9 @@ std::string OsoReader::generateDeviceFunction(){
     s+=" ){\n";
 
 
-    // Define all of the const and local variables defined in the shader
+    // Define all of the const and local and temp variables defined in the shader
     for (unsigned int i=0; i<m_symbols.size(); i++){
-        if (m_symbols[i].m_symType == 5 || m_symbols[i].m_symType == 2){
+        if (m_symbols[i].m_symType == 5 || m_symbols[i].m_symType == 2 || m_symbols[i].m_symType == 3){
             s+="\t";
             if (m_symbols[i].m_type == 0){
                 s+="int ";
@@ -313,45 +312,18 @@ std::string OsoReader::generateDeviceFunction(){
         s+=":\n";
         // If the instruction is a closure parameter find its function name and input its given arguments
         if (m_instructions[i].m_opcode == std::string("closure")){
-            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
-            std::string type;
+//            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
-                switch(it->m_type){
-                    case 0:
-                    case 3:
-                    case 5:
-                    case 7:
-                        type = std::string("float3");
-                        break;
-                    case 1:
-                        type = std::string("float");
-                        break;
-                    case 2:
-                        type = std::string("int");
-                        break;
-                    case 4:
-                        type = std::string("matrix?");
-                        break;
-                    case 6:
-                        type = std::string("char*");
-                        break;
-                    default:
-                        type = std::string("err");
-                        break;
-                }
             }
             else{
-                type = std::string("");
                 output = std::string("current_prd.attenuation");
             }
             std::vector<Symbol>::iterator itName = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
             std::string functionName = itName->m_initialParams[0];
             functionName.erase(remove(functionName.begin(), functionName.end(), '\"'), functionName.end());
             s+="\t";
-            s+=type.c_str();
-            s+=" ";
             s+=output.c_str();
             s+=" = ";
             s+=functionName.c_str();
@@ -371,42 +343,15 @@ std::string OsoReader::generateDeviceFunction(){
         }
         // If the instruction is a multiply
         if (m_instructions[i].m_opcode == std::string("mul")){
-            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
-            std::string type;
+//            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
-                switch(it->m_type){
-                    case 0:
-                    case 3:
-                    case 5:
-                    case 7:
-                        type = std::string("float3");
-                        break;
-                    case 1:
-                        type = std::string("float");
-                        break;
-                    case 2:
-                        type = std::string("int");
-                        break;
-                    case 4:
-                        type = std::string("matrix?");
-                        break;
-                    case 6:
-                        type = std::string("char*");
-                        break;
-                    default:
-                        type = std::string("err");
-                        break;
-                }
             }
             else {
-                type = std::string("");
                 output = std::string("current_prd.attenuation");
             }
             s+="\t";
-            s+=type.c_str();
-            s+=" ";
             s+=output.c_str();
             s+=" = ";
             s+=m_instructions[i].m_args[0].c_str();
@@ -426,22 +371,22 @@ std::string OsoReader::generateDeviceFunction(){
                     case 3:
                     case 5:
                     case 7:
-                        type = std::string("float3");
+                        type = std::string("float3 ");
                         break;
                     case 1:
-                        type = std::string("float");
+                        type = std::string("float ");
                         break;
                     case 2:
-                        type = std::string("int");
+                        type = std::string("int ");
                         break;
                     case 4:
-                        type = std::string("matrix?");
+                        type = std::string("matrix? ");
                         break;
                     case 6:
-                        type = std::string("char*");
+                        type = std::string("char* ");
                         break;
                     default:
-                        type = std::string("err");
+                        type = std::string("err ");
                         break;
                 }
             }
@@ -461,41 +406,41 @@ std::string OsoReader::generateDeviceFunction(){
         }
         if (m_instructions[i].m_opcode == std::string("div")){
             std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
-            std::string type;
+//            std::string type;
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
-                switch(it->m_type){
-                    case 0:
-                    case 3:
-                    case 5:
-                    case 7:
-                        type = std::string("float3");
-                        break;
-                    case 1:
-                        type = std::string("float");
-                        break;
-                    case 2:
-                        type = std::string("int");
-                        break;
-                    case 4:
-                        type = std::string("matrix?");
-                        break;
-                    case 6:
-                        type = std::string("char*");
-                        break;
-                    default:
-                        type = std::string("err");
-                        break;
-                }
+//                switch(it->m_type){
+//                    case 0:
+//                    case 3:
+//                    case 5:
+//                    case 7:
+//                        type = std::string("float3 ");
+//                        break;
+//                    case 1:
+//                        type = std::string("float ");
+//                        break;
+//                    case 2:
+//                        type = std::string("int ");
+//                        break;
+//                    case 4:
+//                        type = std::string("matrix? ");
+//                        break;
+//                    case 6:
+//                        type = std::string("char* ");
+//                        break;
+//                    default:
+//                        type = std::string("err ");
+//                        break;
+//                }
             }
             else {
-                type = std::string("");
+//                type = std::string("");
                 output = std::string("current_prd.attenuation");
             }
             s+="\t";
-            s+=type.c_str();
-            s+=" ";
+//            s+=type.c_str();
+//            s+=" ";
             s+=output.c_str();
             s+=" = ";
             s+=m_instructions[i].m_args[0].c_str();
@@ -505,9 +450,9 @@ std::string OsoReader::generateDeviceFunction(){
 
         }
         if (m_instructions[i].m_opcode == std::string("neq")){
-            s+="\tint ";
-            s+=m_instructions[i].m_output.c_str();
-            s+=";\n";
+//            s+="\tint ";
+//            s+=m_instructions[i].m_output.c_str();
+//            s+=";\n";
             s+="\tif (";
             s+=m_instructions[i].m_args[0].c_str();
             s+=" != ";
@@ -524,9 +469,9 @@ std::string OsoReader::generateDeviceFunction(){
             s+="\t}\n";
         }
         if (m_instructions[i].m_opcode == std::string("eq")){
-            s+="\tint ";
-            s+=m_instructions[i].m_output.c_str();
-            s+=";\n";
+//            s+="\tint ";
+//            s+=m_instructions[i].m_output.c_str();
+//            s+=";\n";
             s+="\tif (";
             s+=m_instructions[i].m_args[0].c_str();
             s+=" == ";
@@ -550,11 +495,16 @@ std::string OsoReader::generateDeviceFunction(){
             s+=";\n";
         }
         if (m_instructions[i].m_opcode == std::string("raytype")){
-            s+="\tint";
+            s+="\t ";
             s+=m_instructions[i].m_output.c_str();
-            s+=" = raytype(";
+            s+=" = OSLraytype(";
             s+=m_instructions[i].m_args[0].c_str();
             s+=");\n";
+        }
+        if (m_instructions[i].m_opcode == std::string("backfacing")){
+            s+="\t ";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = OSLbackfacing(sg);\n";
         }
         if (m_instructions[i].m_opcode == std::string("if")){
             // In order to skip else code add a jump target to the jump targets vector
