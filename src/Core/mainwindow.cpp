@@ -13,12 +13,55 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,1,2,2);
 
+    connect(m_openGLWidget,SIGNAL(pathTracerCreated()),this,SLOT(createMenus()));
 
-    // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
-    m_toolBar = new QToolBar();
-    m_toolBar->setOrientation(Qt::Vertical);
-    ui->gridLayout->addWidget(m_toolBar, 0, 0, 2, 1);
+}
 
+MainWindow::~MainWindow(){
+
+    //delete our node graph singlton class
+    AbstractMaterialWidget::getInstance()->destroy();
+    // delete mesh UI
+    delete m_meshToolbarButton;
+    delete m_meshDockWidget;
+
+    // delete light UI
+    delete m_lightIntensityLabel;
+    delete m_lightIntensitySlider;
+    delete m_lightColourButton;
+    delete m_lightColourDialog;
+    delete m_lightTypeComboBox;
+    delete m_lightTypeLabel;
+    delete m_lightDockGridLayout;
+    delete m_lightWidget;
+    delete m_lightDockWidget;
+    delete m_lightToolbarButton;
+
+    // delete environment map UI
+    delete m_environmentToolbarButton;
+    delete m_environmentButton;
+    delete m_environmentLineEdit;
+    delete m_environmentGridLayout;
+    delete m_environmentGroupBox;
+    delete m_environmentDockWidget;
+
+    delete m_genSetDockWidget;
+    delete m_toolBar;
+
+    delete m_fileMenu;
+
+    delete m_saveImage;
+    delete m_renderMenu;
+    delete m_settingsMenu;
+
+    delete m_menuBar;
+
+    delete ui;
+
+    delete m_openGLWidget;
+}
+
+void MainWindow::createMenus(){
     //--------------------------------------------------------------------------------------------------------------------
     //----------------------------Create our node graph widget instance---------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
@@ -26,6 +69,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     //init our instance with this as the parent. this means when this class is deleted it also will be deleted
     AbstractMaterialWidget::getInstance(this);
     AbstractMaterialWidget::getInstance()->hide();
+
+    // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
+    m_toolBar = new QToolBar();
+    m_toolBar->setOrientation(Qt::Vertical);
+    ui->gridLayout->addWidget(m_toolBar, 0, 0, 2, 1);
+
 
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Light functionality------------------------------------------------
@@ -76,6 +125,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_lightDockWidget->setWidget(m_lightWidget);
     m_lightDockWidget->setHidden(true);
 //    this->addDockWidget(Qt::RightDockWidgetArea, m_lightDockWidget);
+
+
 
     LightManager::getInstance()->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, LightManager::getInstance());
@@ -141,52 +192,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     connect(m_environmentButton, SIGNAL(clicked()), m_openGLWidget, SLOT(loadEnvironmentMap()));
     connect(m_environmentButton, SIGNAL(clicked()), this, SLOT(displayEnvironmentMap()));
 
-    //create our toolbar menu's
-    createMenus();
-}
-
-MainWindow::~MainWindow(){
-    // delete mesh UI
-    delete m_meshToolbarButton;
-    delete m_meshDockWidget;
-
-    // delete light UI
-    delete m_lightIntensityLabel;
-    delete m_lightIntensitySlider;
-    delete m_lightColourButton;
-    delete m_lightColourDialog;
-    delete m_lightTypeComboBox;
-    delete m_lightTypeLabel;
-    delete m_lightDockGridLayout;
-    delete m_lightWidget;
-    delete m_lightDockWidget;
-    delete m_lightToolbarButton;
-
-    // delete environment map UI
-    delete m_environmentToolbarButton;
-    delete m_environmentButton;
-    delete m_environmentLineEdit;
-    delete m_environmentGridLayout;
-    delete m_environmentGroupBox;
-    delete m_environmentDockWidget;
-
-    delete m_genSetDockWidget;
-    delete m_toolBar;
-
-    delete m_fileMenu;
-
-    delete m_saveImage;
-    delete m_renderMenu;
-    delete m_settingsMenu;
-
-    delete m_menuBar;
-
-    delete ui;
-
-    delete m_openGLWidget;
-}
-
-void MainWindow::createMenus(){
     m_menuBar = new QMenuBar(this);
 
     m_fileMenu = new QMenu("File");

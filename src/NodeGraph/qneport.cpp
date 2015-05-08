@@ -69,7 +69,14 @@ void QNEPort::setNEBlock(QNEBlock *b)
 void QNEPort::setName(const QString &n)
 {
 	name = n;
-    label->setPlainText(n + m_initParams);
+    std::string params;
+    for(unsigned int i=0;i<m_initParams.size();i++){
+        params+=m_initParams[i];
+        if(i<m_initParams.size()-1){
+            params+=",";
+        }
+    }
+    label->setPlainText(n + params.c_str());
 }
 
 void QNEPort::setIsOutput(bool o)
@@ -118,11 +125,18 @@ void QNEPort::setPortFlags(int f)
     }
 }
 
-void QNEPort::setInitParams(QString _initParams)
+void QNEPort::setInitParams(std::vector<std::string> _initParams)
 {
     m_initParams = _initParams;
     if(m_initParams.size()>0){
-        label->setPlainText(name + "=" + m_initParams);
+        std::string params;
+        for(unsigned int i=0;i<_initParams.size();i++){
+            params+=_initParams[i];
+            if(i<_initParams.size()-1){
+                params+=",";
+            }
+        }
+        label->setPlainText(name + "=" + params.c_str());
     }
     else{
         label->setPlainText(name);

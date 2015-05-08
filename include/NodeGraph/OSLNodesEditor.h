@@ -9,6 +9,8 @@
 //------------------------------------------------------------------------------------------------------------------------------------
 
 #include <QObject>
+#include <cuda_runtime.h>
+#include <optixu/optixpp_namespace.h>
 #include "NodeGraph/OSLShaderBlock.h"
 #include "NodeGraph/qnodeseditor.h"
 #include "NodeGraph/qneport.h"
@@ -41,8 +43,10 @@ public:
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief creates an optix material program from our OSL node graph.
     /// @brief The file will default be created in OptixMaterials/tempMat.cu unless specified otherwise
+    /// @param _mat - material we wish to compile OSL shader to
+    /// @return Material Compiled if compilation succesful otherwise oppropriate error message
     //------------------------------------------------------------------------------------------------------------------------------------
-    void compileMaterial();
+    std::string compileMaterial(optix::Material &_mat);
     //------------------------------------------------------------------------------------------------------------------------------------
 private:
     //------------------------------------------------------------------------------------------------------------------------------------

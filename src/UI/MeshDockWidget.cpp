@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <iostream>
 #include "Core/pathtracerscene.h"
+#include "UI/AbstractMaterialWidget.h"
 
 MeshDockWidget::MeshDockWidget(QWidget *parent) :
     QDockWidget(parent)
@@ -23,7 +24,6 @@ MeshDockWidget::MeshDockWidget(QWidget *parent) :
     connect(m_addMeshBtn,SIGNAL(clicked()),this,SLOT(addMeshWidget()));
     m_meshDockSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_meshDockGridLayout->addItem(m_meshDockSpacer, 4, 0, 1, 1);
-
 
 }
 //----------------------------------------------------------------------------------------------------------------------

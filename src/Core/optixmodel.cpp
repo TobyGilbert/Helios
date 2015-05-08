@@ -163,6 +163,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(Context &_context){
 
+    std::cout<<"Num verts in mesh "<<m_vertices.size()/3<<std::endl;
     // Create vertex, normal, and texture_coordinate buffers
     m_vertexBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
     m_normalBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
@@ -203,7 +204,6 @@ void OptiXModel::createBuffers(Context &_context){
     }
     m_texCoordsBuffer->unmap();
 
-    std::cout<<m_vertices.size()/3<<std::endl;
     //now lets set up our index buffers
     m_vertIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
     m_normIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
@@ -211,7 +211,6 @@ void OptiXModel::createBuffers(Context &_context){
     m_matIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_INT, m_vertices.size()/3 );
 
     //lets fill up our idx buffers
-    unsigned int vertIdices[m_vertices.size()];
     void *idxPtr = m_vertIdxBuffer->map();
     typedef struct { int x; int y; int z;} ixyz;
     ixyz* idxData = (ixyz*)idxPtr;
@@ -219,9 +218,6 @@ void OptiXModel::createBuffers(Context &_context){
         idxData[i].x = i*3;
         idxData[i].y = i*3+1;
         idxData[i].z = i*3+2;
-        vertIdices[i*3] = i*3;
-        vertIdices[i*3+1] = i*3+1;
-        vertIdices[i*3+2] = i*3+2;
     }
     m_vertIdxBuffer->unmap();
 

@@ -15,7 +15,7 @@
 #include <QFileDialog>
 #include <QString>
 
-#include "AbstractMaterialWidget.h"
+#include "UI/AbstractMaterialWidget.h"
 
 class MeshWidget : public QWidget
 {

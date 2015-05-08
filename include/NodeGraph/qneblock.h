@@ -58,15 +58,15 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds a port to our node. This has been modified to also set the varibel type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    QNEPort* addPort(const QString &name, bool isOutput, QString _initParams, QNEPort::variableType _type = QNEPort::TypeVoid, int flags = 0, int ptr = 0);
+    QNEPort* addPort(const QString &name, bool isOutput, std::vector<std::string> _initParams, QNEPort::variableType _type = QNEPort::TypeVoid, int flags = 0, int ptr = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds an input port to our node. Modified to also set the varible type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    void addInputPort(const QString &name, QString _initParams = 0, QNEPort::variableType _type = QNEPort::TypeVoid);
+    QNEPort *addInputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type = QNEPort::TypeVoid);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds an output port to our node. Modified to also set the varible type and initial paramiters.
     //----------------------------------------------------------------------------------------------------------------------
-    void addOutputPort(const QString &name,QString _initParams = 0,QNEPort::variableType _type = QNEPort::TypeVoid);
+    QNEPort *addOutputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type = QNEPort::TypeVoid);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief mutator to hard code the width of our node.
     //----------------------------------------------------------------------------------------------------------------------
@@ -76,8 +76,7 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     inline void setHeight(int _h){height = _h;}
     //----------------------------------------------------------------------------------------------------------------------
-	void addInputPorts(const QStringList &names);
-	void addOutputPorts(const QStringList &names);
+
 	void save(QDataStream&);
 	void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
