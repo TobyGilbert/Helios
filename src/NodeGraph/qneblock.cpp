@@ -52,7 +52,7 @@ QNEBlock::QNEBlock(QGraphicsItem *parent) : QGraphicsPathItem(parent)
 
 }
 
-QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, QString _initParams = 0, QNEPort::variableType _type, int flags, int ptr)
+QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, std::vector<std::string> _initParams, QNEPort::variableType _type, int flags, int ptr)
 {
 	QNEPort *port = new QNEPort(this);
     port->setName(name);
@@ -91,27 +91,16 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, QString _initPara
 	return port;
 }
 
-QNEPort* QNEBlock::addInputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
+QNEPort* QNEBlock::addInputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type)
 {
     return addPort(name, false,_initParams, _type);
 }
 
-QNEPort* QNEBlock::addOutputPort(const QString &name, QString _initParams, QNEPort::variableType _type)
+QNEPort* QNEBlock::addOutputPort(const QString &name, std::vector<std::string> _initParams, QNEPort::variableType _type)
 {
     return addPort(name, true,_initParams, _type);
 }
 
-void QNEBlock::addInputPorts(const QStringList &names)
-{
-	foreach(QString n, names)
-        addInputPort(n);
-}
-
-void QNEBlock::addOutputPorts(const QStringList &names)
-{
-	foreach(QString n, names)
-        addOutputPort(n);
-}
 
 void QNEBlock::save(QDataStream &ds)
 {
@@ -160,7 +149,9 @@ void QNEBlock::load(QDataStream &ds, QMap<quint64, QNEPort*> &portMap)
 		ds >> name;
 		ds >> output;
 		ds >> flags;
-        portMap[ptr] = addPort(name, output,"", QNEPort::TypeVoid, flags, ptr);
+        /// @todo load and save new osl port data
+        std::vector<std::string> dummyInitParams;
+        portMap[ptr] = addPort(name, output,dummyInitParams, QNEPort::TypeVoid, flags, ptr);
 	}
 }
 
@@ -188,7 +179,7 @@ QNEBlock* QNEBlock::clone()
 		if (port_->type() == QNEPort::Type)
 		{
 			QNEPort *port = (QNEPort*) port_;
-            b->addPort(port->portName(), port->isOutput(),"",port->getVaribleType(), port->portFlags(), port->ptr());
+            b->addPort(port->portName(), port->isOutput(),port->getInitParams(),port->getVaribleType(), port->portFlags(), port->ptr());
 		}
 	}
 

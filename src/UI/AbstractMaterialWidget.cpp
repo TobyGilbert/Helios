@@ -3,13 +3,16 @@
 #include "NodeGraph/OSLShaderBlock.h"
 #include "NodeGraph/OSLVarFloatBlock.h"
 #include "NodeGraph/OSLVarFloatThreeBlock.h"
+#include "NodeGraph/OSLVarColorBlock.h"
+#include "NodeGraph/OSLVarNormalBlock.h"
+#include "NodeGraph/OSLVarPointBlock.h"
+#include "NodeGraph/OSLVarIntBlock.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QPushButton>
 #include <QMessageBox>
-#include <cuda_runtime.h>
 #include <iostream>
 
 //declare our static class instance
@@ -56,6 +59,9 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget(){
+    for(unsigned int i=0; i<m_nodes.size();i++){
+        delete m_nodes[i];
+    }
 }
 
 AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
@@ -78,60 +84,15 @@ AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::createOptixMaterial(){
     //turn our graph editor into an optix material program
-    m_nodeEditor->compileMaterial();
-    //get the path to the file
-    std::string path = m_nodeEditor->getMatDestination();
-
-    cudaDeviceProp prop;
-    cudaGetDeviceProperties(&prop, 0);
-    std::string gencodeFlag = " -gencode arch=compute_"+std::to_string(prop.major)+"0,code=sm_"+std::to_string(prop.major)+"0";
-    int v;
-    cudaRuntimeGetVersion(&v);
-    int vMajor = floor(v/1000);
-    int vMinor = (v - (floor(v/1000)*1000))/10;
-    std::string version = std::to_string(vMajor)+"."+std::to_string(vMinor);
-    std::cout<<"version "<<version<<std::endl;
-    std::string cudaDir,optixDir;
-#ifdef DARWIN
-    cudaDir = "/Developer/NVIDIA/CUDA-"+version;
-    optixDir = "/Developer/OptiX";
-#else
-    cudaDir = "/usr/local/cuda-"+version;
-    optixDir = "/usr/local/OptiX";
-#endif
-    std::string cudaSDKDir;
-    cudaSDKDir = cudaDir + "/samples";
-    std::string includePaths = " -I"+optixDir+"/SDK"+" -I"+optixDir+"/SDK/sutil"+
-                               " -I"+optixDir+"/include"+" -I"+cudaDir+"/include"+
-                               " -I"+cudaDir+"/common/inc"+" -I"+cudaDir+"/../shared/inc"+
-                               " -I./include";
-    std::cout<<"includePaths "<<includePaths<<std::endl;
-
-    std::string libDirs = " -L"+cudaDir+"/lib64"+" -L"+cudaDir+"/lib"+" -L"+cudaSDKDir+"/common/lib"+
-                          " -L"+optixDir+"/lib64";
-    std::string libs = " -lcudart -loptix -loptixu";
-    std::string nvcc = "nvcc ";
-    std::string nvccFlags =" -m64"+gencodeFlag+" --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx";
-
-    QFileInfo file = QString(path.c_str());
-    std::string output = "./ptx/"+file.fileName().toStdString()+".ptx";
-    std::cout<<"output "<<output<<std::endl;
-    std::string nvccCallString = nvcc+nvccFlags+includePaths+libDirs+libs+" ./"+path+" -o "+output;
-    std::cout<<"calling nvcc with: "<<nvccCallString<<std::endl;
-
-    if(system(nvccCallString.c_str())==NULL){
-        optix::Context optiXEngine = PathTracerScene::getInstance()->getContext();
-        optix::Program closestHitProgram = optiXEngine->createProgramFromPTXFile(output,m_nodeEditor->getMaterialName());
-        Program anyHitProgram = optiXEngine->createProgramFromPTXFile( "ptx/path_tracer.cu.ptx", "shadow" );
-        m_material->setClosestHitProgram(0,closestHitProgram);
-        m_material->setAnyHitProgram(1,anyHitProgram);
-        m_material->validate();
+    std::string status = m_nodeEditor->compileMaterial(m_material);
+    if(status=="Material Compiled"){
         m_matCreated = true;
     }
     else{
-        QMessageBox::warning(this,tr("Shader Compilation"),tr("Compilation Failed"));
-        m_matCreated = false;
+        QMessageBox::warning(this,tr("Shader Compilation Failed"),tr(status.c_str()));
+        m_matCreated=false;
     }
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::applyMaterialToMesh(std::string _mesh)
@@ -161,21 +122,70 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
     addFloatNodeBtn->setData(QVariant(1));
     myMenu.addAction(addFloatNodeBtn);
 
-    QAction *addFloatThreeNodeBtn = new QAction(&myMenu);
-    addFloatThreeNodeBtn->setText("Add Float3 Node");
-    addFloatThreeNodeBtn->setData(QVariant(2));
-    myMenu.addAction(addFloatThreeNodeBtn);
+    QAction *addIntNodeBtn = new QAction(&myMenu);
+    addIntNodeBtn->setText("Add Int Node");
+    addIntNodeBtn->setData(QVariant(2));
+    myMenu.addAction(addIntNodeBtn);
+
+    QAction *addVectorNodeBtn = new QAction(&myMenu);
+    addVectorNodeBtn->setText("Add Vector Node");
+    addVectorNodeBtn->setData(QVariant(3));
+    myMenu.addAction(addVectorNodeBtn);
+
+    QAction *addColorNodeBtn = new QAction(&myMenu);
+    addColorNodeBtn->setText("Add Color Node");
+    addColorNodeBtn->setData(QVariant(4));
+    myMenu.addAction(addColorNodeBtn);
+
+    QAction *addNormalNodeBtn = new QAction(&myMenu);
+    addNormalNodeBtn->setText("Add Normal Node");
+    addNormalNodeBtn->setData(QVariant(5));
+    myMenu.addAction(addNormalNodeBtn);
+
+    QAction *addPointNodeBtn = new QAction(&myMenu);
+    addPointNodeBtn->setText("Add Point Node");
+    addPointNodeBtn->setData(QVariant(6));
+    myMenu.addAction(addPointNodeBtn);
 
     //find out if something has been clicked
     QAction* selectedItem = myMenu.exec(globalPos);
     if(selectedItem){
         switch(selectedItem->data().toInt())
         {
-            case(0): addShaderNode(); break;
-            case(1): addFloatNode(); break;
-            case(2): addFloatThreeNode(); break;
-            //if nothing do nothing
-            default: break;
+        case(0): addShaderNode(); break;
+        case(1):{
+            //create a float block
+            OSLVarFloatBlock *f = new OSLVarFloatBlock(m_nodeInterfaceScene, m_material);
+            m_nodes.push_back(f);
+        }
+        break;
+        case(2):{
+            OSLVarIntBlock *i = new OSLVarIntBlock(m_nodeInterfaceScene, m_material);
+            m_nodes.push_back(i);
+        }
+        break;
+        case(3):{
+            OSLVarFloatThreeBlock *v = new OSLVarFloatThreeBlock(m_nodeInterfaceScene,m_material);
+            m_nodes.push_back(v);
+        }
+        break;
+        case(4):{
+            OSLVarColorBlock *c = new OSLVarColorBlock(m_nodeInterfaceScene,m_material);
+            m_nodes.push_back(c);
+        }
+        break;
+        case(5):{
+            OSLVarNormalBlock *n = new OSLVarNormalBlock(m_nodeInterfaceScene,m_material);
+            m_nodes.push_back(n);
+        }
+        break;
+        case(6):{
+            OSLVarPointBlock *p = new OSLVarPointBlock(m_nodeInterfaceScene,m_material);
+            m_nodes.push_back(p);
+        }
+        break;
+        //if nothing do nothing
+        default: break;
         }
     }
 
@@ -191,27 +201,18 @@ void AbstractMaterialWidget::addShaderNode()
     if(location.isEmpty()) return;
 
     //create a new shader node in our ui
-    OSLShaderBlock *b = new OSLShaderBlock();
     //add it to out interface. This needs to be don before we add any
     //ports or it will not work, should probably do something about this
+    OSLShaderBlock *b = new OSLShaderBlock();
     m_nodeInterfaceScene->addItem(b);
     if(!b->loadShader(location)){
         QMessageBox::warning(this,"Compile Error","OSL Shader could not be compiled!");
+        m_nodeInterfaceScene->removeItem(b);
+        delete b;
     }
-    //add it to our list of nodes
-    m_nodes.push_back(b);
+    else{
+        //add it to our list of nodes
+        m_nodes.push_back(b);
+    }
 }
-//------------------------------------------------------------------------------------------------------------------------------------
-void AbstractMaterialWidget::addFloatNode()
-{
-    //create a float block
-    OSLVarFloatBlock *b = new OSLVarFloatBlock(m_nodeInterfaceScene, m_material);
-    m_nodes.push_back(b);
-}
-//------------------------------------------------------------------------------------------------------------------------------------
-void AbstractMaterialWidget::addFloatThreeNode(){
-    OSLVarFloatThreeBlock *b = new OSLVarFloatThreeBlock(m_nodeInterfaceScene,m_material);
-    m_nodes.push_back(b);
-}
-
 //------------------------------------------------------------------------------------------------------------------------------------

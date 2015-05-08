@@ -9,9 +9,10 @@ OSLVarFloatBlock::OSLVarFloatBlock(QGraphicsScene *_scene, optix::Material &_mat
     //set the name of our block
     setBlockName("float");
     //create our spin box
-    QNEPort* varPort = addOutputPort("","",QNEPort::TypeFloat);
+    std::vector<std::string> zeroInitParams;
+    QNEPort* varPort = addOutputPort("",zeroInitParams,QNEPort::TypeFloat);
     //Now lets add our float spin box which will change the value of our variable
-    FloatNodeProxyWidget *floatProxy = new FloatNodeProxyWidget(varPort,m_material,this);
+    new FloatNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 OSLVarFloatBlock::~OSLVarFloatBlock(){
