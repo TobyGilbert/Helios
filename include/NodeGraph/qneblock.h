@@ -42,14 +42,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <QGraphicsSceneMouseEvent>
 #include "NodeGraph/qneport.h"
 
-//#include <QObject>
-
-
-/// @brief This class has been modified from inheriting from both QGraphicsPathItem and QGObject
-/// @brief so that we have access to signals and slots. Qt does a similar thing in there QGraphicsObject.
-class QNEBlock : public QGraphicsPathItem//, QObject
+class QNEBlock : public QGraphicsPathItem
 {
-    //Q_OBJECT
 public:
     //this means you can define a new QGraphicsItem type. Woudln't of done it like this myself.
     enum { Type = QGraphicsItem::UserType + 3 };
