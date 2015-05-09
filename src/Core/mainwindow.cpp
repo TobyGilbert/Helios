@@ -13,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,1,2,2);
 
+    createMenus();
+
     connect(m_openGLWidget,SIGNAL(pathTracerCreated()),this,SLOT(createMenus()));
 
 }

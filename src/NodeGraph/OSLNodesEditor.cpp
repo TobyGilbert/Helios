@@ -344,7 +344,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"    }\n"<<endl;
         stream<<"}\n"<<endl;
 
-        stream<<"current_prd.radiance = result;"<<endl;
+       // stream<<"current_prd.radiance = result;"<<endl;
         stream<<"current_prd.done = true;"<<endl;
 
         //end of our material program

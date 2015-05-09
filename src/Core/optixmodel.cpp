@@ -25,6 +25,7 @@ OptiXModel::OptiXModel(std::string _path, Context &_context)
     m_trans = _context->createTransform();
     m_trans->setMatrix(false,m,0);
     createGeometry(_path,_context);
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 OptiXModel::OptiXModel(OptiXModel *_instance, Context &_context){
@@ -91,7 +92,6 @@ void OptiXModel::createGeometry(std::string _loc, Context &_context){
     //import our mesh
     Assimp::Importer importer;
     const aiScene* scene = importer.ReadFile(_loc.c_str(), aiProcess_GenSmoothNormals | aiProcess_CalcTangentSpace | aiProcess_Triangulate);
-
     if(scene->mFlags == AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
     {
         std::cerr<<"The file was not successfully opened: "<<_loc.c_str()<<std::endl;

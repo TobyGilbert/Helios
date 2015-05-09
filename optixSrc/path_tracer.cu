@@ -29,7 +29,7 @@
 
 
 // Scene wide
-rtDeclareVariable(float,         scene_epsilon, , );
+    rtDeclareVariable(float,         scene_epsilon, , );
 rtDeclareVariable(rtObject,      top_object, , );
 
 // For camera
@@ -104,26 +104,25 @@ RT_PROGRAM void pathtrace_camera(){
         prd.depth = 0;
         prd.type = (char*)"camera";
 
-    for(;;) {
-        Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
-        rtTrace(top_object, ray, prd);
-        if(prd.done) {
-            prd.result += prd.radiance * prd.attenuation;
-            break;
-        }
+      //  for(;;) {
+            Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
+            rtTrace(top_object, ray, prd);
+            //if(prd.done) {
+                prd.result += prd.radiance * prd.attenuation;
+             //   break;
+            //}
 
-        // RR
-        if(prd.depth >= rr_begin_depth){
-            float pcont = fmaxf(prd.attenuation);
-            if(rnd(prd.seed) >= pcont)
-                break;
-                prd.attenuation /= pcont;
-            }
-            prd.depth++;
-            prd.result += prd.radiance * prd.attenuation;
-            ray_origin = prd.origin;
-            ray_direction = prd.direction;
-        } // eye ray
+            // RR
+//            if(prd.depth >= rr_begin_depth){
+//                float pcont = fmaxf(prd.attenuation);
+//                if(rnd(prd.seed) >= pcont) break;
+//                prd.attenuation /= pcont;
+//            }
+//            prd.depth++;
+//            prd.result += prd.radiance * prd.attenuation;
+//            ray_origin = prd.origin;
+//            ray_direction = prd.direction;
+        //} // eye ray
 
         result += prd.result;
         seed = prd.seed;
