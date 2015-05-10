@@ -102,7 +102,7 @@ RT_PROGRAM void pathtrace_camera(){
         prd.done = false;
         prd.seed = seed;
         prd.depth = 0;
-        prd.type = (char*)"camera";
+        //prd.type = (char*)"camera";
 
       //  for(;;) {
             Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
@@ -153,7 +153,7 @@ RT_PROGRAM void defaultMaterial(){
     float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
 
     float3 hitpoint = ray.origin + t_hit * ray.direction;
-    current_prd.origin = hitpoint;
+    //current_prd.origin = hitpoint;
 
     float z1=rnd(current_prd.seed);
     float z2=rnd(current_prd.seed);
@@ -161,7 +161,7 @@ RT_PROGRAM void defaultMaterial(){
     cosine_sample_hemisphere(z1, z2, p);
     float3 v1, v2;
     createONB(ffnormal, v1, v2);
-    current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
+    //current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
 
 //    current_prd.countEmitted = false;
 
@@ -213,6 +213,7 @@ RT_PROGRAM void diffuseEmitter(){
 //
 //-----------------------------------------------------------------------------
 RT_PROGRAM void exception(){
+    printf("depth %d\n",current_prd.depth);
     output_buffer[launch_index] = make_float4(bad_color, 0.0f);
 
 }
@@ -243,14 +244,14 @@ RT_PROGRAM void shadow(){
 }
 //-----------------------------------------------------------------------------
 // OSL device function
-__device__ int OSLraytype(char* _name){
-    if (current_prd.type == _name){
-        return 1;
-    }
-    else {
-        return 0;
-    }
-}
+//__device__ int OSLraytype(char* _name){
+//    if (current_prd.type == _name){
+//        return 1;
+//    }
+//    else {
+//        return 0;
+//    }
+//}
 
 __device__ int OSLbackfacing(){
     return 1;
