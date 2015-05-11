@@ -8,6 +8,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Core/TextureLoader.h"
 #include "Lights/LightManager.h"
+#include <cuda_runtime.h>
 
 //Declare our static instance variable
 PathTracerScene* PathTracerScene::m_instance;
@@ -47,7 +48,12 @@ void PathTracerScene::init(){
     m_context->setRayTypeCount( 3 );
     // we only have one entry point which is our output buffer
     m_context->setEntryPointCount( 1 );
-    // sets the stack size important for recuerssion
+    // sets the stack size important for recursion
+    // we want this to be as big as our hardware will allow us
+    // so that we can send as many rays as the user desires
+    size_t maxStackSize;
+    cudaDeviceGetLimit(&maxStackSize,cudaLimitStackSize);
+    std::cout<<"Max stack size: "<<maxStackSize<<std::endl;
     m_context->setStackSize( 4000 );
     // set some variables
     m_context["scene_epsilon"]->setFloat( 1.e-3f );
