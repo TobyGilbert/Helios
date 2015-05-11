@@ -50,7 +50,7 @@ void QNodesEditor::install(QGraphicsScene *s)
 
 QGraphicsItem* QNodesEditor::itemAt(const QPointF &pos)
 {
-	QList<QGraphicsItem*> items = scene->items(QRectF(pos - QPointF(1,1), QSize(3,3)));
+    QList<QGraphicsItem*> items = scene->items(QRectF(pos - QPointF(1,1), QSize(3,3)));
 
 	foreach(QGraphicsItem *item, items)
 		if (item->type() > QGraphicsItem::UserType)
@@ -92,10 +92,13 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 			break;
 		}
         case Qt::MidButton:
-		{
-			QGraphicsItem *item = itemAt(me->scenePos());
-            if (item && (item->type() == QNEConnection::Type || item->type() == QNEBlock::Type || item->type() == OSLAbstractVarBlock::Type || item->type() == OSLBlock::Type ))
-				delete item;
+        {
+            QGraphicsItem *item = itemAt(me->scenePos());
+            if (item && (item->type() > QGraphicsItem::UserType) && (item->type()!= QNEPort::Type )){
+                std::cerr<<"Deleting Scene Item"<<std::endl;
+                scene->removeItem(item);
+                delete item;
+            }
 			// if (selBlock == (QNEBlock*) item)
 				// selBlock = 0;
 			break;
