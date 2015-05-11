@@ -37,6 +37,7 @@ glass
     float Cs = 0.85
         [[  string help = "Base color",
             float min = 0, float max = 1 ]],
+    color col = color(1, 1, 1),
     float eta = 1.5
         [[  string help = "Index of refraction",
             float min = 1, float max = 3 ]],
@@ -49,5 +50,5 @@ glass
   )
 {
 
-        Ci =  Cs * refraction(N, eta) + Ks * reflection(N, eta);
+        Ci =  col * (Cs * refraction(N, eta) + Ks * reflection(N, eta));
 }
