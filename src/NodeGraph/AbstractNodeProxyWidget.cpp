@@ -15,12 +15,12 @@ void AbstractNodeProxyWidget::getLinkedVarName(std::vector<std::string> &_linked
         //find the input variable we are setting
         if(!c->port1()->isOutput()){
             OSLShaderBlock* b = (OSLShaderBlock*)c->port1()->block();
-            name = b->getShaderName() + c->port1()->getName().toStdString();
+            name = b->getBlockName() + c->port1()->getName().toStdString();
             _linkedVarNames.push_back(name);
         }
         else{
             OSLShaderBlock* b = (OSLShaderBlock*)c->port2()->block();
-            name = b->getShaderName() + c->port2()->getName().toStdString();
+            name = b->getBlockName() + c->port2()->getName().toStdString();
             _linkedVarNames.push_back(name);
         }
     }

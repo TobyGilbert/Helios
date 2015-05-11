@@ -9,6 +9,7 @@ OSLAbstractVarBlock::OSLAbstractVarBlock(QGraphicsScene *_scene,optix::Material 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OSLAbstractVarBlock::setBlockName(std::string _name){
+    m_blockName = _name;
     std::vector<std::string> zeroParams;
     addPort(_name.c_str(),0,zeroParams,QNEPort::TypeVoid, QNEPort::TypePort);
 }

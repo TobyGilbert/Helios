@@ -30,7 +30,7 @@ public:
     /// @brief accessor to the shader name
     /// @return shader name in the form of a string
     //------------------------------------------------------------------------------------------------------------------------------------
-    inline std::string getShaderName(){return m_shaderName;}
+    inline std::string getBlockName(){return m_shaderName;}
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief compiles our osl shader and sets up our ports and obtains required data about shader
     /// @param _path - path to our shader file

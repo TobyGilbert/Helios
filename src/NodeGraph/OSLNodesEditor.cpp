@@ -150,7 +150,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                     //if its a texture we need to write something different
                     if(((QNEPort*) item)->getVaribleType()==QNEPort::TypeString){
                         OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
-                        stream<<"rtTextureSampler<float4,2> "<<block->getShaderName().c_str()<<((QNEPort*) item)->getName()<<";"<<endl;
+                        stream<<"rtTextureSampler<float4,2> "<<block->getBlockName().c_str()<<((QNEPort*) item)->getName()<<";"<<endl;
                     }
                     else{
                         //Convert our input type into a string
@@ -161,7 +161,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             //node: if multiple shaders have the same variable name then they will clash in the program
                             //to solve this we put the shader name on the start of the variable
                             OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
-                            stream<<"rtDeclareVariable("<<type<<","<<block->getShaderName().c_str()<<((QNEPort*) item)->getName()<<",,);"<<endl;
+                            stream<<"rtDeclareVariable("<<type<<","<<block->getBlockName().c_str()<<((QNEPort*) item)->getName()<<",,);"<<endl;
                         }
                     }
                 }
@@ -230,7 +230,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             //note: if 2 shaders have the same variable name we need to
                             //distinguish between them so to solve this we will have the
                             //name of the shader concatinated with the varibale name
-                            stream<<((OSLShaderBlock*)item)->getShaderName().c_str()<<p->getName();
+                            stream<<((OSLShaderBlock*)item)->getBlockName().c_str()<<p->getName();
                             //lets also set its default value
                             std::vector<std::string> initParams = p->getInitParams();
                             stream<<" = ";
@@ -268,7 +268,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         for(unsigned int i=0;i<orderedBlocks.size();i++){
             if(orderedBlocks[i]->type() == OSLShaderBlock::Type){
                 //note the shader name is always the same as the device function we need to call
-                stream<<((OSLShaderBlock*)orderedBlocks[i])->getShaderName().c_str()<<"(";
+                stream<<((OSLShaderBlock*)orderedBlocks[i])->getBlockName().c_str()<<"(";
                 //put in our shader globals
                 stream<<"sg";
                 //now lets print out our the paramiters we need in the function
@@ -287,27 +287,42 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             stream<<",";
                         }
                         //if there is nothing connected we just stick in our default paramiter
-                        stream<<((OSLShaderBlock*)p->block())->getShaderName().c_str();
+                        stream<<((OSLShaderBlock*)p->block())->getBlockName().c_str();
                         stream<<p->getName();
                     }
                     else if(!p->isOutput()){
                         QVector<QNEConnection*> con = p->connections();
                         if(con.size()>1){
                             return "Error: Input to shader has multiple input connections";
-
                         }
                         else{
                             if(i!=0){
                                 stream<<",";
                             }
                             //find which port of the connection is the input and print the variable name
-                            if(!con[0]->port1()->isOutput()){
-                                OSLShaderBlock* b = (OSLShaderBlock*)con[0]->port1()->block();
-                                stream<<b->getShaderName().c_str()<<con[0]->port1()->getName();
+                            if(con[0]->port1()->isOutput()){
+                                if(con[0]->port1()->block()->type() == OSLShaderBlock::Type || con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
+                                    if(con[0]->port1()->block()->type() == OSLShaderBlock::Type){
+                                        QNEBlock* b = (QNEBlock*)con[0]->port1()->block();
+                                        stream<<b->getBlockName().c_str()<<con[0]->port1()->getName();
+                                    }
+                                    else if(con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
+                                        QNEBlock* b = (QNEBlock*)con[0]->port2()->block();
+                                        stream<<b->getBlockName().c_str()<<con[0]->port2()->getName();
+                                    }
+                                }
                             }
                             else{
-                                OSLShaderBlock* b = (OSLShaderBlock*)con[0]->port2()->block();
-                                stream<<b->getShaderName().c_str()<<con[0]->port2()->getName();
+                                if(con[0]->port1()->block()->type() == OSLShaderBlock::Type || con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
+                                    if(con[0]->port1()->block()->type() == OSLShaderBlock::Type){
+                                        QNEBlock* b = (QNEBlock*)con[0]->port2()->block();
+                                        stream<<b->getBlockName().c_str()<<con[0]->port2()->getName();
+                                    }
+                                    else if(con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
+                                        QNEBlock* b = (QNEBlock*)con[0]->port1()->block();
+                                        stream<<b->getBlockName().c_str()<<con[0]->port1()->getName();
+                                    }
+                                }
                             }
                         }
                     }
@@ -435,7 +450,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             //node: if multiple shaders have the same variable name then they will clash in the program
                             //to solve this we put the shader name on the start of the variable
                             OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
-                            std::string varName = block->getShaderName().c_str() + ((QNEPort*) item)->getName().toStdString();
+                            std::string varName = block->getBlockName().c_str() + ((QNEPort*) item)->getName().toStdString();
                             std::vector<std::string> initParams = ((QNEPort*) item)->getInitParams();
                             if(((QNEPort*) item)->getVaribleType()==QNEPort::TypeInt){
                                 _mat[varName.c_str()]->setInt(std::stoi(initParams[0]));
