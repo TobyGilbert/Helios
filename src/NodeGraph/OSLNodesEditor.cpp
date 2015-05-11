@@ -233,18 +233,23 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             stream<<((OSLShaderBlock*)item)->getBlockName().c_str()<<p->getName();
                             //lets also set its default value
                             std::vector<std::string> initParams = p->getInitParams();
-                            stream<<" = ";
+                            if(p->type()==QNEPort::TypeString){
+                                stream<<";"<<endl;
+                                continue;
+                            }
                             if(initParams.size()==3){
+                                stream<<" = ";
                                 stream<<"make_float3(";
                                 for(int i=0;i<3;i++){
                                     stream<<initParams[i].c_str();
                                     if(i!=2) stream<<",";
                                 }
                                 stream<<");"<<endl;
-                            }
-                            else{
+                             }
+                             else{
+                                stream<<" = ";
                                 stream<<initParams[0].c_str()<<";"<<endl;
-                            }
+                             }
                         }
                     }
                 }
