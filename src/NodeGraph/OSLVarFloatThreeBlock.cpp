@@ -12,6 +12,6 @@ OSLVarFloatThreeBlock::OSLVarFloatThreeBlock(QGraphicsScene *_scene, optix::Mate
     std::vector<std::string> zeroParams;
     QNEPort* varPort = addOutputPort("",zeroParams,QNEPort::TypeVector);
     //Now lets add our float spin box which will change the value of our variable
-    FloatThreeNodeProxyWidget *floatProxy = new FloatThreeNodeProxyWidget(varPort,m_material,this);
+    m_widgetProxy = new FloatThreeNodeProxyWidget(varPort,m_material,this);
 
 }

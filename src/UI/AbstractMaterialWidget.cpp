@@ -7,6 +7,7 @@
 #include "NodeGraph/OSLVarNormalBlock.h"
 #include "NodeGraph/OSLVarPointBlock.h"
 #include "NodeGraph/OSLVarIntBlock.h"
+#include "NodeGraph/OSLVarImageBlock.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
@@ -147,6 +148,11 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
     addPointNodeBtn->setData(QVariant(6));
     myMenu.addAction(addPointNodeBtn);
 
+    QAction *addImageNodeBtn = new QAction(&myMenu);
+    addImageNodeBtn->setText("Add Image Node");
+    addImageNodeBtn->setData(QVariant(7));
+    myMenu.addAction(addImageNodeBtn);
+
     //find out if something has been clicked
     QAction* selectedItem = myMenu.exec(globalPos);
     if(selectedItem){
@@ -182,6 +188,11 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
         case(6):{
             OSLVarPointBlock *p = new OSLVarPointBlock(m_nodeInterfaceScene,m_material);
             m_nodes.push_back(p);
+        }
+        break;
+        case(7):{
+            OSLVarImageBlock *i = new OSLVarImageBlock(m_nodeInterfaceScene,m_material);
+            m_nodes.push_back(i);
         }
         break;
         //if nothing do nothing

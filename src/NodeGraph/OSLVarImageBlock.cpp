@@ -1,20 +1,21 @@
-#include "NodeGraph/OSLVarFloatBlock.h"
-#include "NodeGraph/FloatNodeProxyWidget.h"
+#include "NodeGraph/OSLVarImageBlock.h"
+#include "NodeGraph/ImageNodeProxyWidget.h"
+
 //------------------------------------------------------------------------------------------------------------------------------------
-OSLVarFloatBlock::OSLVarFloatBlock(QGraphicsScene *_scene, optix::Material &_mat, QGraphicsItem *parent) : OSLAbstractVarBlock(_scene,_mat,parent)
+OSLVarImageBlock::OSLVarImageBlock(QGraphicsScene *_scene, optix::Material &_mat, QGraphicsItem *parent) : OSLAbstractVarBlock(_scene,_mat,parent)
 {
     //draw our block a little bigger
-    setWidth(30);
-    setHeight(20);
+    setWidth(255);
+    setHeight(255);
     //set the name of our block
-    setBlockName("float");
+    setBlockName("Image");
     //create our spin box
     std::vector<std::string> zeroInitParams;
-    QNEPort* varPort = addOutputPort("",zeroInitParams,QNEPort::TypeFloat);
+    QNEPort* varPort = addOutputPort("",zeroInitParams,QNEPort::TypeString);
     //Now lets add our float spin box which will change the value of our variable
-    m_widgetProxy = new FloatNodeProxyWidget(varPort,m_material,this);
+    m_widgetProxy = new ImageNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-OSLVarFloatBlock::~OSLVarFloatBlock(){
+OSLVarImageBlock::~OSLVarImageBlock(){
 }
 //------------------------------------------------------------------------------------------------------------------------------------

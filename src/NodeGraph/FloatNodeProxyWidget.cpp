@@ -26,6 +26,18 @@ void FloatNodeProxyWidget::setMaterialVariables(double _val){
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
+void FloatNodeProxyWidget::setLinkedVar(){
+    //get all our linked variable names
+    std::vector<std::string> _varNames;
+    getLinkedVarName(_varNames);
+
+    //set all our variables in our material
+    for(unsigned int i=0;i<_varNames.size();i++){
+        m_material[_varNames[i].c_str()]->setFloat(m_spinBox->value());
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
 FloatNodeProxyWidget::~FloatNodeProxyWidget(){
     delete m_spinBox;
 }

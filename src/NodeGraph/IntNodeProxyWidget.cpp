@@ -25,6 +25,18 @@ void IntNodeProxyWidget::setMaterialVariables(int _val){
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
+void IntNodeProxyWidget::setLinkedVar(){
+    //get all our linked variable names
+    std::vector<std::string> _varNames;
+    getLinkedVarName(_varNames);
+
+    //set all our variables in our material
+    for(unsigned int i=0;i<_varNames.size();i++){
+        m_material[_varNames[i].c_str()]->setInt(m_spinBox->value());
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
 IntNodeProxyWidget::~IntNodeProxyWidget(){
     delete m_spinBox;
 }

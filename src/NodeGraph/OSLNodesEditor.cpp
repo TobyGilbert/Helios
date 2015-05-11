@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <algorithm>
 #include "NodeGraph/qneconnection.h"
+#include "NodeGraph/OSLAbstractVarBlock.h"
 #include "Core/pathtracerscene.h"
 
 
@@ -146,15 +147,22 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                         if(connection[0]->port1()->isOutput() && connection[0]->port1()->block()->type()==OSLShaderBlock::Type) continue;
                         if(connection[0]->port2()->isOutput() && connection[0]->port2()->block()->type()==OSLShaderBlock::Type) continue;
                     }
-                    //Convert our input type into a string
-                    QString type = portTypeToString(((QNEPort*) item)->getVaribleType());
-                    //if we have a type and our port belongs to a node that is not a shader node
-                    //lets add it to our material variables
-                    if(type.size()>0){
-                        //node: if multiple shaders have the same variable name then they will clash in the program
-                        //to solve this we put the shader name on the start of the variable
+                    //if its a texture we need to write something different
+                    if(((QNEPort*) item)->getVaribleType()==QNEPort::TypeString){
                         OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
-                        stream<<"rtDeclareVariable("<<type<<","<<block->getShaderName().c_str()<<((QNEPort*) item)->getName()<<",,);"<<endl;
+                        stream<<"rtTextureSampler<float4,2> "<<block->getShaderName().c_str()<<((QNEPort*) item)->getName()<<";"<<endl;
+                    }
+                    else{
+                        //Convert our input type into a string
+                        QString type = portTypeToString(((QNEPort*) item)->getVaribleType());
+                        //if we have a type and our port belongs to a node that is not a shader node
+                        //lets add it to our material variables
+                        if(type.size()>0){
+                            //node: if multiple shaders have the same variable name then they will clash in the program
+                            //to solve this we put the shader name on the start of the variable
+                            OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
+                            stream<<"rtDeclareVariable("<<type<<","<<block->getShaderName().c_str()<<((QNEPort*) item)->getName()<<",,);"<<endl;
+                        }
                     }
                 }
             }
@@ -440,6 +448,13 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             }
                         }
                     }
+                }
+            }
+            //initialize the blocks connected
+            foreach(QGraphicsItem *item, getScene()->items()){
+                if (item->type() == OSLAbstractVarBlock::Type)
+                {
+                    ((OSLAbstractVarBlock*)item)->setLinkedVar();
                 }
             }
 

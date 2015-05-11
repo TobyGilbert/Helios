@@ -32,6 +32,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include "NodeGraph/qneport.h"
 #include "NodeGraph/qneconnection.h"
 #include "NodeGraph/qneblock.h"
+#include "NodeGraph/OSLAbstractVarBlock.h"
 
 QNodesEditor::QNodesEditor(QObject *parent) :
     QObject(parent)
@@ -120,12 +121,20 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 				QNEPort *port2 = (QNEPort*) item;
 
                 //modified to also check that the type is the same as we dont want to conflict osl standards
+                //set sets the variable that the node is connected to
                 if (port1->block() != port2->block() && port1->isOutput() != port2->isOutput() && !port1->isConnected(port2) && port1->getVaribleType() == port2->getVaribleType())
 				{
 					conn->setPos2(port2->scenePos());
 					conn->setPort2(port2);
 					conn->updatePath();
 					conn = 0;
+
+                    if (port1->block()->type()==OSLAbstractVarBlock::Type){
+                        ((OSLAbstractVarBlock *)port1->block())->setLinkedVar();
+                    }
+                    else if (port2->block()->type()==OSLAbstractVarBlock::Type){
+                        ((OSLAbstractVarBlock *)port2->block())->setLinkedVar();
+                    }
 					return true;
 				}
 			}
