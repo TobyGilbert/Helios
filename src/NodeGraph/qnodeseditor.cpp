@@ -33,6 +33,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include "NodeGraph/qneconnection.h"
 #include "NodeGraph/qneblock.h"
 #include "NodeGraph/OSLAbstractVarBlock.h"
+#include "NodeGraph/OSLBlock.h"
+#include "NodeGraph/OSLAbstractVarBlock.h"
 
 QNodesEditor::QNodesEditor(QObject *parent) :
     QObject(parent)
@@ -81,18 +83,18 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 				conn->updatePath();
 
 				return true;
-			} else if (item && item->type() == QNEBlock::Type)
-			{
-				/* if (selBlock)
-					selBlock->setSelected(); */
-				// selBlock = (QNEBlock*) item;
-			}
+//			} else if (item && item->type() == QNEBlock::Type)
+//			{
+//				 if (selBlock)
+//					selBlock->setSelected();
+//				 selBlock = (QNEBlock*) item;
+            }
 			break;
 		}
-		case Qt::RightButton:
+        case Qt::MidButton:
 		{
 			QGraphicsItem *item = itemAt(me->scenePos());
-			if (item && (item->type() == QNEConnection::Type || item->type() == QNEBlock::Type))
+            if (item && (item->type() == QNEConnection::Type || item->type() == QNEBlock::Type || item->type() == OSLAbstractVarBlock::Type || item->type() == OSLBlock::Type ))
 				delete item;
 			// if (selBlock == (QNEBlock*) item)
 				// selBlock = 0;
