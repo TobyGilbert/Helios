@@ -233,13 +233,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             stream<<((OSLShaderBlock*)item)->getBlockName().c_str()<<p->getName();
                             //lets also set its default value
                             std::vector<std::string> initParams = p->getInitParams();
-                            if(p->type()==QNEPort::TypeString){
-                                stream<<";"<<endl;
-                                continue;
-                            }
                             if(initParams.size()==3){
-                                stream<<" = ";
-                                stream<<"make_float3(";
+                                stream<<" = make_float3(";
                                 for(int i=0;i<3;i++){
                                     stream<<initParams[i].c_str();
                                     if(i!=2) stream<<",";
@@ -247,8 +242,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                                 stream<<");"<<endl;
                             }
                             else{
-                                stream<<" = ";
-                                stream<<initParams[0].c_str()<<";"<<endl;
+                                stream<<" = "<<initParams[0].c_str()<<";"<<endl;
                             }
                         }
                     }
@@ -285,17 +279,19 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                     if(p->getVaribleType() == QNEPort::TypeVoid){
                         continue;
                     }
+                    //if its our output Ci continue
                     if(p->getName()=="Ci")continue;
 
+
+                    //if there is nothing connected we just stick in our default paramiter
                     if(p->connections().size()==0){
                         if(i!=0){
                             stream<<",";
                         }
-                        //if there is nothing connected we just stick in our default paramiter
                         stream<<((OSLShaderBlock*)p->block())->getBlockName().c_str();
                         stream<<p->getName();
                     }
-                    else if(!p->isOutput()){
+                    else{
                         QVector<QNEConnection*> con = p->connections();
                         if(con.size()>1){
                             return "Error: Input to shader has multiple input connections";
@@ -306,27 +302,23 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             }
                             //find which port of the connection is the input and print the variable name
                             if(con[0]->port1()->isOutput()){
-                                if(con[0]->port1()->block()->type() == OSLShaderBlock::Type || con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
-                                    if(con[0]->port1()->block()->type() == OSLShaderBlock::Type){
-                                        QNEBlock* b = (QNEBlock*)con[0]->port1()->block();
-                                        stream<<b->getBlockName().c_str()<<con[0]->port1()->getName();
-                                    }
-                                    else if(con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
-                                        QNEBlock* b = (QNEBlock*)con[0]->port2()->block();
-                                        stream<<b->getBlockName().c_str()<<con[0]->port2()->getName();
-                                    }
+                                if(con[0]->port1()->block()->type() == OSLShaderBlock::Type){
+                                    QNEBlock* b = (QNEBlock*)con[0]->port1()->block();
+                                    stream<<b->getBlockName().c_str()<<con[0]->port1()->getName();
+                                }
+                                else if(con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
+                                    QNEBlock* b = (QNEBlock*)con[0]->port2()->block();
+                                    stream<<b->getBlockName().c_str()<<con[0]->port2()->getName();
                                 }
                             }
                             else{
-                                if(con[0]->port1()->block()->type() == OSLShaderBlock::Type || con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
-                                    if(con[0]->port1()->block()->type() == OSLShaderBlock::Type){
-                                        QNEBlock* b = (QNEBlock*)con[0]->port2()->block();
-                                        stream<<b->getBlockName().c_str()<<con[0]->port2()->getName();
-                                    }
-                                    else if(con[0]->port1()->block()->type() == OSLAbstractVarBlock::Type){
-                                        QNEBlock* b = (QNEBlock*)con[0]->port1()->block();
-                                        stream<<b->getBlockName().c_str()<<con[0]->port1()->getName();
-                                    }
+                                if(con[0]->port2()->block()->type() == OSLShaderBlock::Type){
+                                    QNEBlock* b = (QNEBlock*)con[0]->port2()->block();
+                                    stream<<b->getBlockName().c_str()<<con[0]->port2()->getName();
+                                }
+                                else if(con[0]->port2()->block()->type() == OSLAbstractVarBlock::Type){
+                                    QNEBlock* b = (QNEBlock*)con[0]->port1()->block();
+                                    stream<<b->getBlockName().c_str()<<con[0]->port1()->getName();
                                 }
                             }
                         }
