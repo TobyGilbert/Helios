@@ -1,0 +1,8 @@
+shader textureShader(
+  string filename = "",
+  output color Cout = color(1.0, 1.0, 1.0))
+{
+  color tex = texture(filename, u, v);
+  Cout = tex;
+
+}

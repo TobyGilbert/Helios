@@ -195,7 +195,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"//-------Main Material Program-----------"<<endl;
         stream<<"RT_PROGRAM void "<<m_materialName.c_str()<<"(){"<<endl;
 
-        stream<<"if (current_prd.depth > 20){"<<endl;
+        stream<<"if (current_prd.depth > 5){"<<endl;
         stream<<"   current_prd.done = true;"<<endl;
         stream<<"   return;"<<endl;
         stream<<"}"<<endl;
@@ -207,7 +207,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );"<<endl;
         stream<<"sg.I = ray.direction;"<<endl;
         stream<<"// The shading position"<<endl;
-        stream<<"current_prd.origin = ray.origin + t_hit * ray.direction;"<<endl;
+        //stream<<"current_prd.origin = ray.origin + t_hit * ray.direction;"<<endl;
         stream<<"sg.P = ray.origin + t_hit * ray.direction;"<<endl;
         stream<<"// Texture coordinates"<<endl;
         stream<<"sg.u = texcoord.x;"<<endl;
@@ -320,7 +320,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         }
 
 
-
+/*
 
         //calculate our shadows
         stream<<"// Compute our shadows\n"<<endl;
@@ -352,8 +352,10 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"    }\n"<<endl;
         stream<<"}\n"<<endl;
 
-        stream<<"current_prd.radiance = result;"<<endl;
-        //stream<<"current_prd.done = true;"<<endl;
+*/
+
+       // stream<<"current_prd.radiance = result;"<<endl;
+        stream<<"current_prd.done = true;"<<endl;
 
         //end of our material program
         stream<<"}"<<endl;

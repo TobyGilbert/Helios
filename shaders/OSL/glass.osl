@@ -31,10 +31,10 @@ surface
 glass
     [[ string help = "Simple dielectric material" ]]
 (
-    float Ks = 1
+    float Ks = 0.15
         [[  string help = "Color scaling of the refraction",
             float min = 0, float max = 1 ]],
-    color Cs = 1
+    float Cs = 0.85
         [[  string help = "Base color",
             float min = 0, float max = 1 ]],
     float eta = 1.5
@@ -48,23 +48,6 @@ glass
             string widget = "checkBox" ]]
   )
 {
-    // If the current ray type is glossy or diffuse, that means we
-    // are computing indirect lighting. Letting that interact with
-    // glass produces caustics, which are normally hard to trace and
-    // noisy. So we only return closures if that's not the case or
-    // the "caustics" flag is on.
-    if (caustics || (!raytype("glossy") && !raytype("diffuse"))) {
-        // Take into account backfacing to invert eta accordingly
-        if (backfacing()) {
-            Ci = Cs * refraction(N, 1.0 / eta);
-            // If Total Internal Reflection is enabled, we also return a
-            // reflection closure, which might make rays bounce too much
-            // inside an object. That's why we make it optional.
-           // if (TIR)
-             //  Ci += Ks * reflection(N, 1.0 / eta);
-        }
-        else {
-            Ci =  Cs * refraction(N, eta);// + Ks * reflection(N, eta);
-        }
-    }
+
+        Ci =  Cs * refraction(N, eta) + Ks * reflection(N, eta);
 }
