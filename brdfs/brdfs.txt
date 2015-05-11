@@ -138,3 +138,7 @@ __device__ int OSLbackfacing(ShaderGlobals sg){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 OSLTexture(rtTextureSampler<float4, 2>  _filename, float _s, float _t){
+    return make_float3(tex2D(_filename, _s, _t));
+}
+//----------------------------------------------------------------------------

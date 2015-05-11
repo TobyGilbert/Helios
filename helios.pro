@@ -173,7 +173,8 @@ OTHER_FILES += \
     shaders/OSL/ifTest.osl \
     shaders/OSO/ifTest.oso \
     styleSheet/darkOrange \
-    brdfs/brdfs.txt
+    brdfs/brdfs.txt \
+    shaders/OSL/textureShader.osl
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y

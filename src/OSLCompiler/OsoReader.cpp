@@ -122,8 +122,12 @@ std::string OsoReader::generateDeviceFunction(){
     for (unsigned int i=0; i<m_symbols.size(); i++){
         if (m_symbols[i].m_symType == 0){
             s+=", ";
+            if(m_symbols[i].m_type == 2){
+                s+=" rtTextureSampler<float4, 2> ";
+                s+=m_symbols[i].m_name.c_str();
+            }
             // Append the correct varible type, name and initial parameters
-            if (m_symbols[i].m_type == 2 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
+            if (m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 ";
                 s+=m_symbols[i].m_name.c_str();
                 s+=" = make_float3( ";
@@ -159,12 +163,12 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-            else{
-                s+="void ";
-                s+=m_symbols[i].m_name.c_str();
-                s+=" = ";
-                s+=m_symbols[i].m_initialParams[0].c_str();
-            }
+//            else{
+//                s+="void ";
+//                s+=m_symbols[i].m_name.c_str();
+//                s+=" = ";
+//                s+=m_symbols[i].m_initialParams[0].c_str();
+//            }
         }
         if (m_symbols[i].m_symType == 1){
             s+=", ";
@@ -405,7 +409,7 @@ std::string OsoReader::generateDeviceFunction(){
            s+=";\n";
         }
         if (m_instructions[i].m_opcode == std::string("div")){
-            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
+//            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
 //            std::string type;
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
@@ -506,6 +510,33 @@ std::string OsoReader::generateDeviceFunction(){
             s+=m_instructions[i].m_output.c_str();
             s+=" = OSLbackfacing(sg);\n";
         }
+        if(m_instructions[i].m_opcode == std::string("texture")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = OSLTexture(";
+            for (unsigned int j=0; j<m_instructions[i].m_args.size()-1; j++){
+                if(m_instructions[i].m_args[j].c_str() == std::string("u")){
+                    s+="sg.u";
+                }
+                else if(m_instructions[i].m_args[j].c_str() == std::string("v")){
+                    s+="sg.v";
+                }
+                else{
+                    s+=m_instructions[i].m_args[j].c_str();
+                }
+                s+=", ";
+            }
+            if(m_instructions[i].m_args[m_instructions[i].m_args.size()-1].c_str() == std::string("u")){
+                s+="sg.u";
+            }
+            else if(m_instructions[i].m_args[m_instructions[i].m_args.size()-1].c_str() == std::string("v")){
+                s+="sg.v";
+            }
+            else{
+                s+=m_instructions[i].m_args[m_instructions[i].m_args.size()-1].c_str();
+            }
+            s+=");\n";
+        }
         if (m_instructions[i].m_opcode == std::string("if")){
             // In order to skip else code add a jump target to the jump targets vector
             JumpTarget jt;
@@ -545,9 +576,9 @@ void OsoReader::printInstructions(){
 }
 void OsoReader::resetVectors(){
     getOsoReader()->m_symbols.clear();
-    m_instructionFunctions.clear();
-    m_iParams.clear();
-    m_instructions.clear();
+    getOsoReader()->m_instructionFunctions.clear();
+    getOsoReader()->m_iParams.clear();
+    getOsoReader()->m_instructions.clear();
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------------
