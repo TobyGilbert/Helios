@@ -318,7 +318,7 @@ std::string OsoReader::generateDeviceFunction(){
                 output = m_instructions[i].m_output;
             }
             else{
-                output = std::string("current_prd.attenuation");
+                output = std::string("current_prd.result");
             }
             std::vector<Symbol>::iterator itName = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
             std::string functionName = itName->m_initialParams[0];
@@ -349,7 +349,7 @@ std::string OsoReader::generateDeviceFunction(){
                 output = m_instructions[i].m_output;
             }
             else {
-                output = std::string("current_prd.attenuation");
+                output = std::string("current_prd.result");
             }
             s+="\t";
             s+=output.c_str();
@@ -392,7 +392,7 @@ std::string OsoReader::generateDeviceFunction(){
             }
             else {
                 type = std::string("");
-                output = std::string("current_prd.attenuation");
+                output = std::string("current_prd.result");
             }
            s+="\t";
            s+=type.c_str();
@@ -436,7 +436,7 @@ std::string OsoReader::generateDeviceFunction(){
             }
             else {
 //                type = std::string("");
-                output = std::string("current_prd.attenuation");
+                output = std::string("current_prd.result");
             }
             s+="\t";
 //            s+=type.c_str();

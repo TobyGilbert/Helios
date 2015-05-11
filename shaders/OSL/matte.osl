@@ -39,5 +39,5 @@ matte
             float min = 0, float max = 1 ]]
   )
 {
-    Ci = Kd * Cs * diffuse (N);
+    Ci = Kd * Cs * oren_nayar(N, 1.5);
 }

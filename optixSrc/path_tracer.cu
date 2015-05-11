@@ -97,8 +97,8 @@ RT_PROGRAM void pathtrace_camera(){
 
         PerRayData_pathtrace prd;
         prd.result = make_float3(0.f);
-        prd.attenuation = make_float3(1.f);
-        prd.countEmitted = true;
+        //prd.attenuation = make_float3(1.f);
+//        prd.countEmitted = true;
         prd.done = false;
         prd.seed = seed;
         prd.depth = 0;
@@ -108,7 +108,7 @@ RT_PROGRAM void pathtrace_camera(){
             Ray ray = make_Ray(ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX);
             rtTrace(top_object, ray, prd);
             //if(prd.done) {
-                prd.result += prd.radiance * prd.attenuation;
+                //prd.result += prd.radiance * prd.attenuation;
              //   break;
             //}
 
@@ -142,7 +142,7 @@ RT_PROGRAM void pathtrace_camera(){
 }
 //-----------------------------------------------------------------------------
 RT_PROGRAM void defaultMaterial(){
-    if (current_prd.depth > 50){
+    if (current_prd.depth > 5){
         current_prd.done = true;
         return;
 
@@ -153,7 +153,6 @@ RT_PROGRAM void defaultMaterial(){
     float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
 
     float3 hitpoint = ray.origin + t_hit * ray.direction;
-    //current_prd.origin = hitpoint;
 
     float z1=rnd(current_prd.seed);
     float z2=rnd(current_prd.seed);
@@ -161,50 +160,72 @@ RT_PROGRAM void defaultMaterial(){
     cosine_sample_hemisphere(z1, z2, p);
     float3 v1, v2;
     createONB(ffnormal, v1, v2);
+
+    PerRayData_pathtrace prd;
+    prd.result = make_float3(0.0);//current_prd.result;
+//    prd.countEmitted = current_prd.countEmitted;
+    prd.seed = current_prd.seed;
+    prd.depth = current_prd.depth+1;
+
+    float3 ray_origin = hitpoint;
+    float3 ray_direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
+
+    Ray default_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+    rtTrace(top_object, default_ray, prd);
+
+//    prd.depth++;
+
+    current_prd.result = prd.result;
+
+//    current_prd.attenuation = make_float3(1.0);
+//    current_prd.radiance = prd.radiance;
+
     //current_prd.direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
 
 //    current_prd.countEmitted = false;
 
     // Compute direct light...
     // Or shoot one...
-    if (lights.size() != 0.0){
-        unsigned int num_lights = lights.size();
-        float3 result = make_float3(0.0f);
+//    if (lights.size() != 0.0){
+//        unsigned int num_lights = lights.size();
+//        float3 result = make_float3(0.0f);
 
-        for(int i = 0; i < num_lights; ++i) {
-            ParallelogramLight light = lights[i];
-            float z1 = rnd(current_prd.seed);
-            float z2 = rnd(current_prd.seed);
-            float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+//        for(int i = 0; i < num_lights; ++i) {
+//            ParallelogramLight light = lights[i];
+//            float z1 = rnd(current_prd.seed);
+//            float z2 = rnd(current_prd.seed);
+//            float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
 
-            float Ldist = length(light_pos - hitpoint);
-            float3 L = normalize(light_pos - hitpoint);
-            float nDl = dot( world_shading_normal, L );
-            float LnDl = dot( light.normal, L );
-            float A = length(cross(light.v1, light.v2));
+//            float Ldist = length(light_pos - hitpoint);
+//            float3 L = normalize(light_pos - hitpoint);
+//            float nDl = dot( world_shading_normal, L );
+//            float LnDl = dot( light.normal, L );
+//            float A = length(cross(light.v1, light.v2));
 
-            // cast shadow ray
-            if ( nDl > 0.0f && LnDl > 0.0f ) {
-                PerRayData_pathtrace_shadow shadow_prd;
-                shadow_prd.inShadow = false;
-                shadow_prd.type = shadowRay;
-                Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
-                rtTrace(top_object, shadow_ray, shadow_prd);
+//            // cast shadow ray
+//            if ( nDl > 0.0f && LnDl > 0.0f ) {
+//                PerRayData_pathtrace_shadow shadow_prd;
+//                shadow_prd.inShadow = false;
+//                shadow_prd.type = shadowRay;
+//                Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+//                rtTrace(top_object, shadow_ray, shadow_prd);
 
-                if(!shadow_prd.inShadow){
-                    float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
-                    result += light.emission * weight;
-                }
-            }
-        }
-        current_prd.radiance = result;
-    }
+//                if(!shadow_prd.inShadow){
+//                    float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+//                    result += light.emission * weight;
+//                }
+//            }
+//        }
+//        current_prd.radiance = result;
+//    }
+    current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
 rtDeclareVariable(float3,        emission_color, , );
 
 RT_PROGRAM void diffuseEmitter(){
-    current_prd.radiance = current_prd.countEmitted? emission_color : make_float3(0.f);
+    //current_prd.radiance = current_prd.countEmitted? emission_color : make_float3(0.f);
+    current_prd.result = emission_color;
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
@@ -213,7 +234,8 @@ RT_PROGRAM void diffuseEmitter(){
 //
 //-----------------------------------------------------------------------------
 RT_PROGRAM void exception(){
-    printf("depth %d\n",current_prd.depth);
+    rtPrintExceptionDetails();
+//    printf("depth %d\n",current_prd.depth);
     output_buffer[launch_index] = make_float4(bad_color, 0.0f);
 
 }
@@ -223,7 +245,7 @@ RT_PROGRAM void exception(){
 //
 //-----------------------------------------------------------------------------
 RT_PROGRAM void miss(){
-    current_prd.radiance = bg_color;
+    //current_prd.radiance = bg_color;
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
@@ -232,7 +254,7 @@ RT_PROGRAM void envi_miss(){
     float phi = M_PIf * 0.5f - acos(ray.direction.y);
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
-    current_prd.radiance = make_float3(tex2D(envmap, u, v));
+    current_prd.result = make_float3(tex2D(envmap, u, v));
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------

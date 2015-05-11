@@ -50,13 +50,13 @@ struct ShaderGlobals{
 //----------------------------------------------------------------------------------------------------------------------
 struct PerRayData_pathtrace{
     float3 result;
-    float3 radiance;
-    float3 attenuation;
+    //float3 radiance;
+    //float3 attenuation;
 //    float3 origin;
 //    float3 direction;
     unsigned int seed;
     int depth;
-    int countEmitted;
+//    int countEmitted;
     int done;
     //char* type;
 };

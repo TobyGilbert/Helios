@@ -47,8 +47,8 @@ void PathTracerScene::init(){
     m_context->setRayTypeCount( 3 );
     // we only have one entry point which is our output buffer
     m_context->setEntryPointCount( 1 );
-    // for printing?
-    m_context->setStackSize( 1800 );
+    // sets the stack size important for recuerssion
+    m_context->setStackSize( 4000 );
     // set some variables
     m_context["scene_epsilon"]->setFloat( 1.e-3f );
     // set our ray types
@@ -56,6 +56,9 @@ void PathTracerScene::init(){
     m_context["pathtrace_shadow_ray_type"]->setUint(1u);
     m_context["pathtrace_bsdf_shadow_ray_type"]->setUint(2u);
     m_context["rr_begin_depth"]->setUint(m_rr_begin_depth);
+
+    // Enable printing
+    rtContextSetPrintEnabled(m_context->get(), 1);
 
     // create our output buffer and set it in our engine
     optix::Variable output_buffer = m_context["output_buffer"];
@@ -137,10 +140,6 @@ void PathTracerScene::addLight(){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::transformLight(glm::mat4 _trans){
-
-}
-//----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::importMesh(std::string _id, std::string _path){
     /// @todo maybe have all this stuff in a model management class rather than the scene
     /// @todo meshes are all set with detault diffuse texture, we need some sort of material management
@@ -176,7 +175,6 @@ void PathTracerScene::setModelMaterial(std::string _id, Material &_mat){
     mdl->setMaterial(_mat);
     m_frame=0;
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::trace(){
     //if our camera has changed then update it in our engine

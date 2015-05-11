@@ -4,61 +4,137 @@ rtDeclareVariable(unsigned int,  rr_begin_depth, , );
 //----------------------------------------------------------------------------------------------------------------------
 //-------------------------------------------------------- BRDFS -------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 reflection(optix::float3 _normal, float _eta){
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 diffuse(optix::float3 _normal){
+    float z1=rnd(current_prd.seed);
+    float z2=rnd(current_prd.seed);
+    float3 p;
+    cosine_sample_hemisphere(z1, z2, p);
+    float3 v1, v2;
+    createONB(_normal, v1, v2);
+
     float3 ray_origin = ray.origin + t_hit * ray.direction;
-    float3 ray_direction;
-    /*
-    if (optix::dot(-ray.direction, _normal) < 0.0 ){
-        //printf("err");
-        //current_prd.radiance = make_float3(1.0, 0.0, 0.0);
-        //return make_float3(1.0, 0.0, 0.0);
-        ray_direction = reflect(ray.direction, -_normal);
-    }
-    else if( optix::dot(-ray.direction, _normal) == 0.0){
-        ray_direction = ray.direction;
-    }
-    else{
-        ray_direction = reflect(ray.direction, _normal);
-    }
-
-    if (optix::length(ray.direction) == 0.0){
-        printf("ERRROR start");
-    }
-    */
-
-    ray_direction = reflect(ray.direction, _normal);
-    //refract(ray_direction, ray.direction, _normal, _eta);
-    float3 ffnormal = faceforward( _normal, -ray.direction, _normal );
+    float3 ray_direction = v1 * p.x + v2 * p.y + _normal * p.z;
 
     PerRayData_pathtrace prd;
     prd.result = make_float3(0.0);//current_prd.result;
-    prd.radiance = make_float3(1.0);
-    prd.attenuation = current_prd.attenuation;
-    prd.countEmitted = current_prd.countEmitted;
-   // prd.done = current_prd.done;
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;
 
-   // for(;;) {
-        Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
-        if (reflection_ray.direction.x!=reflection_ray.direction.x) printf("ERRROR");
-        rtTrace(top_object, reflection_ray, prd);
+    Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+    rtTrace(top_object, reflection_ray, prd);
 
-  //      if(prd.done) {
-    //        prd.result += prd.radiance * prd.attenuation;
-            //break;
-      //  }
-       // if(prd.depth >= rr_begin_depth){
-          //  float pcont = fmaxf(prd.attenuation);
-           // if(rnd(prd.seed) >= pcont) break;
-           // prd.attenuation /= pcont;
-     //   }
-        prd.depth++;
-       // prd.result += prd.radiance * prd.attenuation;
-        //ray_origin = prd.origin;
-        //ray_direction = prd.direction;
-    //}
-    current_prd.radiance = prd.radiance;
-    return make_float3(1.0);//prd.attenuation;
+    return optix::make_float3(max(optix::dot(_normal, ray_direction), 0.0f) * float(M_1_PI)) * prd.result;
 }
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 phong(optix::float3 _normal, float _exponant){
+    float z1 = rnd(current_prd.seed);
+    float z2 = rnd(current_prd.seed);
+    float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
+    float cosTheta= pow(z1, 1 / (_exponant + 1));
+    float sinPhi = sin(2*float(M_PI)*z2);
+    float cosPhi = cos(2*float(M_PI)*z2);
 
+    float3 ray_origin = ray.origin + t_hit * ray.direction;
+    float3 ray_direction = make_float3 (sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
+
+    PerRayData_pathtrace prd;
+    prd.result = make_float3(0.0);//current_prd.result;
+    prd.seed = current_prd.seed;
+    prd.depth = current_prd.depth+1;
+
+    Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+    rtTrace(top_object, reflection_ray, prd);
+
+    // n + 2 / 2PI * cos^n (A);
+    float3 R = reflect((ray_origin - eye), _normal);
+    float A = optix::dot(R, ray_direction);
+
+    if (A > 0){
+        return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant)))) * prd.result;
+    }
+    return make_float3(0.0);
+}
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 reflection(optix::float3 _normal, float _eta){
+    float3 ray_origin = ray.origin + t_hit * ray.direction;
+    float3 ray_direction = reflect(ray.direction, _normal);
+
+    PerRayData_pathtrace prd;
+    prd.result = make_float3(0.0);//current_prd.result;
+    prd.seed = current_prd.seed;
+    prd.depth = current_prd.depth+1;
+
+    Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+    rtTrace(top_object, reflection_ray, prd);
+
+    return prd.result;
+}
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 refraction(optix::float3 _normal, float _eta){
+    float3 ray_origin = ray.origin + t_hit * ray.direction;
+    float3 ray_direction = ray.direction;
+
+    refract(ray_direction, ray_direction, _normal, _eta);
+
+    PerRayData_pathtrace prd;
+    prd.result = make_float3(0.0);//current_prd.result;
+    prd.seed = current_prd.seed;
+    prd.depth = current_prd.depth+1;
+
+    Ray refraction_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+    rtTrace(top_object, refraction_ray, prd);
+
+    return prd.result;
+}
+//----------------------------------------------------------------------------------------------------------------------
+__device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
+    float z1=rnd(current_prd.seed);
+    float z2=rnd(current_prd.seed);
+    float3 p;
+    cosine_sample_hemisphere(z1, z2, p);
+    float3 v1, v2;
+    createONB(_normal, v1, v2);
+
+    float3 ray_direction = v1 * p.x + v2 * p.y + _normal * p.z;
+    float3 ray_origin =  ray.origin + t_hit * ray.direction;
+
+    PerRayData_pathtrace prd;
+    prd.result = make_float3(0.0);//current_prd.result;
+    prd.seed = current_prd.seed;
+    prd.depth = current_prd.depth+1;
+
+    Ray refraction_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+    rtTrace(top_object, refraction_ray, prd);
+
+    float3 L = ray_direction;
+    float3 V = (ray_origin - eye);
+
+    float A = 1 / (M_PI + ((M_PI / 2) - (2/3)) * _sigma );
+    float B = _sigma / (M_PI + ( (M_PI /2) - (2/3)) * _sigma);
+    float s = optix::dot(L, V) - optix::dot(_normal, L) * optix::dot(_normal, V);
+    float t;
+    if ( s <= 0.0){
+        t = 1.0;
+    }
+    else{
+        t = max(optix::dot(_normal, L), optix::dot(_normal, V));
+    }
+
+    return make_float3(0.8 * optix::dot(_normal, L) * (A + B * (s / t))) * prd.result;
+}
+//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
+__device__ int OSLraytype(char* _char){
+  return 0;
+}
+//----------------------------------------------------------------------------------------------------------------------
+__device__ int OSLbackfacing(ShaderGlobals sg){
+    if (optix::dot(-ray.direction, sg.N) > 0.0){
+      return 0;
+    }
+    else{
+      return 1;
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
