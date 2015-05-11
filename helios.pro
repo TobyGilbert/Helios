@@ -182,8 +182,7 @@ BISONSOURCES = src/OSLCompiler/oso.y
 FLEXSOURCES = src/OSLCompiler/osolexer.l
 
 #Optix Stuff
-CUDA_SOURCES += optixSrc/*.cu \
-                optixSrc/tempMat.cu
+CUDA_SOURCES += optixSrc/*.cu
 
 
 
