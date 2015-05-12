@@ -2,6 +2,7 @@
 #include "NodeGraph/OSLShaderBlock.h"
 #include "NodeGraph/qneconnection.h"
 
+
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractNodeProxyWidget::AbstractNodeProxyWidget(QNEPort *_connectedPort, Material &_mat, QGraphicsItem *_parent) : QGraphicsProxyWidget(_parent)
 {

@@ -8,9 +8,11 @@
 #include "NodeGraph/OSLVarPointBlock.h"
 #include "NodeGraph/OSLVarIntBlock.h"
 #include "NodeGraph/OSLVarImageBlock.h"
+#include "Core/MaterialLibrary.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QFileInfo>
 #include <QPushButton>
 #include <QMessageBox>
@@ -26,6 +28,7 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     this->setMinimumWidth(700);
     this->setWindowTitle("OSL Hypershader 3000");
     m_matCreated = false;
+    m_matAddedToLib = false;
     //add our groupbox
     m_widgetGroupBox = new QGroupBox(this);
     this->setWidget(m_widgetGroupBox);
@@ -45,11 +48,29 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     m_nodeEditor = new OSLNodesEditor(this);
     m_nodeEditor->install(m_nodeInterfaceScene);
 
+    //group box for our buttons
+    QGroupBox *toolGrbBox = new QGroupBox(this);
+    toolGrbBox->setMaximumWidth(200);
+    m_groupBoxLayout->addWidget(toolGrbBox,0,1,1,1);
+    QGridLayout *toolLayout = new QGridLayout(toolGrbBox);
+    toolGrbBox->setLayout(toolLayout);
+
     //add a button to to launch the creation of our shader
-    QPushButton *createShaderBtn = new QPushButton("Create Shader",this);
-    m_groupBoxLayout->addWidget(createShaderBtn,0,1,1,1);
+    QPushButton *createShaderBtn = new QPushButton("Create Shader",toolGrbBox);
+    toolLayout->addWidget(createShaderBtn,0,0,1,1);
     connect(createShaderBtn,SIGNAL(clicked()),this,SLOT(createOptixMaterial()));
 
+    QPushButton *newMatBtn = new QPushButton("New Material",toolGrbBox);
+    toolLayout->addWidget(newMatBtn,1,0,1,1);
+    connect(newMatBtn,SIGNAL(pressed()),this,SLOT(newMaterial()));
+
+    QPushButton *addMatToLibBtn = new QPushButton("Add Material to Library", toolGrbBox);
+    toolLayout->addWidget(addMatToLibBtn,2,0,1,1);
+    connect(addMatToLibBtn,SIGNAL(pressed()),this,SLOT(addMaterialToLib()));
+
+    //push our buttons together
+    QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    toolLayout->addItem(spacer,5,0,1,1);
 
     //Set up our menu for if you right click in our widget
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -64,7 +85,7 @@ AbstractMaterialWidget::~AbstractMaterialWidget(){
         delete m_nodes[i];
     }
 }
-
+//------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
 {
     if(m_instance){
@@ -226,4 +247,32 @@ void AbstractMaterialWidget::addShaderNode()
         m_nodes.push_back(b);
     }
 }
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::newMaterial(){
+    m_nodeEditor->getScene()->clear();
+    m_material = PathTracerScene::getInstance()->getContext()->createMaterial();
+    m_matCreated=false;
+    m_matAddedToLib = false;
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::addMaterialToLib(){
+    if(!m_matCreated)  {
+        QMessageBox::warning(this,"Add Material to Library","No material created");
+        return;
+    }
+    if(m_matAddedToLib) {
+        QMessageBox::warning(this,"Add Material to Library","Material already added to library");
+        return;
+    }
+    std::string matName = QInputDialog::getText(this,"Add Material to Library","Material Name",QLineEdit::Normal).toStdString();
+    if(matName.length()==0){
+        QMessageBox::warning(this,"Add Material to Library","You must give your material a name to add it to the library");
+        return;
+    }
+    if(MaterialLibrary::getInstance()->addMaterialToLibrary(matName,m_material)){
+        m_matAddedToLib = true;
+    }
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------

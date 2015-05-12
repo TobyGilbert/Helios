@@ -117,6 +117,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"rtDeclareVariable(float,         scene_epsilon, , );\n"<<endl;
         stream<<"rtDeclareVariable(rtObject,      top_object, , );\n"<<endl;
         stream<<"rtBuffer<ParallelogramLight>     lights;\n"<<endl;
+        stream<<"rtDeclareVariable(unsigned int,  maxDepth      , , );"<<endl;
         stream<<"rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );\n"<<endl;
         stream<<"// Camera Variables\n"<<endl;
         stream<<"rtDeclareVariable(float3,        eye, , );"<<endl;
@@ -195,7 +196,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"//-------Main Material Program-----------"<<endl;
         stream<<"RT_PROGRAM void "<<m_materialName.c_str()<<"(){"<<endl;
 
-        stream<<"if (current_prd.depth > 5){"<<endl;
+        stream<<"if (current_prd.depth > maxDepth){"<<endl;
         stream<<"   current_prd.done = true;"<<endl;
         stream<<"   return;"<<endl;
         stream<<"}"<<endl;

@@ -1,6 +1,7 @@
 #include "Core/mainwindow.h"
 #include "ui_mainwindow.h"
 #include "UI/AbstractMaterialWidget.h"
+#include "Core/MaterialLibrary.h"
 #include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -21,8 +22,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
 MainWindow::~MainWindow(){
 
-    //delete our node graph singlton class
+    //delete our singlton classes
     AbstractMaterialWidget::getInstance()->destroy();
+    MaterialLibrary::getInstance()->destroy();
     // delete mesh UI
     delete m_meshToolbarButton;
     delete m_meshDockWidget;
@@ -69,8 +71,10 @@ void MainWindow::createMenus(){
     //--------------------------------------------------------------------------------------------------------------------
 
     //init our instance with this as the parent. this means when this class is deleted it also will be deleted
-    AbstractMaterialWidget::getInstance(this);
-    AbstractMaterialWidget::getInstance()->hide();
+    AbstractMaterialWidget::getInstance(this)->hide();
+    //init our materail library
+    MaterialLibrary::getInstance()->hide();
+
 
     // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
     m_toolBar = new QToolBar();

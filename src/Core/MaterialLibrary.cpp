@@ -1,4 +1,7 @@
 #include "Core/MaterialLibrary.h"
+#include <QMessageBox>
+#include <iostream>
+#include "Core/pathtracerscene.h"
 
 //Declare our static instance variable
 MaterialLibrary* MaterialLibrary::m_instance;
@@ -14,62 +17,59 @@ MaterialLibrary::MaterialLibrary(QWidget *parent) :
     QWidget(parent)
 {
     this->setWindowTitle("Material Library");
+    this->setMinimumWidth(200);
+    this->setMinimumHeight(100);
     //set our layout
     m_widgetLayout = new QGridLayout(this);
     this->setLayout(m_widgetLayout);
+    m_matListWidget = new QListWidget(this);
+    m_widgetLayout->addWidget(m_matListWidget,0,0,1,1);
+    connect(m_matListWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(matSelected(QListWidgetItem*)));
     m_widgetSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    //if we already have materials in our class lets add
-    //the relative buttons
-    if(m_materials.size()>0){
-        QString name;
-        for(unsigned int i=0; i<m_materials.size(); i++){
-            name = QString(m_materials[i]->getName().c_str());
-            QPushButton *btn = new QPushButton(name,this);
-            connect(btn,SIGNAL(clicked()),this,SLOT(materialSelected()));
-            btn->setCheckable(true);
-            m_widgetLayout->addWidget(btn,i,0,1,1);
-            m_buttons.push_back(btn);
-        }
-        m_widgetLayout->addItem(m_widgetSpacer,m_materials.size(),0,1,1);
-    }
-    m_widgetLayout->addItem(m_widgetSpacer,0,0,1,1);
+
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 MaterialLibrary::~MaterialLibrary(){
-    for(unsigned int i=0; i<m_buttons.size(); i++){
-        delete m_buttons[i];
+}
+//----------------------------------------------------------------------------------------------------------------------
+bool MaterialLibrary::addMaterialToLibrary(std::string _name, optix::Material _material){
+    //check to see if there is already a material of this name in our library
+    std::map <std::string, optix::Material >::const_iterator mat=m_materials.find(_name);
+    if(mat!=m_materials.end()){
+        QMessageBox::warning(this,"Material Library Error","Material of this name already exists in library");
+        return false;
     }
+    std::cerr<<"Adding "<<_name<<" to material library"<<std::endl;
+    m_materials[_name] = _material;
+    m_matListWidget->addItem(_name.c_str());
+    return true;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MaterialLibrary::addMaterialToLibrary(AbstractMaterialWidget *_material){
-    //add our material to our library
-    m_materials.push_back(_material);
-    QString name(_material->getName().c_str());
-    //create the button for our material
-    QPushButton *btn = new QPushButton(name,this);
-    connect(btn,SIGNAL(clicked()),this,SLOT(materialSelected()));
-    btn->setCheckable(true);
-    m_widgetLayout->addWidget(btn,m_materials.size()-1,0,1,1);
-    m_buttons.push_back(btn);
-    //move our spacer
-    m_widgetLayout->removeItem(m_widgetSpacer);
-    m_widgetLayout->addItem(m_widgetSpacer,m_materials.size(),0,1,1);
+void MaterialLibrary::applyLibMatToMesh(std::string _meshId)
+{
+    this->show();
+    m_applyMatToMesh = true;
+    m_selectedMeshId = _meshId;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MaterialLibrary::materialSelected(){
-    int idx=0;
-    //find which button has been pressed
-    for(unsigned int i=0; i<m_buttons.size(); i++){
-        if(m_buttons[i]->isChecked()){
-            idx = i;
-            break;
+void MaterialLibrary::closeEvent(QCloseEvent *event)
+{
+    m_applyMatToMesh = false;
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MaterialLibrary::matSelected(QListWidgetItem *_item){
+    std::string matName = _item->text().toStdString();
+    if(m_applyMatToMesh){
+        std::map <std::string, optix::Material >::const_iterator mat=m_materials.find(matName);
+        if(mat==m_materials.end()){
+            QMessageBox::warning(this,"Material Library Error","Unknown error");
+            return;
         }
+        std::cerr<<"Applying material "<<mat->first<<" to mesh "<<m_selectedMeshId<<std::endl;
+        PathTracerScene::getInstance()->setModelMaterial(m_selectedMeshId,mat->second);
+        m_applyMatToMesh = false;
+        this->hide();
+        return;
     }
-    //untoggle the button for next use
-    m_buttons[idx]->toggle();
-    //signal that we have selected a material
-    signalMaterialSelected(m_materials[idx]);
-    //hide this widget
-    this->hide();
 }
-//----------------------------------------------------------------------------------------------------------------------

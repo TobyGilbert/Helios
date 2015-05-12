@@ -18,31 +18,26 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     QString stylesheet = QLatin1String(file.readAll());
     this->setStyleSheet(stylesheet);
     //just a quick way to increment columns so we dont have to keep track
-    int rowCount=0;
 
     //add a label for our movement render speed increase
     QLabel *mvRendSpeedLbl = new QLabel("Movement Render Reduction: ",this);
     mvRendSpeedLbl->setToolTip("This reduces the number of pixels rendered while moving for quicker interactibility");
-    m_layout->addWidget(mvRendSpeedLbl,rowCount,0,1,1);
-    m_widgetObjects.push_back(mvRendSpeedLbl);
+    m_layout->addWidget(mvRendSpeedLbl,0,0,1,1);
 
     //add a slider for this paramiter
     QSlider *mvRenRudSldr = new QSlider(this);
     mvRenRudSldr->setOrientation(Qt::Horizontal);
-    m_widgetObjects.push_back(mvRenRudSldr);
     mvRenRudSldr->setValue(4);
     mvRenRudSldr->setMaximum(10);
     mvRenRudSldr->setMinimum(1);
-    m_layout->addWidget(mvRenRudSldr,rowCount,1,1,1);
+    m_layout->addWidget(mvRenRudSldr,0,1,1,1);
 
     //add a Spinbox to show the value
     QSpinBox *mvRedRudSpnBx = new QSpinBox(this);
-    m_widgetObjects.push_back(mvRedRudSpnBx);
     mvRedRudSpnBx->setValue(4);
     mvRedRudSpnBx->setMaximum(10);
     mvRedRudSpnBx->setMinimum(1);
-    m_layout->addWidget(mvRedRudSpnBx,rowCount,2,1,1);
-    rowCount++;
+    m_layout->addWidget(mvRedRudSpnBx,0,2,1,1);
 
     // connect our signals and slots
     connect(mvRenRudSldr,SIGNAL(sliderMoved(int)),mvRedRudSpnBx,SLOT(setValue(int)));
@@ -51,27 +46,28 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
 
     //setup a field for changing the timeout duration
     //a label
-    QLabel *timeOutLbl = new QLabel("Rendering timeout duration: ",this);
-    m_widgetObjects.push_back(timeOutLbl);
-    m_layout->addWidget(timeOutLbl,rowCount,0,1,1);
+    m_layout->addWidget(new QLabel("Rendering timeout duration: ",this),1,0,1,1);
     //a spinbox
     QSpinBox *timeOutSpnBx = new QSpinBox(this);
-    m_widgetObjects.push_back(timeOutSpnBx);
     timeOutSpnBx->setValue(5);
-    timeOutSpnBx->setMaximum(600);
-    m_layout->addWidget(timeOutSpnBx,rowCount,1,1,1);
-    rowCount++;
+    timeOutSpnBx->setMaximum(INFINITY);
+    m_layout->addWidget(timeOutSpnBx,1,1,1,1);
     //connect our signals and slots
     connect(timeOutSpnBx,SIGNAL(valueChanged(int)),this,SLOT(setTimeOutDurSlot(int)));
 
+    //add a field for our max depth
+    m_layout->addWidget(new QLabel("Max Ray Depth",this),2,0,1,1);
+    QSpinBox *maxDepthSpn = new QSpinBox(this);
+    maxDepthSpn->setValue(5);
+    maxDepthSpn->setMaximum(INFINITY);
+    connect(maxDepthSpn,SIGNAL(valueChanged(int)),this,SLOT(setMaxRayDepth(int)));
+    m_layout->addWidget(maxDepthSpn,2,1,1,1);
+
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    m_layout->addItem(spacer,rowCount,0,1,1);
+    m_layout->addItem(spacer,5,0,1,1);
 }
 //----------------------------------------------------------------------------------------------------------------------
 GenSetDockWidget::~GenSetDockWidget(){
-    for(unsigned int i=0; i<m_widgetObjects.size(); i++){
-        delete m_widgetObjects[i];
-    }
     delete m_layout;
     delete m_genSetGroupBox;
 }
