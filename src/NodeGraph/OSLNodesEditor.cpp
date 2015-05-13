@@ -106,6 +106,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         //add our includes and namespaces
         stream<<"#include <optix.h>"<<endl;
         stream<<"#include <optixu/optixu_math_namespace.h>"<<endl;
+        stream<<"#include <optixu/optixu_matrix_namespace.h>"<<endl;
         stream<<"#include \"Core/path_tracer.h\""<<endl;
         stream<<"#include \"Core/random.h\""<<endl;
         stream<<"#include \"BRDFUtils.h\""<<endl;
@@ -124,6 +125,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); "<<endl;
         stream<<"rtDeclareVariable(float3, shading_normal,   attribute shading_normal, );"<<endl;
         stream<<"rtDeclareVariable(float3, texcoord, attribute texcoord, );"<<endl;
+        stream<<"rtDeclareVariable(float3, tangent, attribute tangent, );"<<endl;
+        stream<<"rtDeclareVariable(float3, bitangent, attribute bitangent, );"<<endl;
         stream<<"// Our current ray and payload variables"<<endl;
         stream<<"rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );"<<endl;
         stream<<"rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );"<<endl;
@@ -212,6 +215,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"// Texture coordinates"<<endl;
         stream<<"sg.u = texcoord.x;"<<endl;
         stream<<"sg.v = texcoord.y;"<<endl;
+        stream<<"sg.dPdu = rtTransformNormal( RT_OBJECT_TO_WORLD, tangent);"<<endl;
+        stream<<"sg.dPdv = rtTransformNormal( RT_OBJECT_TO_WORLD, bitangent);"<<endl;
 
 
         //Retrieve and print out any variables that we need for our kernal functions

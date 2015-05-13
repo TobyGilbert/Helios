@@ -36,8 +36,9 @@ matte
             float min = 0, float max = 1 ]],
     color Cs = 1
         [[  string help = "Base color",
-            float min = 0, float max = 1 ]]
+            float min = 0, float max = 1 ]],
+    normal bmNormal = normal(1, 1, 1)
   )
 {
-    Ci = Kd * Cs * oren_nayar(N, 1.5);
+    Ci = (color)bmNormal * Kd * Cs * oren_nayar(bmNormal, 1.5);
 }

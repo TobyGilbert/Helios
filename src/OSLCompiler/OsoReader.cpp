@@ -152,7 +152,7 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
             else if (m_symbols[i].m_type == 4){
-                s+=" matrix? ";
+                s+=" Matrix4x4 ";
                 s+=m_symbols[i].m_name.c_str();
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
@@ -163,12 +163,6 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=" = ";
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
-//            else{
-//                s+="void ";
-//                s+=m_symbols[i].m_name.c_str();
-//                s+=" = ";
-//                s+=m_symbols[i].m_initialParams[0].c_str();
-//            }
         }
         if (m_symbols[i].m_symType == 1){
             s+=", ";
@@ -176,20 +170,10 @@ std::string OsoReader::generateDeviceFunction(){
             if (m_symbols[i].m_type == 0 || m_symbols[i].m_type == 3 || m_symbols[i].m_type == 5 || m_symbols[i].m_type == 7){
                 s+=" float3 &";
                 s+=m_symbols[i].m_name.c_str();
-//                s+=" = make_float3( ";
-//                for (unsigned int j=0; j<m_symbols[i].m_initialParams.size(); j++){
-//                    s+=m_symbols[i].m_initialParams[j].c_str();
-//                    if (j != m_symbols[i].m_initialParams.size()-1){
-//                        s+=",";
-//                    }
-//                }
-//                s+=")";
             }
             else if (m_symbols[i].m_type == 1){
                 s+=" float &";
                 s+=m_symbols[i].m_name.c_str();
-//                s+=" = ";
-//                s+=m_symbols[i].m_initialParams[0].c_str();
             }
             else if (m_symbols[i].m_type == 2){
                 s+=" int &";
@@ -198,22 +182,16 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=m_symbols[i].m_initialParams[0].c_str();
             }
             else if (m_symbols[i].m_type == 4){
-                s+=" matrix? &";
+                s+=" Matrix4x4 &";
                 s+=m_symbols[i].m_name.c_str();
-//                s+=" = ";
-//                s+=m_symbols[i].m_initialParams[0].c_str();
             }
             else if (m_symbols[i].m_type == 6){
                 s+=" char* &";
                 s+=m_symbols[i].m_name.c_str();
-//                s+=" = ";
-//                s+=m_symbols[i].m_initialParams[0].c_str();
             }
             else{
                 s+="void &";
                 s+=m_symbols[i].m_name.c_str();
-//                s+=" = ";
-//                s+=m_symbols[i].m_initialParams[0].c_str();
             }
         }
     }
@@ -267,7 +245,7 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=";\n";
             }
             else if (m_symbols[i].m_type == 4){
-                s+="matrix? ";
+                s+="Matrix4x4 ";
                 s+=m_symbols[i].m_name.c_str();
                 if (m_symbols[i].m_symType == 5){
                     s+=" = ";
@@ -316,7 +294,6 @@ std::string OsoReader::generateDeviceFunction(){
         s+=":\n";
         // If the instruction is a closure parameter find its function name and input its given arguments
         if (m_instructions[i].m_opcode == std::string("closure")){
-//            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
@@ -347,7 +324,6 @@ std::string OsoReader::generateDeviceFunction(){
         }
         // If the instruction is a multiply
         if (m_instructions[i].m_opcode == std::string("mul")){
-//            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
@@ -358,14 +334,18 @@ std::string OsoReader::generateDeviceFunction(){
             s+="\t";
             s+=output.c_str();
             s+=" = ";
-            s+=m_instructions[i].m_args[0].c_str();
+            if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
+                s+=m_instructions[i].m_args[0].c_str();
+            }
+            else{
+                s+="current_prd.result";
+            }
             s+=" * ";
             s+=m_instructions[i].m_args[1].c_str();
             s+=";\n";
         }
         // If the instruction is an addition
         if (m_instructions[i].m_opcode == std::string("add")){
-            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
@@ -376,60 +356,41 @@ std::string OsoReader::generateDeviceFunction(){
            s+="\t";
            s+=output.c_str();
            s+=" = ";
-           s+=m_instructions[i].m_args[0].c_str();
+           if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
+               s+=m_instructions[i].m_args[0].c_str();
+           }
+           else{
+               s+="current_prd.result";
+           }
            s+=" + ";
            s+=m_instructions[i].m_args[1].c_str();
            s+=";\n";
         }
+        // divide
         if (m_instructions[i].m_opcode == std::string("div")){
-//            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
-//            std::string type;
             std::string output;
             if (m_instructions[i].m_output != std::string("Ci")){
                 output = m_instructions[i].m_output;
-//                switch(it->m_type){
-//                    case 0:
-//                    case 3:
-//                    case 5:
-//                    case 7:
-//                        type = std::string("float3 ");
-//                        break;
-//                    case 1:
-//                        type = std::string("float ");
-//                        break;
-//                    case 2:
-//                        type = std::string("int ");
-//                        break;
-//                    case 4:
-//                        type = std::string("matrix? ");
-//                        break;
-//                    case 6:
-//                        type = std::string("char* ");
-//                        break;
-//                    default:
-//                        type = std::string("err ");
-//                        break;
-//                }
             }
             else {
-//                type = std::string("");
                 output = std::string("current_prd.result");
             }
             s+="\t";
-//            s+=type.c_str();
-//            s+=" ";
             s+=output.c_str();
             s+=" = ";
-            s+=m_instructions[i].m_args[0].c_str();
+            if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
+                s+=m_instructions[i].m_args[0].c_str();
+            }
+            else{
+                s+="current_prd.result";
+            }
             s+=" / ";
             s+=m_instructions[i].m_args[1].c_str();
             s+=";\n";
 
         }
+        // boolean operation for not equals to
         if (m_instructions[i].m_opcode == std::string("neq")){
-//            s+="\tint ";
-//            s+=m_instructions[i].m_output.c_str();
-//            s+=";\n";
             s+="\tif (";
             s+=m_instructions[i].m_args[0].c_str();
             s+=" != ";
@@ -445,10 +406,8 @@ std::string OsoReader::generateDeviceFunction(){
             s+=" = 0;\n";
             s+="\t}\n";
         }
+        // boolean operation for equals to
         if (m_instructions[i].m_opcode == std::string("eq")){
-//            s+="\tint ";
-//            s+=m_instructions[i].m_output.c_str();
-//            s+=";\n";
             s+="\tif (";
             s+=m_instructions[i].m_args[0].c_str();
             s+=" == ";
@@ -464,13 +423,164 @@ std::string OsoReader::generateDeviceFunction(){
             s+=" = 0;\n";
             s+="\t}\n";
         }
+        // Assignment
         if (m_instructions[i].m_opcode == std::string("assign")){
+            s+="\t";
+            if(m_instructions[i].m_output.c_str() == std::string("N") || m_instructions[i].m_output.c_str() == std::string("dPdu") || m_instructions[i].m_output.c_str() == std::string("dPdv")){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = ";
+            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
+            if(it->m_type != 4){
+                s+=m_instructions[i].m_args[0].c_str();
+            }
+            else{
+                std::vector<Symbol>::iterator itr = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
+                if(itr->m_initialParams[0] == std::string("1")){
+                    s+="Matrix4x4::identity()";
+                }
+                else if(itr->m_initialParams[0] == std::string("0")){
+                    // Do this
+                }
+            }
+            s+=";\n";
+        }
+        // Filling a matrix
+        if (m_instructions[i].m_opcode == std::string("matrix")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=".setRow(0, make_float4(";
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[2].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[3].c_str();
+            s+="));\n";
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=".setRow(1, make_float4(";
+            s+=m_instructions[i].m_args[4].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[5].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[6].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[7].c_str();
+            s+="));\n";
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=".setRow(2, make_float4(";
+            s+=m_instructions[i].m_args[8].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[9].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[10].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[11].c_str();
+            s+="));\n";
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=".setRow(3, make_float4(";
+            s+=m_instructions[i].m_args[12].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[13].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[14].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[15].c_str();
+            s+="));\n";
+        }
+        //
+        if(m_instructions[i].m_opcode == std::string("compassign")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
+            if(it->m_initialParams[0].c_str() == std::string("0")){
+                s+=".x = ";
+            }
+            else if(it->m_initialParams[0].c_str() == std::string("1")){
+                s+=".y = ";
+            }
+            else if(it->m_initialParams[0].c_str() == std::string("2")){
+                s+=".z = ";
+            }
+            else if(it->m_initialParams[0].c_str() == std::string("3")){
+                s+=".w = ";
+            }
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=";\n";
+        }
+        //
+        if(m_instructions[i].m_opcode == std::string("compref")){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
             s+=" = ";
+            if(m_instructions[i].m_args[0].c_str() == std::string("dPdu") ||m_instructions[i].m_args[0].c_str() == std::string("dPdv") || m_instructions[i].m_args[0].c_str() == std::string("N")){
+                s+="sg.";
+            }
             s+=m_instructions[i].m_args[0].c_str();
-            s+=";\n";
+            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[1]);
+            if(it->m_initialParams[0] == std::string("0")){
+                s+=".x;\n";
+            }
+            if(it->m_initialParams[0] == std::string("1")){
+                s+=".y;\n";
+            }
+            if(it->m_initialParams[0] == std::string("2")){
+                s+=".z;\n";
+            }
+            if(it->m_initialParams[0] == std::string("3")){
+                s+=".w;\n";
+            }
         }
+        //
+        if(m_instructions[i].m_opcode == std::string("mxcompref")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = ";
+            std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
+            s+=m_instructions[i].m_args[0].c_str();
+            if(it->m_type == 4){ // for matrices
+                s+=".getRow(";
+                s+=m_instructions[i].m_args[1].c_str();
+                s+=")";
+                std::vector<Symbol>::iterator itr = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[2]);
+                if(itr->m_initialParams[0].c_str() == std::string("0")){
+                    s+=".x;\n";
+                }
+                else if (itr->m_initialParams[0].c_str() == std::string("1")){
+                    s+=".y;\n";
+                }
+                else if (itr->m_initialParams[0].c_str() == std::string("2")){
+                    s+=".z;\n";
+                }
+                else if (itr->m_initialParams[0].c_str() == std::string("3")){
+                    s+=".w;\n";
+                }
+            }
+            else{ // for two dimensional arrays
+                s+="[";
+                s+=m_instructions[i].m_args[1].c_str();
+                s+="][";
+                s+=m_instructions[i].m_args[2].c_str();
+                s+="];\n";
+            }
+        }
+        // normalize
+        if(m_instructions[i].m_opcode == std::string("normalize")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = normalize(";
+            if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv")){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=");\n";
+        }
+        // the raytype osl function to check the incoming raytype
         if (m_instructions[i].m_opcode == std::string("raytype")){
             s+="\t ";
             s+=m_instructions[i].m_output.c_str();
@@ -478,11 +588,13 @@ std::string OsoReader::generateDeviceFunction(){
             s+=m_instructions[i].m_args[0].c_str();
             s+=");\n";
         }
+        // check if the face is back facing
         if (m_instructions[i].m_opcode == std::string("backfacing")){
             s+="\t ";
             s+=m_instructions[i].m_output.c_str();
             s+=" = OSLbackfacing(sg);\n";
         }
+        // texture lookup
         if(m_instructions[i].m_opcode == std::string("texture")){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
@@ -510,6 +622,7 @@ std::string OsoReader::generateDeviceFunction(){
             }
             s+=");\n";
         }
+        // if statement
         if (m_instructions[i].m_opcode == std::string("if")){
             // In order to skip else code add a jump target to the jump targets vector
             JumpTarget jt;
