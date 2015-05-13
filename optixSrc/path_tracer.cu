@@ -46,6 +46,7 @@ rtBuffer<ParallelogramLight>     lights;
 rtDeclareVariable(unsigned int,  pathtrace_ray_type, , );
 rtDeclareVariable(unsigned int,  pathtrace_shadow_ray_type, , );
 rtDeclareVariable(unsigned int,  rr_begin_depth, , );
+rtDeclareVariable(unsigned int,  maxDepth      , , );
 
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, );
 rtDeclareVariable(float3, shading_normal,   attribute shading_normal, );

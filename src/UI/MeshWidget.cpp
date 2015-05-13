@@ -74,9 +74,8 @@ MeshWidget::MeshWidget(std::string _id) :
     connect(applyShaderBtn,SIGNAL(clicked()),this,SLOT(applyOSLMaterial()));
     m_meshGridLayout->addWidget(applyShaderBtn,4,1,1,1);
 
-    MaterialLibrary::getInstance()->hide();
     QPushButton *openMatLibBtn = new QPushButton("Select Material From Library",this);
-    connect(openMatLibBtn,SIGNAL(clicked()),MaterialLibrary::getInstance(),SLOT(show()));
+    connect(openMatLibBtn,SIGNAL(clicked()),this,SLOT(applyMatFromLib()));
     m_meshGridLayout->addWidget(openMatLibBtn,5,0,1,4);
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
@@ -147,6 +146,11 @@ void MeshWidget::signalTransformChange(){
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::applyOSLMaterial(){
     AbstractMaterialWidget::getInstance()->applyMaterialToMesh(m_meshId);
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::applyMatFromLib()
+{
+    MaterialLibrary::getInstance()->applyLibMatToMesh(m_meshId);
 }
 //----------------------------------------------------------------------------------------------------------------------
 

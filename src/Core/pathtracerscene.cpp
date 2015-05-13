@@ -94,6 +94,7 @@ void PathTracerScene::init(){
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
 
+    m_context["maxDepth"]->setUint(5);
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( make_float3(0.0f) );
@@ -175,7 +176,7 @@ void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::setModelMaterial(std::string _id, Material &_mat){
+void PathTracerScene::setModelMaterial(std::string _id, Material _mat){
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
     OptiXModel* mdl = it->second;
     mdl->setMaterial(_mat);
@@ -225,25 +226,25 @@ void PathTracerScene::updateCamera(){
 QImage PathTracerScene::saveImage(){
     QImage img(m_width,m_height,QImage::Format_RGB32);
     QColor color;
-    int idx;
     // as we're using a openGL buffer rather than optix we must map it with openGL calls
     GLint vboId = m_outputBuffer->getGLBOId();
     glBindBuffer(GL_ARRAY_BUFFER, vboId);
     void* data = glMapBuffer(GL_ARRAY_BUFFER, GL_READ_ONLY);
     typedef struct { float r; float g; float b; float a;} rgb;
     rgb* rgb_data = (rgb*)data;
-    if(rgb_data[0].r>0||rgb_data[0].g>0||rgb_data[0].b>0)
 
+    int x;
+    int y;
+    int h = m_width * m_height;
     for(unsigned int i=0; i<m_width*m_height; i++){
-        int h = m_width * m_height;
         float red = rgb_data[h-i].r; if(red>1.0) red=1.0;
         float green = rgb_data[h-i].g; if(green>1.0) green=1.0;
         float blue = rgb_data[h-i].b; if(blue>1.0) blue=1.0;
         float alpha = rgb_data[h-i].a; if(alpha>1.0) alpha=1.0;
         color.setRgbF(red,green,blue,alpha);
-        idx = floor((float)i/m_width);
-
-        img.setPixel(i-(idx*m_width), idx, color.rgb());
+        y = floor((float)i/m_width);
+        x = m_width - i + y*m_width - 1;
+        img.setPixel(x, y, color.rgb());
 
     }
     //remember to unmap the buffer after or you're going to have a bad time!
