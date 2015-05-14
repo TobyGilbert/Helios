@@ -27,7 +27,6 @@
 #include "Core/random.h"
 #include "BRDFUtils.h"
 
-
 // Scene wide
 rtDeclareVariable(float,         scene_epsilon, , );
 rtDeclareVariable(rtObject,      top_object, , );
@@ -66,9 +65,9 @@ rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );
 rtDeclareVariable(uint2,      launch_index, rtLaunchIndex, );
 
 
-static __device__ inline float3 powf(float3 a, float exp){
-    return make_float3(powf(a.x, exp), powf(a.y, exp), powf(a.z, exp));
-}
+//static __device__ inline float3 powf(float3 a, float exp){
+//    return make_float3(powf(a.x, exp), powf(a.y, exp), powf(a.z, exp));
+//}
 
 // For miss program
 rtDeclareVariable(float3,       bg_color, , );
@@ -100,6 +99,9 @@ RT_PROGRAM void pathtrace_camera(){
 
         PerRayData_pathtrace prd;
         prd.result = make_float3(0.f);
+        prd.attenuation = make_float3(1.0);
+        prd.radiance = make_float3(0.0);
+        prd.countEmitted = true;
         prd.done = false;
         prd.seed = seed;
         prd.depth = 0;
@@ -132,21 +134,6 @@ RT_PROGRAM void defaultMaterial(){
     }    
     float3 world_shading_normal   = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, shading_normal ) );
     float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
-    float3 world_tangent = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, tangent));
-    float3 world_bitangent = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, bitangent));
-
-    // Normal mapping
-    // Set up the tangnet bitangent normal matrix;
-
-    Matrix3x3 TBN;
-    TBN.setRow(0, world_tangent);
-    TBN.setRow(1, world_bitangent);
-    TBN.setRow(2, world_shading_normal);
-
-
-    float4 mapNormal = tex2D(normalMap, texcoord.x, texcoord.y); // the normal we get from the normal map
-
-    world_shading_normal = normalize(TBN * make_float3(mapNormal.x, mapNormal.y, mapNormal.z));
 
     float3 ffnormal = faceforward( world_shading_normal, -ray.direction, world_geometric_normal );
 
@@ -159,8 +146,47 @@ RT_PROGRAM void defaultMaterial(){
     float3 v1, v2;
     createONB(ffnormal, v1, v2);
 
+    // Compute attenuation
+    current_prd.attenuation = current_prd.attenuation;
+    // Compute radiance
+    // Compute direct light...
+    // Or shoot one...
+    unsigned int num_lights = lights.size();
+    float3 result = make_float3(0.0f);
+
+    for(int i = 0; i < num_lights; ++i) {
+      ParallelogramLight light = lights[i];
+      float z1 = rnd(current_prd.seed);
+      float z2 = rnd(current_prd.seed);
+      float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+
+      float Ldist = length(light_pos - hitpoint);
+      float3 L = normalize(light_pos - hitpoint);
+      float nDl = dot( ffnormal, L );
+      float LnDl = dot( light.normal, L );
+      float A = length(cross(light.v1, light.v2));
+
+      // cast shadow ray
+      if ( nDl > 0.0f && LnDl > 0.0f ) {
+        PerRayData_pathtrace_shadow shadow_prd;
+        shadow_prd.inShadow = false;
+        Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+        rtTrace(top_object, shadow_ray, shadow_prd);
+
+        if(!shadow_prd.inShadow){
+          float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+          result += light.emission * weight;
+        }
+      }
+    }
+
+    current_prd.radiance = result;
+    current_prd.countEmitted = false;
+
+
     PerRayData_pathtrace prd;
-    prd.result = make_float3(0.0);//current_prd.result;
+    prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
+    prd.attenuation = current_prd.attenuation;
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;
 
@@ -177,8 +203,13 @@ RT_PROGRAM void defaultMaterial(){
 rtDeclareVariable(float3,        emission_color, , );
 
 RT_PROGRAM void diffuseEmitter(){
-    //current_prd.radiance = current_prd.countEmitted? emission_color : make_float3(0.f);
-    current_prd.result = emission_color;
+//    current_prd.radiance =  make_float3(0.f);
+    if(current_prd.countEmitted){
+        current_prd.result = emission_color;
+    }
+//    else{
+////        current_prd.result = emission_color;
+//    }
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
@@ -188,9 +219,7 @@ RT_PROGRAM void diffuseEmitter(){
 //-----------------------------------------------------------------------------
 RT_PROGRAM void exception(){
     rtPrintExceptionDetails();
-//    printf("depth %d\n",current_prd.depth);
     output_buffer[launch_index] = make_float4(bad_color, 0.0f);
-
 }
 //-----------------------------------------------------------------------------
 //
@@ -207,6 +236,7 @@ RT_PROGRAM void envi_miss(){
     float phi = M_PIf * 0.5f - acos(ray.direction.y);
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
+//    current_prd.radiance = make_float3(tex2D(envmap, u, v));
     current_prd.result = make_float3(tex2D(envmap, u, v));
     current_prd.done = true;
 }
@@ -217,23 +247,3 @@ RT_PROGRAM void shadow(){
     current_prd_shadow.inShadow = true;
     rtTerminateRay();
 }
-//-----------------------------------------------------------------------------
-// OSL device function
-//__device__ int OSLraytype(char* _name){
-//    if (current_prd.type == _name){
-//        return 1;
-//    }
-//    else {
-//        return 0;
-//    }
-//}
-
-__device__ int OSLbackfacing(){
-    return 1;
-}
-
-//----------------------------------------------------------------------------
-__device__ optix::float3 OSLtexture(char* _filename, float _s, float _t){
-    return make_float3(tex2D(normalMap, _s, _t));
-}
-//-----------------------------------------------------------------------------

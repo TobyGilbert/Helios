@@ -337,19 +337,18 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
             }
         }
 
-
 /*
-
         //calculate our shadows
         stream<<"// Compute our shadows\n"<<endl;
         stream<<"unsigned int num_lights = lights.size();\n"<<endl;
+        stream<<"printf(\" number of lights: %u\", num_lights);"<<endl;
         stream<<"float3 result = make_float3(0.0f);\n"<<endl;
 
         stream<<"for(int i = 0; i < num_lights; ++i) {\n"<<endl;
-        stream<<"   ParallelogramLight light = lights[i];\n"<<endl;
-        stream<<"   float z1 = rnd(current_prd.seed);\n"<<endl;
-        stream<<"   float z2 = rnd(current_prd.seed);\n"<<endl;
-        stream<<"   float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2; \n"<<endl;
+        stream<<"    ParallelogramLight light = lights[i];\n"<<endl;
+        stream<<"    float z1 = rnd(current_prd.seed);\n"<<endl;
+        stream<<"    float z2 = rnd(current_prd.seed);\n"<<endl;
+        stream<<"    float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2; \n"<<endl;
         stream<<"    float Ldist = length(light_pos - sg.P);\n"<<endl;
         stream<<"    float3 L = normalize(light_pos - sg.P);\n"<<endl;
         stream<<"    float nDl = dot( sg.N, L );\n"<<endl;
@@ -370,9 +369,10 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"    }\n"<<endl;
         stream<<"}\n"<<endl;
 
+
+        stream<<"current_prd.result = result;"<<endl;
 */
 
-       // stream<<"current_prd.radiance = result;"<<endl;
         stream<<"current_prd.done = true;"<<endl;
 
         //end of our material program

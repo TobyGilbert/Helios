@@ -74,12 +74,12 @@ OptiXModel::OptiXModel(OptiXModel *_instance, Context &_context){
     m_texCoords = _instance->m_texCoords;
     m_tangents = _instance->m_tangents;
     m_bitangents = _instance->m_bitangents;
-    m_indices = _instance->m_indices;
-    m_vertIndices = _instance->m_vertIndices;
-    m_normalIndices = _instance->m_normalIndices;
-    m_texCoordIndices = _instance->m_texCoordIndices;
-    m_tangentIndices = _instance->m_tangentIndices;
-    m_bitangentIndices = _instance->m_bitangentIndices;
+//    m_indices = _instance->m_indices;
+//    m_vertIndices = _instance->m_vertIndices;
+//    m_normalIndices = _instance->m_normalIndices;
+//    m_texCoordIndices = _instance->m_texCoordIndices;
+//    m_tangentIndices = _instance->m_tangentIndices;
+//    m_bitangentIndices = _instance->m_bitangentIndices;
 }
 //----------------------------------------------------------------------------------------------------------------------
 OptiXModel::~OptiXModel(){
@@ -146,7 +146,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
         m_normals.push_back(tempVec);
 
         // UV
-        if(_mesh->mTextureCoords[0]){
+        if(_mesh->HasTextureCoords(0)){
             tempVec.x = _mesh->mTextureCoords[0][i].x;
             tempVec.y = _mesh->mTextureCoords[0][i].y;
         }
@@ -172,25 +172,25 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
     }
 
     //lets fill up our idx buffers
-    typedef struct { int x; int y; int z;} ixyz;
-    unsigned int i;
-    for(i=0; i<_mesh->mNumFaces;i++){
-        m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
+//    typedef struct { int x; int y; int z;} ixyz;
+//    unsigned int i;
+//    for(i=0; i<_mesh->mNumFaces;i++){
+//        m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
 
-    for(i=0; i<_mesh->mNumFaces;i++){
-        m_normalIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
+//    for(i=0; i<_mesh->mNumFaces;i++){
+//        m_normalIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
 
-    for(i=0; i<_mesh->mNumFaces;i++){
-        m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
-    for(i=0; i<_mesh->mNumFaces; i++){
-        m_tangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
-    for(i=0; i<_mesh->mNumFaces; i++){
-        m_bitangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
+//    for(i=0; i<_mesh->mNumFaces;i++){
+//        m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
+//    for(i=0; i<_mesh->mNumFaces; i++){
+//        m_tangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
+//    for(i=0; i<_mesh->mNumFaces; i++){
+//        m_bitangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(Context &_context){
