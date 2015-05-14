@@ -157,14 +157,14 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 void QNodesEditor::save(QDataStream &ds)
 {
 	foreach(QGraphicsItem *item, scene->items())
-		if (item->type() == QNEBlock::Type)
+        if (item->type() != QNEConnection::Type && item->type() != QNEPort::Type)
 		{
 			ds << item->type();
 			((QNEBlock*) item)->save(ds);
 		}
 
 	foreach(QGraphicsItem *item, scene->items())
-		if (item->type() == QNEConnection::Type)
+        if (item->type() == QNEConnection::Type)
 		{
 			ds << item->type();
 			((QNEConnection*) item)->save(ds);
@@ -181,12 +181,13 @@ void QNodesEditor::load(QDataStream &ds)
 	{
 		int type;
 		ds >> type;
-		if (type == QNEBlock::Type)
+        if (type == QNEBlock::Type)
 		{
             QNEBlock *block = new QNEBlock(0);
             scene->addItem(block);
 			block->load(ds, portMap);
-		} else if (type == QNEConnection::Type)
+        }
+        else if (type == QNEConnection::Type)
 		{
             QNEConnection *conn = new QNEConnection(0);
             scene->addItem(conn);

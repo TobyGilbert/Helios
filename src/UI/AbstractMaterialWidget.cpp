@@ -16,6 +16,7 @@
 #include <QFileInfo>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QFileDialog>
 #include <iostream>
 
 //declare our static class instance
@@ -67,6 +68,10 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     QPushButton *addMatToLibBtn = new QPushButton("Add Material to Library", toolGrbBox);
     toolLayout->addWidget(addMatToLibBtn,2,0,1,1);
     connect(addMatToLibBtn,SIGNAL(pressed()),this,SLOT(addMaterialToLib()));
+
+    QPushButton *loadNgBtn = new QPushButton("Load Node Graph",toolGrbBox);
+    toolLayout->addWidget(loadNgBtn,3,0,1,1);
+    connect(loadNgBtn,SIGNAL(pressed()),this,SLOT(loadNodeGraph()));
 
     //push our buttons together
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -270,8 +275,26 @@ void AbstractMaterialWidget::addMaterialToLib(){
         QMessageBox::warning(this,"Add Material to Library","You must give your material a name to add it to the library");
         return;
     }
+
+    QFile f((matName+".hel").c_str());
+    f.open(QFile::WriteOnly);
+    QDataStream ds(&f);
+    m_nodeEditor->save(ds);
     if(MaterialLibrary::getInstance()->addMaterialToLibrary(matName,m_material)){
         m_matAddedToLib = true;
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::loadNodeGraph(){
+    QString location = QFileDialog::getOpenFileName(this,tr("Import Node Graph"),"", tr("Mesh Files (*.hel)"));
+    QFile f(location);
+    if(f.open(QFile::ReadOnly)){
+        QDataStream ds(&f);
+        m_nodeEditor->load(ds);
+    }
+    else{
+        QMessageBox::warning(this,"Import Node Graph","Cannot load node graph");
     }
 }
 
