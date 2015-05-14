@@ -61,17 +61,25 @@ OptiXModel::OptiXModel(OptiXModel *_instance, Context &_context){
     m_vertexBuffer = _instance->m_vertexBuffer;
     m_normalBuffer = _instance->m_normalBuffer;
     m_texCoordsBuffer = _instance->m_texCoordsBuffer;
+    m_tangentsBuffer = _instance->m_tangentsBuffer;
+    m_bitangentsBuffer = _instance->m_bitangentsBuffer;
     m_vertIdxBuffer = _instance->m_vertIdxBuffer;
     m_normIdxBuffer = _instance->m_normIdxBuffer;
     m_texCoordIdxBuffer = _instance->m_texCoordIdxBuffer;
+    m_tangentsIdxBuffer = _instance->m_tangentsIdxBuffer;
+    m_bitangentsIdxBuffer = _instance->m_bitangentsIdxBuffer;
     m_matIdxBuffer = _instance->m_matIdxBuffer;
     m_vertices = _instance->m_vertices;
     m_normals = _instance->m_normals;
     m_texCoords = _instance->m_texCoords;
-    m_indices = _instance->m_indices;
-    m_vertIndices = _instance->m_vertIndices;
-    m_normalIndices = _instance->m_normalIndices;
-    m_texCoordIndices = _instance->m_texCoordIndices;
+    m_tangents = _instance->m_tangents;
+    m_bitangents = _instance->m_bitangents;
+//    m_indices = _instance->m_indices;
+//    m_vertIndices = _instance->m_vertIndices;
+//    m_normalIndices = _instance->m_normalIndices;
+//    m_texCoordIndices = _instance->m_texCoordIndices;
+//    m_tangentIndices = _instance->m_tangentIndices;
+//    m_bitangentIndices = _instance->m_bitangentIndices;
 }
 //----------------------------------------------------------------------------------------------------------------------
 OptiXModel::~OptiXModel(){
@@ -80,9 +88,13 @@ OptiXModel::~OptiXModel(){
         m_vertexBuffer->destroy();
         m_normalBuffer->destroy();
         m_texCoordsBuffer->destroy();
+        m_tangentsBuffer->destroy();
+        m_bitangentsBuffer->destroy();
         m_vertIdxBuffer->destroy();
         m_normIdxBuffer->destroy();
         m_texCoordIdxBuffer->destroy();
+        m_tangentsIdxBuffer->destroy();
+        m_bitangentsIdxBuffer->destroy();
         m_matIdxBuffer->destroy();
     }
     else m_numInstances--;
@@ -115,7 +127,7 @@ void OptiXModel::loadMesh(const aiNode* _node, const aiScene *_scene,Context &_c
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
 
-    for(int i = 0; i <_mesh->mNumVertices; i++)
+    for(unsigned int i = 0; i <_mesh->mNumVertices; i++)
     {
         glm::vec3 tempVec;
 
@@ -134,7 +146,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
         m_normals.push_back(tempVec);
 
         // UV
-        if(_mesh->mTextureCoords[0]){
+        if(_mesh->HasTextureCoords(0)){
             tempVec.x = _mesh->mTextureCoords[0][i].x;
             tempVec.y = _mesh->mTextureCoords[0][i].y;
         }
@@ -143,22 +155,42 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
         }
 
         m_texCoords.push_back(glm::vec2(tempVec.x, tempVec.y));
+
+        // tangent
+        tempVec.x = _mesh->mTangents[i].x;
+        tempVec.y = _mesh->mTangents[i].y;
+        tempVec.z = _mesh->mTangents[i].z;
+
+        m_tangents.push_back(tempVec);
+
+        // bitangent
+        tempVec.x = _mesh->mBitangents[i].x;
+        tempVec.y = _mesh->mBitangents[i].y;
+        tempVec.z = _mesh->mBitangents[i].z;
+
+        m_bitangents.push_back(tempVec);
     }
 
     //lets fill up our idx buffers
-    typedef struct { int x; int y; int z;} ixyz;
-    unsigned int i;
-    for(i=0; i<_mesh->mNumFaces;i++){
-        m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
+//    typedef struct { int x; int y; int z;} ixyz;
+//    unsigned int i;
+//    for(i=0; i<_mesh->mNumFaces;i++){
+//        m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
 
-    for(i=0; i<_mesh->mNumFaces;i++){
-        m_normalIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
+//    for(i=0; i<_mesh->mNumFaces;i++){
+//        m_normalIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
 
-    for(i=0; i<_mesh->mNumFaces;i++){
-        m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-    }
+//    for(i=0; i<_mesh->mNumFaces;i++){
+//        m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
+//    for(i=0; i<_mesh->mNumFaces; i++){
+//        m_tangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
+//    for(i=0; i<_mesh->mNumFaces; i++){
+//        m_bitangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
+//    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(Context &_context){
@@ -168,6 +200,8 @@ void OptiXModel::createBuffers(Context &_context){
     m_vertexBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
     m_normalBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
     m_texCoordsBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT2, m_vertices.size());
+    m_tangentsBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_tangents.size());
+    m_bitangentsBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size());
     //now lets write our information to our buffers
     void *vertPtr = m_vertexBuffer->map();
     typedef struct { float x; float y; float z;} xyz;
@@ -204,10 +238,30 @@ void OptiXModel::createBuffers(Context &_context){
     }
     m_texCoordsBuffer->unmap();
 
+    void *tangPtr = m_tangentsBuffer->map();
+    xyz* tangData = (xyz*)tangPtr;
+    for(i=0; i<m_tangents.size(); i++){
+        tangData[i].x = m_tangents[i].x;
+        tangData[i].y = m_tangents[i].y;
+        tangData[i].z = m_tangents[i].z;
+    }
+    m_tangentsBuffer->unmap();
+
+    void *bitangPtr = m_bitangentsBuffer->map();
+    xyz* bitangData = (xyz*)bitangPtr;
+    for(i=0; i<m_bitangents.size(); i++){
+        bitangData[i].x = m_bitangents[i].x;
+        bitangData[i].y = m_bitangents[i].y;
+        bitangData[i].z = m_bitangents[i].z;
+    }
+    m_bitangentsBuffer->unmap();
+
     //now lets set up our index buffers
     m_vertIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
     m_normIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
     m_texCoordIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
+    m_tangentsIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
+    m_bitangentsIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
     m_matIdxBuffer = _context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_INT, m_vertices.size()/3 );
 
     //lets fill up our idx buffers
@@ -239,6 +293,24 @@ void OptiXModel::createBuffers(Context &_context){
     }
     m_texCoordIdxBuffer->unmap();
 
+    idxPtr = m_tangentsIdxBuffer->map();
+    idxData = (ixyz*)idxPtr;
+    for(i=0; i<m_vertices.size()/3; i++){
+        idxData[i].x = i*3;
+        idxData[i].y = i*3+1;
+        idxData[i].z = i*3+2;
+    }
+    m_tangentsIdxBuffer->unmap();
+
+    idxPtr = m_bitangentsIdxBuffer->map();
+    idxData = (ixyz*)idxPtr;
+    for(i=0; i<m_vertices.size()/3; i++){
+        idxData[i].x = i*3;
+        idxData[i].y = i*3+1;
+        idxData[i].z = i*3+2;
+    }
+    m_bitangentsIdxBuffer->unmap();
+
     //Dont really know what to do with materials yet so lets just have them all default to 0
     unsigned int matIndices[m_vertices.size()/3];
     unsigned int * matPtr = static_cast<unsigned int*>(m_matIdxBuffer->map());
@@ -247,7 +319,6 @@ void OptiXModel::createBuffers(Context &_context){
         matIndices[i]=0u;
     }
     m_matIdxBuffer->unmap();
-
 
     //create our geometry in our engine
     m_geometry = _context->createGeometry();
@@ -266,6 +337,12 @@ void OptiXModel::createBuffers(Context &_context){
 
     m_geometry["texcoord_buffer"]->setBuffer( m_texCoordsBuffer );
     m_geometry["tindex_buffer"]->setBuffer(m_texCoordIdxBuffer );
+
+    m_geometry["tangent_buffer"]->setBuffer( m_tangentsBuffer );
+    m_geometry["tanindex_buffer"]->setBuffer( m_tangentsIdxBuffer);
+
+    m_geometry["bitangent_buffer"]->setBuffer( m_bitangentsBuffer );
+    m_geometry["biindex_buffer"]->setBuffer( m_bitangentsIdxBuffer );
 
     m_geometry["material_buffer"]->setBuffer( m_matIdxBuffer );
 

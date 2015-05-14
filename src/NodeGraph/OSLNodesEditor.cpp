@@ -106,6 +106,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         //add our includes and namespaces
         stream<<"#include <optix.h>"<<endl;
         stream<<"#include <optixu/optixu_math_namespace.h>"<<endl;
+        stream<<"#include <optixu/optixu_matrix_namespace.h>"<<endl;
         stream<<"#include \"Core/path_tracer.h\""<<endl;
         stream<<"#include \"Core/random.h\""<<endl;
         stream<<"#include \"BRDFUtils.h\""<<endl;
@@ -125,6 +126,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); "<<endl;
         stream<<"rtDeclareVariable(float3, shading_normal,   attribute shading_normal, );"<<endl;
         stream<<"rtDeclareVariable(float3, texcoord, attribute texcoord, );"<<endl;
+        stream<<"rtDeclareVariable(float3, tangent, attribute tangent, );"<<endl;
+        stream<<"rtDeclareVariable(float3, bitangent, attribute bitangent, );"<<endl;
         stream<<"// Our current ray and payload variables"<<endl;
         stream<<"rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );"<<endl;
         stream<<"rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );"<<endl;
@@ -213,6 +216,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"// Texture coordinates"<<endl;
         stream<<"sg.u = texcoord.x;"<<endl;
         stream<<"sg.v = texcoord.y;"<<endl;
+        stream<<"sg.dPdu = rtTransformNormal( RT_OBJECT_TO_WORLD, tangent);"<<endl;
+        stream<<"sg.dPdv = rtTransformNormal( RT_OBJECT_TO_WORLD, bitangent);"<<endl;
 
 
         //Retrieve and print out any variables that we need for our kernal functions
@@ -332,19 +337,18 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
             }
         }
 
-
 /*
-
         //calculate our shadows
         stream<<"// Compute our shadows\n"<<endl;
         stream<<"unsigned int num_lights = lights.size();\n"<<endl;
+        stream<<"printf(\" number of lights: %u\", num_lights);"<<endl;
         stream<<"float3 result = make_float3(0.0f);\n"<<endl;
 
         stream<<"for(int i = 0; i < num_lights; ++i) {\n"<<endl;
-        stream<<"   ParallelogramLight light = lights[i];\n"<<endl;
-        stream<<"   float z1 = rnd(current_prd.seed);\n"<<endl;
-        stream<<"   float z2 = rnd(current_prd.seed);\n"<<endl;
-        stream<<"   float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2; \n"<<endl;
+        stream<<"    ParallelogramLight light = lights[i];\n"<<endl;
+        stream<<"    float z1 = rnd(current_prd.seed);\n"<<endl;
+        stream<<"    float z2 = rnd(current_prd.seed);\n"<<endl;
+        stream<<"    float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2; \n"<<endl;
         stream<<"    float Ldist = length(light_pos - sg.P);\n"<<endl;
         stream<<"    float3 L = normalize(light_pos - sg.P);\n"<<endl;
         stream<<"    float nDl = dot( sg.N, L );\n"<<endl;
@@ -365,9 +369,10 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"    }\n"<<endl;
         stream<<"}\n"<<endl;
 
+
+        stream<<"current_prd.result = result;"<<endl;
 */
 
-       // stream<<"current_prd.radiance = result;"<<endl;
         stream<<"current_prd.done = true;"<<endl;
 
         //end of our material program

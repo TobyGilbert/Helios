@@ -240,14 +240,13 @@ void LightManager::updateLight(){
 
 
     // Translate using the scaled values
-//    lightBuffer[m_selectedLight].corner.x = (0.5 * m_scaleX->value()) + m_translateX->value();
-//    lightBuffer[m_selectedLight].v1.x = (-1.0 * m_scaleX->value()) + m_translateX->value();
+    lightBuffer[m_selectedLight].corner.x = (0.5 * m_scaleX->value()) + m_translateX->value();
+    lightBuffer[m_selectedLight].v1.x = (-1.0 * m_scaleX->value()) + m_translateX->value();
 
-//    lightBuffer[m_selectedLight].corner.y = m_translateY->value();
+    lightBuffer[m_selectedLight].corner.y = m_translateY->value();
 
-//    lightBuffer[m_selectedLight].corner.z = (-0.5 * m_scaleZ->value()) + m_translateZ->value();
-//    lightBuffer[m_selectedLight].v2.z = (1.0 * m_scaleZ->value()) + m_translateZ->value();
-
+    lightBuffer[m_selectedLight].corner.z = (-0.5 * m_scaleZ->value()) + m_translateZ->value();
+    lightBuffer[m_selectedLight].v2.z = (1.0 * m_scaleZ->value()) + m_translateZ->value();
 
     m_lightBuffer->unmap();
 

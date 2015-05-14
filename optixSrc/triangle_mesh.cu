@@ -33,14 +33,20 @@ using namespace optix;
 rtBuffer<float3> vertex_buffer;     
 rtBuffer<float3> normal_buffer;
 rtBuffer<float2> texcoord_buffer;
+rtBuffer<float3> tangent_buffer;
+rtBuffer<float3> bitangent_buffer;
 rtBuffer<int3>   vindex_buffer;    // position indices 
 rtBuffer<int3>   nindex_buffer;    // normal indices
 rtBuffer<int3>   tindex_buffer;    // texcoord indices
+rtBuffer<int3>   tanindex_buffer;  // tangents indices
+rtBuffer<int3>   biindex_buffer;   // bitangent indices
 
 rtBuffer<uint>   material_buffer; // per-face material index
 rtDeclareVariable(float3, texcoord, attribute texcoord, ); 
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
-rtDeclareVariable(float3, shading_normal, attribute shading_normal, ); 
+rtDeclareVariable(float3, shading_normal, attribute shading_normal, );
+rtDeclareVariable(float3, tangent, attribute tangent, );
+rtDeclareVariable(float3, bitangent, attribute bitangent, );
 rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
 
 RT_PROGRAM void mesh_intersect( int primIdx )
@@ -72,12 +78,34 @@ RT_PROGRAM void mesh_intersect( int primIdx )
 
       int3 t_idx = tindex_buffer[ primIdx ];
       if ( texcoord_buffer.size() == 0 || t_idx.x < 0 || t_idx.y < 0 || t_idx.z < 0 ) {
-        texcoord = make_float3( 0.0f, 0.0f, 0.0f );
+        texcoord = make_float3( 1.0f, 0.0f, 0.0f );
       } else {
         float2 t0 = texcoord_buffer[ t_idx.x ];
         float2 t1 = texcoord_buffer[ t_idx.y ];
         float2 t2 = texcoord_buffer[ t_idx.z ];
         texcoord = make_float3( t1*beta + t2*gamma + t0*(1.0f-beta-gamma) );
+      }
+
+      int3 tan_idx = tanindex_buffer[ primIdx ];
+      if( tangent_buffer.size() == 0 || tan_idx.x < 0 || tan_idx.y < 0 || tan_idx.z < 0) {
+          tangent = make_float3(0.0f, 0.0f, 0.0f);
+      }
+      else{
+          float3 tan0 = tangent_buffer[ tan_idx.x ];
+          float3 tan1 = tangent_buffer[ tan_idx.y ];
+          float3 tan2 = tangent_buffer[ tan_idx.z ];
+          tangent = normalize( tan1*beta + tan2*gamma + tan0*(1.0f-beta-gamma) );
+      }
+
+      int3 bitan_idx = biindex_buffer[ primIdx ];
+      if( biindex_buffer.size() == 0 || bitan_idx.x < 0 || bitan_idx.y < 0 || bitan_idx.z < 0) {
+          bitangent = make_float3(0.0f, 0.0f, 0.0f);
+      }
+      else{
+          float3 bitan0 = bitangent_buffer[ bitan_idx.x ];
+          float3 bitan1 = bitangent_buffer[ bitan_idx.y ];
+          float3 bitan2 = bitangent_buffer[ bitan_idx.z ];
+          bitangent = normalize( bitan1*beta + bitan2*gamma + bitan0*(1.0f-beta-gamma) );
       }
 
       rtReportIntersection(material_buffer[primIdx]);

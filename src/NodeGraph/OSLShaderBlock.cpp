@@ -1,11 +1,100 @@
 #include "NodeGraph/OSLShaderBlock.h"
 #include "OSLCompiler/OslReader.h"
 #include "OSLCompiler/OsoReader.h"
+#include <QString>
 
 //------------------------------------------------------------------------------------------------------------------------------------
 OSLShaderBlock::OSLShaderBlock(QGraphicsItem *parent) : QNEBlock(parent)
 {
 }
+//------------------------------------------------------------------------------------------------------------------------------------
+void OSLShaderBlock::save(QDataStream &ds){
+    //give the position of our block in the scene
+    ds<<pos();
+    int count(0);
+    //calculate the number of ports we have
+    foreach(QGraphicsItem *port_, childItems())
+    {
+        if (port_->type() != QNEPort::Type)
+            continue;
+
+        count++;
+    }
+    //write in the number of ports we have
+    ds << count;
+
+    //write in our port information
+    foreach(QGraphicsItem *port_, childItems())
+    {
+        if (port_->type() != QNEPort::Type)
+            continue;
+
+        QNEPort *port = (QNEPort*) port_;
+        ds << (quint64) port;
+        ds << port->portName();
+        ds << port->isOutput();
+        //write our port variable type
+        ds << port->getVaribleType();
+        //write how many init params it has
+        std::vector<std::string> initParams = port->getInitParams();
+        ds << (int)initParams.size();
+        //write in our init params
+        for(unsigned int i=0;i<initParams.size();i++){
+            ds << QString(initParams[i].c_str());
+        }
+    }
+
+    //write our shader name and our cuda kernal
+    ds << QString(m_shaderName.c_str());
+    ds << QString(m_cudaKernal.c_str());
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void OSLShaderBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+    //first load in our postion
+    QPointF p;
+    ds >> p;
+    setPos(p);
+
+    //get the number of ports we have in our block
+    int count;
+    ds >> count;
+
+    for (int i = 0; i < count; i++)
+    {
+        QString name;
+        bool output;
+        quint64 ptr;
+        //our variable type
+        int varType;
+
+        ds >> ptr;
+        ds >> name;
+        ds >> output;
+        ds >> varType;
+
+        //now lets get our input params
+        int numInitParams;
+        ds >> numInitParams;
+
+        std::vector<std::string> initParams;
+        QString tempString;
+        for(int i=0;i<numInitParams;i++){
+            ds >> tempString;
+            initParams.push_back(tempString.toStdString());
+        }
+
+        portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, 0, ptr);
+    }
+
+    //set our shader name and kernal
+    QString sn, ck;
+    ds >> sn;
+    m_shaderName = sn.toStdString();
+    ds >> ck;
+    m_cudaKernal = ck.toStdString();
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------
 bool OSLShaderBlock::loadShader(QString _path){
     //lets run our OSL shader through Toby Gilbert's OSL Compilotmatic 3000
