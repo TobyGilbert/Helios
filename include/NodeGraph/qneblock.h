@@ -75,8 +75,15 @@ public:
     virtual inline std::string getBlockName(){}
     //----------------------------------------------------------------------------------------------------------------------
 
-	void save(QDataStream&);
-	void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief save function made virtual to allow implimentation of new blocks
+    //----------------------------------------------------------------------------------------------------------------------
+    virtual void save(QDataStream&);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief load fucntion made virtual to allow implimentaiton of new blocks
+    //----------------------------------------------------------------------------------------------------------------------
+    virtual void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
+    //----------------------------------------------------------------------------------------------------------------------
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 	QNEBlock* clone();
 	QVector<QNEPort*> ports();

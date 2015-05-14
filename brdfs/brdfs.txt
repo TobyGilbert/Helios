@@ -147,6 +147,7 @@ __device__ optix::float3 refraction(optix::float3 _normal, float _eta){
     }
 
     current_prd.radiance = result;
+    current_prd.countEmitted = false;
 
     PerRayData_pathtrace prd;
     prd.attenuation = current_prd.attenuation;

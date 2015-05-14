@@ -35,6 +35,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include "NodeGraph/OSLAbstractVarBlock.h"
 #include "NodeGraph/OSLBlock.h"
 #include "NodeGraph/OSLAbstractVarBlock.h"
+#include "NodeGraph/OSLShaderBlock.h"
 
 QNodesEditor::QNodesEditor(QObject *parent) :
     QObject(parent)
@@ -157,7 +158,7 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 void QNodesEditor::save(QDataStream &ds)
 {
 	foreach(QGraphicsItem *item, scene->items())
-		if (item->type() == QNEBlock::Type)
+        if (item->type() != QNEConnection::Type && item->type() != QNEPort::Type)
 		{
 			ds << item->type();
 			((QNEBlock*) item)->save(ds);
@@ -192,5 +193,10 @@ void QNodesEditor::load(QDataStream &ds)
             scene->addItem(conn);
 			conn->load(ds, portMap);
 		}
+        else if (type == OSLShaderBlock::Type){
+            OSLShaderBlock *sblock = new OSLShaderBlock();
+            scene->addItem(sblock);
+            sblock->load(ds, portMap);
+        }
 	}
 }
