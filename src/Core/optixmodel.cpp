@@ -138,6 +138,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
 
         m_vertices.push_back(tempVec);
 
+        if(!_mesh->HasNormals()) std::cerr<<"WARNING:  Your mesh has no normals, this could end badly!"<<std::endl;
         // normals
         tempVec.x = _mesh->mNormals[i].x;
         tempVec.y = _mesh->mNormals[i].y;
@@ -157,11 +158,11 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
         m_texCoords.push_back(glm::vec2(tempVec.x, tempVec.y));
 
         // tangent
-        tempVec.x = _mesh->mTangents[i].x;
-        tempVec.y = _mesh->mTangents[i].y;
-        tempVec.z = _mesh->mTangents[i].z;
-
-        m_tangents.push_back(tempVec);
+        if(_mesh->HasTangentsAndBitangents()){
+            tempVec.x = _mesh->mTangents[i].x;
+            tempVec.y = _mesh->mTangents[i].y;
+            tempVec.z = _mesh->mTangents[i].z;
+            m_tangents.push_back(tempVec);
 
         // bitangent
         tempVec.x = _mesh->mBitangents[i].x;
@@ -169,6 +170,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
         tempVec.z = _mesh->mBitangents[i].z;
 
         m_bitangents.push_back(tempVec);
+        }
     }
 
     //lets fill up our idx buffers

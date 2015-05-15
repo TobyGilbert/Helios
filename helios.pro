@@ -37,7 +37,6 @@ SOURCES += \
     src/NodeGraph/OSLShaderBlock.cpp \
     src/NodeGraph/OSLVarFloatBlock.cpp \
     src/NodeGraph/OSLNodesEditor.cpp \
-    src/UI/MeshDockWidget.cpp \
     src/UI/GenSetDockWidget.cpp \
     src/UI/AbstractMaterialWidget.cpp \
     src/UI/MeshWidget.cpp \
@@ -83,7 +82,6 @@ HEADERS += \
     include/Core/HDRLoader.h \
     include/Core/optixmodel.h \
     include/Core/TextureLoader.h \
-    include/UI/MeshDockWidget.h \
     include/UI/GenSetDockWidget.h \
     include/OSLCompiler/OsoReader.h \
     include/BRDFUtils.h \

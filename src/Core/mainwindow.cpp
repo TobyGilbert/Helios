@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "UI/AbstractMaterialWidget.h"
 #include "Core/MaterialLibrary.h"
+#include "UI/MeshWidget.h"
 #include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -27,7 +28,6 @@ MainWindow::~MainWindow(){
     MaterialLibrary::getInstance()->destroy();
     // delete mesh UI
     delete m_meshToolbarButton;
-    delete m_meshDockWidget;
 
     // delete light UI
     delete m_lightIntensityLabel;
@@ -145,10 +145,11 @@ void MainWindow::createMenus(){
     toolBar->addWidget(m_meshToolbarButton);
     toolBar->addSeparator();
 
-    m_meshDockWidget = new MeshDockWidget();
-    m_meshDockWidget->setWindowTitle("Mesh Attributes");
-    m_meshDockWidget->setHidden(true);
-    this->addDockWidget(Qt::RightDockWidgetArea, m_meshDockWidget);
+    MeshWidget *meshWgt = new MeshWidget(this);
+    meshWgt->hide();
+    this->addDockWidget(Qt::RightDockWidgetArea, meshWgt);
+    connect(meshWgt,SIGNAL(updateScene()),m_openGLWidget,SLOT(sceneChanged()));
+    connect(m_meshToolbarButton, SIGNAL(clicked()), meshWgt, SLOT(show()));
 
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Environment map----------------------------------------------------
@@ -187,8 +188,6 @@ void MainWindow::createMenus(){
 
 
     connect(m_meshToolbarButton, SIGNAL(clicked(bool)), m_meshToolbarButton,  SLOT(setChecked(bool)));
-    connect(m_meshToolbarButton, SIGNAL(clicked()), m_meshDockWidget, SLOT(show()));
-    connect(m_meshDockWidget,SIGNAL(updateScene()),m_openGLWidget,SLOT(sceneChanged()));
 
     connect(m_environmentToolbarButton, SIGNAL(clicked(bool)), m_environmentToolbarButton, SLOT(setChecked(bool)));
     connect(m_environmentToolbarButton, SIGNAL(clicked()), m_environmentDockWidget, SLOT(show()));
@@ -199,7 +198,7 @@ void MainWindow::createMenus(){
 
     m_fileMenu = new QMenu("File");
     m_importAction = new QAction(tr("&Import"),this);
-    connect(m_importAction,SIGNAL(triggered()),m_meshDockWidget,SLOT(addMeshWidget()));
+    connect(m_importAction,SIGNAL(triggered()),meshWgt,SLOT(importModel()));
     m_fileMenu->addAction(m_importAction);
     m_fileMenu->addAction("Save");
     m_menuBar->addAction(m_fileMenu->menuAction());
