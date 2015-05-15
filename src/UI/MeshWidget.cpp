@@ -130,49 +130,51 @@ MeshWidget::~MeshWidget(){
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::importModel(){
     //Lets get the location of a mesh that we wish to import
-    QString location = QFileDialog::getOpenFileName(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj)"));
-    //if nothing selected then we dont want to do anything
-    if(location.isEmpty()){
-        std::cerr<<"Model Import: Nothing Selected"<<std::endl;
-        return;
-    }
-    //Get some file information
-    QFileInfo fileInfo(location);
-    QString name = fileInfo.baseName();
-
-    //check to see if our model name is taken
-    bool nameOk = false;
-    QString tempName = name;
-    int nameIncrement = 1;
-    while(!nameOk){
-        bool nameTake = false;
-        for(int i=0;i<m_modelList->count();i++){
-            if (m_modelList->item(i)->text()==tempName){
-                tempName = name+QString("%1").arg(nameIncrement);
-                nameIncrement++;
-                nameTake = true;
-            }
+    QStringList locations = QFileDialog::getOpenFileNames(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj)"));
+        for(int i=0;i<locations.size();i++){
+        //if nothing selected then we dont want to do anything
+        if(locations[i].isEmpty()){
+            std::cerr<<"Model Import: Nothing Selected"<<std::endl;
+            return;
         }
-        if(nameTake == false) nameOk = true;
-    }
-    name = tempName;
+        //Get some file information
+        QFileInfo fileInfo(locations[i]);
+        QString name = fileInfo.baseName();
 
-    m_curModelProp = new modelProp;
+        //check to see if our model name is taken
+        bool nameOk = false;
+        QString tempName = name;
+        int nameIncrement = 1;
+        while(!nameOk){
+            bool nameTake = false;
+            for(int i=0;i<m_modelList->count();i++){
+                if (m_modelList->item(i)->text()==tempName){
+                    tempName = name+QString("%1").arg(nameIncrement);
+                    nameIncrement++;
+                    nameTake = true;
+                }
+            }
+            if(nameTake == false) nameOk = true;
+        }
+        name = tempName;
 
-    m_curModelProp->meshHandle = PathTracerScene::getInstance()->importMesh(name.toStdString(),location.toStdString());
+        m_curModelProp = new modelProp;
 
-    if(m_curModelProp->meshHandle){
-        m_curModelProp->transX = m_curModelProp->transY = m_curModelProp->transZ = m_curModelProp->rotX = m_curModelProp->rotY = m_curModelProp->rotZ = 0;
-        m_curModelProp->scaleX = m_curModelProp->scaleY = m_curModelProp->scaleZ = 1;
-        m_modelList->addItem(name);
-        m_modelList->item(m_modelList->count()-1)->setSelected(true);
-        m_curMeshName = name;
-        m_modelProperties[name] = m_curModelProp;
-        updateScene();
-    }
-    else{
-        QMessageBox::warning(this,"Import Model","Failed to import model");
-        return;
+        m_curModelProp->meshHandle = PathTracerScene::getInstance()->importMesh(name.toStdString(),locations[i].toStdString());
+
+        if(m_curModelProp->meshHandle){
+            m_curModelProp->transX = m_curModelProp->transY = m_curModelProp->transZ = m_curModelProp->rotX = m_curModelProp->rotY = m_curModelProp->rotZ = 0;
+            m_curModelProp->scaleX = m_curModelProp->scaleY = m_curModelProp->scaleZ = 1;
+            m_modelList->addItem(name);
+            m_modelList->item(m_modelList->count()-1)->setSelected(true);
+            m_curMeshName = name;
+            m_modelProperties[name] = m_curModelProp;
+            updateScene();
+        }
+        else{
+            QMessageBox::warning(this,"Import Model","Failed to import model");
+            return;
+        }
     }
 }
 //----------------------------------------------------------------------------------------------------------------------

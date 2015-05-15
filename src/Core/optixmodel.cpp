@@ -164,12 +164,12 @@ void OptiXModel::processMesh(const aiMesh *_mesh,Context &_context){
             tempVec.z = _mesh->mTangents[i].z;
             m_tangents.push_back(tempVec);
 
-        // bitangent
-        tempVec.x = _mesh->mBitangents[i].x;
-        tempVec.y = _mesh->mBitangents[i].y;
-        tempVec.z = _mesh->mBitangents[i].z;
+            // bitangent
+            tempVec.x = _mesh->mBitangents[i].x;
+            tempVec.y = _mesh->mBitangents[i].y;
+            tempVec.z = _mesh->mBitangents[i].z;
 
-        m_bitangents.push_back(tempVec);
+            m_bitangents.push_back(tempVec);
         }
     }
 

@@ -29,10 +29,10 @@ optix::TextureSampler loadTexture(optix::Context _context, const std::string &_f
     for ( int row = 1; row < tex.height() ; ++row ){
         for ( int col = 1; col < tex.width() ; ++col )
         {
-            unsigned int buf_index = ( (row)*nx + col )*4;
+            unsigned int buf_index = ( (row)*nx + (tex.width()-col-1) )*4;
             QColor clrCurrent( tex.pixel( nx - col,ny - row ) );
             float inv_255 = 1.0/255.0;
-            buffer_data[buf_index + 0 ] =  float(clrCurrent.red())*inv_255;
+            buffer_data[buf_index +0 ] =  float(clrCurrent.red())*inv_255;
             buffer_data[buf_index +1 ] =  float(clrCurrent.green())*inv_255;
             buffer_data[buf_index +2 ] =  float(clrCurrent.blue())*inv_255;
             buffer_data[buf_index +3 ] =   float(clrCurrent.alpha())*inv_255;

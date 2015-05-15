@@ -45,8 +45,7 @@ void MainWindow::createMenus(){
     // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
     QToolBar *toolBar = new QToolBar(this);
     toolBar->setOrientation(Qt::Vertical);
-    ui->gridLayout->addWidget(toolBar, 0, 0, 2, 1);
-
+    ui->gridLayout->addWidget(toolBar, 0, 0, 4, 1);
 
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Light functionality------------------------------------------------
@@ -120,16 +119,16 @@ void MainWindow::createMenus(){
     connect(environmentButton, SIGNAL(clicked()), m_openGLWidget, SLOT(loadEnvironmentMap()));
     connect(environmentButton, SIGNAL(clicked()), this, SLOT(displayEnvironmentMap()));
 
-    QMenuBar *menuBar = new QMenuBar(this);
+    this->menuBar()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
-    QMenu *fileMenu = new QMenu("File",menuBar);
+    QMenu *fileMenu = new QMenu("File",this->menuBar());
     QAction *importAction = new QAction(tr("&Import"),fileMenu);
     connect(importAction,SIGNAL(triggered()),MeshWidget::getInstance(),SLOT(importModel()));
     fileMenu->addAction(importAction);
     fileMenu->addAction("Save");
-    menuBar->addAction(fileMenu->menuAction());
+    this->menuBar()->addAction(fileMenu->menuAction());
 
-    QMenu *renderMenu = new QMenu("Render",menuBar);
+    QMenu *renderMenu = new QMenu("Render",this->menuBar());
 
     QAction *saveImage = new QAction(tr("&Image"), renderMenu);
 //    m_saveImage->setShortcut(QKeySequence::Image);
@@ -137,11 +136,11 @@ void MainWindow::createMenus(){
     connect(saveImage, SIGNAL(triggered()), m_openGLWidget, SLOT(saveImage()));
 
     renderMenu->addAction(saveImage);
-    menuBar->addAction(renderMenu->menuAction());
+    this->menuBar()->addAction(renderMenu->menuAction());
 
     //add our settings button on our toolbar
-    QMenu *settingsMenu = new QMenu("Settings",menuBar);
-    menuBar->addAction(settingsMenu->menuAction());
+    QMenu *settingsMenu = new QMenu("Settings",this->menuBar());
+    this->menuBar()->addAction(settingsMenu->menuAction());
     QAction *generalSettings = new QAction(tr("&General Settings"),this);
     generalSettings->setStatusTip(tr("Change general settings of Helios"));
     settingsMenu->addAction(generalSettings);
