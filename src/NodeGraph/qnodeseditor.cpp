@@ -35,6 +35,15 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include "NodeGraph/OSLAbstractVarBlock.h"
 #include "NodeGraph/OSLBlock.h"
 #include "NodeGraph/OSLAbstractVarBlock.h"
+#include "NodeGraph/OSLVarColorBlock.h"
+#include "NodeGraph/OSLVarFloatBlock.h"
+#include "NodeGraph/OSLVarFloatThreeBlock.h"
+#include "NodeGraph/OSLVarImageBlock.h"
+#include "NodeGraph/OSLVarIntBlock.h"
+#include "NodeGraph/OSLVarNormalBlock.h"
+#include "NodeGraph/OSLVarPointBlock.h"
+#include "NodeGraph/OSLShaderBlock.h"
+#include "UI/AbstractMaterialWidget.h"
 
 QNodesEditor::QNodesEditor(QObject *parent) :
     QObject(parent)
@@ -156,15 +165,20 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 
 void QNodesEditor::save(QDataStream &ds)
 {
-	foreach(QGraphicsItem *item, scene->items())
-		if (item->type() == QNEBlock::Type)
+    foreach(QGraphicsItem *item, scene->items()){
+        if (item->type() == QNEBlock::Type || item->type() == OSLAbstractVarBlock::Type)
 		{
 			ds << item->type();
 			((QNEBlock*) item)->save(ds);
-		}
+        }
+        else if(item->type() == OSLShaderBlock::Type){
+            ds << item->type();
+            ((OSLShaderBlock*) item)->save(ds);
+        }
+    }
 
 	foreach(QGraphicsItem *item, scene->items())
-		if (item->type() == QNEConnection::Type)
+        if (item->type() == QNEConnection::Type)
 		{
 			ds << item->type();
 			((QNEConnection*) item)->save(ds);
@@ -181,16 +195,77 @@ void QNodesEditor::load(QDataStream &ds)
 	{
 		int type;
 		ds >> type;
-		if (type == QNEBlock::Type)
+        if (type == QNEBlock::Type)
 		{
             QNEBlock *block = new QNEBlock(0);
             scene->addItem(block);
 			block->load(ds, portMap);
-		} else if (type == QNEConnection::Type)
+        }
+        else if (type == QNEConnection::Type)
 		{
             QNEConnection *conn = new QNEConnection(0);
             scene->addItem(conn);
 			conn->load(ds, portMap);
 		}
+        else if (type == OSLShaderBlock::Type){
+            OSLShaderBlock *sblock = new OSLShaderBlock();
+            scene->addItem(sblock);
+            sblock->load(ds, portMap);
+        }
+        else if (type == OSLAbstractVarBlock::Type){
+            int varType;
+            ds >> varType;
+            switch(varType){
+            case(QNEPort::TypeColour):
+            {
+                OSLVarColorBlock *cblock = new OSLVarColorBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(cblock);
+                cblock->load(ds, portMap);
+                break;
+            }
+            case(QNEPort::TypeFloat):
+            {
+                OSLVarFloatBlock *fblock = new OSLVarFloatBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(fblock);
+                fblock->load(ds, portMap);
+                break;
+            }
+            case(QNEPort::TypeVector):
+            {
+                OSLVarFloatThreeBlock *fblock = new OSLVarFloatThreeBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(fblock);
+                fblock->load(ds, portMap);
+                break;
+            }
+            case(QNEPort::TypeInt):
+            {
+                OSLVarIntBlock *iblock = new OSLVarIntBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(iblock);
+                iblock->load(ds, portMap);
+                break;
+            }
+            case(QNEPort::TypeNormal):
+            {
+                OSLVarNormalBlock *nblock = new OSLVarNormalBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(nblock);
+                nblock->load(ds, portMap);
+                break;
+            }
+            case(QNEPort::TypePoint):
+            {
+                OSLVarPointBlock *pblock = new OSLVarPointBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(pblock);
+                pblock->load(ds, portMap);
+                break;
+            }
+            case(QNEPort::TypeString):
+            {
+                OSLVarImageBlock *imblock = new OSLVarImageBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
+                scene->addItem(imblock);
+                imblock->load(ds, portMap);
+                break;
+            }
+            }
+        }
 	}
 }
