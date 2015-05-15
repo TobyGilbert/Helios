@@ -271,6 +271,7 @@ __device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
     current_prd.countEmitted = false;
 
     PerRayData_pathtrace prd;
+    prd.attenuation = current_prd.attenuation;
     prd.result = current_prd.result + (current_prd.radiance * current_prd.attenuation);
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;

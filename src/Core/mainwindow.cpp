@@ -49,9 +49,6 @@ MainWindow::~MainWindow(){
     delete m_environmentGroupBox;
     delete m_environmentDockWidget;
 
-    delete m_genSetDockWidget;
-    delete m_toolBar;
-
     delete m_fileMenu;
 
     delete m_saveImage;
@@ -77,9 +74,9 @@ void MainWindow::createMenus(){
 
 
     // A toolbar used to hold the button associated with different elements in the scene e.g. lighting, mesh options
-    m_toolBar = new QToolBar();
-    m_toolBar->setOrientation(Qt::Vertical);
-    ui->gridLayout->addWidget(m_toolBar, 0, 0, 2, 1);
+    QToolBar *toolBar = new QToolBar(this);
+    toolBar->setOrientation(Qt::Vertical);
+    ui->gridLayout->addWidget(toolBar, 0, 0, 2, 1);
 
 
     //--------------------------------------------------------------------------------------------------------------------
@@ -90,8 +87,8 @@ void MainWindow::createMenus(){
     m_lightToolbarButton = new QToolButton();
     m_lightToolbarButton->setIcon(lightBtnIcon);
     m_lightToolbarButton->setToolTip("Light options");
-    m_toolBar->addWidget(m_lightToolbarButton);
-    m_toolBar->addSeparator();
+    toolBar->addWidget(m_lightToolbarButton);
+    toolBar->addSeparator();
 
     // Create the dock for the light options
     m_lightWidget = new QWidget();
@@ -145,8 +142,8 @@ void MainWindow::createMenus(){
     m_meshToolbarButton = new QToolButton();
     m_meshToolbarButton->setIcon(meshBtnIcon);
     m_meshToolbarButton->setToolTip("Mesh options");
-    m_toolBar->addWidget(m_meshToolbarButton);
-    m_toolBar->addSeparator();
+    toolBar->addWidget(m_meshToolbarButton);
+    toolBar->addSeparator();
 
     m_meshDockWidget = new MeshDockWidget();
     m_meshDockWidget->setWindowTitle("Mesh Attributes");
@@ -162,8 +159,8 @@ void MainWindow::createMenus(){
     m_environmentToolbarButton = new QToolButton();
     m_environmentToolbarButton->setIcon(environBtnIcon);
     m_environmentToolbarButton->setToolTip("Environment Map Options");
-    m_toolBar->addWidget(m_environmentToolbarButton);
-    m_toolBar->addSeparator();
+    toolBar->addWidget(m_environmentToolbarButton);
+    toolBar->addSeparator();
 
     // Set up widget
     m_environmentDockWidget = new QDockWidget();
@@ -225,12 +222,12 @@ void MainWindow::createMenus(){
     m_settingsMenu->addAction(generalSettings);
 
     // create our general settings widget
-    m_genSetDockWidget = new GenSetDockWidget();
-    m_genSetDockWidget->setHidden(true);
+    GenSetDockWidget *genSetwdg = new GenSetDockWidget(this);
+    genSetwdg->setHidden(true);
 
-    connect(generalSettings, SIGNAL(triggered()), m_genSetDockWidget, SLOT(show()));
-    connect(m_genSetDockWidget, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
-    connect(m_genSetDockWidget, SIGNAL(signalSetTimeOutDur(int)),m_openGLWidget,SLOT(setTimeOutDur(int)));
+    connect(generalSettings, SIGNAL(triggered()), genSetwdg, SLOT(show()));
+    connect(genSetwdg, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
+    connect(genSetwdg, SIGNAL(signalSetTimeOutDur(int)),m_openGLWidget,SLOT(setTimeOutDur(int)));
 
 }
 

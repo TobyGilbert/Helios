@@ -34,9 +34,8 @@ matte
     float Kd = 1
         [[  string help = "Diffuse scaling",
             float min = 0, float max = 1 ]],
-    color Cs = color(1, 1, 1),
-    normal norm = N
+    color Cs = color(1, 1, 1)
   )
 {
-    Ci =  Kd * Cs * diffuse(norm);
+    Ci =  Kd * Cs * oren_nayar(N,2);
 }
