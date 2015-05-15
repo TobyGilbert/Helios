@@ -36,7 +36,6 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
 PathTracerScene::~PathTracerScene(){
     delete m_camera;
     m_outputBuffer->destroy();
-    m_lightBuffer->destroy();
     m_enviSampler->destroy();
     m_context->destroy();
 }

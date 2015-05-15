@@ -8,7 +8,23 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-
+//decare our static instance of our widget
+MeshWidget* MeshWidget::m_instance;
+//----------------------------------------------------------------------------------------------------------------------
+MeshWidget* MeshWidget::getInstance(QWidget *parent){
+    if(!m_instance){
+        m_instance = new MeshWidget(parent);
+    }
+    else if(parent){
+        m_instance->setParent(parent);
+    }
+    return m_instance;
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::destroy(){
+    delete m_instance;
+}
+//----------------------------------------------------------------------------------------------------------------------
 MeshWidget::MeshWidget(QWidget *parent) :
     QDockWidget(parent)
 {
@@ -152,6 +168,7 @@ void MeshWidget::importModel(){
         m_modelList->item(m_modelList->count()-1)->setSelected(true);
         m_curMeshName = name;
         m_modelProperties[name] = m_curModelProp;
+        updateScene();
     }
     else{
         QMessageBox::warning(this,"Import Model","Failed to import model");
@@ -181,6 +198,8 @@ void MeshWidget::modelSelected(QListWidgetItem *_item){
 
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::signalTransformChange(double _val){
+
+    if(m_curMeshName.isEmpty()) return;
 
     // get our transform values
     m_curModelProp->transX = m_meshTranslateXDSpinBox->value();

@@ -24,8 +24,6 @@ LightManager::LightManager(QWidget *parent) : QDockWidget("Light Manager", paren
 }
 //----------------------------------------------------------------------------------------------------------------------
 LightManager::~LightManager(){
-    m_lightBuffer->destroy();
-    delete m_instance;
 }
 //----------------------------------------------------------------------------------------------------------------------
 void LightManager::createGUI(){
