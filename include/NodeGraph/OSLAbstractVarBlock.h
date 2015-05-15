@@ -7,7 +7,7 @@
 #include <QGraphicsScene>
 #include "AbstractNodeProxyWidget.h"
 
-class OSLAbstractVarBlock : public QNEBlock
+class   OSLAbstractVarBlock : public QNEBlock
 {
 public:
     //this means you can define a new QGraphicsItem type. Woudln't of done it like this myself.
@@ -24,7 +24,7 @@ public:
     /// @brief Set the name of our variable block
     /// @param _name - desired name
     //------------------------------------------------------------------------------------------------------------------------------------
-    void setBlockName(std::string _name);
+    QNEPort *setBlockName(std::string _name);
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief overiden virtual function to return the block name
     //------------------------------------------------------------------------------------------------------------------------------------

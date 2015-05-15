@@ -37,6 +37,7 @@ void OSLShaderBlock::save(QDataStream &ds){
         ds << port->getVaribleType();
         //write how many init params it has
         std::vector<std::string> initParams = port->getInitParams();
+        std::cout<<"initParamsSize"<<(int)initParams.size()<<std::endl;
         ds << (int)initParams.size();
         //write in our init params
         for(unsigned int i=0;i<initParams.size();i++){
@@ -47,6 +48,7 @@ void OSLShaderBlock::save(QDataStream &ds){
     //write our shader name and our cuda kernal
     ds << QString(m_shaderName.c_str());
     ds << QString(m_cudaKernal.c_str());
+
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -76,15 +78,18 @@ void OSLShaderBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
         //now lets get our input params
         int numInitParams;
         ds >> numInitParams;
-
         std::vector<std::string> initParams;
         QString tempString;
-        for(int i=0;i<numInitParams;i++){
+        for(int j=0;j<numInitParams;j++){
             ds >> tempString;
             initParams.push_back(tempString.toStdString());
         }
 
-        portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, 0, ptr);
+        switch(i){
+        case(0):portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, QNEPort::NamePort, ptr); break;
+        case(1):portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, QNEPort::TypePort, ptr); break;
+        default: portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, 0, ptr); break;
+        }
     }
 
     //set our shader name and kernal

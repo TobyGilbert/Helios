@@ -30,6 +30,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <QBrush>
 #include <QPen>
 #include <QGraphicsScene>
+#include <iostream>
 
 QNEConnection::QNEConnection(QGraphicsItem *parent) : QGraphicsPathItem(parent)
 {
@@ -120,7 +121,6 @@ void QNEConnection::load(QDataStream &ds, const QMap<quint64, QNEPort*> &portMap
 	quint64 ptr2;
 	ds >> ptr1;
 	ds >> ptr2;
-
 	setPort1(portMap[ptr1]);
 	setPort2(portMap[ptr2]);
 	updatePosFromPorts();

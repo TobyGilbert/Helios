@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QDir>
 #include <iostream>
 
 //declare our static class instance
@@ -30,6 +31,7 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     this->setWindowTitle("OSL Hypershader 3000");
     m_matCreated = false;
     m_matAddedToLib = false;
+    m_curNGPath.clear();
     //add our groupbox
     m_widgetGroupBox = new QGroupBox(this);
     this->setWidget(m_widgetGroupBox);
@@ -69,13 +71,21 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     toolLayout->addWidget(addMatToLibBtn,2,0,1,1);
     connect(addMatToLibBtn,SIGNAL(pressed()),this,SLOT(addMaterialToLib()));
 
-    QPushButton *loadNgBtn = new QPushButton("Load Node Graph",toolGrbBox);
-    toolLayout->addWidget(loadNgBtn,3,0,1,1);
-    connect(loadNgBtn,SIGNAL(pressed()),this,SLOT(loadNodeGraph()));
+    QPushButton *loadFromLibBtn = new QPushButton("Load Material from Library",toolGrbBox);
+    toolLayout->addWidget(loadFromLibBtn,3,0,1,1);
+    connect(loadFromLibBtn,SIGNAL(pressed()),MaterialLibrary::getInstance(),SLOT(loadMatToHyperShader()));
+
+    QPushButton *saveBtn = new QPushButton("Save",toolGrbBox);
+    toolLayout->addWidget(saveBtn,4,0,1,1);
+    connect(saveBtn,SIGNAL(pressed()),this,SLOT(saveNodeGraph()));
+
+    QPushButton *loadNgBtn = new QPushButton("Import External Node Graph",toolGrbBox);
+    toolLayout->addWidget(loadNgBtn,5,0,1,1);
+    connect(loadNgBtn,SIGNAL(pressed()),this,SLOT(importNodeGraph()));
 
     //push our buttons together
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    toolLayout->addItem(spacer,5,0,1,1);
+    toolLayout->addItem(spacer,toolGrbBox->children().size(),0,1,1);
 
     //Set up our menu for if you right click in our widget
     setContextMenuPolicy(Qt::CustomContextMenu);
@@ -233,23 +243,26 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos){
 void AbstractMaterialWidget::addShaderNode()
 {
     //let the user select a shader to load in
-    QString location = QFileDialog::getOpenFileName(0,QString("Import Shader"), QString("shaders/"), QString("OSL files (*.osl)"));
-    //if nothing selected then we dont want to do anything
-    if(location.isEmpty()) return;
+    QStringList locations = QFileDialog::getOpenFileNames(0,QString("Import Shader"), QString("shaders/"), QString("OSL files (*.osl)"));
 
-    //create a new shader node in our ui
-    //add it to out interface. This needs to be don before we add any
-    //ports or it will not work, should probably do something about this
-    OSLShaderBlock *b = new OSLShaderBlock();
-    m_nodeInterfaceScene->addItem(b);
-    if(!b->loadShader(location)){
-        QMessageBox::warning(this,"Compile Error","OSL Shader could not be compiled!");
-        m_nodeInterfaceScene->removeItem(b);
-        delete b;
-    }
-    else{
-        //add it to our list of nodes
-        m_nodes.push_back(b);
+    for(int i=0;i<locations.size();i++){
+        //if nothing selected then we dont want to do anything
+        if(locations[i].isEmpty()) return;
+
+        //create a new shader node in our ui
+        //add it to out interface. This needs to be don before we add any
+        //ports or it will not work, should probably do something about this
+        OSLShaderBlock *b = new OSLShaderBlock();
+        m_nodeInterfaceScene->addItem(b);
+        if(!b->loadShader(locations[i])){
+            QMessageBox::warning(this,"Compile Error","OSL Shader could not be compiled!");
+            m_nodeInterfaceScene->removeItem(b);
+            delete b;
+        }
+        else{
+            //add it to our list of nodes
+            m_nodes.push_back(b);
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -258,6 +271,7 @@ void AbstractMaterialWidget::newMaterial(){
     m_material = PathTracerScene::getInstance()->getContext()->createMaterial();
     m_matCreated=false;
     m_matAddedToLib = false;
+    m_curNGPath.clear();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -276,17 +290,19 @@ void AbstractMaterialWidget::addMaterialToLib(){
         return;
     }
 
-    QFile f((matName+".hel").c_str());
+    if(!QDir("NodeGraphs").exists()) QDir().mkdir("NodeGraphs");
+    QFile f(("NodeGraphs/" + matName + ".hel").c_str());
     f.open(QFile::WriteOnly);
     QDataStream ds(&f);
     m_nodeEditor->save(ds);
     if(MaterialLibrary::getInstance()->addMaterialToLibrary(matName,m_material)){
         m_matAddedToLib = true;
+        m_curNGPath = ("NodeGraphs/" + matName + ".hel").c_str();
     }
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void AbstractMaterialWidget::loadNodeGraph(){
+void AbstractMaterialWidget::importNodeGraph(){
     QString location = QFileDialog::getOpenFileName(this,tr("Import Node Graph"),"", tr("Mesh Files (*.hel)"));
     QFile f(location);
     if(f.open(QFile::ReadOnly)){
@@ -295,6 +311,30 @@ void AbstractMaterialWidget::loadNodeGraph(){
     }
     else{
         QMessageBox::warning(this,"Import Node Graph","Cannot load node graph");
+    }
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::loadNodeGraph(QString _path){
+    QFile f(_path);
+    if(f.open(QFile::ReadOnly)){
+        QDataStream ds(&f);
+        m_nodeEditor->load(ds);
+        m_curNGPath = _path;
+    }
+    else{
+        QMessageBox::warning(this,"Import Node Graph","Cannot load node graph");
+    }
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::saveNodeGraph(){
+    if(m_curNGPath.isEmpty()){
+        addMaterialToLib();
+    }
+    else{
+        QFile f(m_curNGPath);
+        f.open(QFile::WriteOnly);
+        QDataStream ds(&f);
+        m_nodeEditor->save(ds);
     }
 }
 
