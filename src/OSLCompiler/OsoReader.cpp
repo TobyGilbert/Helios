@@ -7,6 +7,9 @@
 #include <fstream>
 #include <FlexLexer.h>
 #include <boost/bind.hpp>
+#include <sstream>
+#include <QStringList>
+#include <QDir>
 #ifdef LINUX
     #include <algorithm>
 #endif
@@ -78,6 +81,59 @@ bool OsoReader::parseFile(const std::string &_filename){
     return ok;
 }
 //----------------------------------------------------------------------------------------------------------------------------------------
+bool removeDir(const QString &dirName)
+{
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName)) {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+            if (info.isDir()) {
+                result = removeDir(info.absoluteFilePath());
+            }
+            else {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result) {
+                return result;
+            }
+        }
+        result = dir.rmdir(dirName);
+    }
+
+    return result;
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+bool OsoReader::parseBuffer(const std::string &_buffer, QString _filename){
+    resetVectors();
+    QString osofilename = _filename;
+    QFileInfo info(osofilename);
+    osofilename = info.baseName();
+
+    if ( osofilename.endsWith(".osl")){
+        osofilename = osofilename.split(".", QString::SkipEmptyParts).at(0);
+    }
+    osofilename += ".oso";
+    std::cout<<("shaders/OSO/" + osofilename.toStdString()).c_str()<<std::endl;
+    std::ofstream out(("shaders/OSO/" + osofilename.toStdString()).c_str());
+    out << _buffer;
+    out.close();
+    yyin = fopen(("shaders/OSO/" + osofilename.toStdString()).c_str(), "r");
+    if (!yyin){
+        std::cerr<<"Can't load buffer"<<std::endl;
+    }
+    bool ok = !yyparse();
+    if (ok){
+        std::cout<<"shader passed"<<std::endl;
+    }
+    else{
+        std::cout<<"Failed parse of buffer"<<std::endl;
+    }
+    return ok;
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------------
 std::vector<Symbol> OsoReader::getInputParams(){
     std::vector<Symbol> inputParams;
     // Go through all symbols looking for input parameters
@@ -85,9 +141,6 @@ std::vector<Symbol> OsoReader::getInputParams(){
         if (m_symbols[i].m_symType == 0){ // If input parameter
             inputParams.push_back(m_symbols[i]);
         }
-//        if (m_symbols[i].m_symType == 1){
-//            m_inputParams.push_back(m_symbols[i]);
-//        }
     }
     return inputParams;
 }
@@ -433,6 +486,9 @@ std::string OsoReader::generateDeviceFunction(){
             s+=" = ";
             std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             if(it->m_type != 4){
+                if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv")){
+                    s+="sg.";
+                }
                 s+=m_instructions[i].m_args[0].c_str();
             }
             else{

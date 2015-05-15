@@ -57,8 +57,7 @@ rtDeclareVariable(PerRayData_pathtrace, current_prd, rtPayload, );
 
 // Environment map
 rtTextureSampler<float4, 2> envmap;
-// Normal map
-rtTextureSampler<float4, 2> normalMap;
+
 
 rtDeclareVariable(optix::Ray, ray,          rtCurrentRay, );
 rtDeclareVariable(float,      t_hit,        rtIntersectionDistance, );
@@ -145,6 +144,8 @@ RT_PROGRAM void defaultMaterial(){
     cosine_sample_hemisphere(z1, z2, p);
     float3 v1, v2;
     createONB(ffnormal, v1, v2);
+    float3 ray_origin = hitpoint;
+    float3 ray_direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
 
     // Compute attenuation
     current_prd.attenuation = current_prd.attenuation;
@@ -190,8 +191,6 @@ RT_PROGRAM void defaultMaterial(){
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;
 
-    float3 ray_origin = hitpoint;
-    float3 ray_direction = v1 * p.x + v2 * p.y + ffnormal * p.z;
 
     Ray default_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
     rtTrace(top_object, default_ray, prd);
@@ -227,7 +226,7 @@ RT_PROGRAM void exception(){
 //
 //-----------------------------------------------------------------------------
 RT_PROGRAM void miss(){
-    //current_prd.radiance = bg_color;
+    current_prd.result = make_float3(0.5, 0.5, 0.5);
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------

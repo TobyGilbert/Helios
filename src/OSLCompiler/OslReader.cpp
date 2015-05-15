@@ -21,8 +21,14 @@ bool OslReader::compileOSL(QString _shaderName){
     }
     OSL::OSLCompiler compiler;
     std::vector<std::string> options;
-    bool ok = compiler.compile(oslfilename.toStdString(), options, QDir::currentPath().toStdString() + "/include/stdosl.h");
-
+    bool ok;
+    try {
+        ok = compiler.compile(oslfilename.toStdString(), options, QDir::currentPath().toStdString() + "/include/stdosl.h");
+    }
+    catch (int e){
+        std::cout<<"OSL compile failed!"<<e<<std::endl;
+        return 0;
+    }
 
     if (ok) {
         std::cout << "Compiled " << oslfilename.toStdString() << " -> " << compiler.output_filename() << "\n";
@@ -38,9 +44,9 @@ bool OslReader::compileOSL(QString _shaderName){
     return true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OslReader::compileOSLtoBuffer(QString _shaderName){
+bool OslReader::compileOSLtoBuffer(QString _shaderName){
     QString oslfilename = _shaderName;
-    if (oslfilename.endsWith(".osl")){
+    if (! oslfilename.endsWith(".osl")){
         oslfilename = oslfilename.split(".", QString::SkipEmptyParts).at(0);
     }
     std::string sourcecode;
@@ -56,9 +62,11 @@ void OslReader::compileOSLtoBuffer(QString _shaderName){
         std::cerr<<"Could not compile \"" << oslfilename.toStdString() << "\"\n";
     }
 
-//    if (! m_shadingSystem->LoadMemoryCompiledShader(oslfilename.toStdString(), osobuffer)){
-//        std::cerr << "Could not load compiled buffer from \"" << oslfilename.toStdString() << "\"\n";
-//    }
+    OsoReader osoread;
+    if(!osoread.parseBuffer(osobuffer.c_str(), oslfilename)){
+        std::cerr<<"Could not load buffer \""<<oslfilename.toStdString() << "\"\n";
+    }
 
+    return true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------

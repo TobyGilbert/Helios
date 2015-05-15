@@ -63,7 +63,7 @@ void PathTracerScene::init(){
     m_context["pathtrace_bsdf_shadow_ray_type"]->setUint(2u);
     m_context["rr_begin_depth"]->setUint(m_rr_begin_depth);
 
-    // Enable printing
+    // Enable printing on the GPU
     rtContextSetPrintEnabled(m_context->get(), 1);
 
     // create our output buffer and set it in our engine
@@ -81,9 +81,9 @@ void PathTracerScene::init(){
 
     m_camera = new PinholeCamera(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
                                  optix::make_float3( 0.0f, 0.0f, 0.0f ),        //lookat
-                                 optix::make_float3( 0.0f, 1.0f,  0.0f ),        //up
-                                 35.0f,                                          //hfov
-                                 35.0f);                                         //vfov
+                                 optix::make_float3( 0.0f, 1.0f,  0.0f ),       //up
+                                 35.0f,                                         //hfov
+                                 35.0f);                                        //vfov
 
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
@@ -102,9 +102,6 @@ void PathTracerScene::init(){
     m_enviSampler = loadHDRTexture(m_context, "./HDRMaps/Refmap.hdr", default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
 
-    // Load normalmap
-    optix::TextureSampler normalMap = loadTexture(m_context, "./textures/normalMap2.jpg");
-    m_context["normalMap"]->setTextureSampler(normalMap);
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";

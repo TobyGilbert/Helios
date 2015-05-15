@@ -10,7 +10,7 @@ OSLShaderBlock::OSLShaderBlock(QGraphicsItem *parent) : QNEBlock(parent)
 bool OSLShaderBlock::loadShader(QString _path){
     //lets run our OSL shader through Toby Gilbert's OSL Compilotmatic 3000
     OslReader shade;
-    if(!shade.compileOSL(_path)){
+    if(!shade.compileOSLtoBuffer(_path)){
         return false;
     }
 
