@@ -228,28 +228,27 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                 QVector<QNEPort*> ports= ((OSLShaderBlock*)item)->ports();
                 foreach(QNEPort* p, ports){
                     if(p->isOutput()){
-                        //if the output ports of our hsader block is connected to
-                        //another shader block then we need it as a variable we can
-                        //pass data around in our kernals
-                        if(p->connections().size()>0){
-                            stream<<portTypeToString(p->getVaribleType())<<" ";
-                            //note: if 2 shaders have the same variable name we need to
-                            //distinguish between them so to solve this we will have the
-                            //name of the shader concatinated with the varibale name
-                            stream<<((OSLShaderBlock*)item)->getBlockName().c_str()<<p->getName();
-                            //lets also set its default value
-                            std::vector<std::string> initParams = p->getInitParams();
-                            if(initParams.size()==3){
-                                stream<<" = make_float3(";
-                                for(int i=0;i<3;i++){
-                                    stream<<initParams[i].c_str();
-                                    if(i!=2) stream<<",";
-                                }
-                                stream<<");"<<endl;
+                        stream<<portTypeToString(p->getVaribleType())<<" ";
+                        //note: if 2 shaders have the same variable name we need to
+                        //distinguish between them so to solve this we will have the
+                        //name of the shader concatinated with the varibale name
+                        stream<<((OSLShaderBlock*)item)->getBlockName().c_str()<<p->getName();
+                        //lets also set its default value
+                        std::vector<std::string> initParams = p->getInitParams();
+                        if(initParams.size()==0){
+                            stream<<";";
+                            continue;
+                        }
+                        if(initParams.size()==3){
+                            stream<<" = make_float3(";
+                            for(int i=0;i<3;i++){
+                                stream<<initParams[i].c_str();
+                                if(i!=2) stream<<",";
                             }
-                            else{
-                                stream<<" = "<<initParams[0].c_str()<<";"<<endl;
-                            }
+                            stream<<");"<<endl;
+                        }
+                        else{
+                            stream<<" = "<<initParams[0].c_str()<<";"<<endl;
                         }
                     }
                 }
@@ -257,6 +256,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         }
 
         stream<<"\n\n";
+
 
         //get our last shader block;
         QNEBlock *lastBlock = getLastBlock();
