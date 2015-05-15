@@ -40,6 +40,7 @@ metal
     color Cs = 1
         [[  string help = "Base color",
             float min = 0, float max = 1 ]]
+    , output float a = 1
   )
 {
     Ci = Ks * Cs * reflection (N, eta);
