@@ -314,3 +314,9 @@ __device__ optix::float3 OSLTexture(rtTextureSampler<float4, 2>  _filename, floa
     return make_float3(tex2D(_filename, _s, _t));
 }
 //----------------------------------------------------------------------------
+__device__ optix::float3 OSLcellnoise(optix::float3 _x){
+    optix::float3 point = make_float3(floor(_x.x), floor(_x.y), floor(_x.z));
+    float z = (point.x + point.y + point.z)/3.0;
+    z = rnd(z);
+    return make_float3(z, z, z);
+}

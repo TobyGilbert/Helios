@@ -228,7 +228,11 @@ simple_typename
         ;
 
 arraylen_opt
-        : '[' INT_LITERAL ']'           { std::cout<<"INT_LITERAL arraylen_opt "<<std::endl; }
+        : '[' INT_LITERAL ']'           {
+                                          OsoReader* reader = getOsoReader();
+                                          reader->makeSymbolArrayType(std::to_string($2));
+                                          std::cout<<"INT_LITERAL arraylen_opt "<<std::endl;
+                                        }
         | /* empty */                   { ; }
         ;
 

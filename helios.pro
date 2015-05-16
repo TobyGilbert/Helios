@@ -112,7 +112,8 @@ HEADERS += \
     include/NodeGraph/IntNodeProxyWidget.h \
     include/NodeGraph/OSLVarIntBlock.h \
     include/NodeGraph/ImageNodeProxyWidget.h \
-    include/NodeGraph/OSLVarImageBlock.h
+    include/NodeGraph/OSLVarImageBlock.h \
+    shaders/OSL/stdosl.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
