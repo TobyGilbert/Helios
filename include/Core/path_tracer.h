@@ -41,9 +41,9 @@ struct ShaderGlobals{
     float3 I;
     float3 N;
     float3 Ng;
-    float u, v;
     float3 dPdu;
     float3 dPdv;
+    float u, v;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief our per ray payload data for our path tracer
@@ -52,27 +52,27 @@ struct PerRayData_pathtrace{
     float3 result;
     float3 attenuation;
     float3 radiance;
-    bool countEmitted;
     unsigned int seed;
     int depth;
     int done;
+    bool countEmitted;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief our per shadow ray payload for our path tracer
 //----------------------------------------------------------------------------------------------------------------------
 struct PerRayData_pathtrace_shadow{
-    bool inShadow;
     rayType type;
+    bool inShadow;
 };
 //----------------------------------------------------------------------------------------------------------------------
 /// @brief Parallelogram light properties
 //----------------------------------------------------------------------------------------------------------------------
 struct ParallelogramLight
 {
-  optix::float3 corner;
-  optix::float3 v1, v2;
-  optix::float3 normal;
-  optix::float3 emission;
+  float3 corner;
+  float3 v1, v2;
+  float3 normal;
+  float3 emission;
   bool textured;
 };
 

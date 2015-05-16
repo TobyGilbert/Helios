@@ -1,6 +1,7 @@
 OpenShadingLanguage 1.00
 # Compiled by oslc 1.6.2dev
 surface matte	%meta{string,help,"Lambertian diffuse material"} 
+<<<<<<< HEAD
 param	float	Kd	1		%meta{string,help,"Diffuse scaling"} %meta{float,min,0} %meta{float,max,1}  %read{8,8} %write{2147483647,-1}
 param	color	Cs	1 1 1		%read{8,8} %write{2147483647,-1}
 global	normal	N	%read{7,7} %write{2147483647,-1}
@@ -37,4 +38,19 @@ code ___main___
 	closure		$tmp3 $const6 N $const5 	%line{44} %argrw{"wrrr"}
 	mul		$tmp4 Kd Cs 	%argrw{"wrr"}
 	mul		Ci $tmp3 $tmp4 	%argrw{"wrr"}
+=======
+param	float	Kd	1		%meta{string,help,"Diffuse scaling"} %meta{float,min,0} %meta{float,max,1}  %read{1,1} %write{2147483647,-1}
+param	color	Cs	1 1 1		%read{1,1} %write{2147483647,-1}
+global	normal	N	%read{0,0} %write{2147483647,-1}
+global	closure color	Ci	%read{2147483647,-1} %write{2,2}
+temp	closure color	$tmp1	%read{2,2} %write{0,0}
+const	string	$const1	"diffuse"		%read{0,0} %write{2147483647,-1}
+temp	color	$tmp2	%read{2,2} %write{1,1}
+code ___main___
+# <buffer>:40
+# <not found>
+	closure		$tmp1 $const1 N 	%filename{"<buffer>"} %line{40} %argrw{"wrr"}
+	mul		$tmp2 Kd Cs 	%argrw{"wrr"}
+	mul		Ci $tmp1 $tmp2 	%argrw{"wrr"}
+>>>>>>> 127ebba86995559eecfda7d23d679dd13a590131
 	end
