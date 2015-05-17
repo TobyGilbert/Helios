@@ -175,7 +175,8 @@ OTHER_FILES += \
     shaders/OSL/textureShader.osl \
     textures/normalMap2.jpg \
     shaders/OSL/flakes.osl \
-    shaders/OSL/normalMap.osl
+    shaders/OSL/normalMap.osl \
+    shaders/OSL/plastic.osl
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y

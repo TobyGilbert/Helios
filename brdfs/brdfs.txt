@@ -105,6 +105,7 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
     current_prd.countEmitted = false;
 
     PerRayData_pathtrace prd;
+    current_prd.attenuation = prd.attenuation;
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;

@@ -35,6 +35,11 @@ PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
 //----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::~PathTracerScene(){
     delete m_camera;
+    std::map<std::string,OptiXModel*>::iterator models;
+    for(models=m_meshArray.begin();models!=m_meshArray.end();models++){
+        delete models->second;
+        m_meshArray.erase(models);
+    }
     m_outputBuffer->destroy();
     m_enviSampler->destroy();
     m_context->destroy();
@@ -147,7 +152,7 @@ OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path){
     /// @todo maybe have all this stuff in a model management class rather than the scene
     /// @todo meshes are all set with detault diffuse texture, we need some sort of material management
     //import mesh
-    OptiXModel* model = new OptiXModel(_path,m_context);
+    OptiXModel* model = new OptiXModel(_path);
     Material defaultMaterial = m_context->createMaterial();
 
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
@@ -157,7 +162,6 @@ OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path){
     defaultMaterial->setAnyHitProgram( 1, default_ah );
     model->setMaterial(defaultMaterial);
     //add to our scene
-    std::cout<<"has been called path: "<<_path<<std::endl;
     m_topGroup->addChild(model->getGeomAndTrans());
     m_topGroup->getAcceleration()->markDirty();
     m_meshArray[_id] = model;
@@ -165,6 +169,36 @@ OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path){
 
     return model;
 }
+//----------------------------------------------------------------------------------------------------------------------
+OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _instanceName){
+    std::map<std::string,OptiXModel*>::iterator model = m_meshArray.find(_geomId);
+    if(model!=m_meshArray.end()){
+        OptiXModel* instance = new OptiXModel(model->second);
+        m_topGroup->addChild(instance->getGeomAndTrans());
+        m_topGroup->getAcceleration()->markDirty();
+        m_meshArray[_instanceName] = instance;
+        m_frame = 0;
+        return instance;
+    }
+    else{
+        std::cerr<<"Error: Could not find model in path tracer! Doing nothing"<<std::endl;
+        return 0;
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::removeGeomtry(std::string _id){
+    std::map<std::string,OptiXModel*>::iterator model = m_meshArray.find(_id);
+    if(model!=m_meshArray.end()){
+        m_topGroup->removeChild(model->second->getGeomAndTrans());
+        m_topGroup->getAcceleration()->markDirty();
+        delete model->second;
+        m_meshArray.erase(model);
+    }
+    else{
+        std::cerr<<"Error: Could not find model to delete in path tracer"<<std::endl;
+    }
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
