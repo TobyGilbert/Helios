@@ -1,0 +1,35 @@
+surface carPaint(
+                 color baseColour1 = color(0.08, 0.08, 0.77),
+                 color baseColour2 = color(0.46, 0.46, 0.82),
+                 color specularColour = color(0.87, 0.87, 1.0),
+                 float diffuseWeight = 0.5,
+                 float specularWeight = 0.3,
+                 float specularGlossiness = 0.5,
+                 float reflectionWeight = 0.2,
+                 float baseFalloffAmount = 0.4,
+                 float flakeSpread = 0.6
+                 )
+{
+    float cosNI = dot(N, -I);
+    float baseBlendFactor = pow(cosNI, 1.0 / baseFalloffAmount);
+    if(baseBlendFactor>1){
+      baseBlendFactor=1;
+    }
+    if(baseBlendFactor<0){
+      baseBlendFactor=0;
+    }
+    color  diffuseColour = mix(baseColour1, baseColour2, baseBlendFactor);
+    color reflectionColour = color((reflectionWeight * (1.0 - cosNI)));
+
+    normal n = random() * 2.0 - 1.0;
+    float cosFlake = dot(n, -I);
+    if(cosFlake < 0.0){
+        cosFlake  = -cosFlake;
+        n = -n;
+    }
+
+    n = normalize(N + flakeSpread * n);
+
+   // Ci = diffuseWeight * diffuseColour * diffuse(N) + specularWeight * specularColour * phong(N, 80) + reflectionColour * reflection(N, 1.0);
+   Ci =   diffuseColour * diffuseWeight * diffuse(N) + specularColour * phong(n, 80) + reflectionColour * reflection(N, 1.0);
+}
