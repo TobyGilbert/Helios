@@ -149,6 +149,7 @@ void MainWindow::createMenus(){
 
     // create our general settings widget
     GenSetDockWidget *genSetwdg = new GenSetDockWidget(this);
+    genSetwdg->setWindowFlags(Qt::Window);
     genSetwdg->setHidden(true);
 
     connect(generalSettings, SIGNAL(triggered()), genSetwdg, SLOT(show()));

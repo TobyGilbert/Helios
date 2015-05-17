@@ -1,56 +1,18 @@
 OpenShadingLanguage 1.00
 # Compiled by oslc 1.6.2dev
 surface matte	%meta{string,help,"Lambertian diffuse material"} 
-<<<<<<< HEAD
-param	float	Kd	1		%meta{string,help,"Diffuse scaling"} %meta{float,min,0} %meta{float,max,1}  %read{8,8} %write{2147483647,-1}
-param	color	Cs	1 1 1		%read{8,8} %write{2147483647,-1}
-global	normal	N	%read{7,7} %write{2147483647,-1}
-global	closure color	Ci	%read{2147483647,-1} %write{9,9}
-local	int	a	%read{1,6} %write{0,6}
-local	int	___317_i	%read{1,6} %write{1,6}
-const	int	$const1	0		%read{0,2} %write{2147483647,-1}
-const	int	$const2	5		%read{3,3} %write{2147483647,-1}
-temp	int	$tmp1	%read{1,6} %write{1,6}
-const	int	$const3	1		%read{4,6} %write{2147483647,-1}
-temp	int	$tmp2	%read{2147483647,-1} %write{5,5}
-temp	closure color	$tmp3	%read{9,9} %write{7,7}
-const	float	$const5	2		%read{7,7} %write{2147483647,-1}
-const	string	$const6	"oren_nayar"		%read{7,7} %write{2147483647,-1}
-temp	color	$tmp4	%read{9,9} %write{8,8}
-code ___main___
-# <buffer>:40
-# <not found>
-	assign		a $const1 	%filename{"<buffer>"} %line{40} %argrw{"wr"}
-# <buffer>:41
-# <not found>
-	for		$tmp1 3 4 5 7 	%line{41} %argrw{"r"}
-	assign		___317_i $const1 	%argrw{"wr"}
-	lt		$tmp1 ___317_i $const2 	%argrw{"wrr"}
-# <buffer>:42
-# <not found>
-	add		a a $const3 	%line{42} %argrw{"wrr"}
-# <buffer>:41
-# <not found>
-	assign		$tmp2 ___317_i 	%line{41} %argrw{"wr"}
-	add		___317_i ___317_i $const3 	%argrw{"wrr"}
-# <buffer>:44
-# <not found>
-	closure		$tmp3 $const6 N $const5 	%line{44} %argrw{"wrrr"}
-	mul		$tmp4 Kd Cs 	%argrw{"wrr"}
-	mul		Ci $tmp3 $tmp4 	%argrw{"wrr"}
-=======
 param	float	Kd	1		%meta{string,help,"Diffuse scaling"} %meta{float,min,0} %meta{float,max,1}  %read{1,1} %write{2147483647,-1}
 param	color	Cs	1 1 1		%read{1,1} %write{2147483647,-1}
 global	normal	N	%read{0,0} %write{2147483647,-1}
 global	closure color	Ci	%read{2147483647,-1} %write{2,2}
 temp	closure color	$tmp1	%read{2,2} %write{0,0}
-const	string	$const1	"diffuse"		%read{0,0} %write{2147483647,-1}
+const	float	$const1	80		%read{0,0} %write{2147483647,-1}
+const	string	$const2	"phong"		%read{0,0} %write{2147483647,-1}
 temp	color	$tmp2	%read{2,2} %write{1,1}
 code ___main___
 # <buffer>:40
 # <not found>
-	closure		$tmp1 $const1 N 	%filename{"<buffer>"} %line{40} %argrw{"wrr"}
+	closure		$tmp1 $const2 N $const1 	%filename{"<buffer>"} %line{40} %argrw{"wrrr"}
 	mul		$tmp2 Kd Cs 	%argrw{"wrr"}
 	mul		Ci $tmp1 $tmp2 	%argrw{"wrr"}
->>>>>>> 127ebba86995559eecfda7d23d679dd13a590131
 	end

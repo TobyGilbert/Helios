@@ -45,11 +45,13 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
       }
     }
 
+    float pdf = float(M_1_PI);
+
     current_prd.radiance = result;
     current_prd.countEmitted = false;
 
     PerRayData_pathtrace prd;
-    prd.attenuation = current_prd.attenuation;
+    prd.attenuation = current_prd.attenuation * pdf;
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;
@@ -57,23 +59,34 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
     Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
     rtTrace(top_object, reflection_ray, prd);
 
-    return  optix::make_float3(max(optix::dot(_normal, ray_direction), 0.0f) * float(M_1_PI)) * prd.result;
+    return prd.result;
 }
 //----------------------------------------------------------------------------------------------------------------------
-__device__ optix::float3 phong(optix::float3 _normal, float _exponant){
-    float z1 = rnd(current_prd.seed);
-    float z2 = rnd(current_prd.seed);
-    float sinTheta = sqrt(1 - pow(z1, 2 / (_exponant + 1)));
-    float cosTheta= pow(z1, 1 / (_exponant + 1));
-    float sinPhi = sin(2*float(M_PI)*z2);
-    float cosPhi = cos(2*float(M_PI)*z2);
+__device__ optix::float3 phong(optix::float3 _normal, float _exponent){
+   float3 ray_origin = ray.origin + t_hit * ray.direction;
+   float3 ffnormal = faceforward( _normal, -ray.direction, _normal );
+   float3 reflection_direction = reflect(ray.direction, ffnormal);
+   float3 U, V, W;
+   createONB(reflection_direction, U, V, W);
+   float2 sample = make_float2(rnd(current_prd.seed), rnd(current_prd.seed));
+   //mapToDisk(sample);
+   //sample.y = abs(sample.y);
 
-    float3 ray_origin = ray.origin + t_hit * ray.direction;
-    float3 ray_direction = make_float3 (sinTheta * cosPhi, sinTheta * sinPhi, cosTheta);
+   float2 sphericalDirection = make_float2(acos(pow(sample.x, (1/(_exponent+1)))),  2 * M_PI * sample.y);
+
+   float3 ray_direction = normalize(make_float3(cos(sphericalDirection.y)*sin(sphericalDirection.x), sin(sphericalDirection.y)*sin(sphericalDirection.x), cos(sphericalDirection.x)));
+
+   ray_direction = U * ray_direction.x + V * ray_direction.y + W * ray_direction.z;
+
+   // Real pdf however is slow to converge
+   //float theta;
+   float pdf = ( (_exponent + 1) * pow(dot(ray_direction, reflection_direction), _exponent) )/ (2 * M_PI);
+
+   //float pdf = ( 0.05 + 0.95 * pow(dot(ray_direction, reflection_direction), _exponent) ) / ( 0.7 * exp(-0.02 * _exponent) );
+
+
     unsigned int num_lights = lights.size();
     float3 result = make_float3(0.0f);
-    float3 ffnormal = faceforward( _normal, -ray.direction, _normal );
-
 
     for(int i = 0; i < num_lights; ++i) {
       ParallelogramLight light = lights[i];
@@ -105,6 +118,7 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
     current_prd.countEmitted = false;
 
     PerRayData_pathtrace prd;
+    prd.attenuation = current_prd.attenuation * (pdf);
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;
@@ -112,14 +126,7 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponant){
     Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
     rtTrace(top_object, reflection_ray, prd);
 
-    // n + 2 / 2PI * cos^n (A);
-    float3 R = reflect((ray_origin - eye), _normal);
-    float A = optix::dot(R, ray_direction);
-
-    if (A > 0){
-        return make_float3((( _exponant + 2) / (2 * M_PI * pow(A, _exponant)))) * prd.result;
-    }
-    return make_float3(0.0);
+    return prd.result;
 }
 //----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 reflection(optix::float3 _normal, float _eta){
@@ -158,8 +165,10 @@ __device__ optix::float3 reflection(optix::float3 _normal, float _eta){
     current_prd.radiance = result;
     current_prd.countEmitted = false;
 
+    float pdf = 1.0;
+
     PerRayData_pathtrace prd;
-    prd.attenuation = current_prd.attenuation;
+    prd.attenuation = current_prd.attenuation * pdf;
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
     prd.seed = current_prd.seed;
     prd.depth = current_prd.depth+1;
@@ -213,8 +222,10 @@ __device__ optix::float3 refraction(optix::float3 _normal, float _eta){
     current_prd.radiance = result;
     current_prd.countEmitted = false;
 
+    float pdf = 1.0;
+
     PerRayData_pathtrace prd;
-    prd.attenuation = current_prd.attenuation;
+    prd.attenuation = current_prd.attenuation * pdf;
     prd.radiance = make_float3(0.0);
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
     prd.seed = current_prd.seed;
@@ -314,15 +325,18 @@ __device__ optix::float3 OSLTexture(rtTextureSampler<float4, 2>  _filename, floa
     return make_float3(tex2D(_filename, _s, _t));
 }
 //----------------------------------------------------------------------------------------------------------------------
+/*
 __device__ optix::float3 OSLcellnoise(optix::float3 _x){
     optix::float3 point = make_float3(floor(_x.x), floor(_x.y), floor(_x.z));
     float z = (point.x + point.y + point.z)/3.0;
     z = rnd(z);
     return make_float3(z, z, z);
 }
+
 //----------------------------------------------------------------------------------------------------------------------
 __device__ void OSLfresnel(optix::float3 _I, optix::float3 _N, float _eta, float& _Kr, float& _Kt, optix::float3& R, optix::float3& T){
     float f = 1.0 - max(dot(_N, -I), 0.0);
     f = pow(f, 2.0) * 0.65;
     Kr = make_float3(f, f, f);
 }
+*/

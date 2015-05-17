@@ -1,0 +1,9 @@
+shader plastic (
+                float diffuse_weight = 0.8,
+                float specular_weight = 0.16,
+                color specular_colour = color(1, 1, 1),
+                float exponant = 80.0
+                )
+{
+    Ci = (diffuse_weight * diffuse(N) ) + (specular_weight * specular_colour * phong(N, exponant));
+}
