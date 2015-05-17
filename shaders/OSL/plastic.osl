@@ -5,5 +5,7 @@ shader plastic (
                 float exponant = 80.0
                 )
 {
-    Ci = (diffuse_weight * diffuse(N) ) + (specular_weight * specular_colour * phong(N, exponant));
+    closure color diffuse_col = diffuse_weight * diffuse(N);
+    closure color specular_col = specular_weight * specular_colour * phong(N, exponant);
+    Ci = diffuse_col + specular_col;
 }

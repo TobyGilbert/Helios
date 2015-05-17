@@ -401,6 +401,20 @@ std::string OsoReader::generateDeviceFunction(){
             }
             s+=" );\n";
         }
+        // negate the value
+        if(m_instructions[i].m_opcode == std::string("neg")){
+            s+="\t";
+            if(m_instructions[i].m_output.c_str() == std::string("N") || m_instructions[i].m_output.c_str() == std::string("I") || m_instructions[i].m_output.c_str() == std::string("dPdu") || m_instructions[i].m_output.c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = -";
+            if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=";\n";
+        }
         // If the instruction is a multiply
         if (m_instructions[i].m_opcode == std::string("mul")){
             std::string output;
@@ -433,15 +447,24 @@ std::string OsoReader::generateDeviceFunction(){
                 output = std::string("current_prd.result");
             }
            s+="\t";
+           if(m_instructions[i].m_output.c_str() == std::string("N") || m_instructions[i].m_output.c_str() == std::string("I") || m_instructions[i].m_output.c_str() == std::string("dPdu") || m_instructions[i].m_output.c_str() == std::string("dPdv") ){
+               s+="sg.";
+           }
            s+=output.c_str();
            s+=" = ";
            if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
+               if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+                   s+="sg.";
+               }
                s+=m_instructions[i].m_args[0].c_str();
            }
            else{
                s+="current_prd.result";
            }
            s+=" + ";
+           if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+               s+="sg.";
+           }
            s+=m_instructions[i].m_args[1].c_str();
            s+=";\n";
         }
@@ -458,15 +481,84 @@ std::string OsoReader::generateDeviceFunction(){
             s+=output.c_str();
             s+=" = ";
             if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
+                if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+                    s+="sg.";
+                }
                 s+=m_instructions[i].m_args[0].c_str();
             }
             else{
                 s+="current_prd.result";
             }
             s+=" / ";
+            if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
             s+=m_instructions[i].m_args[1].c_str();
             s+=";\n";
 
+        }
+        // subtract
+        if(m_instructions[i].m_opcode == std::string("sub")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = ";
+            if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=" - ";
+            if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=";\n";
+        }
+        // dot product
+        if(m_instructions[i].m_opcode == std::string("dot")){
+            s+="\t";
+            if(m_instructions[i].m_output.c_str() == std::string("N") || m_instructions[i].m_output.c_str() == std::string("I") || m_instructions[i].m_output.c_str() == std::string("dPdu") || m_instructions[i].m_output.c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = optix::dot(";
+            if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=", ";
+            if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+                s+="sg.";
+            }
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=");\n";
+        }
+        if(m_instructions[i].m_opcode == std::string("mix")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = (";
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=" * ";
+            s+=m_instructions[i].m_args[2].c_str();
+            s+= ") + (";
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=" * (1.0 -";
+            s+=m_instructions[i].m_args[2].c_str();
+            s+=") );\n";
+        }
+        if(m_instructions[i].m_opcode == std::string("pow")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = pow(";
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=");\n";
+        }
+        // random
+        if(m_instructions[i].m_opcode == std::string("random")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+="= make_float3(rnd(current_prd.seed), rnd(current_prd.seed), rnd(current_prd.seed));\n";
         }
         // boolean operation for not equals to
         if (m_instructions[i].m_opcode == std::string("neq")){
@@ -512,10 +604,17 @@ std::string OsoReader::generateDeviceFunction(){
             s+=" = ";
             std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             if(it->m_type != 4){
+                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
+                    s+="make_float3(";
+                }
+                if(m_instructions[i].m_args.size())
                 if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv")){
                     s+="sg.";
                 }
                 s+=m_instructions[i].m_args[0].c_str();
+                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
+                    s+=")";
+                }
             }
             else{
                 std::vector<Symbol>::iterator itr = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);

@@ -209,10 +209,10 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"// Calcualte the shading and geometric normals for use with our OSL shaders"<<endl;
         stream<<"sg.N = normalize( rtTransformNormal(RT_OBJECT_TO_WORLD, shading_normal));"<<endl;
         stream<<"sg.Ng = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );"<<endl;
-        stream<<"sg.I = ray.direction;"<<endl;
+        stream<<"sg.P = ray.origin + t_hit * ray.direction;"<<endl;
+        stream<<"sg.I = normalize(eye - sg.P);"<<endl;
         stream<<"// The shading position"<<endl;
         //stream<<"current_prd.origin = ray.origin + t_hit * ray.direction;"<<endl;
-        stream<<"sg.P = ray.origin + t_hit * ray.direction;"<<endl;
         stream<<"// Texture coordinates"<<endl;
         stream<<"sg.u = texcoord.x;"<<endl;
         stream<<"sg.v = texcoord.y;"<<endl;

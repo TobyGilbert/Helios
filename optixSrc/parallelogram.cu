@@ -58,6 +58,7 @@ RT_PROGRAM void intersect(int primIdx)
     }
 }
 
+
 RT_PROGRAM void bounds (int, float result[6])
 {
     // v1 and v2 are scaled by 1./length^2.  Rescale back to normal for the bounds computation.
