@@ -105,6 +105,17 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     OptiXModel *importMesh(std::string _id, std::string _path);
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief creates an instance of geometry in our scene
+    /// @param _geomId - geometry Id to create an instance of
+    /// @param _instanceName - desired name for instance created
+    //----------------------------------------------------------------------------------------------------------------------
+    OptiXModel *createInstance(std::string _geomId, std::string _instanceName);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief removes a geometry from our scene
+    /// @param _id - id of geomtry to remove
+    //----------------------------------------------------------------------------------------------------------------------
+    void removeGeomtry(std::string _id);
+    //----------------------------------------------------------------------------------------------------------------------
     /// @brief transforms a model in our scene
     /// @param _id - the id of our model
     /// @param _trans - the transform we wish to apply to our model

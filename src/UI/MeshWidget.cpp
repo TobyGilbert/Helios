@@ -46,6 +46,14 @@ MeshWidget::MeshWidget(QWidget *parent) :
     meshGridLayout->addWidget(importBtn,1,0,1,1);
     connect(importBtn,SIGNAL(pressed()),this,SLOT(importModel()));
 
+    QPushButton *instanceBtn = new QPushButton("Create Instance",this);
+    connect(instanceBtn,SIGNAL(pressed()),this,SLOT(createInstance()));
+    meshGridLayout->addWidget(instanceBtn,1,2,1,1);
+
+    QPushButton *deleteMdlBtn = new QPushButton("Delete Model",this);
+    connect(deleteMdlBtn,SIGNAL(pressed()),this,SLOT(removeSelected()));
+    meshGridLayout->addWidget(deleteMdlBtn,1,3,1,1);
+
     //add our transform controls
     meshGridLayout->addWidget(new QLabel("Translate",gb), 2, 0, 1, 1);
     m_meshTranslateXDSpinBox = new QDoubleSpinBox(gb);
@@ -101,6 +109,7 @@ MeshWidget::MeshWidget(QWidget *parent) :
     QPushButton *openMatLibBtn = new QPushButton("Select Material From Library",this);
     connect(openMatLibBtn,SIGNAL(clicked()),this,SLOT(applyMatFromLib()));
     meshGridLayout->addWidget(openMatLibBtn,5,2,1,2);
+
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     meshGridLayout->addItem(m_meshSpacer, children().size(), 0, 2, 4);
@@ -172,11 +181,64 @@ void MeshWidget::importModel(){
             updateScene();
         }
         else{
-            QMessageBox::warning(this,"Import Model","Failed to import model");
-            return;
+            QMessageBox::warning(this,"Import Model","Failed to import model" + locations[i]);
+            continue;
         }
     }
 }
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::createInstance(){
+    QList<QListWidgetItem*> items = m_modelList->selectedItems();
+    for(int i=0;i<items.size();i++){
+        QString name = items[i]->text() + "instance";
+        //check to see if our model name is taken
+        bool nameOk = false;
+        QString tempName = name;
+        int nameIncrement = 1;
+        while(!nameOk){
+            bool nameTake = false;
+            for(int i=0;i<m_modelList->count();i++){
+                if (m_modelList->item(i)->text()==tempName){
+                    tempName = name+QString("%1").arg(nameIncrement);
+                    nameIncrement++;
+                    nameTake = true;
+                }
+            }
+            if(nameTake == false) nameOk = true;
+        }
+        name = tempName;
+
+        m_curModelProp = new modelProp;
+
+        m_curModelProp->meshHandle = PathTracerScene::getInstance()->createInstance(items[i]->text().toStdString(),name.toStdString());
+
+        if(m_curModelProp->meshHandle){
+            m_curModelProp->transX = m_curModelProp->transY = m_curModelProp->transZ = m_curModelProp->rotX = m_curModelProp->rotY = m_curModelProp->rotZ = 0;
+            m_curModelProp->scaleX = m_curModelProp->scaleY = m_curModelProp->scaleZ = 1;
+            m_modelList->addItem(name);
+            m_modelList->item(m_modelList->count()-1)->setSelected(true);
+            m_curMeshName = name;
+            m_modelProperties[name] = m_curModelProp;
+            updateScene();
+        }
+        else{
+            QMessageBox::warning(this,"Instance Model","Failed to instace model" + items[i]->text());
+            continue;
+        }
+
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::removeSelected(){
+    QList<QListWidgetItem*> items = m_modelList->selectedItems();
+    for(int i=0;i<items.size();i++){
+        PathTracerScene::getInstance()->removeGeomtry(items[i]->text().toStdString());
+        m_modelList->removeItemWidget(items[i]);
+        delete items[i];
+    }
+    updateScene();
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::modelSelected(QListWidgetItem *_item){
     QString modelName = _item->text();

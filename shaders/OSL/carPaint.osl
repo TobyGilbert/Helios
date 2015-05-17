@@ -6,12 +6,13 @@ surface carPaint(
                  float specularWeight = 0.3,
                  float specularGlossiness = 0.5,
                  float reflectionWeight = 0.2,
-                 float baseFalloffAmount = 0.4,
-                 float flakeSpread = 0.6
+                 float baseFalloffAmount = 2.0,
+                 float flakeSpread = 0.6,
+                 float e = 80.0
                  )
 {
     float cosNI = dot(N, -I);
-    float baseBlendFactor = pow(cosNI, 1.0 / baseFalloffAmount);
+    float baseBlendFactor = pow(cosNI, baseFalloffAmount);
     if(baseBlendFactor>1){
       baseBlendFactor=1;
     }
@@ -30,6 +31,5 @@ surface carPaint(
 
     n = normalize(N + flakeSpread * n);
 
-   // Ci = diffuseWeight * diffuseColour * diffuse(N) + specularWeight * specularColour * phong(N, 80) + reflectionColour * reflection(N, 1.0);
-   Ci =   diffuseColour * diffuseWeight * diffuse(N) + specularColour * phong(n, 80) + reflectionColour * reflection(N, 1.0);
+    Ci =   diffuseColour * diffuseWeight * diffuse(N) + specularColour * phong(n, e) + reflectionColour * reflection(N, 1.0);
 }

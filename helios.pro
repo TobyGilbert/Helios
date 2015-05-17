@@ -278,7 +278,6 @@ PTX_DIR = ptx
 # join the includes in a line
 CUDA_INC = $$join(INCLUDEPATH,' -I','-I',' ')
 
-# Prepare the extra compiler configuration (taken from the nvidia forum - i'm not an expert in this part)
 optix.input = CUDA_SOURCES
 
 #cuda.output = ${OBJECTS_DIR}${QMAKE_FILE_BASE}_cuda.o

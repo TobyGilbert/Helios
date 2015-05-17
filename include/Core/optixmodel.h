@@ -12,6 +12,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include <assimp/Importer.hpp>
+#include <map>
 
 using namespace optix;
 class OptiXMesh;
@@ -22,13 +23,13 @@ public:
     /// @brief our default constructor, doesnt really do anything apart from init our members
     /// @param _path - the path to the geometry we want to import
     //----------------------------------------------------------------------------------------------------------------------
-    OptiXModel(std::string _path, Context &_context);
+    OptiXModel(std::string _path);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our copy contructor that will create an instance of geomtry in our scene
     /// @brief instancing is great becuase it means we need less data on the gpu!
     /// @param _instance - the model that we wish to create an instance of
     //----------------------------------------------------------------------------------------------------------------------
-    OptiXModel(OptiXModel *_instance, Context &_context);
+    OptiXModel(OptiXModel *_instance);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our destructor
     //----------------------------------------------------------------------------------------------------------------------
@@ -36,9 +37,8 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief creates our geomtry
     /// @param _loc - the location of the mesh we wish to import
-    /// @param _context - a reference to the instance of our OptiX Engine
     //----------------------------------------------------------------------------------------------------------------------
-    void createGeometry(std::string _loc, Context &_context);
+    void createGeometry(std::string _loc);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a mutator for our transformation matrix for our geomtry
     /// @brief this function converts glm matricies to OptiX compatible array of floats
@@ -57,7 +57,7 @@ public:
     /// @brief set our models material
     /// @param matrial we wish to apply to our model
     //----------------------------------------------------------------------------------------------------------------------
-    void setMaterial(Material &_mat);
+    void setMaterial(Material _mat);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief an accessor to our model geomtry
     //----------------------------------------------------------------------------------------------------------------------
@@ -75,21 +75,29 @@ protected:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief loads a mesh from our current assimp scene
     //----------------------------------------------------------------------------------------------------------------------
-    void loadMesh(const aiNode *_node, const aiScene *_scene, Context &_context);
+    void loadMesh(const aiNode *_node, const aiScene *_scene);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief processes an imported mesh
     //----------------------------------------------------------------------------------------------------------------------
-    void processMesh(const aiMesh *_mesh, Context &_context);
+    void processMesh(const aiMesh *_mesh);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief creates our buffers in our OptiX context and sets our data
     //----------------------------------------------------------------------------------------------------------------------
-    void createBuffers(Context &_context);
+    void createBuffers();
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief create a default defuse material
     //----------------------------------------------------------------------------------------------------------------------
-    Material createDefaultMat(Context &_context);
+    Material createDefaultMat();
     //----------------------------------------------------------------------------------------------------------------------
 private:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Id of this instance
+    //----------------------------------------------------------------------------------------------------------------------
+    std::string m_instanceId;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief static map to keep track of our instances of models
+    //----------------------------------------------------------------------------------------------------------------------
+    static std::map<std::string,int> m_instanceCount;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our OptiX geometry instance
     //----------------------------------------------------------------------------------------------------------------------
@@ -197,11 +205,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     std::vector <glm::vec3> m_bitangentIndices;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a static member to keep track of how many instances we have so if we remove one we dont delete the buffers
-    /// @brief that the other instances are using
-    //----------------------------------------------------------------------------------------------------------------------
-    static int m_numInstances;
-    //----------------------------------------------------------------------------------------------------------------------
+
 };
 
 
