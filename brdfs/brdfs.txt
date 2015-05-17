@@ -69,8 +69,8 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponent){
    float3 U, V, W;
    createONB(reflection_direction, U, V, W);
    float2 sample = make_float2(rnd(current_prd.seed), rnd(current_prd.seed));
-   //mapToDisk(sample);
-   //sample.y = abs(sample.y);
+   mapToDisk(sample);
+   sample.y = abs(sample.y);
 
    float2 sphericalDirection = make_float2(acos(pow(sample.x, (1/(_exponent+1)))),  2 * M_PI * sample.y);
 
