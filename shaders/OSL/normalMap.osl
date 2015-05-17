@@ -1,0 +1,18 @@
+shader normalMap(string normalmap = "",
+                 output normal bmNormal = normal(1, 1, 1)
+                 )
+{
+
+  matrix TBN = matrix ( dPdu[0], dPdu[1], dPdu[2], 0,
+                        dPdv[0], dPdv[1], dPdv[2], 0,
+                        N[0], N[1], N[2], 0,
+                        0, 0, 0, 0);
+
+  color norm = texture(normalmap, u, v);
+  normal b;
+  b[0] = (TBN[0][0] * norm[0]) + (TBN[0][1] * norm[1]) + (TBN[0][2] * norm[2]);
+  b[1] = (TBN[1][0] * norm[0]) + (TBN[1][1] * norm[1]) + (TBN[1][2] * norm[2]);
+  b[2] = (TBN[2][0] * norm[0]) + (TBN[2][1] * norm[1]) + (TBN[2][2] * norm[2]);
+  b = normalize(b);
+  bmNormal =  b;
+}
