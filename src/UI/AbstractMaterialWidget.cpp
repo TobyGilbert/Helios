@@ -19,6 +19,7 @@
 #include <QFileDialog>
 #include <QDir>
 #include <iostream>
+#include <QProgressBar>
 
 //declare our static class instance
 AbstractMaterialWidget* AbstractMaterialWidget::m_instance;
@@ -120,6 +121,11 @@ AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::createOptixMaterial(){
+    //Progress bar to entertain/distract the user
+    QProgressBar progressBar(this);
+    progressBar.setRange(0,100);
+    progressBar.show();
+    connect(m_nodeEditor,SIGNAL(percentCompiled(int)),&progressBar,SLOT(setValue(int)));
     //turn our graph editor into an optix material program
     std::string status = m_nodeEditor->compileMaterial(m_material);
     if(status=="Material Compiled"){

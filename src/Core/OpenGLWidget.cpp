@@ -152,20 +152,21 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::timerEvent(QTimerEvent *){
+    updateGL();
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::paintGL(){
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 //    PathTracerScene::getInstance()->trace();
     QTime currentTime = m_timeOutStart.currentTime();
     int secsPassed = m_timeOutStart.secsTo(currentTime);
     //if we haven't timed out then render another frame with our path tracer
     if(secsPassed<m_timedOut||m_timedOut==0){
-        updateGL();
+        PathTracerScene::getInstance()->trace();
     }
-}
-
-//----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::paintGL(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    PathTracerScene::getInstance()->trace();
     GLuint vboId = PathTracerScene::getInstance()->getOutputBuffer()->getGLBOId();
 
     glBindTexture( GL_TEXTURE_2D, m_texID);

@@ -80,9 +80,9 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponent){
 
    // Real pdf however is slow to converge
    //float theta;
-   float pdf = ( (_exponent + 1) * pow(dot(ray_direction, reflection_direction), _exponent) )/ (2 * M_PI);
+   //float pdf = ( (_exponent + 1) * pow(dot(ray_direction, reflection_direction), _exponent) )/ (2 * M_PI);
 
-   //float pdf = ( 0.05 + 0.95 * pow(dot(ray_direction, reflection_direction), _exponent) ) / ( 0.7 * exp(-0.02 * _exponent) );
+   float pdf = ( 0.05 + 0.95 * pow(dot(ray_direction, reflection_direction), _exponent) ) / ( 0.7 * exp(-0.02 * _exponent) );
 
 
     unsigned int num_lights = lights.size();
