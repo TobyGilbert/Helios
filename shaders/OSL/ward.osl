@@ -5,7 +5,7 @@ ward
     float Ks = 1
         [[  string description = "Specular scaling",
             float UImin = 0, float UIsoftmax = 1 ]],
-    float ax = 0.1
+    float ax = 0.5
         [[  string description = "X roughness (lower is sharper)",
             float UImin = 0, float UIsoftmax = 1 ]],
     float ay = 0.1

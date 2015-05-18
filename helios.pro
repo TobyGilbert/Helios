@@ -172,14 +172,16 @@ OTHER_FILES += \
     shaders/OSL/ifTest.osl \
     shaders/OSO/ifTest.oso \
     styleSheet/darkOrange \
-    brdfs/brdfs.txt \
     shaders/OSL/textureShader.osl \
     textures/normalMap2.jpg \
     shaders/OSL/flakes.osl \
     shaders/OSL/normalMap.osl \
     shaders/OSL/plastic.osl \
     shaders/OSO/plastic.oso \
-    shaders/OSL/carPaint.osl
+    shaders/OSL/carPaint.osl \
+    shaders/OSL/mandelbrot.osl \
+    shaders/OSL/carbonFibre.osl \
+    brdfs/brdfs
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y

@@ -1,11 +1,12 @@
 shader plastic (
                 float diffuse_weight = 0.8,
+                color diffuse_colour = color(1, 1, 1),
                 float specular_weight = 0.16,
                 color specular_colour = color(1, 1, 1),
                 float exponant = 80.0
                 )
 {
-    closure color diffuse_col = diffuse_weight * diffuse(N);
+    closure color diffuse_col = diffuse_colour * diffuse_weight * diffuse(N);
     closure color specular_col = specular_weight * specular_colour * phong(N, exponant);
     Ci = diffuse_col + specular_col;
 }
