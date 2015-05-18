@@ -1,0 +1,22 @@
+OpenShadingLanguage 1.00
+# Compiled by oslc 1.6.2dev
+surface ward	%meta{string,description,"Ward specular material"} 
+param	float	Ks	1		%meta{string,description,"Specular scaling"} %meta{float,UImin,0} %meta{float,UIsoftmax,1}  %read{2,2} %write{2147483647,-1}
+param	float	ax	0.5		%meta{string,description,"X roughness (lower is sharper)"} %meta{float,UImin,0} %meta{float,UIsoftmax,1}  %read{1,1} %write{2147483647,-1}
+param	float	ay	0.1		%meta{string,description,"Y roughness (lower is sharper)"} %meta{float,UImin,0} %meta{float,UIsoftmax,1}  %read{1,1} %write{2147483647,-1}
+param	color	Cs	1 1 1		%meta{string,description,"Base color"} %meta{float,UImin,0} %meta{float,UImax,1}  %read{2,2} %write{2147483647,-1}
+global	normal	N	%read{1,1} %write{2147483647,-1}
+global	vector	dPdu	%read{0,0} %write{2147483647,-1}
+global	closure color	Ci	%read{2147483647,-1} %write{3,3}
+temp	closure color	$tmp1	%read{3,3} %write{1,1}
+temp	vector	$tmp2	%read{1,1} %write{0,0}
+const	string	$const1	"ward"		%read{1,1} %write{2147483647,-1}
+temp	color	$tmp3	%read{3,3} %write{2,2}
+code ___main___
+# <buffer>:19
+# <not found>
+	normalize	$tmp2 dPdu 	%filename{"<buffer>"} %line{19} %argrw{"wr"}
+	closure		$tmp1 $const1 N $tmp2 ax ay 	%argrw{"wrrrrr"}
+	mul		$tmp3 Ks Cs 	%argrw{"wrr"}
+	mul		Ci $tmp1 $tmp3 	%argrw{"wrr"}
+	end
