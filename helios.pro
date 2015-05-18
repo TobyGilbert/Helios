@@ -58,7 +58,8 @@ SOURCES += \
     src/NodeGraph/IntNodeProxyWidget.cpp \
     src/NodeGraph/OSLVarIntBlock.cpp \
     src/NodeGraph/ImageNodeProxyWidget.cpp \
-    src/NodeGraph/OSLVarImageBlock.cpp
+    src/NodeGraph/OSLVarImageBlock.cpp \
+    src/UI/RenderSettings.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -111,7 +112,8 @@ HEADERS += \
     include/NodeGraph/OSLVarIntBlock.h \
     include/NodeGraph/ImageNodeProxyWidget.h \
     include/NodeGraph/OSLVarImageBlock.h \
-    shaders/OSL/stdosl.h
+    shaders/OSL/stdosl.h \
+    include/UI/RenderSettings.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

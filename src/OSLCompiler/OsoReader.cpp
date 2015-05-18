@@ -604,17 +604,17 @@ std::string OsoReader::generateDeviceFunction(){
             s+=" = ";
             std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
             if(it->m_type != 4){
-                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
-                    s+="make_float3(";
-                }
+//                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
+//                    s+="make_float3(";
+//                }
                 if(m_instructions[i].m_args.size())
                 if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv")){
                     s+="sg.";
                 }
                 s+=m_instructions[i].m_args[0].c_str();
-                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
-                    s+=")";
-                }
+//                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
+//                    s+=")";
+//                }
             }
             else{
                 std::vector<Symbol>::iterator itr = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);

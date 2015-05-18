@@ -98,7 +98,9 @@ void PathTracerScene::init(){
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
 
+    //set our max ray depth
     m_context["maxDepth"]->setUint(5);
+    m_maxRayDepth = 5;
     m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( make_float3(0.0f) );
@@ -226,7 +228,7 @@ void PathTracerScene::trace(){
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::resize(int _width, int _height){
 //    m_width = _width/m_devicePixelRatio;
-    m_width = _height/m_devicePixelRatio;
+    m_width = _width/m_devicePixelRatio;
     m_height = _height/m_devicePixelRatio;
 
     unsigned int elementSize = m_outputBuffer->getElementSize();

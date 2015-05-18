@@ -63,9 +63,23 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     connect(maxDepthSpn,SIGNAL(valueChanged(int)),this,SLOT(setMaxRayDepth(int)));
     m_layout->addWidget(maxDepthSpn,2,1,1,1);
 
+
+
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addItem(spacer,5,0,1,1);
 }
+//----------------------------------------------------------------------------------------------------------------------
+void GenSetDockWidget::installScene(OpenGLWidget *_scene){
+    m_scene = _scene;
+    //add field for our ray depth during camera movement
+    m_layout->addWidget(new QLabel("Camera Movement Ray Depth",this),3,0,1,1);
+    QSpinBox *camDepthSpn = new QSpinBox(this);
+    camDepthSpn->setValue(2);
+    camDepthSpn->setMaximum(INFINITY);
+    connect(camDepthSpn,SIGNAL(valueChanged(int)),m_scene,SLOT(setCamMovRayDepth(int)));
+    m_layout->addWidget(camDepthSpn,3,1,1,1);
+}
+
 //----------------------------------------------------------------------------------------------------------------------
 GenSetDockWidget::~GenSetDockWidget(){
     delete m_layout;

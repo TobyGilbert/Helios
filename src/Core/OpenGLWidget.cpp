@@ -29,6 +29,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_resolutionScale = 1;
     m_moveRenderReduction = 4;
     m_timedOut = 5;
+    m_cameraMovRayDepth = 2;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -148,6 +149,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     glViewport(0,0,_w,_h);
     PathTracerScene::getInstance()->resize(_w/m_resolutionScale,_h/m_resolutionScale);
     m_cam->setShape(width(), height());
+    sceneChanged();
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -243,6 +245,9 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     // resize our pathtracer for more responsive movement controls
     // resize amount set in general settings widget
     PathTracerScene::getInstance()->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
+    //change our scene depth while moving for faster camera movement
+    m_curMaxRayDepth = PathTracerScene::getInstance()->getMaxRayDepth();
+    PathTracerScene::getInstance()->setMaxRayDepth(m_cameraMovRayDepth);
   }
   // right mouse translate mode
   else if(_event->button() == Qt::RightButton)
@@ -251,6 +256,9 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_origYPos = _event->y();
     m_translate = true;
     PathTracerScene::getInstance()->resize(width()/m_moveRenderReduction,height()/m_moveRenderReduction);
+    //change our scene depth while moving for faster camera movement
+    m_curMaxRayDepth = PathTracerScene::getInstance()->getMaxRayDepth();
+    PathTracerScene::getInstance()->setMaxRayDepth(m_cameraMovRayDepth);
   }
 
 }
@@ -263,12 +271,16 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   {
     m_rotate=false;
     PathTracerScene::getInstance()->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
+    //return our scene max depth to original depth now we have completed our translation
+    PathTracerScene::getInstance()->setMaxRayDepth(m_curMaxRayDepth);
   }
         // right mouse translate mode
   if (_event->button() == Qt::RightButton)
   {
     m_translate=false;
     PathTracerScene::getInstance()->resize(width()*devicePixelRatio(),height()*devicePixelRatio());
+    //return our scene max depth to original depth now we have completed our translation
+    PathTracerScene::getInstance()->setMaxRayDepth(m_curMaxRayDepth);
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
