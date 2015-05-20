@@ -527,7 +527,7 @@ std::string OsoReader::generateDeviceFunction(){
             }
             s+=m_instructions[i].m_args[0].c_str();
             s+=", ";
-            if(checkShaderGlobals(m_instructions[i].m_args[0])){
+            if(checkShaderGlobals(m_instructions[i].m_args[1])){
                 s+="sg.";
             }
             s+=m_instructions[i].m_args[1].c_str();

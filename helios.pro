@@ -183,7 +183,8 @@ OTHER_FILES += \
     shaders/OSL/carPaint.osl \
     shaders/OSL/mandelbrot.osl \
     shaders/OSL/carbonFibre.osl \
-    brdfs/brdfs
+    brdfs/brdfs \
+    shaders/OSL/ggx.osl
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y
