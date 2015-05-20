@@ -150,10 +150,34 @@ RT_PROGRAM void defaultMaterial(){
     // Compute attenuation
     current_prd.attenuation = current_prd.attenuation;
     // Compute radiance
-    // Compute direct light...
-    // Or shoot one...
-    unsigned int num_lights = lights.size();
+    // Compute direct lighting for environment map
+
     float3 result = make_float3(0.0f);
+
+//    float3 randDirection;
+//    z1=rnd(current_prd.seed);
+//    z2=rnd(current_prd.seed);
+//    cosine_sample_hemisphere(z1, z2, p);
+//    createONB(ffnormal, v1, v2);
+//    randDirection = v1 * p.x + v2 * p.y + ffnormal * p.z;
+
+//    float theta = atan2f(randDirection.x, randDirection.z);
+//    float phi = M_PIf * 0.5f - acos(ray.direction.y);
+//    float u = (theta + M_PIf) * (0.5f * M_1_PIf);
+//    float v = 0.5f * ( 1.0f + sin(phi));
+
+//    PerRayData_pathtrace_shadow shadow_prd;
+//    shadow_prd.inShadow = false;
+//    Ray shadow_ray = make_Ray( hitpoint, randDirection, pathtrace_shadow_ray_type, scene_epsilon, RT_DEFAULT_MAX );
+//    rtTrace(top_object, shadow_ray, shadow_prd);
+
+//    if(!shadow_prd.inShadow){
+//      result += make_float3(tex2D(envmap, u, v));
+//    }
+
+    // Now for the lights in the scene
+    unsigned int num_lights = lights.size();
+
 
     for(int i = 0; i < num_lights; ++i) {
       ParallelogramLight light = lights[i];
@@ -198,6 +222,7 @@ RT_PROGRAM void defaultMaterial(){
     current_prd.result = prd.result;
     current_prd.done = true; // end the ray comming in
 }
+
 //-----------------------------------------------------------------------------
 rtDeclareVariable(float3,        emission_color, , );
 
@@ -206,9 +231,6 @@ RT_PROGRAM void diffuseEmitter(){
     if(current_prd.countEmitted){
         current_prd.result = emission_color;
     }
-//    else{
-////        current_prd.result = emission_color;
-//    }
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
@@ -235,8 +257,12 @@ RT_PROGRAM void envi_miss(){
     float phi = M_PIf * 0.5f - acos(ray.direction.y);
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
-//    current_prd.radiance = make_float3(tex2D(envmap, u, v));
-    current_prd.result = make_float3(tex2D(envmap, u, v));
+    if(current_prd.countEmitted){
+        current_prd.result = make_float3(tex2D(envmap, u, v));
+    }
+    else{
+        current_prd.result += make_float3(tex2D(envmap, u, v));
+    }
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------

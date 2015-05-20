@@ -373,28 +373,24 @@ std::string OsoReader::generateDeviceFunction(){
         }
         // If the instruction is a closure parameter find its function name and input its given arguments
         if (m_instructions[i].m_opcode == std::string("closure")){
-            std::string output;
+            s+="\t";
             if (m_instructions[i].m_output != std::string("Ci")){
-                output = m_instructions[i].m_output;
+                s+=m_instructions[i].m_output;
             }
             else{
-                output = std::string("current_prd.result");
+                s+=std::string("current_prd.result");
             }
             std::vector<Symbol>::iterator itName = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
             std::string functionName = itName->m_initialParams[0];
             functionName.erase(remove(functionName.begin(), functionName.end(), '\"'), functionName.end());
-            s+="\t";
-            s+=output.c_str();
             s+=" = ";
             s+=functionName.c_str();
             s+="( ";
             for (unsigned int j=1; j<m_instructions[i].m_args.size(); j++){
-                if (m_instructions[i].m_args[j] == std::string("N")){
-                    s+="sg.N";
+                if (checkShaderGlobals(m_instructions[i].m_args[j])){
+                    s+="sg.";
                 }
-                else{
-                    s+=m_instructions[i].m_args[j].c_str();
-                }
+                s+=m_instructions[i].m_args[j].c_str();
                 if (j != (m_instructions[i].m_args.size()-1)){
                     s+=",";
                 }
@@ -417,43 +413,48 @@ std::string OsoReader::generateDeviceFunction(){
         }
         // If the instruction is a multiply
         if (m_instructions[i].m_opcode == std::string("mul")){
-            std::string output;
+            s+="\t";
             if (m_instructions[i].m_output != std::string("Ci")){
-                output = m_instructions[i].m_output;
+                s+=m_instructions[i].m_output.c_str();
             }
             else {
-                output = std::string("current_prd.result");
+                s+=std::string("current_prd.result");
             }
-            s+="\t";
-            s+=output.c_str();
+            if(checkShaderGlobals(m_instructions[i].m_output)){
+                s+="sg.";
+            }
             s+=" = ";
             if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
+                if(checkShaderGlobals(m_instructions[i].m_args[0])){
+                    s+="sg.";
+                }
                 s+=m_instructions[i].m_args[0].c_str();
             }
             else{
                 s+="current_prd.result";
             }
             s+=" * ";
+            if(checkShaderGlobals(m_instructions[i].m_args[1])){
+                s+="sg.";
+            }
             s+=m_instructions[i].m_args[1].c_str();
             s+=";\n";
         }
         // If the instruction is an addition
         if (m_instructions[i].m_opcode == std::string("add")){
-            std::string output;
+            s+="\t";
             if (m_instructions[i].m_output != std::string("Ci")){
-                output = m_instructions[i].m_output;
+                s+= m_instructions[i].m_output;
             }
             else {
-                output = std::string("current_prd.result");
+                s+=std::string("current_prd.result");
             }
-           s+="\t";
-           if(m_instructions[i].m_output.c_str() == std::string("N") || m_instructions[i].m_output.c_str() == std::string("I") || m_instructions[i].m_output.c_str() == std::string("dPdu") || m_instructions[i].m_output.c_str() == std::string("dPdv") ){
+           if(checkShaderGlobals(m_instructions[i].m_output) ){
                s+="sg.";
            }
-           s+=output.c_str();
            s+=" = ";
            if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
-               if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+               if(checkShaderGlobals(m_instructions[i].m_args[0])){
                    s+="sg.";
                }
                s+=m_instructions[i].m_args[0].c_str();
@@ -462,7 +463,7 @@ std::string OsoReader::generateDeviceFunction(){
                s+="current_prd.result";
            }
            s+=" + ";
-           if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+           if(checkShaderGlobals(m_instructions[i].m_args[1])){
                s+="sg.";
            }
            s+=m_instructions[i].m_args[1].c_str();
@@ -481,7 +482,7 @@ std::string OsoReader::generateDeviceFunction(){
             s+=output.c_str();
             s+=" = ";
             if(m_instructions[i].m_args[0].c_str() != std::string("Ci")){
-                if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+                if(checkShaderGlobals(m_instructions[i].m_args[0])){
                     s+="sg.";
                 }
                 s+=m_instructions[i].m_args[0].c_str();
@@ -490,7 +491,7 @@ std::string OsoReader::generateDeviceFunction(){
                 s+="current_prd.result";
             }
             s+=" / ";
-            if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+            if(checkShaderGlobals(m_instructions[i].m_args[1])){
                 s+="sg.";
             }
             s+=m_instructions[i].m_args[1].c_str();
@@ -502,12 +503,12 @@ std::string OsoReader::generateDeviceFunction(){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
             s+=" = ";
-            if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+            if(checkShaderGlobals(m_instructions[i].m_args[0])){
                 s+="sg.";
             }
             s+=m_instructions[i].m_args[0].c_str();
             s+=" - ";
-            if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+            if(checkShaderGlobals(m_instructions[i].m_args[1])){
                 s+="sg.";
             }
             s+=m_instructions[i].m_args[1].c_str();
@@ -516,17 +517,17 @@ std::string OsoReader::generateDeviceFunction(){
         // dot product
         if(m_instructions[i].m_opcode == std::string("dot")){
             s+="\t";
-            if(m_instructions[i].m_output.c_str() == std::string("N") || m_instructions[i].m_output.c_str() == std::string("I") || m_instructions[i].m_output.c_str() == std::string("dPdu") || m_instructions[i].m_output.c_str() == std::string("dPdv") ){
+            if(checkShaderGlobals(m_instructions[i].m_output)){
                 s+="sg.";
             }
             s+=m_instructions[i].m_output.c_str();
             s+=" = optix::dot(";
-            if(m_instructions[i].m_args[0].c_str() == std::string("N") || m_instructions[i].m_args[0].c_str() == std::string("I") || m_instructions[i].m_args[0].c_str() == std::string("dPdu") || m_instructions[i].m_args[0].c_str() == std::string("dPdv") ){
+            if(checkShaderGlobals(m_instructions[i].m_args[0])){
                 s+="sg.";
             }
             s+=m_instructions[i].m_args[0].c_str();
             s+=", ";
-            if(m_instructions[i].m_args[1].c_str() == std::string("N") || m_instructions[i].m_args[1].c_str() == std::string("I") || m_instructions[i].m_args[1].c_str() == std::string("dPdu") || m_instructions[i].m_args[1].c_str() == std::string("dPdv") ){
+            if(checkShaderGlobals(m_instructions[i].m_args[0])){
                 s+="sg.";
             }
             s+=m_instructions[i].m_args[1].c_str();
@@ -603,6 +604,8 @@ std::string OsoReader::generateDeviceFunction(){
             s+=m_instructions[i].m_output.c_str();
             s+=" = ";
             std::vector<Symbol>::iterator it = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_output);
+            std::vector<Symbol>::iterator itr = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == m_instructions[i].m_args[0]);
+
             if(it->m_type != 4){
 //                if((it->m_type == 3 || it->m_type == 5 || it->m_type == 6 || it->m_type == 8) && m_instructions[i].m_args.size() < 3){
 //                    s+="make_float3(";
@@ -700,6 +703,55 @@ std::string OsoReader::generateDeviceFunction(){
             }
             s+=";\n";
         }
+        // normal
+        /// @todo take into account the first parameter which specifies the coordinate space
+        if (m_instructions[i].m_opcode == std::string("normal")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = make_float3(";
+            // Get the symbol for the first symbol to check if its relating to the coordinate space
+            std::vector<Symbol>::iterator sym = getSymbol(m_instructions[i].m_args[0]);
+            if(sym->m_initialParams[0] != std::string("common")
+                    && sym->m_initialParams[0] != std::string("\"object\"")
+                    && sym->m_initialParams[0] != std::string("\"shader\"")
+                    && sym->m_initialParams[0] != std::string("\"world\"")
+                    && sym->m_initialParams[0] != std::string("\"camera\"")
+                    && sym->m_initialParams[0] != std::string("\"screen\"")
+                    && sym->m_initialParams[0] != std::string("\"raster\"")
+                    && sym->m_initialParams[0] != std::string("\"NDC\"")){
+                if(checkShaderGlobals(m_instructions[i].m_args[0])){
+                    s+="sg.";
+                }
+                s+=m_instructions[i].m_args[0].c_str();
+                s+=", ";
+                if(checkShaderGlobals(m_instructions[i].m_args[1])){
+                    s+="sg.";
+                }
+                s+=m_instructions[i].m_args[1].c_str();
+                s+=", ";
+                if(checkShaderGlobals(m_instructions[i].m_args[2])){
+                    s+="sg.";
+                }
+                s+=m_instructions[i].m_args[2].c_str();
+            }
+            else{
+                if(checkShaderGlobals(m_instructions[i].m_args[1])){
+                    s+="sg.";
+                }
+                s+=m_instructions[i].m_args[1].c_str();
+                s+=", ";
+                if(checkShaderGlobals(m_instructions[i].m_args[2])){
+                    s+="sg.";
+                }
+                s+=m_instructions[i].m_args[2].c_str();
+                s+=", ";
+                if(checkShaderGlobals(m_instructions[i].m_args[3])){
+                    s+="sg.";
+                }
+                s+=m_instructions[i].m_args[3].c_str();
+            }
+            s+=");\n";
+        }
         // Filling a matrix
         if (m_instructions[i].m_opcode == std::string("matrix")){
             s+="\t";
@@ -787,7 +839,7 @@ std::string OsoReader::generateDeviceFunction(){
             s+=m_instructions[i].m_args[1].c_str();
             s+=";\n";
         }
-        //
+        // access element of 1d array
         if(m_instructions[i].m_opcode == std::string("compref")){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
@@ -810,7 +862,7 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=".w;\n";
             }
         }
-        //
+        //acces element of 2d array
         if(m_instructions[i].m_opcode == std::string("mxcompref")){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
@@ -846,6 +898,7 @@ std::string OsoReader::generateDeviceFunction(){
         // function call
         if(m_instructions[i].m_opcode == std::string("functioncall")){
             // Do nothing for now
+            s+="//FUNCTIONCALL!\n";
 
         }
         // normalize
@@ -903,13 +956,14 @@ std::string OsoReader::generateDeviceFunction(){
         }
         // for loop
         if (m_instructions[i].m_opcode == std::string("for")){
-            midLoop =true;
+            midLoop = true;
             s+="\t for(";
             ForLoop fl;
             fl.m_endCondition = atoi(m_instructions[i].m_args[1].c_str())+1;
             fl.m_endLoop = atoi(m_instructions[i].m_args[3].c_str())+1;
             m_forLoopJumpTargets.push_back(fl);
         }
+
         // less than <
         if (m_instructions[i].m_opcode == std::string("lt")){
             s+="\t(";
@@ -966,7 +1020,18 @@ void OsoReader::resetVectors(){
     getOsoReader()->m_iParams.clear();
     getOsoReader()->m_instructions.clear();
 }
-
+//----------------------------------------------------------------------------------------------------------------------------------------
+std::vector<Symbol>::iterator OsoReader::getSymbol(std::string _symbolName){
+    std::vector<Symbol>::iterator sym = std::find_if(m_symbols.begin(), m_symbols.end(), boost::bind(&Symbol::m_name, _1) == _symbolName);
+    return sym;
+}
+//----------------------------------------------------------------------------------------------------------------------------------------
+bool OsoReader::checkShaderGlobals(std::string _variable){
+    if(_variable == std::string("N") || _variable == std::string("I") || _variable == std::string("dPdu") || _variable == std::string("dPdv") || _variable == std::string("u") || _variable == std::string("v")){
+        return true;
+    }
+    return false;
+}
 //----------------------------------------------------------------------------------------------------------------------------------------
 OsoReader* getOsoReader(){
     if (!osoReader)

@@ -177,7 +177,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         stream<<"\n\n";
         percentCompiled(30);
         //our BRDF functions
-        QFile brdfsLib("brdfs/brdfs.txt");
+        QFile brdfsLib("brdfs/brdfs");
         if(brdfsLib.open(QIODevice::ReadOnly)){
             QTextStream in(&brdfsLib);
             while(!in.atEnd()){
@@ -432,7 +432,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         if(system(nvccCallString.c_str())==NULL){
             optix::Context optiXEngine = PathTracerScene::getInstance()->getContext();
             optix::Program closestHitProgram = optiXEngine->createProgramFromPTXFile(output,m_materialName);
-            Program anyHitProgram = optiXEngine->createProgramFromPTXFile( "ptx/path_tracer.cu.ptx", "shadow" );
+            optix::Program anyHitProgram = optiXEngine->createProgramFromPTXFile( "ptx/path_tracer.cu.ptx", "shadow" );
             _mat->setClosestHitProgram(0,closestHitProgram);
             _mat->setAnyHitProgram(1,anyHitProgram);
             _mat->validate();

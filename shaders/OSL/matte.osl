@@ -37,5 +37,5 @@ matte
     color Cs = color(1, 1, 1)
   )
 {
-    Ci =  Kd * Cs * diffuse(N);
+    Ci = Kd * Cs * diffuse(N);
 }

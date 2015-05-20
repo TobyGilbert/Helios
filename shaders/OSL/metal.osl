@@ -39,9 +39,8 @@ metal
             float min = 1, float max = 100 ]],
     color Cs = 1
         [[  string help = "Base color",
-            float min = 0, float max = 1 ]],
-    normal norm = 0
+            float min = 0, float max = 1 ]]
   )
 {
-    Ci = Ks * Cs * reflection (norm, eta);
+    Ci = Ks * Cs * reflection (N, eta);
 }
