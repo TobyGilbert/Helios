@@ -459,7 +459,7 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                             //node: if multiple shaders have the same variable name then they will clash in the program
                             //to solve this we put the shader name on the start of the variable
                             OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
-                            std::string varName = block->getBlockName().c_str() + ((QNEPort*) item)->getName().toStdString();
+                            std::string varName = block->getBlockName() + ((QNEPort*) item)->getName().toStdString();
                             std::vector<std::string> initParams = ((QNEPort*) item)->getInitParams();
                             if(((QNEPort*) item)->getVaribleType()==QNEPort::TypeInt){
                                 _mat[varName.c_str()]->setInt(std::stoi(initParams[0]));

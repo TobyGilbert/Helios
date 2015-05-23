@@ -10,12 +10,12 @@
 #include "OSLCompiler/OsoReader.h"
 
 
-const static float INCREMENT=0.02;
+const static float INCREMENT=0.15;
 #define PI 3.14159265359f
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
 //------------------------------------------------------------------------------------------------------------------------------------
-const static float ZOOM=0.1;
+const static float ZOOM=0.3;
 OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidget(_format,_parent){
     // set this widget to have the initial keyboard focus
     setFocus();
@@ -25,11 +25,12 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     // mouse rotation values set to 0
     m_spinXFace=0;
     m_spinYFace=0;
-    m_zoom = 1.0;
     m_resolutionScale = 1;
     m_moveRenderReduction = 4;
     m_timedOut = 5;
     m_cameraMovRayDepth = 2;
+    m_modelPos = glm::vec3(0);
+    m_mouseGlobalTX = glm::mat4();
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -201,19 +202,21 @@ void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewM
 
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
-  // Sourced from Jon Macey's NGL library
-  // note the method buttons() is the button state when event was called
-  // this is different from button() which is used to check which button was
-  // pressed when the mousePress/Release event is generated
   if(m_rotate && _event->buttons() == Qt::LeftButton){
     float diffx=_event->x()-m_origX;
     float diffy=_event->y()-m_origY;
+    m_spinXFace -= (float) 0.01f * diffy;
+    m_spinYFace += (float) 0.01f * diffx;
     glm::mat4 rotx,roty,finalRot;
-    rotx = glm::rotate(rotx, 0.002f * diffy,glm::vec3(1.0,0.0,0.0));
-    roty = glm::rotate(roty, 0.002f * diffx,glm::vec3(0.0,1.0,0.0));
+    rotx = glm::rotate(rotx, m_spinXFace,glm::vec3(1.0,0.0,0.0));
+    roty = glm::rotate(roty, m_spinYFace,glm::vec3(0.0,1.0,0.0));
     finalRot = rotx*roty;
-    PathTracerScene::getInstance()->getCamera()->rotate(finalRot);
-    PathTracerScene::getInstance()->signalCameraChanged();
+    m_mouseGlobalTX = finalRot;
+    m_mouseGlobalTX[3][0] = m_modelPos.x;
+    m_mouseGlobalTX[3][1] = m_modelPos.y;
+    m_mouseGlobalTX[3][2] = m_modelPos.z;
+    PathTracerScene::getInstance()->setGlobalTrans(m_mouseGlobalTX);
+
     m_origX = _event->x();
     m_origY = _event->y();
     // our scene has cahnged so reset our timeout
@@ -226,17 +229,18 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     diffX*=-1.0;
     m_origXPos=_event->x();
     m_origYPos=_event->y();
-    PathTracerScene::getInstance()->getCamera()->translate(diffX,diffY);
-    PathTracerScene::getInstance()->signalCameraChanged();
+    m_modelPos.x += INCREMENT * diffX;
+    m_modelPos.y -= INCREMENT * diffY;
+    m_mouseGlobalTX[3][0] = m_modelPos.x;
+    m_mouseGlobalTX[3][1] = m_modelPos.y;
+    PathTracerScene::getInstance()->setGlobalTrans(m_mouseGlobalTX);
+
     // our scene has cahnged so reset our timeout
     sceneChanged();
    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
-    // Sourced from Jon Macey's NGL library
-  // this method is called when the mouse button is pressed in this case we
-  // store the value where the mouse was clicked (x,y) and set the Rotate flag to true
   if(_event->button() == Qt::LeftButton)
   {
     m_origX = _event->x();
@@ -264,9 +268,6 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
-    // Sourced from Jon Macey's NGL library
-  // this event is called when the mouse button is released
-  // we then set Rotate to false
   if (_event->button() == Qt::LeftButton)
   {
     m_rotate=false;
@@ -285,21 +286,19 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::wheelEvent(QWheelEvent *_event){
-    // Sourced from Jon Macey's NGL library
-    // check the diff of the wheel position (0 means no change)
     if(_event->delta() > 0)
     {
-        m_zoom=ZOOM;
-        PathTracerScene::getInstance()->getCamera()->dolly(-m_zoom);
-        PathTracerScene::getInstance()->signalCameraChanged();
+        m_modelPos.z+=ZOOM;
+        m_mouseGlobalTX[3][2]+=ZOOM;
+        PathTracerScene::getInstance()->setGlobalTrans(m_mouseGlobalTX);
         // our scene has cahnged so reset our timeout
         sceneChanged();
     }
     else if(_event->delta() <0 )
     {
-        m_zoom= ZOOM;
-        PathTracerScene::getInstance()->getCamera()->dolly(m_zoom);
-        PathTracerScene::getInstance()->signalCameraChanged();
+        m_modelPos.z-=ZOOM;
+        m_mouseGlobalTX[3][2]-=ZOOM;
+        PathTracerScene::getInstance()->setGlobalTrans(m_mouseGlobalTX);
         // our scene has cahnged so reset our timeout
         sceneChanged();
     }

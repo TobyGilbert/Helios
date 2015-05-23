@@ -39,7 +39,10 @@ OptiXModel::OptiXModel(OptiXModel *_instance){
     m_geometry = _instance->m_geometry;
     m_geometryInstance = PathTracerScene::getInstance()->getContext()->createGeometryInstance();
     m_geometryInstance->setGeometry(m_geometry);
-    setMaterial(_instance->m_geometryInstance->getMaterial(0));
+    Material mat = PathTracerScene::getInstance()->getContext()->createMaterial();
+    mat->setClosestHitProgram(0,_instance->m_geometryInstance->getMaterial(0)->getClosestHitProgram(0));
+    mat->setAnyHitProgram(1,_instance->m_geometryInstance->getMaterial(0)->getAnyHitProgram(1));
+    setMaterial(mat);
     // create a new transform as we dont want this to be the same as our other model
     m_trans = PathTracerScene::getInstance()->getContext()->createTransform();
     // identity matrix to init our transformation

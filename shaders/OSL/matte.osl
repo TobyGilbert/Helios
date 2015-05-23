@@ -34,8 +34,9 @@ matte
     float Kd = 1
         [[  string help = "Diffuse scaling",
             float min = 0, float max = 1 ]],
-    color Cs = color(1, 1, 1)
+    color Cs = color(1, 1, 1),
+    normal norm = normal(1, 1, 1)
   )
 {
-    Ci = Kd * Cs * diffuse(N);
+    Ci = Kd * Cs * diffuse(norm);
 }

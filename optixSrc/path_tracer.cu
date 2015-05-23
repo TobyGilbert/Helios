@@ -269,7 +269,7 @@ RT_PROGRAM void envi_miss(){
         current_prd.result = make_float3(tex2D(envmap, u, v));
     }
     else{
-        current_prd.result += make_float3(tex2D(envmap, u, v));
+        current_prd.result +=  make_float3(tex2D(envmap, u, v));
     }
     current_prd.done = true;
 }

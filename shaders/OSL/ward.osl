@@ -16,5 +16,5 @@ ward
             float UImin = 0, float UImax = 1 ]]
   )
 {
-    Ci = Ks * Cs * ward (N, normalize(dPdu), ax, ay);
+    Ci = 0.5 * diffuse(N) + 0.2 * ward (N, normalize(dPdu), ax, ay);
 }

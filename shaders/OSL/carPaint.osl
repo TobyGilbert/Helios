@@ -13,14 +13,10 @@ surface carPaint(
 {
     float cosNI = dot(N, -I);
     float baseBlendFactor = pow(cosNI, baseFalloffAmount);
-    if(baseBlendFactor>1){
-      baseBlendFactor=1;
-    }
-    if(baseBlendFactor<0){
-      baseBlendFactor=0;
-    }
+
     color  diffuseColour = mix(baseColour1, baseColour2, baseBlendFactor);
-    color reflectionColour = color((reflectionWeight * (1.0 - cosNI)));
+    float h = (reflectionWeight * (1.0 - cosNI));
+    color reflectionColour = color(h, h, h);
 
     normal n = random() * 2.0 - 1.0;
     float cosFlake = dot(n, -I);
@@ -31,5 +27,7 @@ surface carPaint(
 
     n = normalize(N + flakeSpread * n);
 
-    Ci =   diffuseColour * diffuseWeight * diffuse(N) + specularColour * phong(n, e) + reflectionColour * reflection(N, 1.0);
+    //diffuseColour = color(1, 1, 1);
+
+    Ci = diffuseColour * diffuseWeight * diffuse(n) + specularColour * phong(n, e) + reflectionColour * reflection(N, 1.0);
 }

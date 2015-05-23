@@ -279,17 +279,18 @@ void MeshWidget::signalTransformChange(double _val){
     //create our transform matrix
     glm::mat4 rotXMat,rotYMat,rotZMat,finalRot;
     float DtoR = 3.14159265359/180.0;
+    glm::mat4 finalTrans;
+    finalTrans[0][0] = m_curModelProp->scaleX;
+    finalTrans[1][1] = m_curModelProp->scaleY;
+    finalTrans[2][2] = m_curModelProp->scaleZ;
     rotXMat = glm::rotate(rotXMat,m_curModelProp->rotX*DtoR,glm::vec3(1,0,0));
     rotYMat = glm::rotate(rotYMat,m_curModelProp->rotY*DtoR,glm::vec3(0,1,0));
     rotZMat = glm::rotate(rotZMat,m_curModelProp->rotZ*DtoR,glm::vec3(0,0,1));
     finalRot = rotXMat * rotYMat * rotZMat;
-    glm::mat4 finalTrans = finalRot;
+    finalTrans*=finalRot;
     finalTrans[3][0] = m_curModelProp->transX;
     finalTrans[3][1] = m_curModelProp->transY;
     finalTrans[3][2] = m_curModelProp->transZ;
-    finalTrans[0][0] = m_curModelProp->scaleX;
-    finalTrans[1][1] = m_curModelProp->scaleY;
-    finalTrans[2][2] = m_curModelProp->scaleZ;
     PathTracerScene::getInstance()->transformModel(m_curMeshName.toStdString(),finalTrans);
     updateScene();
 

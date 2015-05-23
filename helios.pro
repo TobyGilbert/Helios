@@ -184,7 +184,11 @@ OTHER_FILES += \
     shaders/OSL/mandelbrot.osl \
     shaders/OSL/carbonFibre.osl \
     brdfs/brdfs \
-    shaders/OSL/ggx.osl
+    shaders/OSL/ggx.osl \
+    shaders/OSL/glassBulb.osl \
+    shaders/OSL/ground.osl \
+    shaders/OSL/textureShader2.osl \
+    shaders/OSL/textureShader3.osl
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y

@@ -542,16 +542,16 @@ std::string OsoReader::generateDeviceFunction(){
             s+=m_instructions[i].m_args[2].c_str();
             s+= ") + (";
             s+=m_instructions[i].m_args[1].c_str();
-            s+=" * (1.0 -";
+            s+=" * (1.0f - ";
             s+=m_instructions[i].m_args[2].c_str();
             s+=") );\n";
         }
         if(m_instructions[i].m_opcode == std::string("pow")){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
-            s+=" = pow(";
+            s+=" = pow((double)";
             s+=m_instructions[i].m_args[0].c_str();
-            s+=", ";
+            s+=",(double)";
             s+=m_instructions[i].m_args[1].c_str();
             s+=");\n";
         }
@@ -751,6 +751,18 @@ std::string OsoReader::generateDeviceFunction(){
                 s+=m_instructions[i].m_args[3].c_str();
             }
             s+=");\n";
+        }
+        //color
+        if(m_instructions[i].m_opcode == std::string("color")){
+            s+="\t";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = make_float3(";
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=", ";
+            s+=m_instructions[i].m_args[2].c_str();
+            s+=");\n ";
         }
         // Filling a matrix
         if (m_instructions[i].m_opcode == std::string("matrix")){
@@ -974,6 +986,16 @@ std::string OsoReader::generateDeviceFunction(){
             s+=m_instructions[i].m_args[1].c_str();
             s+=");\n";
         }
+        // greater than
+        if (m_instructions[i].m_opcode == std::string("gt")){
+            s+="\t(";
+            s+=m_instructions[i].m_output.c_str();
+            s+=" = ";
+            s+=m_instructions[i].m_args[0].c_str();
+            s+=" > ";
+            s+=m_instructions[i].m_args[1].c_str();
+            s+=");\n";
+        }
         // if statement
         if (m_instructions[i].m_opcode == std::string("if")){
             // In order to skip else code add a jump target to the jump targets vector
@@ -1013,6 +1035,7 @@ void OsoReader::printInstructions(){
     }
 }
 void OsoReader::resetVectors(){
+    getOsoReader()->m_lineNo = 1;
     getOsoReader()->m_jumpTargets.clear();
     getOsoReader()->m_forLoopJumpTargets.clear();
     getOsoReader()->m_symbols.clear();
