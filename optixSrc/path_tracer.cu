@@ -204,7 +204,6 @@ RT_PROGRAM void defaultMaterial(){
         }
       }
     }
-
     current_prd.radiance = result;
     current_prd.countEmitted = false;
 
@@ -222,15 +221,6 @@ RT_PROGRAM void defaultMaterial(){
     current_prd.result = prd.result;
     current_prd.done = true; // end the ray comming in
 }
-//__device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness, float _eta){
-//    optix::float3 ray_origin = ray.origin + t_hit * ray.direction;
-//    optix::float3 ffnormal = frontfacing(_normal, ray_origin - eye, _normal);
-
-//    float z1 = rnd(current_prd.seed);
-//    float z2 = rnd(current_prd.seed);
-//    float phi = 2.0 * M_PI * z1;
-//    float theta = acos(sqrt((1.0 - z2) / ((_roughness * _roughness - 1.0) * z2 + 1.0)));
-//}
 //-----------------------------------------------------------------------------
 rtDeclareVariable(float3,        emission_color, , );
 

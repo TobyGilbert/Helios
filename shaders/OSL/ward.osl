@@ -13,8 +13,10 @@ ward
             float UImin = 0, float UIsoftmax = 1 ]],
     color Cs = 1
         [[  string description = "Base color",
-            float UImin = 0, float UImax = 1 ]]
+            float UImin = 0, float UImax = 1 ]],
+    normal norm = normal(1, 0, 0)
   )
 {
-    Ci = Ks * Cs * ward (N, normalize(dPdu), ax, ay);
+    color anist = (color)norm;
+    Ci = Ks * Cs * ward (norm, normalize(dPdu), anist[0], anist[2]);
 }

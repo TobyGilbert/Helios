@@ -63,7 +63,6 @@ version
                 {
                     OsoReader* reader = getOsoReader();
                     reader->version($2, 0.0);
-                    std::cout<<"shader version "<<$2<<std::endl;
                 }
         ;
 
@@ -72,7 +71,6 @@ shader_declaration
                 {
                     OsoReader* reader = getOsoReader();
                     reader->shader($1, $2);
-                    std::cout<<"shader name: "<<$2<<std::endl;
                 }
             hints_opt ENDOFLINE
                 {
@@ -88,7 +86,6 @@ symbols_opt
 codemarker
         : CODE IDENTIFIER ENDOFLINE
                 {
-                    std::cout<<"CODE"<<" IDENTIFIER "<<$2<<std::endl;
                 }
         ;
 
@@ -100,7 +97,6 @@ instructions
 instruction
         : label opcode
                 {
-                    std::cout<<"Dollar 2: "<<$2<<std::endl;
                     OsoReader* reader = getOsoReader();
                     int lineNo = reader->getLineNo();
                     reader->instruction($2, lineNo);
@@ -108,7 +104,6 @@ instruction
                 }
             arguments_opt jumptargets_opt hints_opt ENDOFLINE
                 {
-                    std::cout<<$2<<std::endl;
                 }
         | codemarker
         | ENDOFLINE
@@ -117,7 +112,6 @@ instruction
 shader_type
         : IDENTIFIER
                 {
-                    std::cout<<"shader_type: "<<$1<<std::endl;
                 }
         ;
 
@@ -162,7 +156,6 @@ symbol
                        t = TypeColour;
                     }
                     reader->addSymbols($1, t, $4);
-                    std::cout<<"symbol IDENTIFIER: "<<$4;
                 }
             initial_values_opt hints_opt
                 {
@@ -180,50 +173,39 @@ typespec
                 }
         | CLOSURE simple_typename
                 {
-                    std::cout<<"closure ";
                 }
         | STRUCT IDENTIFIER
                 {
-                    std::cout<<"STRUCT "<<$1<<" IDENTIFIER "<<$2<<std::endl;
                 }
         ;
 
 simple_typename
         : COLORTYPE
                 {
-                     std::cout<<"colour: ";
                 }
         | FLOATTYPE
                 {
-                    std::cout<<"float: ";
                 }
         | INTTYPE
                 {
-                    std::cout<<"int: ";
                 }
         | MATRIXTYPE
                 {
-                    std::cout<<"matrix: ";
                 }
         | NORMALTYPE
                 {
-                    std::cout<<"normal: ";
                 }
         | POINTTYPE
                 {
-                    std::cout<<"point: ";
                 }
         | STRINGTYPE
                 {
-                    std::cout<<"string: ";
                 }
         | VECTORTYPE
                 {
-                    std::cout<<"vector: ";
                 }
         | VOIDTYPE
                 {
-                    std::cout<<"void ";
                 }
         ;
 
@@ -231,7 +213,6 @@ arraylen_opt
         : '[' INT_LITERAL ']'           {
                                           OsoReader* reader = getOsoReader();
                                           reader->makeSymbolArrayType(std::to_string($2));
-                                          std::cout<<"INT_LITERAL arraylen_opt "<<std::endl;
                                         }
         | /* empty */                   { ; }
         ;
@@ -251,26 +232,22 @@ initial_value
                 {
                     OsoReader* reader = getOsoReader();
                     reader->addSymbolDefaults(std::to_string($1));
-                    std::cout<<" initial value "<<$1<<std::endl;
                 }
         | INT_LITERAL
                 {
                     OsoReader* reader = getOsoReader();
                     reader->addSymbolDefaults(std::to_string($1));
-                    std::cout<<" initial_value "<<$1<<std::endl;
                 }
         | STRING_LITERAL
                 {
                     OsoReader* reader = getOsoReader();
                     reader->addSymbolDefaults($1);
-                    std::cout<<" initial_value "<<$1<<std::endl;
                 }
         ;
 
 label
         : INT_LITERAL ':'
                 {
-                    std::cout<<"INT_LITERAL label: "<<$1<<std::endl;
                 }
         | /* empty */                   { ; }
         ;
@@ -278,7 +255,6 @@ label
 opcode
         : IDENTIFIER
                 {
-                    std::cout<<"INDENTIFIER opcode "<<$1<<std::endl;
                 }
         ;
 
@@ -297,7 +273,6 @@ argument
                 {
                     OsoReader* reader = getOsoReader();
                     reader->instructionArguments($1);
-                    std::cout<<"IDENTIFIER argument: "<<$1<<std::endl;
                 }
         ;
 
@@ -316,7 +291,6 @@ jumptarget
                 {
                     OsoReader* reader = getOsoReader();
                     reader->instructionArguments(std::to_string($1));
-                    std::cout<<"INT_LITERAL jumptarget "<<$1<<std::endl;
                 }
         ;
 
@@ -333,12 +307,11 @@ hints
 hint
         : HINT hintcontents_opt
                 {
-                    std::cout<<"HINT "<<$1<<std::endl;
                 }
         ;
 
 hintcontents_opt
-        : '{' hintcontents '}'          { std::cout<<"{}"<<std::endl; }
+        : '{' hintcontents '}'          { ; }
         | /* empty */                   { ; }
         ;
 
@@ -354,23 +327,18 @@ hintcontents
 hintcontents_item
         : INT_LITERAL
                 {
-                    std::cout<<" INT_LITERAL hintcontents_item "<<$1<<std::endl;
                 }
         | FLOAT_LITERAL
                 {
-                    std::cout<<" FLOAT_LITERAL hintcontents_item "<<$1<<std::endl;
                 }
         | STRING_LITERAL
                 {
-                    std::cout<<" STRING_LITERAL hintcontents: "<<$1<<std::endl;
                 }
         | IDENTIFIER arraylen_opt
                 {
-                    std::cout<<"IDENTIFIER hintcontents: "<<$1;
                 }
         | simple_typename arraylen_opt
                 {
-                    ;
                 }
         ;
 

@@ -26,13 +26,164 @@
 #include <iostream>
 #include <string>
 #include <cstdlib>
+#include <IL/il.h>
 
 //-----------------------------------------------------------------------------
 //  
 //  HDRLoader class definition
 //
 //-----------------------------------------------------------------------------
+ILubyte* createTexture(const std::string _path){
+   ilInit();
+   ILuint image = ilGenImage();
 
+   ilBindImage(image);
+
+   ILboolean loadSuccess = ilLoadImage(_path.c_str());
+   if(!loadSuccess){
+      std::cerr<<"Failed to load image: "<<_path<<std::endl;
+      ilBindImage(NULL);
+      ilDeleteImage(image);
+      return 0 ;
+   }
+
+   ILboolean convertSuccess = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
+   if(!convertSuccess){
+      std::cerr<<"Failed to convert image: "<<_path<<std::endl;
+      ilBindImage(NULL);
+      ilDeleteImage(image);
+      return 0;
+   }
+
+//   GLuint texture;
+//   glGenTextures(1, &texture);
+//   glBindTexture(GL_TEXTURE_2D, texture);
+
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+
+//   glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE), ilGetData());
+//   glBindTexture(GL_TEXTURE_2D, NULL);
+
+//   ilBindImage(NULL);
+//   ilDeleteImage(image);
+
+   return ilGetData();
+}
+typedef struct {
+   double r;       // percent
+   double g;       // percent
+   double b;       // percent
+} rgb;
+
+   typedef struct {
+   double h;       // angle in degrees
+   double s;       // percent
+   double v;       // percent
+} hsv;
+
+   static hsv      rgb2hsv(rgb in);
+   static rgb      hsv2rgb(hsv in);
+
+hsv rgb2hsv(rgb in)
+{
+   hsv         out;
+   double      min, max, delta;
+
+   min = in.r < in.g ? in.r : in.g;
+   min = min  < in.b ? min  : in.b;
+
+   max = in.r > in.g ? in.r : in.g;
+   max = max  > in.b ? max  : in.b;
+
+   out.v = max;                                // v
+   delta = max - min;
+   if( max > 0.0 ) { // NOTE: if Max is == 0, this divide would cause a crash
+       out.s = (delta / max);                  // s
+   } else {
+       // if max is 0, then r = g = b = 0
+           // s = 0, v is undefined
+       out.s = 0.0;
+       out.h = NAN;                            // its now undefined
+       return out;
+   }
+   if( in.r >= max )                           // > is bogus, just keeps compilor happy
+       out.h = ( in.g - in.b ) / delta;        // between yellow & magenta
+   else
+   if( in.g >= max )
+       out.h = 2.0 + ( in.b - in.r ) / delta;  // between cyan & yellow
+   else
+       out.h = 4.0 + ( in.r - in.g ) / delta;  // between magenta & cyan
+
+   out.h *= 60.0;                              // degrees
+
+   if( out.h < 0.0 )
+       out.h += 360.0;
+
+   return out;
+}
+
+
+rgb hsv2rgb(hsv in)
+{
+   double      hh, p, q, t, ff;
+   long        i;
+   rgb         out;
+
+   if(in.s <= 0.0) {       // < is bogus, just shuts up warnings
+       out.r = in.v;
+       out.g = in.v;
+       out.b = in.v;
+       return out;
+   }
+   hh = in.h;
+   if(hh >= 360.0) hh = 0.0;
+   hh /= 60.0;
+   i = (long)hh;
+   ff = hh - i;
+   p = in.v * (1.0 - in.s);
+   q = in.v * (1.0 - (in.s * ff));
+   t = in.v * (1.0 - (in.s * (1.0 - ff)));
+
+   switch(i) {
+   case 0:
+       out.r = in.v;
+       out.g = t;
+       out.b = p;
+       break;
+   case 1:
+       out.r = q;
+       out.g = in.v;
+       out.b = p;
+       break;
+   case 2:
+       out.r = p;
+       out.g = in.v;
+       out.b = t;
+       break;
+
+   case 3:
+       out.r = p;
+       out.g = q;
+       out.b = in.v;
+       break;
+   case 4:
+       out.r = t;
+       out.g = p;
+       out.b = in.v;
+       break;
+   case 5:
+   default:
+       out.r = in.v;
+       out.g = p;
+       out.b = q;
+       break;
+   }
+   return out;
+}
 void HDRLoader::getLine( std::ifstream& file_in, std::string& s )
 {
   for (;;) {
@@ -68,12 +219,18 @@ namespace {
       const int HDR_EXPON_BIAS = 128;
       float s = (float)ldexp(1.0, (int(RV.e)-(HDR_EXPON_BIAS+8)));
       s *= inv_img_exposure;
-      FV[0] = (RV.r + 0.5f)*s;
-      FV[1] = (RV.g + 0.5f)*s;
-      FV[2] = (RV.b + 0.5f)*s;
+      rgb colour;
+      colour.r = ((RV.r+0.5f)*s);
+      colour.g = ((RV.g+0.5f)*s);
+      colour.b = ((RV.b+0.5f)*s);
+      hsv huesat = rgb2hsv(colour);
+      huesat.s *=0.7; // reduce the saturation to 70%
+      colour = hsv2rgb(huesat);
+      FV[0] = colour.r;
+      FV[1] = colour.g;
+      FV[2] = colour.b;
     }
   }
-
 
   void ReadScanlineNoRLE(std::ifstream &inf, RGBe *RGBEline, const size_t wid)
   {
@@ -240,12 +397,13 @@ optix::TextureSampler loadHDRTexture( optix::Context context,
 
   // Read in HDR, set texture buffer to empty buffer if fails
   HDRLoader hdr( filename );
+  ILubyte* data = createTexture(filename);
   if ( hdr.failed() ) {
 
     // Create buffer with single texel set to default_color
     optix::Buffer buffer = context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT4, 1u, 1u );
-
     float* buffer_data = static_cast<float*>( buffer->map() );
+
     buffer_data[0] = default_color.x;
     buffer_data[1] = default_color.y;
     buffer_data[2] = default_color.z;
@@ -266,8 +424,6 @@ optix::TextureSampler loadHDRTexture( optix::Context context,
 
   // Create buffer and populate with HDR data
   optix::Buffer buffer = context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT4, nx, ny );
-  buffer = context->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT4, nx, ny );
-
   float* buffer_data = static_cast<float*>( buffer->map() );
 
   for ( unsigned int i = 0; i < nx; ++i ) {

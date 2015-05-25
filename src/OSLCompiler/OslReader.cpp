@@ -46,7 +46,8 @@ bool OslReader::compileOSL(QString _shaderName){
 //------------------------------------------------------------------------------------------------------------------------------------
 bool OslReader::compileOSLtoBuffer(QString _shaderName){
     QString oslfilename = _shaderName;
-    if (! oslfilename.endsWith(".osl")){
+    std::cout<<"Compiling \""<<oslfilename.toStdString()<<"\""<<std::endl;
+    if (!oslfilename.endsWith(".osl")){
         oslfilename = oslfilename.split(".", QString::SkipEmptyParts).at(0);
     }
     std::string sourcecode;

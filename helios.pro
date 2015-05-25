@@ -111,12 +111,12 @@ HEADERS += \
     include/NodeGraph/OSLVarIntBlock.h \
     include/NodeGraph/ImageNodeProxyWidget.h \
     include/NodeGraph/OSLVarImageBlock.h \
-    shaders/OSL/stdosl.h
+    include/stdosl.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
 linux:LIBS += -lfl
-LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
+LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp -lIl
 DESTDIR=./
 
 CONFIG += console
@@ -181,8 +181,9 @@ OTHER_FILES += \
     shaders/OSL/carPaint.osl \
     shaders/OSL/mandelbrot.osl \
     shaders/OSL/carbonFibre.osl \
+    shaders/OSL/ggx.osl \
     brdfs/brdfs \
-    shaders/OSL/ggx.osl
+    shaders/OSL/wood.osl
 
 #Sources we want compiled with bison
 BISONSOURCES = src/OSLCompiler/oso.y

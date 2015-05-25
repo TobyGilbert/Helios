@@ -103,7 +103,7 @@ void PathTracerScene::init(){
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( make_float3(0.0f) );
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
-    m_enviSampler = loadHDRTexture(m_context, "./HDRMaps/Refmap.hdr", default_color);
+    m_enviSampler = loadHDRTexture(m_context, "./HDRMaps/CedarCity.hdr", default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
 
 
@@ -130,7 +130,7 @@ void PathTracerScene::init(){
     //create our top group and set it in our engine
     m_topGroup = m_context->createGroup();
     m_context["top_object"]->set(m_topGroup);
-    m_topGroup->setAcceleration(m_context->createAcceleration("Bvh","Bvh"));
+    m_topGroup->setAcceleration(m_context->createAcceleration("Sbvh","Bvh"));
 
     // Finalize
     m_context->validate();
