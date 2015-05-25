@@ -34,7 +34,7 @@ glass
     float Ks = 0.15
         [[  string help = "Color scaling of the refraction",
             float min = 0, float max = 1 ]],
-    float Cs = 0.85
+    float Cs = 0.80
         [[  string help = "Base color",
             float min = 0, float max = 1 ]],
     color col = color(1, 1, 1),
@@ -56,8 +56,9 @@ glass
             // If Total Internal Reflection is enabled, we also return a
             // reflection closure, which might make rays bounce too much
             // inside an object. That's why we make it optional.
-            if (TIR)
-               Ci += Ks * reflection(N, 1.0 / eta);
+            //if (TIR){
+            //   Ci += Ks * reflection(N, 1.0 / eta);
+            //}
         }
         else {
             Ci =  col * (Cs * refraction(N, eta) + Ks * reflection(N, eta));

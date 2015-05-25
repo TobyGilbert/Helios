@@ -3,6 +3,7 @@
 #include "UI/AbstractMaterialWidget.h"
 #include "Core/MaterialLibrary.h"
 #include "UI/MeshWidget.h"
+#include "UI/RenderSettings.h"
 #include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
@@ -132,12 +133,14 @@ void MainWindow::createMenus(){
 
     QMenu *renderMenu = new QMenu("Render",this->menuBar());
 
-    QAction *saveImage = new QAction(tr("&Image"), renderMenu);
-//    m_saveImage->setShortcut(QKeySequence::Image);
-    saveImage->setStatusTip(tr("Render to image"));
-    connect(saveImage, SIGNAL(triggered()), m_openGLWidget, SLOT(saveImage()));
+    RenderSettings *renSetWgt = new RenderSettings(this);
+    renSetWgt->hide();
 
-    renderMenu->addAction(saveImage);
+    QAction *renderImage = new QAction(tr("&Image"), renderMenu);
+//    m_saveImage->setShortcut(QKeySequence::Image);
+    renderImage->setStatusTip(tr("Render to image"));
+    connect(renderImage, SIGNAL(triggered()), renSetWgt, SLOT(show()));
+    renderMenu->addAction(renderImage);
     this->menuBar()->addAction(renderMenu->menuAction());
 
     //add our settings button on our toolbar
@@ -150,6 +153,7 @@ void MainWindow::createMenus(){
     // create our general settings widget
     GenSetDockWidget *genSetwdg = new GenSetDockWidget(this);
     genSetwdg->setWindowFlags(Qt::Window);
+    genSetwdg->installScene(m_openGLWidget);
     genSetwdg->setHidden(true);
 
     connect(generalSettings, SIGNAL(triggered()), genSetwdg, SLOT(show()));

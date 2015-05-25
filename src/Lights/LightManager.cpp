@@ -211,7 +211,7 @@ void LightManager::updateLight(){
     glm::mat4 rotx = glm::mat4(1.0);
     glm::mat4 roty = glm::mat4(1.0);
     glm::mat4 rotz = glm::mat4(1.0);
-    rotx = glm::rotate(rotx, 1.5f, glm::vec3(1.0, 0.0, 0.0));
+    rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
     roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
     rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
 
@@ -228,9 +228,9 @@ void LightManager::updateLight(){
     v2.y = lightBuffer[m_selectedLight].v2.y;
     v2.z = lightBuffer[m_selectedLight].v2.z;
 
-    corner = ( rotx * roty * rotz) * corner;
-    v1 = ( rotx * roty * rotz) * v1;
-    v2 = ( rotx * roty * rotz) * v2;
+    //corner = ( rotx * roty * rotz) * corner;
+    //v1 = ( rotx * roty * rotz) * v1;
+    //v2 = ( rotx * roty * rotz) * v2;
 
     lightBuffer[m_selectedLight].corner = make_float3(corner.x, corner.y, corner.z);
     lightBuffer[m_selectedLight].v1 = make_float3(v1.x, v1.y, v1.z);
@@ -251,7 +251,7 @@ void LightManager::updateLight(){
     // Update the vector to store transforms
     LightTransforms lightTrans;
     lightTrans.m_translate = glm::vec3(m_translateX->value(), m_translateY->value(), m_translateZ->value());
-    lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
+    //lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
     lightTrans.m_scale = glm::vec3(m_scaleX->value(), m_scaleY->value(), m_scaleZ->value());
     m_lightTransforms[m_selectedLight]= lightTrans;
 

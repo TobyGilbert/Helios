@@ -1,5 +1,3 @@
-
-#define GLM_FORCE_RADIANS
 #include "Core/pathtracerscene.h"
 #include <QColor>
 #include <iostream>
@@ -64,7 +62,6 @@ void PathTracerScene::init(){
     // set our ray types
     m_context["pathtrace_ray_type"]->setUint(0u);
     m_context["pathtrace_shadow_ray_type"]->setUint(1u);
-    m_context["pathtrace_bsdf_shadow_ray_type"]->setUint(2u);
     m_context["rr_begin_depth"]->setUint(m_rr_begin_depth);
 
     // Enable printing on the GPU
@@ -98,8 +95,10 @@ void PathTracerScene::init(){
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
 
+    //set our max ray depth
     m_context["maxDepth"]->setUint(5);
-    m_context["sqrt_num_samples"]->setUint( m_sqrt_num_samples );
+    m_maxRayDepth = 5;
+    m_context["sqrt_num_samples"]->setUint(m_sqrt_num_samples );
     m_context["bad_color"]->setFloat( 0.0f, 1.0f, 0.0f );
     m_context["bg_color"]->setFloat( make_float3(0.0f) );
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
@@ -127,10 +126,21 @@ void PathTracerScene::init(){
     m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
 
-    //create our top group and set it in our engine
+    //create our top group and set it in our engine and add a matrix for our global translation
+    m_globalTrans = m_context->createTransform();
+    float m[16];
+    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
+    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
+    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
+    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
+    m_globalTrans->setMatrix(false,m,0);
+    m_globalTransGroup = m_context->createGroup();
+    m_globalTrans->setChild(m_globalTransGroup);
+    m_globalTransGroup->setAcceleration(m_context->createAcceleration("Sbvh","Bvh"));
     m_topGroup = m_context->createGroup();
+    m_topGroup->setAcceleration(m_context->createAcceleration("NoAccel","NoAccel"));
+    m_topGroup->addChild(m_globalTrans);
     m_context["top_object"]->set(m_topGroup);
-    m_topGroup->setAcceleration(m_context->createAcceleration("Sbvh","Bvh"));
 
     // Finalize
     m_context->validate();
@@ -142,9 +152,8 @@ void PathTracerScene::addLight(){
     m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
     // Only add the last one on the vector to avoid duplicates
-    m_topGroup->addChild(LightManager::getInstance()->getGeomAndTrans().back());
-
-    m_topGroup->getAcceleration()->markDirty();
+    m_globalTransGroup->addChild(LightManager::getInstance()->getGeomAndTrans().back());
+    m_globalTransGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -162,8 +171,8 @@ OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path){
     defaultMaterial->setAnyHitProgram( 1, default_ah );
     model->setMaterial(defaultMaterial);
     //add to our scene
-    m_topGroup->addChild(model->getGeomAndTrans());
-    m_topGroup->getAcceleration()->markDirty();
+    m_globalTransGroup->addChild(model->getGeomAndTrans());
+    m_globalTransGroup->getAcceleration()->markDirty();
     m_meshArray[_id] = model;
     m_frame = 0;
 
@@ -174,8 +183,8 @@ OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _in
     std::map<std::string,OptiXModel*>::iterator model = m_meshArray.find(_geomId);
     if(model!=m_meshArray.end()){
         OptiXModel* instance = new OptiXModel(model->second);
-        m_topGroup->addChild(instance->getGeomAndTrans());
-        m_topGroup->getAcceleration()->markDirty();
+        m_globalTransGroup->addChild(instance->getGeomAndTrans());
+        m_globalTransGroup->getAcceleration()->markDirty();
         m_meshArray[_instanceName] = instance;
         m_frame = 0;
         return instance;
@@ -189,8 +198,8 @@ OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _in
 void PathTracerScene::removeGeomtry(std::string _id){
     std::map<std::string,OptiXModel*>::iterator model = m_meshArray.find(_id);
     if(model!=m_meshArray.end()){
-        m_topGroup->removeChild(model->second->getGeomAndTrans());
-        m_topGroup->getAcceleration()->markDirty();
+        m_globalTransGroup->removeChild(model->second->getGeomAndTrans());
+        m_globalTransGroup->getAcceleration()->markDirty();
         delete model->second;
         m_meshArray.erase(model);
     }
@@ -204,7 +213,7 @@ void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
     OptiXModel* mdl = it->second;
     mdl->setTrans(_trans);
-    m_topGroup->getAcceleration()->markDirty();
+    m_globalTransGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -226,7 +235,7 @@ void PathTracerScene::trace(){
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::resize(int _width, int _height){
 //    m_width = _width/m_devicePixelRatio;
-    m_width = _height/m_devicePixelRatio;
+    m_width = _width/m_devicePixelRatio;
     m_height = _height/m_devicePixelRatio;
 
     unsigned int elementSize = m_outputBuffer->getElementSize();
@@ -285,6 +294,26 @@ QImage PathTracerScene::saveImage(){
     return img;
 }
 //----------------------------------------------------------------------------------------------------------------------
+void PathTracerScene::setGlobalTrans(glm::mat4 _trans){
+    // identity matrix to init our transformation
+    float m[16];
+    m[ 0] = _trans[0][0];  m[ 1] = _trans[1][0];  m[ 2] = _trans[2][0];  m[ 3] = _trans[3][0];
+    m[ 4] = _trans[0][1];  m[ 5] = _trans[1][1];  m[ 6] = _trans[2][1];  m[ 7] = _trans[3][1];
+    m[ 8] = _trans[0][2];  m[ 9] = _trans[1][2];  m[ 10] = _trans[2][2];  m[ 11] = _trans[3][2];
+    m[ 12] = _trans[0][3];  m[ 13] = _trans[1][3];  m[ 14] = _trans[2][3];  m[ 15] = _trans[3][3];
+    // create our inverse transform
+    float invM[16];
+    glm::mat4 inv = glm::inverse(_trans);
+    invM[ 0] = inv[0][0];  invM[ 1] = inv[1][0];  invM[ 2] = inv[2][0];  invM[ 3] = inv[3][0];
+    invM[ 4] = inv[0][1];  invM[ 5] = inv[1][1];  invM[ 6] = inv[2][1];  invM[ 7] = inv[3][1];
+    invM[ 8] = inv[0][2];  invM[ 9] = inv[1][2];  invM[ 10] = inv[2][2];  invM[ 11] = inv[3][2];
+    invM[ 12] = inv[0][3];  invM[ 13] = inv[1][3];  invM[ 14] = inv[2][3];  invM[ 15] = inv[3][3];
+    // set our transform
+    m_globalTrans->setMatrix(false,m,invM);
+    //update our scene
+    cleanTopAcceleration();
+}
+//----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::setEnvironmentMap(std::string _environmentMap){
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
     m_enviSampler->destroy();
@@ -293,6 +322,6 @@ void PathTracerScene::setEnvironmentMap(std::string _environmentMap){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::cleanTopAcceleration(){
-    m_topGroup->getAcceleration()->markDirty();
+    m_globalTransGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }

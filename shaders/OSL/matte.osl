@@ -35,9 +35,16 @@ matte
         [[  string help = "Diffuse scaling",
             float min = 0, float max = 1 ]],
     color Cs = color(1, 1, 1),
+<<<<<<< HEAD
     float roughness = 0.0
   )
 {
 
     Ci = Cs * Kd * translucence(N);
+=======
+    normal norm = normal(1, 1, 1)
+  )
+{
+    Ci = Kd * Cs * diffuse(norm);
+>>>>>>> 49dfd879f26664e3362faece040b34b1eaa7fed5
 }
