@@ -33,46 +33,6 @@
 //  HDRLoader class definition
 //
 //-----------------------------------------------------------------------------
-ILubyte* createTexture(const std::string _path){
-   ilInit();
-   ILuint image = ilGenImage();
-
-   ilBindImage(image);
-
-   ILboolean loadSuccess = ilLoadImage(_path.c_str());
-   if(!loadSuccess){
-      std::cerr<<"Failed to load image: "<<_path<<std::endl;
-      ilBindImage(NULL);
-      ilDeleteImage(image);
-      return 0 ;
-   }
-
-   ILboolean convertSuccess = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
-   if(!convertSuccess){
-      std::cerr<<"Failed to convert image: "<<_path<<std::endl;
-      ilBindImage(NULL);
-      ilDeleteImage(image);
-      return 0;
-   }
-
-//   GLuint texture;
-//   glGenTextures(1, &texture);
-//   glBindTexture(GL_TEXTURE_2D, texture);
-
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-
-
-//   glTexImage2D(GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT), 0, ilGetInteger(IL_IMAGE_FORMAT), ilGetInteger(IL_IMAGE_TYPE), ilGetData());
-//   glBindTexture(GL_TEXTURE_2D, NULL);
-
-//   ilBindImage(NULL);
-//   ilDeleteImage(image);
-
-   return ilGetData();
-}
 typedef struct {
    double r;       // percent
    double g;       // percent
@@ -397,7 +357,6 @@ optix::TextureSampler loadHDRTexture( optix::Context context,
 
   // Read in HDR, set texture buffer to empty buffer if fails
   HDRLoader hdr( filename );
-  ILubyte* data = createTexture(filename);
   if ( hdr.failed() ) {
 
     // Create buffer with single texel set to default_color

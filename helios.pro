@@ -118,7 +118,7 @@ HEADERS += \
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
 linux:LIBS += -lfl
-LIBS += -L/opt/local/lib -lIL -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp -lIl
+LIBS += -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
 DESTDIR=./
 
 CONFIG += console
@@ -186,7 +186,8 @@ OTHER_FILES += \
     shaders/OSL/ggx.osl \
     brdfs/brdfs \
     shaders/OSL/wood.osl \
-    shaders/OSL/ground.osl
+    shaders/OSL/ground.osl \
+    shaders/OSL/Cerberus.osl
 
 
 #Sources we want compiled with bison

@@ -421,8 +421,11 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                               " -L"+optixDir+"/lib64";
         std::string libs = " -lcudart -loptix -loptixu";
         std::string nvcc = "nvcc ";
+#ifdef DARWIN
         std::string nvccFlags =" -m64"+gencodeFlag+" -maxrregcount 20 -w --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx";
-
+#else
+        std::string nvccFlags =" -m64"+gencodeFlag+" -w --compiler-options -fno-strict-aliasing -use_fast_math --ptxas-options=-v -ptx";
+#endif
         QFileInfo file = QString(path.c_str());
         std::string output = "./ptx/"+file.fileName().toStdString()+".ptx";
         //std::cout<<"output "<<output<<std::endl;
