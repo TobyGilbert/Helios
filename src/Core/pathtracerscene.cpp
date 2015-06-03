@@ -80,7 +80,7 @@ void PathTracerScene::init(){
     m_outputBuffer->setSize(m_width/m_devicePixelRatio,m_height/m_devicePixelRatio);
     output_buffer->set(m_outputBuffer);
 
-    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
+    m_camera = new PathTraceCamera(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
                                  optix::make_float3( 0.0f, 0.0f, 0.0f ),        //lookat
                                  optix::make_float3( 0.0f, 1.0f,  0.0f ),       //up
                                  35.0f,                                         //hfov
@@ -88,7 +88,6 @@ void PathTracerScene::init(){
 
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
-
     //set up our camera in our engine
     m_context["eye"]->setFloat( eye );
     m_context["U"]->setFloat( U );

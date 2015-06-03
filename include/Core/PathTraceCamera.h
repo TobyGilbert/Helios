@@ -1,8 +1,8 @@
-#ifndef PINHOLECAMERA_H
-#define PINHOLECAMERA_H
+#ifndef PATHTRACECAMERA_H
+#define PATHTRACECAMERA_H
 
-/// @class PinholeCamera
-/// @brief this in a simple pinhole camera for path tracing. This is converted code from NVidia's demo's
+/// @class PathTraceCamera
+/// @brief this in a simple camera for path tracing. This is converted code from NVidia's demo's
 /// @author Declan Russell
 /// @date 27/01/2015
 
@@ -13,7 +13,7 @@
 
 using namespace optix;
 
-class PinholeCamera
+class PathTraceCamera
 {
 public:
     //----------------------------------------------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ public:
     /// @param _hfov - the horizontal field of view of our camera
     /// @param _vfov - the virtical field of view of our camera
     //----------------------------------------------------------------------------------------------------------------------
-    PinholeCamera(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov);
+    PathTraceCamera(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a mutator for our paramters
     /// @param _eye - the eye of our pinhole camera
@@ -65,7 +65,7 @@ protected:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief basic constructor, we dont want this to be used.
     //----------------------------------------------------------------------------------------------------------------------
-    PinholeCamera();
+    PathTraceCamera();
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief calculates our Eye U V W vectors
     /// @brief this is called by our defualt constructor and setParamiters functions
@@ -117,4 +117,4 @@ private:
 
 };
 
-#endif // PINHOLECAMERA_H
+#endif // PATHTRACECAMERA_H

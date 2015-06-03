@@ -118,6 +118,8 @@ void MainWindow::createMenus(){
 
     CameraWidget::getInstance()->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, CameraWidget::getInstance());
+    connect(CameraWidget::getInstance(), SIGNAL(updateScene()), m_openGLWidget, SLOT(sceneChanged()));
+
     //--------------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------Material Library----------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
@@ -127,9 +129,21 @@ void MainWindow::createMenus(){
     matlibToolbarButton->setIcon(matlibBtnIcon);
     matlibToolbarButton->setToolTip("Material Library");
     toolBar->addWidget(matlibToolbarButton);
+    toolBar->addSeparator();   
+    connect(matlibToolbarButton,SIGNAL(clicked()),MeshWidget::getInstance(),SLOT(applyMatFromLib()));
+
+
+    //--------------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------OSL Hypershader-----------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+    QPixmap osl("icons/osl.png");
+    QIcon oslBtnIcon(osl);
+    QToolButton *oslToolbarButton = new QToolButton(toolBar);
+    oslToolbarButton->setIcon(oslBtnIcon);
+    oslToolbarButton->setToolTip("OSL Hypershader");
+    toolBar->addWidget(oslToolbarButton);
     toolBar->addSeparator();
-
-
+    connect(oslToolbarButton,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
     //--------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------

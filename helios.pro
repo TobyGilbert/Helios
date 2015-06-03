@@ -24,7 +24,6 @@ SOURCES += \
     src/Core/OpenGLWidget.cpp \
     src/Core/Shader.cpp \
     src/Core/pathtracerscene.cpp \
-    src/Core/pinholecamera.cpp \
     src/Core/HDRLoader.cpp \
     src/Core/optixmodel.cpp \
     src/Core/TextureLoader.cpp \
@@ -60,7 +59,8 @@ SOURCES += \
     src/NodeGraph/ImageNodeProxyWidget.cpp \
     src/NodeGraph/OSLVarImageBlock.cpp \
     src/UI/RenderSettings.cpp \
-    src/UI/CameraWidget.cpp
+    src/UI/CameraWidget.cpp \
+    src/Core/PathTraceCamera.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -80,7 +80,6 @@ HEADERS += \
     include/Core/random.h \
     include/Core/path_tracer.h \
     include/Core/pathtracerscene.h \
-    include/Core/pinholecamera.h \
     include/Core/HDRLoader.h \
     include/Core/optixmodel.h \
     include/Core/TextureLoader.h \
@@ -117,7 +116,8 @@ HEADERS += \
     include/UI/RenderSettings.h \
     include/OSLCompiler/ErrorHandler.h \
     include/OSLCompiler/export.h \
-    include/UI/CameraWidget.h
+    include/UI/CameraWidget.h \
+    include/Core/PathTraceCamera.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

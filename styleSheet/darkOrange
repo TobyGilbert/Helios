@@ -159,6 +159,7 @@ QComboBox::down-arrow
 QGroupBox{
     margin-top: 20px;
     margin-bottom: 10px;
+    margin-right: 10px;
     border: 2px solid gray;
     border-radius: 10px;
 }
@@ -294,7 +295,10 @@ QCheckBox:disabled
 {
 color: #414141;
 }
-
+QDockWidget
+{
+    border: 1px solid #7f7f7f;
+}
 QDockWidget::title
 {
     text-align: center;

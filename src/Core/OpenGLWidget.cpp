@@ -328,6 +328,6 @@ void OpenGLWidget::loadEnvironmentMap(){
     m_environmentMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
     PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
     // Reset the frame
-    PathTracerScene::getInstance()->signalSceneChanged();
+    sceneChanged();
 }
 //----------------------------------------------------------------------------------------------------------------------
