@@ -39,6 +39,42 @@ private:
     //------------------------------------------------------------------------------------------------------------------------------------
 };
 //------------------------------------------------------------------------------------------------------------------------------------
+// Subclass ErrorHandler because we want our messages to appear somewhat
+// differant than the default ErrorHandler base class, in order to match
+// typical compiler command line messages.
+class OSLC_ErrorHandler : public OSL::ErrorHandler {
+public:
+    virtual void operator () (int errcode, const std::string &msg) {
+        static OIIO::mutex err_mutex;
+        OIIO::lock_guard guard (err_mutex);
+        switch (errcode & 0xffff0000) {
+        case EH_INFO :
+            if (verbosity() >= VERBOSE)
+                std::cout << msg << std::endl;
+            break;
+        case EH_WARNING :
+            if (verbosity() >= NORMAL)
+                std::cerr << msg << std::endl;
+            break;
+        case EH_ERROR :
+            std::cerr << msg << std::endl;
+            break;
+        case EH_SEVERE :
+            std::cerr << msg << std::endl;
+            break;
+        case EH_DEBUG :
+#ifdef NDEBUG
+            break;
+#endif
+        default :
+            if (verbosity() > QUIET)
+                std::cout << msg;
+            break;
+        }
+    }
+};
+
+static OSLC_ErrorHandler default_oslc_error_handler;
 #endif
 
 /// Read the entire contents of the named file and place it in str,

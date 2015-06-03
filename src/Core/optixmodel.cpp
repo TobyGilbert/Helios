@@ -59,7 +59,7 @@ OptiXModel::OptiXModel(OptiXModel *_instance){
     geoGroup->setChild(0,m_geometryInstance);
     //create our acceleration method, in this case none becuase we only have one peice of geomtry
     //set this acceleration in our geometry group
-    geoGroup->setAcceleration(PathTracerScene::getInstance()->getContext()->createAcceleration("Sbvh","Sbvh"));
+    geoGroup->setAcceleration(PathTracerScene::getInstance()->getContext()->createAcceleration("Sbvh","Bvh"));
     //make a acceleration dirty
     geoGroup->getAcceleration()->markDirty();
     m_trans->setChild(geoGroup);

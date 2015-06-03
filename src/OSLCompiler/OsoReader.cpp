@@ -842,7 +842,7 @@ std::string OsoReader::generateDeviceFunction(){
             s+=");\n";
         }
         //color
-        if(m_instructions[i].m_opcode == std::string("color")){
+        else if(m_instructions[i].m_opcode == std::string("color")){
             s+="\t";
             s+=m_instructions[i].m_output.c_str();
             s+=" = make_float3(";
@@ -1065,7 +1065,7 @@ std::string OsoReader::generateDeviceFunction(){
             s+=");\n";
         }
         // greater than
-        if (m_instructions[i].m_opcode == std::string("gt")){
+        else if (m_instructions[i].m_opcode == std::string("gt")){
             s+="\t(";
             s+=m_instructions[i].m_output.c_str();
             s+=" = ";

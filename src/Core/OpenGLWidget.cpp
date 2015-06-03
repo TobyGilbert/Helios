@@ -315,7 +315,6 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::saveImage(){
-
    QImage image = PathTracerScene::getInstance()->saveImage();
    QFileDialog fileDialog(this);
    fileDialog.setDefaultSuffix(".png");
@@ -328,5 +327,7 @@ void OpenGLWidget::loadEnvironmentMap(){
     QFileDialog fileDialog;
     m_environmentMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
     PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
+    // Reset the frame
+    PathTracerScene::getInstance()->signalSceneChanged();
 }
 //----------------------------------------------------------------------------------------------------------------------
