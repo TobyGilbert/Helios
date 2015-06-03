@@ -16,7 +16,7 @@
 #include <QString>
 #include <QListWidget>
 #include <QListWidgetItem>
-#include "Core/optixmodel.h"
+#include "Core/OptixModel.h"
 #include <map>
 
 #include "UI/AbstractMaterialWidget.h"

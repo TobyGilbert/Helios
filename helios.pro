@@ -24,9 +24,7 @@ SOURCES += \
     src/Core/OpenGLWidget.cpp \
     src/Core/Shader.cpp \
     src/Core/pathtracerscene.cpp \
-    src/Core/pinholecamera.cpp \
     src/Core/HDRLoader.cpp \
-    src/Core/optixmodel.cpp \
     src/Core/TextureLoader.cpp \
     src/Core/MaterialLibrary.cpp \
     src/NodeGraph/qneblock.cpp \
@@ -59,7 +57,10 @@ SOURCES += \
     src/NodeGraph/OSLVarIntBlock.cpp \
     src/NodeGraph/ImageNodeProxyWidget.cpp \
     src/NodeGraph/OSLVarImageBlock.cpp \
-    src/UI/RenderSettings.cpp
+    src/UI/RenderSettings.cpp \
+    src/UI/CameraWidget.cpp \
+    src/Core/PathTraceCamera.cpp \
+    src/Core/OptixModel.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -79,9 +80,7 @@ HEADERS += \
     include/Core/random.h \
     include/Core/path_tracer.h \
     include/Core/pathtracerscene.h \
-    include/Core/pinholecamera.h \
     include/Core/HDRLoader.h \
-    include/Core/optixmodel.h \
     include/Core/TextureLoader.h \
     include/UI/GenSetDockWidget.h \
     include/OSLCompiler/OsoReader.h \
@@ -113,7 +112,12 @@ HEADERS += \
     include/NodeGraph/ImageNodeProxyWidget.h \
     include/NodeGraph/OSLVarImageBlock.h \
     include/stdosl.h \
-    include/UI/RenderSettings.h
+    include/UI/RenderSettings.h \
+    include/OSLCompiler/ErrorHandler.h \
+    include/OSLCompiler/export.h \
+    include/UI/CameraWidget.h \
+    include/Core/PathTraceCamera.h \
+    include/Core/OptixModel.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

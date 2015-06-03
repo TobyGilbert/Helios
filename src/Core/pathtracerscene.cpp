@@ -80,7 +80,7 @@ void PathTracerScene::init(){
     m_outputBuffer->setSize(m_width/m_devicePixelRatio,m_height/m_devicePixelRatio);
     output_buffer->set(m_outputBuffer);
 
-    m_camera = new PinholeCamera(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
+    m_camera = new PathTraceCamera(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
                                  optix::make_float3( 0.0f, 0.0f, 0.0f ),        //lookat
                                  optix::make_float3( 0.0f, 1.0f,  0.0f ),       //up
                                  35.0f,                                         //hfov
@@ -88,12 +88,13 @@ void PathTracerScene::init(){
 
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
-
     //set up our camera in our engine
     m_context["eye"]->setFloat( eye );
     m_context["U"]->setFloat( U );
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
+    m_context["aperture_radius"]->setFloat(0.0);
+    m_context["focal_point"]->setFloat(0.0, 0.0, 0.0);
 
     //set our max ray depth
     m_context["maxDepth"]->setUint(5);
@@ -108,7 +109,7 @@ void PathTracerScene::init(){
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "pathtrace_camera" );
+    optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "depth_of_field_camera" );
 
     m_context->setRayGenerationProgram( 0, ray_gen_program );
     optix::Program exception_program = m_context->createProgramFromPTXFile( ptx_path, "exception" );

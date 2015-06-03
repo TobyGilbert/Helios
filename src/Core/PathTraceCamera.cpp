@@ -1,21 +1,21 @@
-#include "Core/pinholecamera.h"
+#include "Core/PathTraceCamera.h"
 
 #include <optixu/optixu_math_namespace.h>
 #include <cmath>
 
-PinholeCamera::PinholeCamera()
+PathTraceCamera::PathTraceCamera()
 {
 }
 //----------------------------------------------------------------------------------------------------------------------
-PinholeCamera::PinholeCamera(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
+PathTraceCamera::PathTraceCamera(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
     calcVectors(_eye,_lookat, _up, _hfov,_vfov);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PinholeCamera::setParameters(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
+void PathTraceCamera::setParameters(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
     calcVectors(_eye,_lookat, _up, _hfov,_vfov);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PinholeCamera::calcVectors(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
+void PathTraceCamera::calcVectors(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov){
     m_lookat = _lookat;
     m_eye = _eye;
     m_up= _up;
@@ -29,20 +29,20 @@ void PinholeCamera::calcVectors(float3 _eye, float3 _lookat, float3 _up, float _
     m_vfov = _vfov;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PinholeCamera::getEyeUVW(float3 &_eye, float3 &_U, float3 &_V, float3 &_W){
+void PathTraceCamera::getEyeUVW(float3 &_eye, float3 &_U, float3 &_V, float3 &_W){
     _eye = m_eye;
     _U = m_U;
     _V = m_V;
     _W = m_W;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PinholeCamera::translate(float _x, float _y){
+void PathTraceCamera::translate(float _x, float _y){
     float3 trans = m_U*_x + m_V*_y;
     m_eye+=trans;
     m_lookat+=trans;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PinholeCamera::dolly(float _scale)
+void PathTraceCamera::dolly(float _scale)
 {
   // Better make sure the scale isn't exactly one.
   if (_scale == 1.0f) return;
@@ -52,7 +52,7 @@ void PinholeCamera::dolly(float _scale)
   calcVectors(m_eye,m_lookat,m_up,m_hfov,m_vfov);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PinholeCamera::rotate(glm::mat4 _trans){
+void PathTraceCamera::rotate(glm::mat4 _trans){
     float m[16];
     m[ 0] = _trans[0][0];  m[ 1] = _trans[1][0];  m[ 2] = _trans[2][0];  m[ 3] = _trans[3][0];
     m[ 4] = _trans[0][1];  m[ 5] = _trans[1][1];  m[ 6] = _trans[2][1];  m[ 7] = _trans[3][1];
@@ -81,11 +81,9 @@ void PinholeCamera::rotate(glm::mat4 _trans){
     lookat4.w      = 1.0f;
 
     calcVectors(make_float3(final_trans*eye4), make_float3(final_trans*lookat4), make_float3(final_trans*up4),m_hfov,m_vfov);
-
 }
-
 //----------------------------------------------------------------------------------------------------------------------
-Matrix4x4 PinholeCamera::initWithBasis(const float3 &u, const float3 &v, const float3 &w, const float3 &t){
+Matrix4x4 PathTraceCamera::initWithBasis(const float3 &u, const float3 &v, const float3 &w, const float3 &t){
     float m[16];
     m[0] = u.x;
     m[1] = v.x;

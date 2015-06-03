@@ -5,6 +5,7 @@
 #include "UI/MeshWidget.h"
 #include "UI/RenderSettings.h"
 #include <QFileDialog>
+#include "UI/CameraWidget.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) ,m_menuCreated(false){
     ui->setupUi(this);
@@ -66,6 +67,7 @@ void MainWindow::createMenus(){
 
     LightManager::getInstance()->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, LightManager::getInstance());
+    connect(LightManager::getInstance(), SIGNAL(updateScene()), m_openGLWidget, SLOT(sceneChanged()));
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Mesh functionality-------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
@@ -110,20 +112,57 @@ void MainWindow::createMenus(){
     this->addDockWidget(Qt::RightDockWidgetArea, environmentDockWidget);
 
     //--------------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------Camera--------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+    QPixmap camera("icons/camera.png");
+    QIcon cameraBtnIcon(camera);
+    QToolButton *cameraToolbarButton = new QToolButton(toolBar);
+    cameraToolbarButton->setIcon(cameraBtnIcon);
+    cameraToolbarButton->setToolTip("Camera Options");
+    toolBar->addWidget(cameraToolbarButton);
+    toolBar->addSeparator();
+
+    CameraWidget::getInstance()->setHidden(true);
+    this->addDockWidget(Qt::RightDockWidgetArea, CameraWidget::getInstance());
+    connect(CameraWidget::getInstance(), SIGNAL(updateScene()), m_openGLWidget, SLOT(sceneChanged()));
+
+    //--------------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------Material Library----------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+    QPixmap matlib("icons/matlib.png");
+    QIcon matlibBtnIcon(matlib);
+    QToolButton *matlibToolbarButton = new QToolButton(toolBar);
+    matlibToolbarButton->setIcon(matlibBtnIcon);
+    matlibToolbarButton->setToolTip("Material Library");
+    toolBar->addWidget(matlibToolbarButton);
+    toolBar->addSeparator();   
+    connect(matlibToolbarButton,SIGNAL(clicked()),MaterialLibrary::getInstance(),SLOT(show()));
+
+
+    //--------------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------OSL Hypershader-----------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+    QPixmap osl("icons/osl.png");
+    QIcon oslBtnIcon(osl);
+    QToolButton *oslToolbarButton = new QToolButton(toolBar);
+    oslToolbarButton->setIcon(oslBtnIcon);
+    oslToolbarButton->setToolTip("OSL Hypershader");
+    toolBar->addWidget(oslToolbarButton);
+    toolBar->addSeparator();
+    connect(oslToolbarButton,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
+    //--------------------------------------------------------------------------------------------------------------------
     //--------------------------------------------------Connections-------------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
     connect(lightToolbarBtn, SIGNAL(clicked(bool)), lightToolbarBtn, SLOT(setChecked(bool)));
 //    connect(lightToolbarBtn, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
 //    connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
     connect(lightToolbarBtn, SIGNAL(clicked()), LightManager::getInstance(), SLOT(show()));
-
-
     connect(meshToolbarButton, SIGNAL(clicked(bool)), meshToolbarButton,  SLOT(setChecked(bool)));
-
     connect(environmentToolbarButton, SIGNAL(clicked(bool)), environmentToolbarButton, SLOT(setChecked(bool)));
     connect(environmentToolbarButton, SIGNAL(clicked()), environmentDockWidget, SLOT(show()));
     connect(environmentButton, SIGNAL(clicked()), m_openGLWidget, SLOT(loadEnvironmentMap()));
     connect(environmentButton, SIGNAL(clicked()), this, SLOT(displayEnvironmentMap()));
+    connect(cameraToolbarButton, SIGNAL(clicked()), CameraWidget::getInstance(), SLOT(show()));
 
     //set up our menu bar
     //get problems with native menu bar so set it non native

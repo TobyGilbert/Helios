@@ -289,21 +289,21 @@ __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness,
   optix::float3 m = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
 
   // fresnel
-  float cosNO = optix::dot(- _normal, ray.direction - eye);
+  float cosNO = optix::dot(-_normal, ray.direction - eye);
   float F = fresnel_dielectric(cosNO, _eta);
 
   // Distribution function
-  float rough2 = _roughness* _roughness;
-  float chi;
-  if(_roughness > 0){
-      chi = 1;
+  float rough2 = _roughness * _roughness;
+  float mDotN = optix::dot(m, _normal);
+  float D;
+  if(mDotN > 0){
+      D = rough2*mDotN;
+      float cos2theta = cos(theta)*cos(theta);
+      D /= ( M_PI * (cos2theta * cos2theta) * ((rough2 + (tan(theta)*tan(theta))) * (rough2 + (tan(theta)*tan(theta)))));
   }
   else{
-      chi = 0;
+      D = 0;
   }
-  float D = rough2*chi*optix::dot(m, _normal);
-  float cos2theta = cos(theta)*cos(theta);
-  D /= ( M_PI * (cos2theta * cos2theta) * ((rough2 + (tan(theta)*tan(theta))) * (rough2 + (tan(theta)*tan(theta)))));
 
   // the shadow masking function
   optix::float3 v = ray_origin - eye;
@@ -359,12 +359,17 @@ __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness,
   current_prd.radiance = result;
   current_prd.countEmitted = false;
 
-  float pdf = D * optix::dot(m, _normal) * jacobian;
+  float pdf = D * mDotN * jacobian;
 
 
   PerRayData_pathtrace prd;
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
-  prd.attenuation = current_prd.attenuation * pdf * weight;
+  if(_roughness == 0.0){
+    prd.attenuation = current_prd.attenuation;
+  }
+  else{
+    prd.attenuation = current_prd.attenuation * pdf * weight;
+  }
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
 

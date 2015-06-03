@@ -1,120 +1,95 @@
-#ifndef PINHOLECAMERA_H
-#define PINHOLECAMERA_H
+#ifndef CAMERAWIDGET_H_
+#define CAMERAWIDGET_H_
+//----------------------------------------------------------------------------------------------------------------------
+/// @class MeshWidget
+/// @date 02/05/15
+/// @author Toby Gilbert
+/// @brief This class is an extention of QDockWidget that includes our camera controls
+//----------------------------------------------------------------------------------------------------------------------
+#include <QDockWidget>
+#include <QLabel>
+#include <QDoubleSpinBox>
 
-/// @class PinholeCamera
-/// @brief this in a simple pinhole camera for path tracing. This is converted code from NVidia's demo's
-/// @author Declan Russell
-/// @date 27/01/2015
-
-#include <optixu/optixpp_namespace.h>
-#include <optixu/optixu_matrix_namespace.h>
-#include <glm/glm.hpp>
-#include <cmath>
-
-using namespace optix;
-
-class PinholeCamera
+//----------------------------------------------------------------------------------------------------------------------
+class CameraWidget : public QDockWidget
 {
+    Q_OBJECT
 public:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our default contructor that does all our calculations
-    /// @param _eye - the eye of our pinhole camera
-    /// @param _lookat - the direction that our camera is facing
-    /// @param _up - which direction up is
-    /// @param _hfov - the horizontal field of view of our camera
-    /// @param _vfov - the virtical field of view of our camera
+    /// @brief returns the instance of our camera widget
     //----------------------------------------------------------------------------------------------------------------------
-    PinholeCamera(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov);
+    static CameraWidget *getInstance(QWidget *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a mutator for our paramters
-    /// @param _eye - the eye of our pinhole camera
-    /// @param _lookat - the direction that our camera is facing
-    /// @param _up - which direction up is
-    /// @param _hfov - the horizontal field of view of our camera
-    /// @param _vfov - the virtical field of view of our camera
+    /// @brief destroys our singleton class
     //----------------------------------------------------------------------------------------------------------------------
-    void setParameters(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief a function to return
-    /// @param _eye call by reference to set the eye postion of our camera
-    /// @param _U call by reference to set the U vector of of our camera
-    /// @param _V call by reference to set the V vector of of our camera
-    /// @param _W call by reference to set the W vector of of our camera
-    //----------------------------------------------------------------------------------------------------------------------
-    void getEyeUVW(float3 &_eye, float3 &_U, float3 &_V, float3 &_W);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief Translate our camera
-    /// @param _x - the translation of our camera in the x direction
-    /// @param _y - the translation of our camera in the y direction
-    //----------------------------------------------------------------------------------------------------------------------
-    void translate(float _x, float _y);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief rotates our camera
-    /// @param _trans - our rotation matrix
-    /// @todo fix this, you are using m_W instead of lookat in places
-    //----------------------------------------------------------------------------------------------------------------------
-    void rotate(glm::mat4 _trans);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief zoom in and out our camera
-    /// @param _scale - the scale of our zoom
-    /// @todo fix this, you are using m_W instead of lookat in places
-    //----------------------------------------------------------------------------------------------------------------------
-    void dolly(float _scale);
-    //----------------------------------------------------------------------------------------------------------------------
-protected:
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief basic constructor, we dont want this to be used.
-    //----------------------------------------------------------------------------------------------------------------------
-    PinholeCamera();
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief calculates our Eye U V W vectors
-    /// @brief this is called by our defualt constructor and setParamiters functions
-    //----------------------------------------------------------------------------------------------------------------------
-    void calcVectors(float3 _eye, float3 _lookat, float3 _up, float _hfov, float _vfov);
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief
-    //----------------------------------------------------------------------------------------------------------------------
-    Matrix4x4 initWithBasis( const float3& u, const float3& v,const float3& w,const float3& t );
+    static void destroy();
     //----------------------------------------------------------------------------------------------------------------------
 private:
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief convertion from degrees to radians
+    /// @brief our destructor
     //----------------------------------------------------------------------------------------------------------------------
-    inline float DtoR(float d){return d*(static_cast<float>(M_PI)/180.f);}
+    ~CameraWidget();
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our eye location
+    /// @brief our default constructor
     //----------------------------------------------------------------------------------------------------------------------
-    float3 m_eye;
+    explicit CameraWidget(QWidget *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our U vector of our camera
+    /// @brief pointer to the instance of our singleton class
     //----------------------------------------------------------------------------------------------------------------------
-    float3 m_U;
+    static CameraWidget* m_instance;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our V vector of our camera
+    /// @brief "Aperture Radius"
     //----------------------------------------------------------------------------------------------------------------------
-    float3 m_V;
+    QLabel* m_apertureLabel;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our W vector of our camera
+    /// @brief The aperture radius of our camera
     //----------------------------------------------------------------------------------------------------------------------
-    float3 m_W;
+    QDoubleSpinBox* m_apertureRadiusSB;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our up vector
+    /// @brief "Focal Point"
     //----------------------------------------------------------------------------------------------------------------------
-    float3 m_up;
+    QLabel* m_focalPointLabel;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our camera lookat
+    /// @brief X componant of focal point
     //----------------------------------------------------------------------------------------------------------------------
-    float3 m_lookat;
+    QDoubleSpinBox* m_focalPointXSB;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our horizontal field of view
+    /// @brief Y componant of focal point
     //----------------------------------------------------------------------------------------------------------------------
-    float m_hfov;
+    QDoubleSpinBox* m_focalPointYSB;
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief our verticle field of view
+    /// @brief Z componant of focal point
     //----------------------------------------------------------------------------------------------------------------------
-    float m_vfov;
+    QDoubleSpinBox* m_focalPointZSB;
     //----------------------------------------------------------------------------------------------------------------------
-
+    /// @brief Horizontal FOV
+    //----------------------------------------------------------------------------------------------------------------------
+    QDoubleSpinBox* m_hFOV;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Vertical FOV
+    //----------------------------------------------------------------------------------------------------------------------
+    QDoubleSpinBox* m_vFOV;
+    //----------------------------------------------------------------------------------------------------------------------
+public slots:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Enables the depth of field controls
+    //----------------------------------------------------------------------------------------------------------------------
+    void enableDOF(bool _enabled);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Update DOF camera settings
+    //----------------------------------------------------------------------------------------------------------------------
+    void updateDOF();
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Update other camera settings
+    //----------------------------------------------------------------------------------------------------------------------
+    void updateCamera();
+    //----------------------------------------------------------------------------------------------------------------------
+signals:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief Update other camera settings
+    //----------------------------------------------------------------------------------------------------------------------
+    void updateScene();
+    //----------------------------------------------------------------------------------------------------------------------
 };
-
-#endif // PINHOLECAMERA_H
+//----------------------------------------------------------------------------------------------------------------------
+#endif

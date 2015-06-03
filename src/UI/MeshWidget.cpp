@@ -98,13 +98,10 @@ MeshWidget::MeshWidget(QWidget *parent) :
     m_meshScaleZDSpinBox->setValue(1.0);
     meshGridLayout->addWidget(m_meshScaleZDSpinBox, 4, 3, 1, 1);
 
-    QPushButton *openOSLHyperShaderBtn = new QPushButton("Open OSL hypershader",this);
-    connect(openOSLHyperShaderBtn,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
-    meshGridLayout->addWidget(openOSLHyperShaderBtn,5,0,1,1);
 
     QPushButton *openMatLibBtn = new QPushButton("Select Material From Library",this);
     connect(openMatLibBtn,SIGNAL(clicked()),this,SLOT(applyMatFromLib()));
-    meshGridLayout->addWidget(openMatLibBtn,5,2,1,2);
+    meshGridLayout->addWidget(openMatLibBtn,5,0,1,1);
 
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -135,7 +132,7 @@ MeshWidget::~MeshWidget(){
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::importModel(){
     //Lets get the location of a mesh that we wish to import
-    QStringList locations = QFileDialog::getOpenFileNames(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj)"));
+    QStringList locations = QFileDialog::getOpenFileNames(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj *.OBJ)"));
         for(int i=0;i<locations.size();i++){
         //if nothing selected then we dont want to do anything
         if(locations[i].isEmpty()){

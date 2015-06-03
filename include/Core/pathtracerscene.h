@@ -22,8 +22,8 @@
 #include "random.h"
 #include "path_tracer.h"
 #include "helpers.h"
-#include "optixmodel.h"
-#include "pinholecamera.h"
+#include "Core/OptixModel.h"
+#include "Core/PathTraceCamera.h"
 
 using namespace optix;
 
@@ -101,7 +101,7 @@ public:
     /// @brief accesor to our scenes camera
     /// @return our camera
     //----------------------------------------------------------------------------------------------------------------------
-    inline PinholeCamera* getCamera(){return m_camera;}
+    inline PathTraceCamera* getCamera(){return m_camera;}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief function to import a mesh to our scene
     /// @param _path - the path to our mesh
@@ -216,7 +216,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief the camera of our scene
     //----------------------------------------------------------------------------------------------------------------------
-    PinholeCamera *m_camera;
+    PathTraceCamera *m_camera;
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief our device pixel ratio default set to 1 but for mac this could be different
     //----------------------------------------------------------------------------------------------------------------------
