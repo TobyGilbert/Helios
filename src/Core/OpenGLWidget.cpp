@@ -23,7 +23,6 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     // mouse rotation values set to 0
     m_spinXFace=0;
     m_spinYFace=0;
-    m_resolutionScale = 1;
     m_moveRenderReduction = 4;
     m_timedOut = 5;
     m_cameraMovRayDepth = 2;
@@ -146,7 +145,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     if(_w==0||_h==0)return;
     // set the viewport for openGL
     glViewport(0,0,_w,_h);
-    PathTracerScene::getInstance()->resize(_w/m_resolutionScale,_h/m_resolutionScale);
+    PathTracerScene::getInstance()->resize(_w,_h);
     m_cam->setShape(width(), height());
     sceneChanged();
 

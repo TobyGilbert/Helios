@@ -208,20 +208,25 @@ CUDA_SOURCES += optixSrc/*.cu
 # Path to cuda SDK install
 macx:CUDA_DIR = /Developer/NVIDIA/CUDA-6.5
 linux:CUDA_DIR = /usr/local/cuda-6.5
+#add to our defines as we need to know where NVCC is at run time
+DEFINES += "CUDA_DIRECTORY=$$CUDA_DIR"
+
 # Path to cuda toolkit install
 macx:CUDA_SDK = /Developer/NVIDIA/CUDA-6.5/samples
 linux:CUDA_SDK = /usr/local/cuda-6.5/samples
 
+#add a definition to where our OptiX Directory is
+macx:OPTIX_DIR = /Developer/OptiX
+linux:OPTIX_DIR = /usr/local/OptiX
+DEFINES += "OPTIX_DIRECTORY=$$OPTIX_DIR"
 # include paths
-macx:INCLUDEPATH += /Developer/OptiX/SDK/sutil
-macx:INCLUDEPATH += /Developer/OptiX/SDK
-linux:INCLUDEPATH += /usr/local/OptiX/SDK/sutil
-linux:INCLUDEPATH += /usr/local/OptiX/SDK
+INCLUDEPATH += $$OPTIX_DIR/SDK/sutil
+INCLUDEPATH += $$OPTIX_DIR/OptiX/SDK
 INCLUDEPATH += $$CUDA_DIR/include
 INCLUDEPATH += $$CUDA_DIR/common/inc/
 INCLUDEPATH += $$CUDA_DIR/../shared/inc/
-macx:INCLUDEPATH += /Developer/OptiX/include
-linux:INCLUDEPATH += /usr/local/OptiX/include
+INCLUDEPATH += $$OPTIX_DIR/include
+
 # lib dirs
 #QMAKE_LIBDIR += $$CUDA_DIR/lib64
 macx:QMAKE_LIBDIR += $$CUDA_DIR/lib

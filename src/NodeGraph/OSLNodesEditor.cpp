@@ -12,6 +12,8 @@
 #include "NodeGraph/OSLAbstractVarBlock.h"
 #include "Core/pathtracerscene.h"
 
+#define stringify( x ) stringify_literal( x )
+#define stringify_literal( x ) # x
 
 //------------------------------------------------------------------------------------------------------------------------------------
 OSLNodesEditor::OSLNodesEditor(QObject *parent) :
@@ -402,13 +404,10 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         std::string version = std::to_string(vMajor)+"."+std::to_string(vMinor);
         std::cout<<"Compiling with CUDA Version "<<version<<std::endl;
         std::string cudaDir,optixDir;
-    #ifdef DARWIN
-        cudaDir = "/Developer/NVIDIA/CUDA-"+version;
-        optixDir = "/Developer/OptiX";
-    #else
-        cudaDir = "/usr/local/cuda-"+version;
-        optixDir = "/usr/local/OptiX";
-    #endif
+        cudaDir = stringify(CUDA_DIRECTORY);
+        optixDir = stringify(OPTIX_DIRECTORY);
+        std::cout<<"Cuda Dir"<<cudaDir<<std::endl;
+        std::cout<<"Optix Dir"<<optixDir<<std::endl;
         std::string cudaSDKDir;
         cudaSDKDir = cudaDir + "/samples";
         std::string includePaths = " -I"+optixDir+"/SDK"+" -I"+optixDir+"/SDK/sutil"+
