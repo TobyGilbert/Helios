@@ -29,7 +29,6 @@ OptiXModel::OptiXModel(std::string _path)
 }
 //----------------------------------------------------------------------------------------------------------------------
 OptiXModel::OptiXModel(OptiXModel *_instance){
-
     //get our model Id
     m_instanceId = _instance->m_instanceId;
     //increment the instance count
@@ -405,22 +404,6 @@ void OptiXModel::setMaterial(Material _mat){
         m_geometryInstance->setMaterial(0,_mat);
     }
 }
-//----------------------------------------------------------------------------------------------------------------------
-Material OptiXModel::createDefaultMat(){
-    //create our closest hit and any hit programs
-    // Set up diffuse material
-    Material diffuse = PathTracerScene::getInstance()->getContext()->createMaterial();
-//    std::string ptx_path = "ptx/tempMat.cu.ptx";
-    std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    Program diffuse_ch = PathTracerScene::getInstance()->getContext()->createProgramFromPTXFile( ptx_path, "constructShaderGlobals" );
-    Program diffuse_ah = PathTracerScene::getInstance()->getContext()->createProgramFromPTXFile( ptx_path, "shadow" );
-    diffuse->setClosestHitProgram( 0, diffuse_ch );
-    diffuse->setAnyHitProgram( 1, diffuse_ah );
-
-    //now we're all done lets return our material
-    return diffuse;
-}
-
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::setTrans(float *_m, bool _transpose, float *_invM){
     m_trans->setMatrix(_transpose,_m,_invM);

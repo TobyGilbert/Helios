@@ -71,7 +71,7 @@ void OpenGLWidget::initializeGL(){
         1.0f,1.0f
     };
     //notice our tex coords are flipped upside down becuase
-    //the resulting image from a pinhole camera will be upside down
+    //the resulting image from a camera will be upside down
     float texCoords[]={
         //bottom left
         1.0,1.0f,
@@ -155,13 +155,9 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
 void OpenGLWidget::timerEvent(QTimerEvent *){
     updateGL();
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::paintGL(){
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-//    PathTracerScene::getInstance()->trace();
     QTime currentTime = m_timeOutStart.currentTime();
     int secsPassed = m_timeOutStart.secsTo(currentTime);
     //if we haven't timed out then render another frame with our path tracer
@@ -180,7 +176,6 @@ void OpenGLWidget::paintGL(){
     else if ((elementSize % 2) == 0) glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
     else                             glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-//    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, width()/RESOLOUTION_SCALE, height()/RESOLOUTION_SCALE, 0, GL_RGBA, GL_FLOAT, 0);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, PathTracerScene::getInstance()->getWidth(), PathTracerScene::getInstance()->getHeight(), 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
@@ -190,6 +185,7 @@ void OpenGLWidget::paintGL(){
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 }
+//----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewMatrix, glm::mat4 _perspectiveMatrix){
     GLuint MVPLoc = m_shaderProgram->getUniformLoc("MVP");
 
@@ -197,7 +193,6 @@ void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewM
 
     glUniformMatrix4fv(MVPLoc, 1, GL_FALSE, glm::value_ptr(MVP));
 }
-
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
   if(m_rotate && _event->buttons() == Qt::LeftButton){

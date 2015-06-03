@@ -81,9 +81,7 @@ void PathTraceCamera::rotate(glm::mat4 _trans){
     lookat4.w      = 1.0f;
 
     calcVectors(make_float3(final_trans*eye4), make_float3(final_trans*lookat4), make_float3(final_trans*up4),m_hfov,m_vfov);
-
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 Matrix4x4 PathTraceCamera::initWithBasis(const float3 &u, const float3 &v, const float3 &w, const float3 &t){
     float m[16];
