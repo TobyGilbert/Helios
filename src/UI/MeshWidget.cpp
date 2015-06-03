@@ -98,18 +98,9 @@ MeshWidget::MeshWidget(QWidget *parent) :
     m_meshScaleZDSpinBox->setValue(1.0);
     meshGridLayout->addWidget(m_meshScaleZDSpinBox, 4, 3, 1, 1);
 
-    QPushButton *openOSLHyperShaderBtn = new QPushButton("Open OSL hypershader",this);
-    connect(openOSLHyperShaderBtn,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
-    meshGridLayout->addWidget(openOSLHyperShaderBtn,5,0,1,1);
-
     QPushButton *applyShaderBtn = new QPushButton("Apply shader to mesh",this);
     connect(applyShaderBtn,SIGNAL(clicked()),this,SLOT(applyOSLMaterial()));
-    meshGridLayout->addWidget(applyShaderBtn,5,1,1,1);
-
-    QPushButton *openMatLibBtn = new QPushButton("Select Material From Library",this);
-    connect(openMatLibBtn,SIGNAL(clicked()),this,SLOT(applyMatFromLib()));
-    meshGridLayout->addWidget(openMatLibBtn,5,2,1,2);
-
+    meshGridLayout->addWidget(applyShaderBtn,5,0,1,2);
 
     m_meshSpacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     meshGridLayout->addItem(m_meshSpacer, children().size(), 0, 2, 4);

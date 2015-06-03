@@ -6,6 +6,9 @@
 #include <QCheckBox>
 #include <QDoubleSpinBox>
 
+/// @author Toby Gilbert
+/// @brief A camera widget used to update camera setting e.g. depth of field
+
 //decare our static instance of our widget
 CameraWidget* CameraWidget::m_instance;
 //----------------------------------------------------------------------------------------------------------------------
@@ -30,26 +33,43 @@ CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent){
     QGridLayout *gridLayout = new QGridLayout(groupbox);
     groupbox->setLayout(gridLayout);
 
+    // FOV
+    QLabel *hFOVlabel = new QLabel(QString("Horizontal Field of View"), this);
+    m_hFOV = new QDoubleSpinBox(this);
+    m_hFOV->setValue(35.0);
+    gridLayout->addWidget(hFOVlabel, 0, 0, 1, 1);
+    gridLayout->addWidget(m_hFOV, 0, 1, 1, 1);
+    QLabel *vFOVlabel = new QLabel(QString("Vertical Field of View"), this);
+    m_vFOV = new QDoubleSpinBox(this);
+    m_vFOV->setValue(35.0);
+    gridLayout->addWidget(vFOVlabel, 1, 0, 1, 1);
+    gridLayout->addWidget(m_vFOV, 1, 1, 1, 1);
+
+    QGroupBox* DOFgroupbox = new QGroupBox(this);
+    gridLayout->addWidget(DOFgroupbox, 2, 0, 1, 2);
+    QGridLayout* DOFgridLayout = new QGridLayout(groupbox);
+    DOFgroupbox->setLayout(DOFgridLayout);
+
     //Enable DOF checkbox
     QLabel *DOFlabel = new QLabel(QString("Enable Depth of Field"), this);
-    gridLayout->addWidget(DOFlabel, 0, 0, 1, 1);
+    DOFgridLayout->addWidget(DOFlabel, 0, 0, 1, 1);
     QCheckBox* DOFcheckbox = new QCheckBox(this);
     DOFcheckbox->setChecked(false);
-    gridLayout->addWidget(DOFcheckbox, 0, 1, 1, 1);
+    DOFgridLayout->addWidget(DOFcheckbox, 0, 1, 1, 1);
 
     // Aperture radius
     m_apertureLabel = new QLabel(QString("Aperture Radius"), this);
     m_apertureLabel->setEnabled(false);
-    gridLayout->addWidget(m_apertureLabel, 1, 0, 1, 1);
+    DOFgridLayout->addWidget(m_apertureLabel, 1, 0, 1, 1);
     m_apertureRadiusSB = new QDoubleSpinBox(this);
     m_apertureRadiusSB->setEnabled(false);
     m_apertureRadiusSB->setValue(0.5);
-    gridLayout->addWidget(m_apertureRadiusSB, 1, 1, 1, 1);
+    DOFgridLayout->addWidget(m_apertureRadiusSB, 1, 1, 1, 1);
 
     // Focal point
     m_focalPointLabel = new QLabel(QString("Focal Point"), this);
     m_focalPointLabel->setEnabled(false);
-    gridLayout->addWidget(m_focalPointLabel, 2, 0, 1, 1);
+    DOFgridLayout->addWidget(m_focalPointLabel, 2, 0, 1, 1);
     m_focalPointXSB = new QDoubleSpinBox(this);
     m_focalPointYSB = new QDoubleSpinBox(this);
     m_focalPointZSB = new QDoubleSpinBox(this);
@@ -59,16 +79,16 @@ CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent){
     m_focalPointXSB->setValue(0.0);
     m_focalPointYSB->setValue(0.0);
     m_focalPointZSB->setValue(0.0);
-    m_focalPointXSB->setMaximum(10.0);
-    m_focalPointYSB->setMaximum(10.0);
-    m_focalPointZSB->setMaximum(10.0);
-    m_focalPointXSB->setMinimum(-10.0);
-    m_focalPointYSB->setMinimum(-10.0);
-    m_focalPointZSB->setMinimum(-10.0);
+    m_focalPointXSB->setMaximum(INFINITY);
+    m_focalPointYSB->setMaximum(INFINITY);
+    m_focalPointZSB->setMaximum(INFINITY);
+    m_focalPointXSB->setMinimum(-INFINITY);
+    m_focalPointYSB->setMinimum(-INFINITY);
+    m_focalPointZSB->setMinimum(-INFINITY);
 
-    gridLayout->addWidget(m_focalPointXSB, 2, 1, 1, 1);
-    gridLayout->addWidget(m_focalPointYSB, 2, 2, 1, 1);
-    gridLayout->addWidget(m_focalPointZSB, 2, 3, 1, 1);
+    DOFgridLayout->addWidget(m_focalPointXSB, 2, 1, 1, 1);
+    DOFgridLayout->addWidget(m_focalPointYSB, 2, 2, 1, 1);
+    DOFgridLayout->addWidget(m_focalPointZSB, 2, 3, 1, 1);
 
     QSpacerItem* spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     gridLayout->addItem(spacer, 3, 0, 1, 4);
@@ -81,6 +101,8 @@ CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent){
     connect(m_focalPointXSB, SIGNAL(valueChanged(double)), this, SLOT(updateDOF()));
     connect(m_focalPointYSB, SIGNAL(valueChanged(double)), this, SLOT(updateDOF()));
     connect(m_focalPointZSB, SIGNAL(valueChanged(double)), this, SLOT(updateDOF()));
+    connect(m_hFOV, SIGNAL(valueChanged(double)), this, SLOT(updateCamera()));
+    connect(m_vFOV, SIGNAL(valueChanged(double)), this, SLOT(updateCamera()));
 
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -105,7 +127,7 @@ void CameraWidget::enableDOF(bool _enabled){
     }
 
     // Reset the frame
-    PathTracerScene::getInstance()->signalSceneChanged();
+    updateScene();
 }
 //----------------------------------------------------------------------------------------------------------------------
 void CameraWidget::updateDOF(){
@@ -113,6 +135,17 @@ void CameraWidget::updateDOF(){
     PathTracerScene::getInstance()->getContext()["focal_point"]->setFloat(m_focalPointXSB->value(), m_focalPointYSB->value(), m_focalPointZSB->value());
 
     // Reset the frame
-    PathTracerScene::getInstance()->signalSceneChanged();
+    updateScene();
 }
 //----------------------------------------------------------------------------------------------------------------------
+void CameraWidget::updateCamera(){
+    PathTracerScene::getInstance()->getCamera()->setParameters(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
+                                                               optix::make_float3( 0.0f, 0.0f, 0.0f ),        //lookat
+                                                               optix::make_float3( 0.0f, 1.0f,  0.0f ),       // up
+                                                               m_vFOV->value(),
+                                                               m_hFOV->value());
+
+    PathTracerScene::getInstance()->updateCamera();
+
+    updateScene();
+}
