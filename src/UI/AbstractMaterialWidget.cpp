@@ -84,6 +84,10 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     toolLayout->addWidget(loadNgBtn,5,0,1,1);
     connect(loadNgBtn,SIGNAL(pressed()),this,SLOT(importNodeGraph()));
 
+    QPushButton *applyMatBtn = new QPushButton("Apply Material",toolGrbBox);
+    toolLayout->addWidget(applyMatBtn,6,0,1,1);
+    connect(applyMatBtn,SIGNAL(pressed()),this,SLOT(applyMaterialToMesh()));
+
     //push our buttons together
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     toolLayout->addItem(spacer,toolGrbBox->children().size(),0,1,1);
@@ -138,6 +142,29 @@ void AbstractMaterialWidget::createOptixMaterial(){
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::applyMaterialToMesh(){
+    if(m_matCreated)
+    {
+        if(m_matAddedToLib)
+        {
+
+        }
+        else
+        {
+            std::string matName = addMaterialToLib();
+            if(matName.length()==0)
+            {
+                return;
+            }
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this,"Add Material","No OSL shader created. Please Create Material First");
+    }
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::applyMaterialToMesh(std::string _mesh)
 {
     if(m_matCreated){
@@ -145,7 +172,7 @@ void AbstractMaterialWidget::applyMaterialToMesh(std::string _mesh)
         PathTracerScene::getInstance()->setModelMaterial(_mesh,m_material);
     }
     else{
-        QMessageBox::warning(this,"Add Material","No OSL shader created");
+        QMessageBox::warning(this,"Add Material","No OSL shader created. Please Create Material First");
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -281,19 +308,19 @@ void AbstractMaterialWidget::newMaterial(){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void AbstractMaterialWidget::addMaterialToLib(){
+std::string AbstractMaterialWidget::addMaterialToLib(){
     if(!m_matCreated)  {
         QMessageBox::warning(this,"Add Material to Library","No material created");
-        return;
+        return "";
     }
     if(m_matAddedToLib) {
         QMessageBox::warning(this,"Add Material to Library","Material already added to library");
-        return;
+        return "";
     }
     std::string matName = QInputDialog::getText(this,"Add Material to Library","Material Name",QLineEdit::Normal).toStdString();
     if(matName.length()==0){
         QMessageBox::warning(this,"Add Material to Library","You must give your material a name to add it to the library");
-        return;
+        return "";
     }
 
     if(!QDir("NodeGraphs").exists()) QDir().mkdir("NodeGraphs");
@@ -304,6 +331,11 @@ void AbstractMaterialWidget::addMaterialToLib(){
     if(MaterialLibrary::getInstance()->addMaterialToLibrary(matName,m_material)){
         m_matAddedToLib = true;
         m_curNGPath = ("NodeGraphs/" + matName + ".hel").c_str();
+        return matName;
+    }
+    else
+    {
+        return "";
     }
 }
 
