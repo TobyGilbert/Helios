@@ -69,7 +69,7 @@ void Light::createParollelogramLight(){
     m_geometryGroup->setChildCount(1);
     m_geometryGroup->setChild(0, m_geometryInstance);
 
-    m_acceleration = PathTracerScene::getInstance()->getContext()->createAcceleration("Sbvh", "Sbvh");
+    m_acceleration = PathTracerScene::getInstance()->getContext()->createAcceleration("Sbvh", "Bvh");
     m_geometryGroup->setAcceleration(m_acceleration);
 
     m_acceleration->markDirty();

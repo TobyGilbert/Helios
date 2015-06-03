@@ -139,7 +139,7 @@ MeshWidget::~MeshWidget(){
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::importModel(){
     //Lets get the location of a mesh that we wish to import
-    QStringList locations = QFileDialog::getOpenFileNames(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj)"));
+    QStringList locations = QFileDialog::getOpenFileNames(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj *.OBJ)"));
         for(int i=0;i<locations.size();i++){
         //if nothing selected then we dont want to do anything
         if(locations[i].isEmpty()){

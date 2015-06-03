@@ -59,7 +59,8 @@ SOURCES += \
     src/NodeGraph/OSLVarIntBlock.cpp \
     src/NodeGraph/ImageNodeProxyWidget.cpp \
     src/NodeGraph/OSLVarImageBlock.cpp \
-    src/UI/RenderSettings.cpp
+    src/UI/RenderSettings.cpp \
+    src/UI/CameraWidget.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -113,7 +114,10 @@ HEADERS += \
     include/NodeGraph/ImageNodeProxyWidget.h \
     include/NodeGraph/OSLVarImageBlock.h \
     include/stdosl.h \
-    include/UI/RenderSettings.h
+    include/UI/RenderSettings.h \
+    include/OSLCompiler/ErrorHandler.h \
+    include/OSLCompiler/export.h \
+    include/UI/CameraWidget.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

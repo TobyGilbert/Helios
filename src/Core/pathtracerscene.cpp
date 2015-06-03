@@ -94,6 +94,8 @@ void PathTracerScene::init(){
     m_context["U"]->setFloat( U );
     m_context["V"]->setFloat( V );
     m_context["W"]->setFloat( W);
+    m_context["aperture_radius"]->setFloat(0.0);
+    m_context["focal_point"]->setFloat(0.0, 0.0, 0.0);
 
     //set our max ray depth
     m_context["maxDepth"]->setUint(5);
@@ -108,7 +110,7 @@ void PathTracerScene::init(){
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
-    optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "pathtrace_camera" );
+    optix::Program ray_gen_program = m_context->createProgramFromPTXFile( ptx_path, "depth_of_field_camera" );
 
     m_context->setRayGenerationProgram( 0, ray_gen_program );
     optix::Program exception_program = m_context->createProgramFromPTXFile( ptx_path, "exception" );

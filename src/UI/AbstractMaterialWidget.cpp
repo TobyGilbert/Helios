@@ -36,7 +36,7 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     //add our groupbox
     m_widgetGroupBox = new QGroupBox(this);
     this->setWidget(m_widgetGroupBox);
-    m_groupBoxLayout = new QGridLayout(this);
+    m_groupBoxLayout = new QGridLayout(m_widgetGroupBox);
     m_widgetGroupBox->setLayout(m_groupBoxLayout);
     //create our graphics view to hold our node interface scene
     m_graphicsView = new QGraphicsView(this);

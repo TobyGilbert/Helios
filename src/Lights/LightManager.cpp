@@ -27,13 +27,12 @@ LightManager::~LightManager(){
 }
 //----------------------------------------------------------------------------------------------------------------------
 void LightManager::createGUI(){
-    // Create a widget to work with
-    QWidget* lightWidget = new QWidget(this);
-    this->setWidget(lightWidget);
-
-    // Apply layout to that widget
-    QGridLayout *gridLayout = new QGridLayout(this);
-    lightWidget->setLayout(gridLayout);
+    this->setWindowTitle("Light Manager");
+    //add our grid layout to our widget
+    QGroupBox * gb = new QGroupBox(this);
+    this->setWidget(gb);
+    QGridLayout *gridLayout = new QGridLayout(gb);
+    gb->setLayout(gridLayout);
 
     // Combo box for selecting light to use
     m_lightIndexListWidget = new QListWidget(this);
@@ -110,12 +109,9 @@ void LightManager::createGUI(){
     gridLayout->addWidget(m_emissionY, 5, 2, 1, 1);
     gridLayout->addWidget(m_emissionZ, 5, 3, 1, 1);
 
-    m_button = new QPushButton("hello", this);
-    gridLayout->addWidget(m_button, 6, 0, 1, 4);
-
     // A spacer to push everything to the top
     QSpacerItem* spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    gridLayout->addItem(spacer, 7, 0, 1, 4);
+    gridLayout->addItem(spacer, 6, 0, 1, 4);
 
     // Connections
     connect(addLightBtn, SIGNAL(clicked()), this, SLOT(addLight()));
@@ -137,7 +133,18 @@ void LightManager::createGUI(){
     connect(addLightBtn, SIGNAL(clicked()), m_emissionZ, SLOT(show()));
 
     connect(m_lightIndexListWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(updateGUI(QModelIndex)));
-    connect(m_button, SIGNAL(clicked()), this, SLOT(updateLight()));
+    connect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_translateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_translateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
 }
 //----------------------------------------------------------------------------------------------------------------------
 void LightManager::initialise(){
@@ -197,6 +204,7 @@ void LightManager::setGuiDefaults(){
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::addLight(){
     PathTracerScene::getInstance()->addLight();
+    updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::updateLight(){
@@ -207,13 +215,12 @@ void LightManager::updateLight(){
     lightBuffer[m_selectedLight].emission.y = m_emissionY->value();
     lightBuffer[m_selectedLight].emission.z = m_emissionZ->value();
 
-    float DtoR = 3.14159265359/180.0;
     glm::mat4 rotx = glm::mat4(1.0);
     glm::mat4 roty = glm::mat4(1.0);
     glm::mat4 rotz = glm::mat4(1.0);
-    rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
-    roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
-    rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
+    rotx = glm::rotate(rotx, (float)m_rotateX->value(), glm::vec3(1.0, 0.0, 0.0));
+    roty = glm::rotate(roty, (float)m_rotateY->value(), glm::vec3(0.0, 1.0, 0.0));
+    rotz = glm::rotate(rotz, (float)m_rotateZ->value(), glm::vec3(0.0, 0.0, 1.0));
 
     glm::vec4 corner;
     glm::vec4 v1;
@@ -228,15 +235,6 @@ void LightManager::updateLight(){
     v2.y = lightBuffer[m_selectedLight].v2.y;
     v2.z = lightBuffer[m_selectedLight].v2.z;
 
-    //corner = ( rotx * roty * rotz) * corner;
-    //v1 = ( rotx * roty * rotz) * v1;
-    //v2 = ( rotx * roty * rotz) * v2;
-
-    lightBuffer[m_selectedLight].corner = make_float3(corner.x, corner.y, corner.z);
-    lightBuffer[m_selectedLight].v1 = make_float3(v1.x, v1.y, v1.z);
-    lightBuffer[m_selectedLight].v2 = make_float3(v2.x, v2.y, v2.z);
-
-
     // Translate using the scaled values
     lightBuffer[m_selectedLight].corner.x = (0.5 * m_scaleX->value()) + m_translateX->value();
     lightBuffer[m_selectedLight].v1.x = (-1.0 * m_scaleX->value()) + m_translateX->value();
@@ -246,24 +244,30 @@ void LightManager::updateLight(){
     lightBuffer[m_selectedLight].corner.z = (-0.5 * m_scaleZ->value()) + m_translateZ->value();
     lightBuffer[m_selectedLight].v2.z = (1.0 * m_scaleZ->value()) + m_translateZ->value();
 
+//    corner = /*( rotx * roty * rotz) */ glm::vec4(lightBuffer[m_selectedLight].corner.x, lightBuffer[m_selectedLight].corner.y, lightBuffer[m_selectedLight].corner.z, 1.0);
+//    v1 = /*( rotx * roty * rotz) */ glm::vec4(lightBuffer[m_selectedLight].v1.x, lightBuffer[m_selectedLight].v1.y, lightBuffer[m_selectedLight].v1.z, 1.0);
+//    v2 = /*( rotx * roty * rotz) */ glm::vec4(lightBuffer[m_selectedLight].v2.x, lightBuffer[m_selectedLight].v2.y, lightBuffer[m_selectedLight].v2.z, 1.0);
+
+    //lightBuffer[m_selectedLight].corner = make_float3(corner.x, corner.y, corner.z);
+    //lightBuffer[m_selectedLight].v1 = make_float3(v1.x, v1.y, v1.z);
+    //lightBuffer[m_selectedLight].v2 = make_float3(v2.x, v2.y, v2.z);
+
     m_lightBuffer->unmap();
 
     // Update the vector to store transforms
     LightTransforms lightTrans;
     lightTrans.m_translate = glm::vec3(m_translateX->value(), m_translateY->value(), m_translateZ->value());
-    //lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
+    lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
     lightTrans.m_scale = glm::vec3(m_scaleX->value(), m_scaleY->value(), m_scaleZ->value());
     m_lightTransforms[m_selectedLight]= lightTrans;
 
-    glm::mat4 transform = glm::mat4();
+    glm::mat4 transform = glm::mat4(1.0);
 
     // Rotate
     transform = rotx * roty * rotz;
 
     // Scale
-    transform[0][0] = m_scaleX->value();
-    transform[1][1] = m_scaleY->value();
-    transform[2][2] = m_scaleZ->value();
+    transform = glm::scale(transform, glm::vec3(m_scaleX->value(),m_scaleY->value(),m_scaleZ->value()));
 
     // Translate
     transform[3][0] = m_translateX->value();
@@ -278,6 +282,7 @@ void LightManager::updateLight(){
 
     // Update accelleration structure
     PathTracerScene::getInstance()->cleanTopAcceleration();
+    updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::updateGUI(QModelIndex _index){
