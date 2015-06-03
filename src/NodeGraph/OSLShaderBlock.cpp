@@ -37,7 +37,6 @@ void OSLShaderBlock::save(QDataStream &ds){
         ds << port->getVaribleType();
         //write how many init params it has
         std::vector<std::string> initParams = port->getInitParams();
-        std::cout<<"initParamsSize"<<(int)initParams.size()<<std::endl;
         ds << (int)initParams.size();
         //write in our init params
         for(unsigned int i=0;i<initParams.size();i++){

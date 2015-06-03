@@ -209,7 +209,6 @@ void OptiXModel::processMesh(const aiMesh *_mesh){
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(){
 
-    std::cout<<"Num verts in mesh "<<m_vertices.size()/3<<std::endl;
     // Create vertex, normal, and texture_coordinate buffers
     m_vertexBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
     m_normalBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );

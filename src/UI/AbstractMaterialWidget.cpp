@@ -9,6 +9,7 @@
 #include "NodeGraph/OSLVarIntBlock.h"
 #include "NodeGraph/OSLVarImageBlock.h"
 #include "Core/MaterialLibrary.h"
+#include "UI/MeshWidget.h"
 #include <QMenu>
 #include <QPoint>
 #include <QFileDialog>
@@ -98,7 +99,27 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
 
     //create a material in our context
     m_material = PathTracerScene::getInstance()->getContext()->createMaterial();
+
 }
+//------------------------------------------------------------------------------------------------------------------------------------
+void AbstractMaterialWidget::compileAndAddToLib(QString _path){
+    QFileInfo fileInfo(_path);
+    std::cerr<<"Loading Material "<<fileInfo.baseName().toStdString()<<" from "<<_path.toStdString()<<std::endl;
+    loadNodeGraph(_path);
+    std::cerr<<"Compiling Material "<<fileInfo.baseName().toStdString()<<std::endl;
+    m_matCreated = false;
+    createOptixMaterial();
+    if(m_matCreated)
+    {
+        MaterialLibrary::getInstance()->addMaterialToLibrary(fileInfo.baseName().toStdString(),m_material);
+    }
+    else
+    {
+        std::cerr<<"Compilation of material "<<fileInfo.baseName().toStdString()<<" from "<<_path.toStdString()<<" has failed and not been added to the library."<<std::endl;
+    }
+    newMaterial();
+}
+
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget(){
     for(unsigned int i=0; i<m_nodes.size();i++){
@@ -114,7 +135,7 @@ AbstractMaterialWidget* AbstractMaterialWidget::getInstance(QWidget *parent)
                 std::cerr<<"AbstractMaterialWidget already has a parent"<<std::endl;
             }
             else{
-                m_instance->setParent(parent);
+                m_instance->setParent(parent,Qt::Window);
             }
         }
     }
@@ -139,7 +160,6 @@ void AbstractMaterialWidget::createOptixMaterial(){
         QMessageBox::warning(this,tr("Shader Compilation Failed"),tr(status.c_str()));
         m_matCreated=false;
     }
-
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void AbstractMaterialWidget::applyMaterialToMesh(){
@@ -147,20 +167,28 @@ void AbstractMaterialWidget::applyMaterialToMesh(){
     {
         if(m_matAddedToLib)
         {
-
+            MeshWidget::getInstance()->applyOSLMaterial(m_material,m_curMatName);
         }
         else
         {
-            std::string matName = addMaterialToLib();
-            if(matName.length()==0)
+            if(addMaterialToLib())
             {
-                return;
+                MeshWidget::getInstance()->applyOSLMaterial(m_material,m_curMatName);
             }
+
         }
     }
     else
     {
-        QMessageBox::warning(this,"Add Material","No OSL shader created. Please Create Material First");
+        QMessageBox::StandardButton reply = QMessageBox::question(this,"Add Material","No OSL shader created. Would you like to compile it now?",QMessageBox::Yes|QMessageBox::No);
+        if(reply == QMessageBox::Yes)
+        {
+            createOptixMaterial();
+            applyMaterialToMesh();
+        }
+        else{
+            return;
+        }
     }
 }
 
@@ -168,7 +196,7 @@ void AbstractMaterialWidget::applyMaterialToMesh(){
 void AbstractMaterialWidget::applyMaterialToMesh(std::string _mesh)
 {
     if(m_matCreated){
-        std::cerr<<"Adding material "<<m_materialName<<" to mesh "<<_mesh<<std::endl;
+        std::cerr<<"Adding material "<<m_curMatName<<" to mesh "<<_mesh<<std::endl;
         PathTracerScene::getInstance()->setModelMaterial(_mesh,m_material);
     }
     else{
@@ -308,19 +336,19 @@ void AbstractMaterialWidget::newMaterial(){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-std::string AbstractMaterialWidget::addMaterialToLib(){
+bool AbstractMaterialWidget::addMaterialToLib(){
     if(!m_matCreated)  {
         QMessageBox::warning(this,"Add Material to Library","No material created");
-        return "";
+        return false;
     }
     if(m_matAddedToLib) {
         QMessageBox::warning(this,"Add Material to Library","Material already added to library");
-        return "";
+        return false;
     }
     std::string matName = QInputDialog::getText(this,"Add Material to Library","Material Name",QLineEdit::Normal).toStdString();
     if(matName.length()==0){
         QMessageBox::warning(this,"Add Material to Library","You must give your material a name to add it to the library");
-        return "";
+        return false;
     }
 
     if(!QDir("NodeGraphs").exists()) QDir().mkdir("NodeGraphs");
@@ -331,11 +359,12 @@ std::string AbstractMaterialWidget::addMaterialToLib(){
     if(MaterialLibrary::getInstance()->addMaterialToLibrary(matName,m_material)){
         m_matAddedToLib = true;
         m_curNGPath = ("NodeGraphs/" + matName + ".hel").c_str();
-        return matName;
+        m_curMatName = matName;
+        return true;
     }
     else
     {
-        return "";
+        return false;
     }
 }
 
@@ -375,5 +404,4 @@ void AbstractMaterialWidget::saveNodeGraph(){
         m_nodeEditor->save(ds);
     }
 }
-
 //------------------------------------------------------------------------------------------------------------------------------------

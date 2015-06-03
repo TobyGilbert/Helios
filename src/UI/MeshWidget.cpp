@@ -102,10 +102,6 @@ MeshWidget::MeshWidget(QWidget *parent) :
     connect(openOSLHyperShaderBtn,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
     meshGridLayout->addWidget(openOSLHyperShaderBtn,5,0,1,1);
 
-    QPushButton *applyShaderBtn = new QPushButton("Apply shader to mesh",this);
-    connect(applyShaderBtn,SIGNAL(clicked()),this,SLOT(applyOSLMaterial()));
-    meshGridLayout->addWidget(applyShaderBtn,5,1,1,1);
-
     QPushButton *openMatLibBtn = new QPushButton("Select Material From Library",this);
     connect(openMatLibBtn,SIGNAL(clicked()),this,SLOT(applyMatFromLib()));
     meshGridLayout->addWidget(openMatLibBtn,5,2,1,2);
@@ -296,8 +292,24 @@ void MeshWidget::signalTransformChange(double _val){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::applyOSLMaterial(){
-    AbstractMaterialWidget::getInstance()->applyMaterialToMesh(m_curMeshName.toStdString());
+void MeshWidget::applyOSLMaterial(Material _mat, std::string _matName){
+    QList<QListWidgetItem*> items = m_modelList->selectedItems();
+    if(items.size()==0){
+        QMessageBox::information(this,"Mesh Widget","Nothing selected to apply material to.");
+        return;
+    }
+    std::map <QString, modelProp *>::const_iterator model;
+    for(int i=0;i<items.size();i++){
+        std::cerr<<"Applying material "<<_matName<<" to mesh "<<items[i]->text().toStdString()<<std::endl;
+        PathTracerScene::getInstance()->setModelMaterial(items[i]->text().toStdString(),_mat);
+        model = m_modelProperties.find(items[i]->text());
+        if(model!=m_modelProperties.end()){
+            model->second->materialName = _matName;
+        }
+        else{
+            std::cerr<<"Warning: MeshWidget, Could not find model properties for "<<items[i]->text().toStdString()<<std::endl;
+        }
+    }
     updateScene();
 }
 //----------------------------------------------------------------------------------------------------------------------

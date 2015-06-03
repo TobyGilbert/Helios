@@ -6,7 +6,7 @@
 #include "UI/RenderSettings.h"
 #include <QFileDialog>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow){
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) ,m_menuCreated(false){
     ui->setupUi(this);
 
     QGLFormat format;
@@ -16,8 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     m_openGLWidget = new OpenGLWidget(format,this);
     ui->gridLayout->addWidget(m_openGLWidget,0,1,2,2);
 
-    createMenus();
-
+    connect(m_openGLWidget,SIGNAL(pathTracerCreated()),this,SLOT(createMenus()));
 }
 
 MainWindow::~MainWindow(){
@@ -31,14 +30,21 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::createMenus(){
+    if(!m_menuCreated)
+    {
+        m_menuCreated = true;
+    }
+    else{
+        return;
+    }
     //--------------------------------------------------------------------------------------------------------------------
     //----------------------------Create our node graph widget instance---------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
-
     //init our instance with this as the parent. this means when this class is deleted it also will be deleted
     AbstractMaterialWidget::getInstance(this)->hide();
     //init our materail library
     MaterialLibrary::getInstance(this)->hide();
+    MaterialLibrary::getInstance()->importAllFrom("NodeGraphs/");
     //init our mesh library
     MeshWidget::getInstance(this)->hide();
 
