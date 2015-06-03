@@ -1,4 +1,4 @@
-#include "Core/optixmodel.h"
+#include "Core/OptixModel.h"
 #include "Core/pathtracerscene.h"
 
 #include <optixu/optixu.h>
