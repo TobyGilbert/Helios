@@ -92,6 +92,27 @@ void MeshWidget::load(QDataStream &ds)
             tempProps->materialName = matName.toStdString();
         }
 
+        //check if the name of our object is already taken in our scene
+        bool nameOk = false;
+        QString tempName = tempProps->name;
+        int nameIncrement = 1;
+        while(!nameOk)
+        {
+            bool nameTake = false;
+            for(int i=0;i<m_modelList->count();i++)
+            {
+                if (m_modelList->item(i)->text()==tempName)
+                {
+                    tempName = tempProps->name+QString("%1").arg(nameIncrement);
+                    nameIncrement++;
+                    nameTake = true;
+                }
+            }
+            if(nameTake == false) nameOk = true;
+        }
+        tempProps->name = tempName;
+
+
         //If we already have this model in our scene then we may as well make the new one an instance
         it = paths.find(tempProps->meshPath);
         if(it==paths.end())
@@ -377,6 +398,7 @@ void MeshWidget::removeSelected()
     QList<QListWidgetItem*> items = m_modelList->selectedItems();
     for(int i=0;i<items.size();i++)
     {
+        std::cout<<"Deleting "<<items[i]->text().toStdString()<<std::endl;
         PathTracerScene::getInstance()->removeGeomtry(items[i]->text().toStdString());
         std::map <QString, modelProp *>::iterator model=m_modelProperties.find(items[i]->text());
         delete model->second;
@@ -386,7 +408,6 @@ void MeshWidget::removeSelected()
     }
     updateScene();
 }
-
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::modelSelected(QListWidgetItem *_item)
 {

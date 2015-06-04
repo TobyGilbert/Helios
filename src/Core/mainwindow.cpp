@@ -257,6 +257,16 @@ void MainWindow::saveScene()
 }
 void MainWindow::loadScene()
 {
+    //See if there is anything already in our scene
+    //if so ask the user if they would like to clear it first
+    if(MeshWidget::getInstance()->getNumModels()>0)
+    {
+        QMessageBox::StandardButton reply = QMessageBox::question(this,"Scene Import","Would you like to clear the current scene?",QMessageBox::Yes|QMessageBox::No);
+        if(reply==QMessageBox::Yes)
+        {
+            MeshWidget::getInstance()->clearScene();
+        }
+    }
     //get the path to our file location
     QStringList files = QFileDialog::getOpenFileNames(this,"Load Scene","","*.sun");
     //iterate through our selected files

@@ -21,7 +21,7 @@ PathTracerScene* PathTracerScene::getInstance(){
 
 //----------------------------------------------------------------------------------------------------------------------
 PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
-                                    , m_sqrt_num_samples( 2u )
+                                    , m_sqrt_num_samples( 1u )
                                     , m_width(512)
                                     , m_height(512)
                                     , m_frame(0)
@@ -213,6 +213,7 @@ void PathTracerScene::removeGeomtry(std::string _id)
         m_globalTransGroup->getAcceleration()->markDirty();
         delete model->second;
         m_meshArray.erase(model);
+
     }
     else
     {

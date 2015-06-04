@@ -14,6 +14,7 @@ OptiXModel::OptiXModel(std::string _path)
 {
     std::cerr<<"Importing model "<<_path<<std::endl;
     std::stringstream id;
+    id<<this;
     m_instanceCount[id.str()] = 0;
     m_instanceId = id.str();
     // identity matrix to init our transformation
