@@ -16,10 +16,12 @@ OSLVarImageBlock::OSLVarImageBlock(QGraphicsScene *_scene, Material _mat, QGraph
     m_widgetProxy = new ImageNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-OSLVarImageBlock::~OSLVarImageBlock(){
+OSLVarImageBlock::~OSLVarImageBlock()
+{
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarImageBlock::save(QDataStream &ds){
+void OSLVarImageBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypeString;
@@ -42,7 +44,8 @@ void OSLVarImageBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarImageBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarImageBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

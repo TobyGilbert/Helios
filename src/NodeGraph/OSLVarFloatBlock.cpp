@@ -15,10 +15,12 @@ OSLVarFloatBlock::OSLVarFloatBlock(QGraphicsScene *_scene, Material _mat, QGraph
     m_widgetProxy = new FloatNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-OSLVarFloatBlock::~OSLVarFloatBlock(){
+OSLVarFloatBlock::~OSLVarFloatBlock()
+{
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarFloatBlock::save(QDataStream &ds){
+void OSLVarFloatBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypeFloat;
@@ -40,7 +42,8 @@ void OSLVarFloatBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarFloatBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarFloatBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

@@ -143,10 +143,12 @@ bool QNodesEditor::eventFilter(QObject *o, QEvent *e)
 					conn->updatePath();
 					conn = 0;
 
-                    if (port1->block()->type()==OSLAbstractVarBlock::Type){
+                    if (port1->block()->type()==OSLAbstractVarBlock::Type)
+                    {
                         ((OSLAbstractVarBlock *)port1->block())->setLinkedVar();
                     }
-                    else if (port2->block()->type()==OSLAbstractVarBlock::Type){
+                    else if (port2->block()->type()==OSLAbstractVarBlock::Type)
+                    {
                         ((OSLAbstractVarBlock *)port2->block())->setLinkedVar();
                     }
 					return true;

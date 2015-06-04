@@ -15,7 +15,8 @@ OSLVarPointBlock::OSLVarPointBlock(QGraphicsScene *_scene, Material _mat, QGraph
     m_widgetProxy = new FloatThreeNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarPointBlock::save(QDataStream &ds){
+void OSLVarPointBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypePoint;
@@ -39,7 +40,8 @@ void OSLVarPointBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarPointBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarPointBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

@@ -69,6 +69,20 @@ void MaterialLibrary::importAllFrom(QString _path){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
+bool MaterialLibrary::getMatFromLib(std::string _mat, optix::Material &o_mat)
+{
+    std::map <std::string, optix::Material >::const_iterator mat = m_materials.find(_mat);
+    if(mat!=m_materials.end())
+    {
+        o_mat = mat->second;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
 void MaterialLibrary::deleteSelectedMat(){
     QList<QListWidgetItem*> items = m_matListWidget->selectedItems();
     std::map <std::string, optix::Material >::const_iterator mat;

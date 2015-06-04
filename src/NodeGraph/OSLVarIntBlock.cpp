@@ -14,10 +14,12 @@ OSLVarIntBlock::OSLVarIntBlock(QGraphicsScene *_scene, Material _mat, QGraphicsI
     m_widgetProxy = new IntNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-OSLVarIntBlock::~OSLVarIntBlock(){
+OSLVarIntBlock::~OSLVarIntBlock()
+{
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarIntBlock::save(QDataStream &ds){
+void OSLVarIntBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypeInt;
@@ -39,7 +41,8 @@ void OSLVarIntBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarIntBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarIntBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

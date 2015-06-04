@@ -12,21 +12,26 @@
 //decare our static instance of our widget
 CameraWidget* CameraWidget::m_instance;
 //----------------------------------------------------------------------------------------------------------------------
-CameraWidget* CameraWidget::getInstance(QWidget *parent){
-    if(!m_instance){
+CameraWidget* CameraWidget::getInstance(QWidget *parent)
+{
+    if(!m_instance)
+    {
         m_instance = new CameraWidget(parent);
     }
-    else if(parent){
+    else if(parent)
+    {
         m_instance->setParent(parent);
     }
     return m_instance;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void CameraWidget::destroy(){
+void CameraWidget::destroy()
+{
     delete m_instance;
 }
 //----------------------------------------------------------------------------------------------------------------------
-CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent){
+CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent)
+{
     this->setWindowTitle("Camera");
     QGroupBox *groupbox = new QGroupBox(this);
     this->setWidget(groupbox);
@@ -106,11 +111,13 @@ CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-CameraWidget::~CameraWidget(){
+CameraWidget::~CameraWidget()
+{
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void CameraWidget::enableDOF(bool _enabled){
+void CameraWidget::enableDOF(bool _enabled)
+{
     m_apertureLabel->setEnabled(_enabled);
     m_apertureRadiusSB->setEnabled(_enabled);
     m_focalPointLabel->setEnabled(_enabled);
@@ -118,10 +125,12 @@ void CameraWidget::enableDOF(bool _enabled){
     m_focalPointYSB->setEnabled(_enabled);
     m_focalPointZSB->setEnabled(_enabled);
 
-    if(!_enabled){
+    if(!_enabled)
+    {
         PathTracerScene::getInstance()->getContext()["aperture_radius"]->setFloat(0.0);
     }
-    else{
+    else
+    {
         PathTracerScene::getInstance()->getContext()["aperture_radius"]->setFloat(m_apertureRadiusSB->value());
         PathTracerScene::getInstance()->getContext()["focal_point"]->setFloat(m_focalPointXSB->value(), m_focalPointYSB->value(), m_focalPointZSB->value());
     }
@@ -130,7 +139,8 @@ void CameraWidget::enableDOF(bool _enabled){
     updateScene();
 }
 //----------------------------------------------------------------------------------------------------------------------
-void CameraWidget::updateDOF(){
+void CameraWidget::updateDOF()
+{
     PathTracerScene::getInstance()->getContext()["aperture_radius"]->setFloat(m_apertureRadiusSB->value());
     PathTracerScene::getInstance()->getContext()["focal_point"]->setFloat(m_focalPointXSB->value(), m_focalPointYSB->value(), m_focalPointZSB->value());
 
@@ -138,7 +148,8 @@ void CameraWidget::updateDOF(){
     updateScene();
 }
 //----------------------------------------------------------------------------------------------------------------------
-void CameraWidget::updateCamera(){
+void CameraWidget::updateCamera()
+{
     PathTracerScene::getInstance()->getCamera()->setParameters(optix::make_float3( 0.0f, 0.0f, -25.0f ),      //eye
                                                                optix::make_float3( 0.0f, 0.0f, 0.0f ),        //lookat
                                                                optix::make_float3( 0.0f, 1.0f,  0.0f ),       // up

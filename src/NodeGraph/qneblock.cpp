@@ -76,7 +76,8 @@ QNEPort* QNEBlock::addPort(const QString &name, bool isOutput, std::vector<std::
 	setPath(p);
 
 	int y = -height / 2 + vertMargin + port->radius();
-    foreach(QGraphicsItem *port_, childItems()) {
+    foreach(QGraphicsItem *port_, childItems())
+    {
 		if (port_->type() != QNEPort::Type)
 			continue;
 

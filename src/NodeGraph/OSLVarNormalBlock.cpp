@@ -15,7 +15,8 @@ OSLVarNormalBlock::OSLVarNormalBlock(QGraphicsScene *_scene, Material _mat, QGra
     m_widgetProxy = new FloatThreeNodeProxyWidget(varPort,m_material,this);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarNormalBlock::save(QDataStream &ds){
+void OSLVarNormalBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypeNormal;
@@ -39,7 +40,8 @@ void OSLVarNormalBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarNormalBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarNormalBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

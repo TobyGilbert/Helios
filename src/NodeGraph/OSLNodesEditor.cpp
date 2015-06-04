@@ -25,8 +25,10 @@ OSLNodesEditor::OSLNodesEditor(QObject *parent) :
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-QString OSLNodesEditor::portTypeToString(QNEPort::variableType _type){
-    switch(_type){
+QString OSLNodesEditor::portTypeToString(QNEPort::variableType _type)
+{
+    switch(_type)
+    {
         case(QNEPort::TypeFloat): return QString("float"); break;
         case(QNEPort::TypeInt): return QString("int"); break;
         case(QNEPort::TypeNormal): return QString("float3"); break;
@@ -38,7 +40,8 @@ QString OSLNodesEditor::portTypeToString(QNEPort::variableType _type){
     return "";
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-QNEBlock *OSLNodesEditor::getLastBlock(){
+QNEBlock *OSLNodesEditor::getLastBlock()
+{
     //iterate through our graphics items in our scene
     foreach(QGraphicsItem *item, getScene()->items())
     {
@@ -47,9 +50,11 @@ QNEBlock *OSLNodesEditor::getLastBlock(){
         {
             //iterate through all our ports of the block
             QVector<QNEPort*> blockPorts = ((OSLShaderBlock*)item)->ports();
-            foreach(QNEPort* port,blockPorts){
+            foreach(QNEPort* port,blockPorts)
+            {
                 //if the port is an output and its name is Ci then we have a last block
-                if(port->isOutput() && (port->getName() == "Ci")){
+                if(port->isOutput() && (port->getName() == "Ci"))
+                {
                     return (QNEBlock*)item;
                 }
             }
@@ -60,26 +65,32 @@ QNEBlock *OSLNodesEditor::getLastBlock(){
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLNodesEditor::evaluateBlock(QNEBlock *_block, std::vector<QNEBlock *> &_blockVector){
+void OSLNodesEditor::evaluateBlock(QNEBlock *_block, std::vector<QNEBlock *> &_blockVector)
+{
     //check if our block has already been evaluated
     std::vector<QNEBlock*>::iterator it = std::find(_blockVector.begin(),_blockVector.end(),_block);
-    if(it != _blockVector.end()){
+    if(it != _blockVector.end())
+    {
         return;
     }
-    else{
+    else
+    {
         //if its not been evaluated check all of its imputs to see if they have been evaluated
         QVector<QNEPort*> blockPorts = ((OSLShaderBlock*)_block)->ports();
         foreach(QNEPort* port,blockPorts){
             //if the port is an input check to see if its connected to another shader
-            if(!port->isOutput()){
+            if(!port->isOutput())
+            {
                 //get all the connections of our port
                 QVector<QNEConnection*> connections = port->connections();
                 foreach(QNEConnection* con, connections){
                     //check which port of the connection is the output of the previous node
-                    if(con->port1()->isOutput()){
+                    if(con->port1()->isOutput())
+                    {
                         evaluateBlock(con->port1()->block(),_blockVector);
                     }
-                    else{
+                    else
+                    {
                         evaluateBlock(con->port2()->block(),_blockVector);
                     }
                 }
@@ -94,12 +105,14 @@ void OSLNodesEditor::evaluateBlock(QNEBlock *_block, std::vector<QNEBlock *> &_b
 std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
 {
     QFileInfo fileInfo(m_optixMatDest.c_str());
-    if(!QDir(fileInfo.absoluteDir()).exists()){
+    if(!QDir(fileInfo.absoluteDir()).exists())
+    {
         QDir().mkdir(fileInfo.absolutePath());
     }
     QFile myfile(m_optixMatDest.c_str());
 
-    if(myfile.open(QIODevice::WriteOnly)){
+    if(myfile.open(QIODevice::WriteOnly))
+    {
 
         percentCompiled(0);
 
@@ -146,27 +159,33 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
             {
 
                 //check to see if we have an input port
-                if(!((QNEPort*) item)->isOutput()){
+                if(!((QNEPort*) item)->isOutput())
+                {
                     QVector<QNEConnection*> connection = ((QNEPort*) item)->connections();
-                    if(connection.size()>1){
+                    if(connection.size()>1)
+                    {
                         return "Port " + ((QNEPort*) item)->getName().toStdString() + " has multiple inputs";
                     }
-                    if(connection.size()>0){
+                    if(connection.size()>0)
+                    {
                         //make sure our input is not comming from another shader block
                         if(connection[0]->port1()->isOutput() && connection[0]->port1()->block()->type()==OSLShaderBlock::Type) continue;
                         if(connection[0]->port2()->isOutput() && connection[0]->port2()->block()->type()==OSLShaderBlock::Type) continue;
                     }
                     //if its a texture we need to write something different
-                    if(((QNEPort*) item)->getVaribleType()==QNEPort::TypeString){
+                    if(((QNEPort*) item)->getVaribleType()==QNEPort::TypeString)
+                    {
                         OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
                         stream<<"rtTextureSampler<float4,2> "<<block->getBlockName().c_str()<<((QNEPort*) item)->getName()<<";"<<endl;
                     }
-                    else{
+                    else
+                    {
                         //Convert our input type into a string
                         QString type = portTypeToString(((QNEPort*) item)->getVaribleType());
                         //if we have a type and our port belongs to a node that is not a shader node
                         //lets add it to our material variables
-                        if(type.size()>0){
+                        if(type.size()>0)
+                        {
                             //node: if multiple shaders have the same variable name then they will clash in the program
                             //to solve this we put the shader name on the start of the variable
                             OSLShaderBlock *block = (OSLShaderBlock*) ((QNEPort*) item)->block();
@@ -180,9 +199,11 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         percentCompiled(30);
         //our BRDF functions
         QFile brdfsLib("brdfs/brdfs");
-        if(brdfsLib.open(QIODevice::ReadOnly)){
+        if(brdfsLib.open(QIODevice::ReadOnly))
+        {
             QTextStream in(&brdfsLib);
-            while(!in.atEnd()){
+            while(!in.atEnd())
+            {
                 stream<<in.readLine()<<endl;
             }
             brdfsLib.close();
@@ -191,7 +212,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
 
         //add all the device functions that we need in our material program
         stream<<"//Our OSL device functions"<<endl;
-        foreach(QGraphicsItem *item, getScene()->items()){
+        foreach(QGraphicsItem *item, getScene()->items())
+        {
             if (item->type() == OSLShaderBlock::Type)
             {
                 stream<<((OSLShaderBlock*)item)->getDevicefunction().c_str()<<endl;
@@ -227,12 +249,14 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
 
 
         //Retrieve and print out any variables that we need for our kernal functions
-        foreach(QGraphicsItem *item, getScene()->items()){
+        foreach(QGraphicsItem *item, getScene()->items())
+        {
             if (item->type() == OSLShaderBlock::Type)
             {
                 //get the ports of our block
                 QVector<QNEPort*> ports= ((OSLShaderBlock*)item)->ports();
-                foreach(QNEPort* p, ports){
+                foreach(QNEPort* p, ports)
+                {
                     if(p->isOutput()){
                         stream<<portTypeToString(p->getVaribleType())<<" ";
                         //note: if 2 shaders have the same variable name we need to
@@ -241,19 +265,23 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
                         stream<<((OSLShaderBlock*)item)->getBlockName().c_str()<<p->getName();
                         //lets also set its default value
                         std::vector<std::string> initParams = p->getInitParams();
-                        if(initParams.size()==0){
+                        if(initParams.size()==0)
+                        {
                             stream<<";";
                             continue;
                         }
-                        if(initParams.size()==3){
+                        if(initParams.size()==3)
+                        {
                             stream<<" = make_float3(";
-                            for(int i=0;i<3;i++){
+                            for(int i=0;i<3;i++)
+                            {
                                 stream<<initParams[i].c_str();
                                 if(i!=2) stream<<",";
                             }
                             stream<<");"<<endl;
                         }
-                        else{
+                        else
+                        {
                             stream<<" = "<<initParams[0].c_str()<<";"<<endl;
                         }
                     }
@@ -268,7 +296,8 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         //get our last shader block;
         QNEBlock *lastBlock = getLastBlock();
         //check that we have found a last block
-        if(!lastBlock){
+        if(!lastBlock)
+        {
             return "Cannot find end block";
         }
         //evaluate our blocks so we know the order to call our
@@ -277,19 +306,23 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         evaluateBlock(lastBlock,orderedBlocks);
 
         //write our code
-        for(unsigned int i=0;i<orderedBlocks.size();i++){
-            if(orderedBlocks[i]->type() == OSLShaderBlock::Type){
+        for(unsigned int i=0;i<orderedBlocks.size();i++)
+        {
+            if(orderedBlocks[i]->type() == OSLShaderBlock::Type)
+            {
                 //note the shader name is always the same as the device function we need to call
                 stream<<((OSLShaderBlock*)orderedBlocks[i])->getBlockName().c_str()<<"(";
                 //put in our shader globals
                 stream<<"sg";
                 //now lets print out our the paramiters we need in the function
                 QVector<QNEPort*> ports = ((OSLShaderBlock*)orderedBlocks[i])->ports();
-                for(int i=0; i<ports.size(); i++){
+                for(int i=0; i<ports.size(); i++)
+                {
                     QNEPort* p = ports[i];
 
                     //if our port is not a variable then lets skip
-                    if(p->getVaribleType() == QNEPort::TypeVoid){
+                    if(p->getVaribleType() == QNEPort::TypeVoid)
+                    {
                         continue;
                     }
                     //if its our output Ci continue
@@ -297,20 +330,26 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
 
 
                     //if there is nothing connected we just stick in our default paramiter
-                    if(p->connections().size()==0){
-                        if(i!=0){
+                    if(p->connections().size()==0)
+                    {
+                        if(i!=0)
+                        {
                             stream<<",";
                         }
                         stream<<((OSLShaderBlock*)p->block())->getBlockName().c_str();
                         stream<<p->getName();
                     }
-                    else{
+                    else
+                    {
                         QVector<QNEConnection*> con = p->connections();
-                        if(con.size()>1){
+                        if(con.size()>1)
+                        {
                             return "Error: Input to shader has multiple input connections";
                         }
-                        else{
-                            if(i!=0){
+                        else
+                        {
+                            if(i!=0)
+                            {
                                 stream<<",";
                             }
                             //find which port of the connection is the input and print the variable name

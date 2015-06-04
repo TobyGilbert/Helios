@@ -17,7 +17,8 @@ OSLVarColorBlock::OSLVarColorBlock(QGraphicsScene *_scene, optix::Material _mat,
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarColorBlock::save(QDataStream &ds){
+void OSLVarColorBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypeColour;
@@ -41,7 +42,8 @@ void OSLVarColorBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarColorBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarColorBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

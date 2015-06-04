@@ -11,18 +11,139 @@
 //decare our static instance of our widget
 MeshWidget* MeshWidget::m_instance;
 //----------------------------------------------------------------------------------------------------------------------
-MeshWidget* MeshWidget::getInstance(QWidget *parent){
-    if(!m_instance){
+MeshWidget* MeshWidget::getInstance(QWidget *parent)
+{
+    if(!m_instance)
+    {
         m_instance = new MeshWidget(parent);
     }
-    else if(parent){
+    else if(parent)
+    {
         m_instance->setParent(parent);
     }
     return m_instance;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::destroy(){
+void MeshWidget::destroy()
+{
     delete m_instance;
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::save(QDataStream &ds)
+{
+    //iterate through all our our map
+    modelProp * props;
+    std::map<QString,modelProp*>::const_iterator mp;
+    for(mp = m_modelProperties.begin();mp!=m_modelProperties.end();mp++)
+    {
+        //load our data into our file
+        props = mp->second;
+        ds<<mp->first;
+        ds<<props->meshPath;
+        ds<<props->transX;
+        ds<<props->transY;
+        ds<<props->transZ;
+        ds<<props->rotX;
+        ds<<props->rotY;
+        ds<<props->rotZ;
+        ds<<props->scaleX;
+        ds<<props->scaleY;
+        ds<<props->scaleZ;
+        //say if our model has a material applied
+        if(props->materialName.length()>0)
+        {
+            ds<<true;
+            //write in our material name
+            ds<<QString(props->materialName.c_str());
+        }
+        else{
+            ds<<false;
+        }
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::load(QDataStream &ds)
+{
+    modelProp *tempProps;
+    std::map<QString,QString> paths;
+    std::map<QString,QString>::iterator it;
+    while(!ds.atEnd())
+    {
+        //load in all our data from our file
+        tempProps = new modelProp;
+        bool hasMat;
+        ds>>tempProps->name;
+        ds>>tempProps->meshPath;
+        ds>>tempProps->transX;
+        ds>>tempProps->transY;
+        ds>>tempProps->transZ;
+        ds>>tempProps->rotX;
+        ds>>tempProps->rotY;
+        ds>>tempProps->rotZ;
+        ds>>tempProps->scaleX;
+        ds>>tempProps->scaleY;
+        ds>>tempProps->scaleZ;
+        ds>>hasMat;
+        tempProps->materialName = "";
+        if(hasMat)
+        {
+            QString matName;
+            ds>>matName;
+            tempProps->materialName = matName.toStdString();
+        }
+
+        //If we already have this model in our scene then we may as well make the new one an instance
+        it = paths.find(tempProps->meshPath);
+        if(it==paths.end())
+        {
+            tempProps->meshHandle = PathTracerScene::getInstance()->importMesh(tempProps->name.toStdString(),tempProps->meshPath.toStdString());
+            paths[tempProps->meshPath] = tempProps->name;
+        }
+        else
+        {
+            tempProps->meshHandle = PathTracerScene::getInstance()->createInstance(it->second.toStdString(),tempProps->name.toStdString());
+        }
+
+        //set the material of our model if its in our library
+        optix::Material mat;
+        if(MaterialLibrary::getInstance()->getMatFromLib(tempProps->materialName,mat))
+        {
+            tempProps->meshHandle->setMaterial(mat);
+        }
+
+        //create our transform matrix
+        glm::mat4 rotXMat,rotYMat,rotZMat,finalRot;
+        float DtoR = 3.14159265359/180.0;
+        glm::mat4 finalTrans;
+        finalTrans[0][0] = tempProps->scaleX;
+        finalTrans[1][1] = tempProps->scaleY;
+        finalTrans[2][2] = tempProps->scaleZ;
+        rotXMat = glm::rotate(rotXMat,tempProps->rotX*DtoR,glm::vec3(1,0,0));
+        rotYMat = glm::rotate(rotYMat,tempProps->rotY*DtoR,glm::vec3(0,1,0));
+        rotZMat = glm::rotate(rotZMat,tempProps->rotZ*DtoR,glm::vec3(0,0,1));
+        finalRot = rotXMat * rotYMat * rotZMat;
+        finalTrans*=finalRot;
+        finalTrans[3][0] = tempProps->transX;
+        finalTrans[3][1] = tempProps->transY;
+        finalTrans[3][2] = tempProps->transZ;
+        //transform our model
+        PathTracerScene::getInstance()->transformModel(tempProps->name.toStdString(),finalTrans);
+
+        m_modelList->addItem(tempProps->name);
+        //store in our map
+        m_modelProperties[tempProps->name] = tempProps;
+    }
+
+}
+//----------------------------------------------------------------------------------------------------------------------
+void MeshWidget::clearScene()
+{
+    //select all items in list
+    m_modelList->setSelectionMode(QAbstractItemView::ExtendedSelection);
+    m_modelList->selectAll();
+    //delete all that are selected
+    removeSelected();
+    m_modelList->setSelectionMode(QAbstractItemView::SingleSelection);
 }
 //----------------------------------------------------------------------------------------------------------------------
 MeshWidget::MeshWidget(QWidget *parent) :
@@ -122,20 +243,25 @@ MeshWidget::MeshWidget(QWidget *parent) :
     connect(m_meshScaleZDSpinBox,SIGNAL(valueChanged(double)),this,SLOT(signalTransformChange(double)));
 }
 //----------------------------------------------------------------------------------------------------------------------
-MeshWidget::~MeshWidget(){
+MeshWidget::~MeshWidget()
+{
     std::map <QString,modelProp*>::const_iterator mp;
-    for(mp = m_modelProperties.begin();mp!=m_modelProperties.end();mp++){
+    for(mp = m_modelProperties.begin();mp!=m_modelProperties.end();mp++)
+    {
         delete mp->second;
     }
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::importModel(){
+void MeshWidget::importModel()
+{
     //Lets get the location of a mesh that we wish to import
     QStringList locations = QFileDialog::getOpenFileNames(this,tr("Import Mesh"), "models/", tr("Mesh Files (*.obj *.OBJ)"));
-        for(int i=0;i<locations.size();i++){
+        for(int i=0;i<locations.size();i++)
+        {
         //if nothing selected then we dont want to do anything
-        if(locations[i].isEmpty()){
+        if(locations[i].isEmpty())
+        {
             std::cerr<<"Model Import: Nothing Selected"<<std::endl;
             return;
         }
@@ -147,10 +273,13 @@ void MeshWidget::importModel(){
         bool nameOk = false;
         QString tempName = name;
         int nameIncrement = 1;
-        while(!nameOk){
+        while(!nameOk)
+        {
             bool nameTake = false;
-            for(int i=0;i<m_modelList->count();i++){
-                if (m_modelList->item(i)->text()==tempName){
+            for(int i=0;i<m_modelList->count();i++)
+            {
+                if (m_modelList->item(i)->text()==tempName)
+                {
                     tempName = name+QString("%1").arg(nameIncrement);
                     nameIncrement++;
                     nameTake = true;
@@ -160,38 +289,51 @@ void MeshWidget::importModel(){
         }
         name = tempName;
 
-        m_curModelProp = new modelProp;
 
-        m_curModelProp->meshHandle = PathTracerScene::getInstance()->importMesh(name.toStdString(),locations[i].toStdString());
+        OptiXModel* tempHandle =  PathTracerScene::getInstance()->importMesh(name.toStdString(),locations[i].toStdString());
 
-        if(m_curModelProp->meshHandle){
+        if(tempHandle)
+        {
+            m_curModelProp = new modelProp;
+            m_curModelProp->meshHandle = tempHandle;
+            m_curModelProp->meshPath = locations[i];
             m_curModelProp->transX = m_curModelProp->transY = m_curModelProp->transZ = m_curModelProp->rotX = m_curModelProp->rotY = m_curModelProp->rotZ = 0;
             m_curModelProp->scaleX = m_curModelProp->scaleY = m_curModelProp->scaleZ = 1;
+            m_curModelProp->materialName = "";
             m_modelList->addItem(name);
             m_modelList->item(m_modelList->count()-1)->setSelected(true);
             m_curMeshName = name;
             m_modelProperties[name] = m_curModelProp;
             updateScene();
         }
-        else{
+        else
+        {
             QMessageBox::warning(this,"Import Model","Failed to import model" + locations[i]);
             continue;
         }
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::createInstance(){
+void MeshWidget::createInstance()
+{
     QList<QListWidgetItem*> items = m_modelList->selectedItems();
     for(int i=0;i<items.size();i++){
-        QString name = items[i]->text() + "instance";
+        QString name = items[i]->text();
+        if(!m_curModelProp->isIntance)
+        {
+            name+="_instance";
+        }
         //check to see if our model name is taken
         bool nameOk = false;
         QString tempName = name;
         int nameIncrement = 1;
-        while(!nameOk){
+        while(!nameOk)
+        {
             bool nameTake = false;
-            for(int i=0;i<m_modelList->count();i++){
-                if (m_modelList->item(i)->text()==tempName){
+            for(int i=0;i<m_modelList->count();i++)
+            {
+                if (m_modelList->item(i)->text()==tempName)
+                {
                     tempName = name+QString("%1").arg(nameIncrement);
                     nameIncrement++;
                     nameTake = true;
@@ -201,11 +343,18 @@ void MeshWidget::createInstance(){
         }
         name = tempName;
 
-        m_curModelProp = new modelProp;
 
-        m_curModelProp->meshHandle = PathTracerScene::getInstance()->createInstance(items[i]->text().toStdString(),name.toStdString());
+        OptiXModel* tempHandle = PathTracerScene::getInstance()->createInstance(items[i]->text().toStdString(),name.toStdString());
 
-        if(m_curModelProp->meshHandle){
+        if(tempHandle)
+        {
+            QString path = m_curModelProp->meshPath;
+            std::string matName = m_curModelProp->materialName;
+            m_curModelProp = new modelProp;
+            m_curModelProp->meshHandle = tempHandle;
+            m_curModelProp->meshPath = path;
+            m_curModelProp->materialName = matName;
+            m_curModelProp->isIntance = true;
             m_curModelProp->transX = m_curModelProp->transY = m_curModelProp->transZ = m_curModelProp->rotX = m_curModelProp->rotY = m_curModelProp->rotZ = 0;
             m_curModelProp->scaleX = m_curModelProp->scaleY = m_curModelProp->scaleZ = 1;
             m_modelList->addItem(name);
@@ -214,7 +363,8 @@ void MeshWidget::createInstance(){
             m_modelProperties[name] = m_curModelProp;
             updateScene();
         }
-        else{
+        else
+        {
             QMessageBox::warning(this,"Instance Model","Failed to instace model" + items[i]->text());
             continue;
         }
@@ -222,10 +372,15 @@ void MeshWidget::createInstance(){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::removeSelected(){
+void MeshWidget::removeSelected()
+{
     QList<QListWidgetItem*> items = m_modelList->selectedItems();
-    for(int i=0;i<items.size();i++){
+    for(int i=0;i<items.size();i++)
+    {
         PathTracerScene::getInstance()->removeGeomtry(items[i]->text().toStdString());
+        std::map <QString, modelProp *>::iterator model=m_modelProperties.find(items[i]->text());
+        delete model->second;
+        m_modelProperties.erase(model);
         m_modelList->removeItemWidget(items[i]);
         delete items[i];
     }
@@ -233,10 +388,12 @@ void MeshWidget::removeSelected(){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::modelSelected(QListWidgetItem *_item){
+void MeshWidget::modelSelected(QListWidgetItem *_item)
+{
     QString modelName = _item->text();
     std::map <QString, modelProp *>::const_iterator model=m_modelProperties.find(modelName);
-    if(model==m_modelProperties.end()){
+    if(model==m_modelProperties.end())
+    {
         QMessageBox::warning(this,"Model Library","Something went wrong with selecting model");
         return;
     }
@@ -254,7 +411,8 @@ void MeshWidget::modelSelected(QListWidgetItem *_item){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::signalTransformChange(double _val){
+void MeshWidget::signalTransformChange(double _val)
+{
 
     if(m_curMeshName.isEmpty()) return;
 
@@ -289,21 +447,26 @@ void MeshWidget::signalTransformChange(double _val){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void MeshWidget::applyOSLMaterial(Material _mat, std::string _matName){
+void MeshWidget::applyOSLMaterial(Material _mat, std::string _matName)
+{
     QList<QListWidgetItem*> items = m_modelList->selectedItems();
-    if(items.size()==0){
+    if(items.size()==0)
+    {
         QMessageBox::information(this,"Mesh Widget","Nothing selected to apply material to.");
         return;
     }
     std::map <QString, modelProp *>::const_iterator model;
-    for(int i=0;i<items.size();i++){
+    for(int i=0;i<items.size();i++)
+    {
         std::cerr<<"Applying material "<<_matName<<" to mesh "<<items[i]->text().toStdString()<<std::endl;
         PathTracerScene::getInstance()->setModelMaterial(items[i]->text().toStdString(),_mat);
         model = m_modelProperties.find(items[i]->text());
-        if(model!=m_modelProperties.end()){
+        if(model!=m_modelProperties.end())
+        {
             model->second->materialName = _matName;
         }
-        else{
+        else
+        {
             std::cerr<<"Warning: MeshWidget, Could not find model properties for "<<items[i]->text().toStdString()<<std::endl;
         }
     }

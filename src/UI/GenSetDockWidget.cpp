@@ -69,7 +69,8 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     m_layout->addItem(spacer,5,0,1,1);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void GenSetDockWidget::installScene(OpenGLWidget *_scene){
+void GenSetDockWidget::installScene(OpenGLWidget *_scene)
+{
     m_scene = _scene;
     //add field for our ray depth during camera movement
     m_layout->addWidget(new QLabel("Camera Movement Ray Depth",this),3,0,1,1);
@@ -81,7 +82,8 @@ void GenSetDockWidget::installScene(OpenGLWidget *_scene){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-GenSetDockWidget::~GenSetDockWidget(){
+GenSetDockWidget::~GenSetDockWidget()
+{
     delete m_layout;
     delete m_genSetGroupBox;
 }

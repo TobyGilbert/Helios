@@ -74,7 +74,7 @@ public:
     /// @brief mutator for the variable type of the port
     /// @brief added by Declan Russell
     //----------------------------------------------------------------------------------------------------------------------
-    inline void setVaribleType(variableType _type){m_varibleType = _type;}
+    void setVaribleType(variableType _type);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief accessor to the varible type of the port
     /// @brief added by Declan Russell

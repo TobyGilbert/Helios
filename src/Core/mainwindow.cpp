@@ -5,6 +5,9 @@
 #include "UI/MeshWidget.h"
 #include "UI/RenderSettings.h"
 #include <QFileDialog>
+#include <QFileInfo>
+#include <QFile>
+#include <QDataStream>
 #include "UI/CameraWidget.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) ,m_menuCreated(false){
@@ -169,11 +172,24 @@ void MainWindow::createMenus(){
     menuBar()->setNativeMenuBar(false);
     this->menuBar()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
+    //File toolbar tab
     QMenu *fileMenu = new QMenu("File",this->menuBar());
+    QAction *newScn = new QAction("New Scene",fileMenu);
+    connect(newScn,SIGNAL(triggered()),MeshWidget::getInstance(),SLOT(clearScene()));
+    fileMenu->addAction(newScn);
+    //save scene action
+    QAction *saveScn = new QAction("Save Scene",fileMenu);
+    connect(saveScn,SIGNAL(triggered()),this,SLOT(saveScene()));
+    fileMenu->addAction(saveScn);
+    //load scene action
+    QAction *loadScn = new QAction("Load Scene",fileMenu);
+    connect(loadScn,SIGNAL(triggered()),this,SLOT(loadScene()));
+    fileMenu->addAction(loadScn);
+    //import file action
     QAction *importAction = new QAction(tr("&Import"),fileMenu);
     connect(importAction,SIGNAL(triggered()),MeshWidget::getInstance(),SLOT(importModel()));
     fileMenu->addAction(importAction);
-    fileMenu->addAction("Save");
+
     this->menuBar()->addAction(fileMenu->menuAction());
 
     QMenu *renderMenu = new QMenu("Render",this->menuBar());
@@ -207,6 +223,73 @@ void MainWindow::createMenus(){
 
 }
 
-void MainWindow::displayEnvironmentMap(){
+void MainWindow::saveScene()
+{
+    //get the path to our save location
+    QString path = QFileDialog::getSaveFileName(this,"Save Scene","","*.sun");
+    //if nothing is selected then just bail
+    if(path.length()==0)
+    {
+        return;
+    }
+    //if we do have a save location lets save our scene
+    QFileInfo info(path);
+    if(info.suffix()!="sun")
+    {
+        path+=".sun";
+    }
+    //create our file and data stream
+    QFile f(path);
+    f.open(QFile::WriteOnly);
+    QDataStream ds(&f);
+    //write in our environmap location if we have one
+    if(m_openGLWidget->getEnvironmentMap().length()>0)
+    {
+        ds<<true;
+        ds<<m_openGLWidget->getEnvironmentMap();
+    }
+    else{
+        ds<<false;
+    }
+    //save our scene
+    MeshWidget::getInstance()->save(ds);
+    f.close();
+}
+void MainWindow::loadScene()
+{
+    //get the path to our file location
+    QStringList files = QFileDialog::getOpenFileNames(this,"Load Scene","","*.sun");
+    //iterate through our selected files
+    for(int i=0;i<files.size();i++)
+    {
+        //if nothing is selected then just bail
+        if(files[i].length()==0)
+        {
+            continue;
+        }
+        QFile f(files[i]);
+        if(f.open(QFile::ReadOnly))
+        {
+            QDataStream ds(&f);
+
+            bool envMap;
+            ds>>envMap;
+            if(envMap)
+            {
+                QString envMapPath;
+                ds>>envMapPath;
+                PathTracerScene::getInstance()->setEnvironmentMap(envMapPath.toStdString());
+                m_environmentLineEdit->setText(envMapPath);
+            }
+            MeshWidget::getInstance()->load(ds);
+        }
+        f.close();
+    }
+    m_openGLWidget->sceneChanged();
+}
+
+void MainWindow::displayEnvironmentMap()
+{
     m_environmentLineEdit->setText(m_openGLWidget->getEnvironmentMap());
 }
+
