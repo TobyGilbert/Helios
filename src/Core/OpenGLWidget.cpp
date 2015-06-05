@@ -53,8 +53,7 @@ void OpenGLWidget::initializeGL(){
     // as re-size is not explicitly called we need to do this.
     glViewport(0,0,width(),height());
 
-
-    PathTracerScene::getInstance()->setNumSamples(6u);
+    PathTracerScene::getInstance()->setNumSamples(1u);
     PathTracerScene::getInstance()->setSize(width(),height());
     PathTracerScene::getInstance()->setDevicePixelRatio(devicePixelRatio());
     PathTracerScene::getInstance()->init();

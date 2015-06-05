@@ -8,7 +8,8 @@ OSLShaderBlock::OSLShaderBlock(QGraphicsItem *parent) : QNEBlock(parent)
 {
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLShaderBlock::save(QDataStream &ds){
+void OSLShaderBlock::save(QDataStream &ds)
+{
     //give the position of our block in the scene
     ds<<pos();
     int count(0);
@@ -37,7 +38,6 @@ void OSLShaderBlock::save(QDataStream &ds){
         ds << port->getVaribleType();
         //write how many init params it has
         std::vector<std::string> initParams = port->getInitParams();
-        std::cout<<"initParamsSize"<<(int)initParams.size()<<std::endl;
         ds << (int)initParams.size();
         //write in our init params
         for(unsigned int i=0;i<initParams.size();i++){
@@ -52,7 +52,8 @@ void OSLShaderBlock::save(QDataStream &ds){
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLShaderBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLShaderBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;
@@ -80,12 +81,14 @@ void OSLShaderBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
         ds >> numInitParams;
         std::vector<std::string> initParams;
         QString tempString;
-        for(int j=0;j<numInitParams;j++){
+        for(int j=0;j<numInitParams;j++)
+        {
             ds >> tempString;
             initParams.push_back(tempString.toStdString());
         }
 
-        switch(i){
+        switch(i)
+        {
         case(0):portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, QNEPort::NamePort, ptr); break;
         case(1):portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, QNEPort::TypePort, ptr); break;
         default: portMap[ptr] = addPort(name, output,initParams, (QNEPort::variableType)varType, 0, ptr); break;
@@ -101,10 +104,12 @@ void OSLShaderBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-bool OSLShaderBlock::loadShader(QString _path){
+bool OSLShaderBlock::loadShader(QString _path)
+{
     //lets run our OSL shader through Toby Gilbert's OSL Compilotmatic 3000
     OslReader shade;
-    if(!shade.compileOSLtoBuffer(_path)){
+    if(!shade.compileOSLtoBuffer(_path))
+    {
         return false;
     }
 
@@ -118,7 +123,8 @@ bool OSLShaderBlock::loadShader(QString _path){
     //add our input ports required by our shader
     std::vector<Symbol> symbols = reader->getInputParams();
 //    std::cout<<symbols.size()<<std::endl;
-    for (unsigned int i=0; i<symbols.size(); i++){
+    for (unsigned int i=0; i<symbols.size(); i++)
+    {
 //        std::cout<<symbols[i].m_name<<std::endl;
         std::string name = symbols[i].m_name;
         addInputPort(name.c_str(),symbols[i].m_initialParams,(QNEPort::variableType)symbols[i].m_type);
@@ -128,7 +134,8 @@ bool OSLShaderBlock::loadShader(QString _path){
     std::vector<Symbol> outputSymbols = reader->getOutputParams();
 //    std::cout<<"out params size "<<outputSymbols.size()<<std::endl;
 //    std::cout<<outputSymbols.size()<<std::endl;
-    for (unsigned int i=0; i<outputSymbols.size(); i++){
+    for (unsigned int i=0; i<outputSymbols.size(); i++)
+    {
 //        std::cout<<outputSymbols[i].m_name<<std::endl;
         addOutputPort(QString(outputSymbols[i].m_name.c_str()),outputSymbols[i].m_initialParams,(QNEPort::variableType)outputSymbols[i].m_type);
     }

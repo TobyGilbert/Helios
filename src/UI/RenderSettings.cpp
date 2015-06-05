@@ -39,10 +39,14 @@ RenderSettings::RenderSettings(QWidget *parent) : QWidget(parent,Qt::Window),
     connect(sampleSpn,SIGNAL(valueChanged(int)),this,SLOT(setNumSamples(int)));
     layout->addWidget(sampleSpn,2,1,1,1);
 
-
     QPushButton *renderBtn = new QPushButton("Render Image",this);
     connect(renderBtn,SIGNAL(pressed()),this,SLOT(renderImage()));
     layout->addWidget(renderBtn,3,0,1,2);
+
+    m_progressBar = new QProgressBar(this);
+    layout->addWidget(m_progressBar,4,0,1,2);
+    m_progressBar->setValue(0);
+    m_progressBar->show();
 
     //add a spacer to make things more organised
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
@@ -50,13 +54,20 @@ RenderSettings::RenderSettings(QWidget *parent) : QWidget(parent,Qt::Window),
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-void RenderSettings::renderImage(){
+void RenderSettings::renderImage()
+{
     PathTracerScene *pt = PathTracerScene::getInstance();
     int currentWidth = pt->getWidth();
     int currentHeight = pt->getHeight();
     pt->resize(m_imgWidth,m_imgHeight);
     pt->signalSceneChanged();
-    for(int i=0;i<m_numSamples;i++)pt->trace();
+    m_progressBar->setRange(0,m_numSamples);
+    for(int i=0;i<m_numSamples;i++)
+    {
+        m_progressBar->setValue(i);
+        pt->trace();
+    }
+    m_progressBar->setValue(0);
     QImage img = pt->saveImage();
     img.save("test",m_imgFormat.toUtf8());
     pt->resize(currentWidth,currentHeight);

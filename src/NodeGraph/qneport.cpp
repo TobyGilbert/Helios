@@ -44,7 +44,7 @@ QNEPort::QNEPort(QGraphicsItem *parent):
 	p.addEllipse(-radius_, -radius_, 2*radius_, 2*radius_);
 	setPath(p);
 
-	setPen(QPen(Qt::darkRed));
+    setPen(QPen(Qt::black));
 	setBrush(Qt::red);
 
 	setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
@@ -70,9 +70,11 @@ void QNEPort::setName(const QString &n)
 {
 	name = n;
     std::string params;
-    for(unsigned int i=0;i<m_initParams.size();i++){
+    for(unsigned int i=0;i<m_initParams.size();i++)
+    {
         params+=m_initParams[i];
-        if(i<m_initParams.size()-1){
+        if(i<m_initParams.size()-1)
+        {
             params+=",";
         }
     }
@@ -86,9 +88,13 @@ void QNEPort::setIsOutput(bool o)
 	QRect r = fm.boundingRect(name);
 
 	if (isOutput_)
+    {
 		label->setPos(-radius_ - margin - label->boundingRect().width(), -label->boundingRect().height()/2);
-	else
+    }
+    else
+    {
 		label->setPos(radius_ + margin, -label->boundingRect().height()/2);
+    }
 }
 
 int QNEPort::radius()
@@ -125,14 +131,32 @@ void QNEPort::setPortFlags(int f)
     }
 }
 
+void QNEPort::setVaribleType(QNEPort::variableType _type)
+{
+    m_varibleType = _type;
+    switch(_type)
+    {
+    case(TypeColour): setBrush(Qt::yellow); break;
+    case(TypePoint): setBrush(Qt::red); break;
+    case(TypeNormal): setBrush(QBrush(QColor(255,0,255))); break;
+    case(TypeFloat): setBrush(Qt::green); break;
+    case(TypeInt): setBrush(Qt::darkCyan); break;
+    case(TypeString): setBrush(Qt::darkMagenta); break;
+    case(TypeMatrix): setBrush(Qt::blue); break;
+    }
+}
+
 void QNEPort::setInitParams(std::vector<std::string> _initParams)
 {
     m_initParams = _initParams;
-    if(m_initParams.size()>0){
+    if(m_initParams.size()>0)
+    {
         std::string params;
-        for(unsigned int i=0;i<_initParams.size();i++){
+        for(unsigned int i=0;i<_initParams.size();i++)
+        {
             params+=_initParams[i];
-            if(i<_initParams.size()-1){
+            if(i<_initParams.size()-1)
+            {
                 params+=",";
             }
         }

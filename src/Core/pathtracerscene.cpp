@@ -31,10 +31,12 @@ PathTracerScene::PathTracerScene()  : m_cameraChanged(false),
     m_context = optix::Context::create();
 }
 //----------------------------------------------------------------------------------------------------------------------
-PathTracerScene::~PathTracerScene(){
+PathTracerScene::~PathTracerScene()
+{
     delete m_camera;
     std::map<std::string,OptiXModel*>::iterator models;
-    for(models=m_meshArray.begin();models!=m_meshArray.end();models++){
+    for(models=m_meshArray.begin();models!=m_meshArray.end();models++)
+    {
         delete models->second;
         m_meshArray.erase(models);
     }
@@ -44,7 +46,8 @@ PathTracerScene::~PathTracerScene(){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::init(){
+void PathTracerScene::init()
+{
     // how many ray types we have
     // we have our light ray, shadow ray and a bsdf shadow ray
     m_context->setRayTypeCount( 3 );
@@ -145,7 +148,8 @@ void PathTracerScene::init(){
     m_context->compile();
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::addLight(){
+void PathTracerScene::addLight()
+{
     LightManager::getInstance()->createParollelogramLight();
     m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
@@ -155,7 +159,8 @@ void PathTracerScene::addLight(){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path){
+OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path)
+{
     /// @todo maybe have all this stuff in a model management class rather than the scene
     /// @todo meshes are all set with detault diffuse texture, we need some sort of material management
     //import mesh
@@ -177,9 +182,11 @@ OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path){
     return model;
 }
 //----------------------------------------------------------------------------------------------------------------------
-OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _instanceName){
+OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _instanceName)
+{
     std::map<std::string,OptiXModel*>::iterator model = m_meshArray.find(_geomId);
-    if(model!=m_meshArray.end()){
+    if(model!=m_meshArray.end())
+    {
         OptiXModel* instance = new OptiXModel(model->second);
         m_globalTransGroup->addChild(instance->getGeomAndTrans());
         m_globalTransGroup->getAcceleration()->markDirty();
@@ -187,27 +194,33 @@ OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _in
         m_frame = 0;
         return instance;
     }
-    else{
+    else
+    {
         std::cerr<<"Error: Could not find model in path tracer! Doing nothing"<<std::endl;
         return 0;
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::removeGeomtry(std::string _id){
+void PathTracerScene::removeGeomtry(std::string _id)
+{
     std::map<std::string,OptiXModel*>::iterator model = m_meshArray.find(_id);
-    if(model!=m_meshArray.end()){
+    if(model!=m_meshArray.end())
+    {
         m_globalTransGroup->removeChild(model->second->getGeomAndTrans());
         m_globalTransGroup->getAcceleration()->markDirty();
         delete model->second;
         m_meshArray.erase(model);
+
     }
-    else{
+    else
+    {
         std::cerr<<"Error: Could not find model to delete in path tracer"<<std::endl;
     }
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans){
+void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans)
+{
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
     OptiXModel* mdl = it->second;
     mdl->setTrans(_trans);
@@ -222,7 +235,8 @@ void PathTracerScene::setModelMaterial(std::string _id, Material _mat){
     m_frame=0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::trace(){
+void PathTracerScene::trace()
+{
     //if our camera has changed then update it in our engine
     if(m_cameraChanged) updateCamera();
 
@@ -231,7 +245,8 @@ void PathTracerScene::trace(){
     m_context->launch(0,m_width,m_height);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::resize(int _width, int _height){
+void PathTracerScene::resize(int _width, int _height)
+{
 //    m_width = _width/m_devicePixelRatio;
     m_width = _width/m_devicePixelRatio;
     m_height = _height/m_devicePixelRatio;
@@ -249,7 +264,8 @@ void PathTracerScene::resize(int _width, int _height){
     m_frame = 0;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::updateCamera(){
+void PathTracerScene::updateCamera()
+{
     float3 eye,U,V,W;
     m_camera->getEyeUVW(eye,U,V,W);
 
@@ -262,7 +278,8 @@ void PathTracerScene::updateCamera(){
     m_cameraChanged = false;
 }
 //----------------------------------------------------------------------------------------------------------------------
-QImage PathTracerScene::saveImage(){
+QImage PathTracerScene::saveImage()
+{
     QImage img(m_width,m_height,QImage::Format_RGB32);
     QColor color;
     // as we're using a openGL buffer rather than optix we must map it with openGL calls
@@ -275,7 +292,8 @@ QImage PathTracerScene::saveImage(){
     int x;
     int y;
     int h = m_width * m_height;
-    for(unsigned int i=0; i<m_width*m_height; i++){
+    for(unsigned int i=0; i<m_width*m_height; i++)
+    {
         float red = rgb_data[h-i].r; if(red>1.0) red=1.0;
         float green = rgb_data[h-i].g; if(green>1.0) green=1.0;
         float blue = rgb_data[h-i].b; if(blue>1.0) blue=1.0;
@@ -292,7 +310,8 @@ QImage PathTracerScene::saveImage(){
     return img;
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::setGlobalTrans(glm::mat4 _trans){
+void PathTracerScene::setGlobalTrans(glm::mat4 _trans)
+{
     // identity matrix to init our transformation
     float m[16];
     m[ 0] = _trans[0][0];  m[ 1] = _trans[1][0];  m[ 2] = _trans[2][0];  m[ 3] = _trans[3][0];
@@ -316,14 +335,16 @@ void PathTracerScene::setGlobalTrans(glm::mat4 _trans){
     cleanTopAcceleration();
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::setEnvironmentMap(std::string _environmentMap){
+void PathTracerScene::setEnvironmentMap(std::string _environmentMap)
+{
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
     m_enviSampler->destroy();
     m_enviSampler = loadHDRTexture(m_context, _environmentMap, default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void PathTracerScene::cleanTopAcceleration(){
+void PathTracerScene::cleanTopAcceleration()
+{
     m_globalTransGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }

@@ -22,7 +22,7 @@
 #include "random.h"
 #include "path_tracer.h"
 #include "helpers.h"
-#include "Core/optixmodel.h"
+#include "Core/OptixModel.h"
 #include "Core/PathTraceCamera.h"
 
 using namespace optix;

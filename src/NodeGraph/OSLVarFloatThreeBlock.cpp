@@ -16,7 +16,8 @@ OSLVarFloatThreeBlock::OSLVarFloatThreeBlock(QGraphicsScene *_scene, optix::Mate
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarFloatThreeBlock::save(QDataStream &ds){
+void OSLVarFloatThreeBlock::save(QDataStream &ds)
+{
     //write the type of varblock we are so one could know
     //what class to create from reading the file
     ds<<QNEPort::TypeVector;
@@ -40,7 +41,8 @@ void OSLVarFloatThreeBlock::save(QDataStream &ds){
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void OSLVarFloatThreeBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap){
+void OSLVarFloatThreeBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
+{
     //first load in our postion
     QPointF p;
     ds >> p;

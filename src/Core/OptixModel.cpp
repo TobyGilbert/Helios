@@ -14,6 +14,7 @@ OptiXModel::OptiXModel(std::string _path)
 {
     std::cerr<<"Importing model "<<_path<<std::endl;
     std::stringstream id;
+    id<<this;
     m_instanceCount[id.str()] = 0;
     m_instanceId = id.str();
     // identity matrix to init our transformation
@@ -208,7 +209,6 @@ void OptiXModel::processMesh(const aiMesh *_mesh){
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(){
 
-    std::cout<<"Num verts in mesh "<<m_vertices.size()/3<<std::endl;
     // Create vertex, normal, and texture_coordinate buffers
     m_vertexBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
     m_normalBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_FLOAT3, m_vertices.size() );
