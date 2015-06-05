@@ -309,7 +309,7 @@ RT_PROGRAM void exception(){
 //
 //-----------------------------------------------------------------------------
 RT_PROGRAM void miss(){
-    current_prd.result = make_float3(0.5, 0.5, 0.5);
+    current_prd.result = make_float3(0.0, 0.0, 0.0);
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
@@ -326,6 +326,8 @@ RT_PROGRAM void envi_miss(){
     }
     current_prd.done = true;
 }
+
+
 //-----------------------------------------------------------------------------
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
 

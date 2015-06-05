@@ -54,7 +54,7 @@ void OpenGLWidget::initializeGL(){
     glViewport(0,0,width(),height());
 
 
-    PathTracerScene::getInstance()->setNumSamples(2u);
+    PathTracerScene::getInstance()->setNumSamples(6u);
     PathTracerScene::getInstance()->setSize(width(),height());
     PathTracerScene::getInstance()->setDevicePixelRatio(devicePixelRatio());
     PathTracerScene::getInstance()->init();
