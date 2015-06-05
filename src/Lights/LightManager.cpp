@@ -221,9 +221,10 @@ void LightManager::updateLight(){
     glm::mat4 rotx = glm::mat4(1.0);
     glm::mat4 roty = glm::mat4(1.0);
     glm::mat4 rotz = glm::mat4(1.0);
-    rotx = glm::rotate(rotx, (float)m_rotateX->value(), glm::vec3(1.0, 0.0, 0.0));
-    roty = glm::rotate(roty, (float)m_rotateY->value(), glm::vec3(0.0, 1.0, 0.0));
-    rotz = glm::rotate(rotz, (float)m_rotateZ->value(), glm::vec3(0.0, 0.0, 1.0));
+    float DtoR = 3.14159265359/180.0;
+    rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
+    roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
+    rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
 
     glm::vec4 corner;
     glm::vec4 v1;
@@ -243,10 +244,10 @@ void LightManager::updateLight(){
     glm::vec3 point3;
 
     glm::mat4 transform = glm::mat4(1.0);
-    // Rotate
-    transform = rotx * roty * rotz;
     // Scale
     transform = glm::scale(transform, glm::vec3(m_scaleX->value(),m_scaleY->value(),m_scaleZ->value()));
+    // Rotate
+    transform = rotx * roty * rotz;
     // Translate
     transform[3][0] = m_translateX->value();
     transform[3][1] = m_translateY->value();
@@ -298,7 +299,7 @@ void LightManager::transformLights(glm::mat4 _trans){
     m_transGlobal = _trans;
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
     glm::vec4 point1, point2, point3;
-    for(int i=0; i<m_numLights; i++){
+    for(unsigned int i=0; i<m_numLights; i++){
         // convert to points
         point1.x = lightBuffer[i].corner.x;
         point1.y = lightBuffer[i].corner.y;
@@ -314,15 +315,16 @@ void LightManager::transformLights(glm::mat4 _trans){
         point3.w = 1.0;
         // transform
         glm::mat4 transLocal = glm::mat4(1.0);
+        transLocal = glm::scale(transLocal, glm::vec3(m_lightTransforms[i].m_scale));
         glm::mat4 rotx = glm::mat4(1.0);
         glm::mat4 roty = glm::mat4(1.0);
         glm::mat4 rotz = glm::mat4(1.0);
-        rotx = glm::rotate(rotx, (float)m_lightTransforms[i].m_rotate.x, glm::vec3(1.0, 0.0, 0.0));
-        roty = glm::rotate(roty, (float)m_lightTransforms[i].m_rotate.y, glm::vec3(0.0, 1.0, 0.0));
-        rotz = glm::rotate(rotz, (float)m_lightTransforms[i].m_rotate.z, glm::vec3(0.0, 0.0, 1.0));
+        float DtoR = 3.14159265359/180.0;
+        rotx = glm::rotate(rotx, (float)m_lightTransforms[i].m_rotate.x*DtoR, glm::vec3(1.0, 0.0, 0.0));
+        roty = glm::rotate(roty, (float)m_lightTransforms[i].m_rotate.y*DtoR, glm::vec3(0.0, 1.0, 0.0));
+        rotz = glm::rotate(rotz, (float)m_lightTransforms[i].m_rotate.z*DtoR, glm::vec3(0.0, 0.0, 1.0));
         transLocal = rotx * roty * rotz;
 
-        transLocal = glm::scale(transLocal, glm::vec3(m_lightTransforms[i].m_scale));
         transLocal[3][0] = m_lightTransforms[i].m_translate.x;
         transLocal[3][1] = m_lightTransforms[i].m_translate.y;
         transLocal[3][2] = m_lightTransforms[i].m_translate.z;
