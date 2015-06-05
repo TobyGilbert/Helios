@@ -50,7 +50,8 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief Create the parallelogram geometry used by the light
     //----------------------------------------------------------------------------------------------------------------------
-    optix::GeometryInstance createParallelogram(const optix::float3 &anchor, const optix::float3 &offset1, const optix::float3 &offset2);
+//    optix::GeometryInstance createParallelogram(const optix::float3 &anchor, const optix::float3 &offset1, const optix::float3 &offset2);
+    optix::GeometryInstance createParallelogram(const optix::float3 &_point1, const optix::float3 &_point2, const optix::float3 &_point3);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief The geometry instance
     //----------------------------------------------------------------------------------------------------------------------
@@ -78,6 +79,7 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     optix::GeometryGroup m_geometryGroup;
     optix::Acceleration m_acceleration;
+    float m_points[4];
 
 };
 

@@ -140,11 +140,15 @@ __device__ optix::float3 ward(optix::float3 _normal, optix::float3 _t, float _xR
   optix::float2 sample = make_float2(rnd(current_prd.seed), rnd(current_prd.seed));
 
   float phi = atan((_yRough / _xRough) * tan(2*M_PI*sample.y));
-  float theta = (((cos(phi)*cos(phi)) / (_xRough * _xRough))) + (((sin(phi)*sin(phi)) / (_yRough * _yRough)));
+  float cosPhi = cos(phi);
+  float sinPhi = sin(phi);
+  float theta = (((cosPhi*cosPhi) / (_xRough * _xRough))) + (((sinPhi*sinPhi) / (_yRough * _yRough)));
+  float sinTheta = sin(theta);
+  float cosTheta = cos(theta);
   theta = atan( sqrt( -log(sample.x) / theta));
 
   // Calculate the half direction from spherical coordinates
-  optix::float3 half = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
+  optix::float3 half = make_float3(sinTheta*cosPhi, sinTheta*sinPhi, cosTheta);
 
 
   // Calucate the outgoing direction;
@@ -187,8 +191,8 @@ __device__ optix::float3 ward(optix::float3 _normal, optix::float3 _t, float _xR
     }
   }
 
-  float pdf = 1 / ( 4 * M_PI * _xRough * _yRough * optix::dot(half, ray.direction) * (cos(theta)*cos(theta)*cos(theta)));
-  pdf *= exp(-(tan(theta)*tan(theta)) * ( ( (cos(phi) * cos(phi)) / (_xRough*_xRough) )  + ( (sin(phi)*sin(phi)) / (_yRough *_yRough) )  ));
+  float pdf = 1 / ( 4 * M_PI * _xRough * _yRough * optix::dot(half, ray.direction) * (cosTheta*cosTheta*cosTheta));
+  pdf *= exp(-(tan(theta)*tan(theta)) * ( ( (cosPhi * cosPhi) / (_xRough*_xRough) )  + ( (sinPhi*sinPhi) / (_yRough *_yRough) )  ));
 
   current_prd.radiance = result;
   current_prd.countEmitted = false;
@@ -307,8 +311,9 @@ __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness,
 
   // the shadow masking function
   optix::float3 v = ray_origin - eye;
-  float G = 2 * optix::dot(_normal, v);
-  G /= ( optix::dot(_normal, v) + sqrt( rough2 + ( 1 - rough2)*(optix::dot(_normal, v)*optix::dot(_normal, v))));
+  float NdotV = optix::dot(_normal, v);
+  float G = 2 * NdotV;
+  G /= ( NdotV + sqrt( rough2 + ( 1 - rough2)*(NdotV*NdotV)));
 
   optix::float3 ray_direction = 2 * optix::dot(optix::normalize(ray.direction), optix::normalize(m)) * m - ray.direction;
 
@@ -384,7 +389,6 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
   optix::float3 ray_origin = ray.origin + t_hit * ray.direction;
   optix::float3 ffnormal = faceforward(_normal, ray_origin - eye, _normal);
 
-
   // Find a random normal
   float z1 = rnd(current_prd.seed);
   float z2 = rnd(current_prd.seed);
@@ -401,22 +405,28 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
   float F = fresnel_dielectric(cosNO, _eta);
 
   // Distribution function
-  int chi;
-  if(_roughness > 0.0f){
-      chi = 1;
+  float MdotN = optix::dot(m, _normal);
+  float D;
+  if(MdotN > 0.0f){
+      // Beckmann distribution function
+      float cos2Theta = cos(theta) * cos(theta);
+      float cos4Theta = cos2Theta * cos2Theta;
+      D = MdotN / (M_PI * rough2 * cos4Theta);
+      D *= exp((-(tan(theta)*tan(theta)))/ rough2);
   }
   else{
-      chi = 0;
+      D = 0;
   }
-  // Beckmann distribution function
-  float cos2Theta = cos(theta) * cos(theta);
-  float cos4Theta = cos2Theta * cos2Theta;
-  float D = (chi * optix::dot(m, _normal)) / (M_PI * rough2 * cos4Theta);
-  D *= exp((-(tan(theta)*tan(theta)))/ rough2);
 
   // the shadow masking function
   optix::float3 v = ray_origin - eye;
-  float G = chi * (optix::dot(v, m)/optix::dot(v, _normal));
+  float VdotM = optix::dot(v, m);
+  float VdotN = optix::dot(v, _normal);
+  float G = 0.0;
+  if((VdotM / VdotN) > 0.0){
+    G = (VdotM/VdotN);
+  }
+
   // Schlicks improved shadow-masking function
   if(_roughness < 1.6f){
     G *= ((3.535f*_roughness + 2.181f*rough2) / (1.0f + 2.276f * _roughness + 2.577f*rough2));
@@ -737,4 +747,3 @@ __device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
 
   return  prd.result;
 }
-//----------------------------------------------------------------------------------------------------------------------

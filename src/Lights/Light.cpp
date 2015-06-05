@@ -31,21 +31,45 @@ Light::~Light(){
 
 }
 //----------------------------------------------------------------------------------------------------------------------
-optix::GeometryInstance Light::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
+//optix::GeometryInstance Light::createParallelogram(const float3 &anchor, const float3 &offset1, const float3 &offset2){
+//    optix::Geometry parallelogram = PathTracerScene::getInstance()->getContext()->createGeometry();
+//    parallelogram->setPrimitiveCount( 1u );
+//    parallelogram->setIntersectionProgram( m_pgram_intersection );
+//    parallelogram->setBoundingBoxProgram( m_pgram_bounding_box );
+
+//    float3 normal = normalize( cross( offset1, offset2 ) );
+//    float d = dot( normal, anchor );
+//    float4 plane = optix::make_float4( normal, d );
+
+//    float3 v1 = offset1 / dot( offset1, offset1 );
+//    float3 v2 = offset2 / dot( offset2, offset2 );
+
+//    parallelogram["plane"]->setFloat( plane );
+//    parallelogram["anchor"]->setFloat( anchor );
+//    parallelogram["v1"]->setFloat( v1 );
+//    parallelogram["v2"]->setFloat( v2 );
+
+//    optix::GeometryInstance gi = PathTracerScene::getInstance()->getContext()->createGeometryInstance();
+//    gi->setGeometry(parallelogram);
+//    return gi;
+//}
+optix::GeometryInstance Light::createParallelogram(const float3 &_point1, const float3 &_point2, const float3 &_point3){
     optix::Geometry parallelogram = PathTracerScene::getInstance()->getContext()->createGeometry();
     parallelogram->setPrimitiveCount( 1u );
     parallelogram->setIntersectionProgram( m_pgram_intersection );
     parallelogram->setBoundingBoxProgram( m_pgram_bounding_box );
 
+    float3 offset1 = _point2 - _point1;
+    float3 offset2 = _point3 - _point1;
     float3 normal = normalize( cross( offset1, offset2 ) );
-    float d = dot( normal, anchor );
+    float d = dot( normal, _point1 );
     float4 plane = optix::make_float4( normal, d );
 
     float3 v1 = offset1 / dot( offset1, offset1 );
     float3 v2 = offset2 / dot( offset2, offset2 );
 
     parallelogram["plane"]->setFloat( plane );
-    parallelogram["anchor"]->setFloat( anchor );
+    parallelogram["anchor"]->setFloat( _point1 );
     parallelogram["v1"]->setFloat( v1 );
     parallelogram["v2"]->setFloat( v2 );
 
@@ -61,7 +85,10 @@ void Light::createParollelogramLight(){
     m_parallelogramLight.normal = normalize(cross(m_parallelogramLight.v1, m_parallelogramLight.v2));
     m_parallelogramLight.emission = make_float3(5.0, 5.0, 5.0);
 
-    m_geometryInstance = createParallelogram(m_parallelogramLight.corner, m_parallelogramLight.v1, m_parallelogramLight.v2);
+    float3 point1 = m_parallelogramLight.corner;
+    float3 point2 = m_parallelogramLight.corner + m_parallelogramLight.v1;
+    float3 point3 = m_parallelogramLight.corner + m_parallelogramLight.v2;
+    m_geometryInstance = createParallelogram(point1, point2, point3);
     m_geometryInstance->addMaterial(m_lightMaterial);
     m_geometryInstance["emission_color"]->setFloat(5.0, 5.0, 5.0);
 

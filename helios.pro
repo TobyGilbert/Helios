@@ -188,10 +188,11 @@ OTHER_FILES += \
     shaders/OSL/mandelbrot.osl \
     shaders/OSL/carbonFibre.osl \
     shaders/OSL/ggx.osl \
-    brdfs/brdfs \
     shaders/OSL/wood.osl \
     shaders/OSL/ground.osl \
-    shaders/OSL/Cerberus.osl
+    shaders/OSL/Cerberus.osl \
+    brdfs/brdfs \
+    shaders/OSL/beckmann.osl
 
 
 #Sources we want compiled with bison

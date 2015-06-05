@@ -20,12 +20,12 @@ PathTracerScene* PathTracerScene::getInstance(){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-PathTracerScene::PathTracerScene()  : m_rr_begin_depth(1u)
-                                    , m_sqrt_num_samples( 2u )
-                                    , m_width(512)
-                                    , m_height(512)
-                                    , m_frame(0)
-                                    , m_cameraChanged(false)
+PathTracerScene::PathTracerScene()  : m_cameraChanged(false),
+                                    m_rr_begin_depth(1u),
+                                    m_sqrt_num_samples( 4u ),
+                                    m_frame(0),
+                                    m_width(512),
+                                    m_height(512)
 {
     // create an instance of our OptiX engine
     m_context = optix::Context::create();
@@ -53,9 +53,6 @@ void PathTracerScene::init(){
     // sets the stack size important for recursion
     // we want this to be as big as our hardware will allow us
     // so that we can send as many rays as the user desires
-    size_t maxStackSize;
-    cudaDeviceGetLimit(&maxStackSize,cudaLimitStackSize);
-    std::cout<<"Max stack size: "<<maxStackSize<<std::endl;
     m_context->setStackSize( 4000 );
     // set some variables
     m_context["scene_epsilon"]->setFloat( 1.e-3f );
@@ -311,6 +308,10 @@ void PathTracerScene::setGlobalTrans(glm::mat4 _trans){
     invM[ 12] = inv[0][3];  invM[ 13] = inv[1][3];  invM[ 14] = inv[2][3];  invM[ 15] = inv[3][3];
     // set our transform
     m_globalTrans->setMatrix(false,m,invM);
+
+    // Update the lights buffer used for direct lighting
+    LightManager::getInstance()->transformLights(_trans);
+
     //update our scene
     cleanTopAcceleration();
 }

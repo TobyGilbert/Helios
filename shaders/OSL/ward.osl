@@ -17,10 +17,6 @@ ward
     normal norm = normal(1, 0, 0)
   )
 {
-<<<<<<< HEAD
     color anist = (color)norm;
     Ci = Ks * Cs * ward (norm, normalize(dPdu), anist[0], anist[2]);
-=======
-    Ci = 0.5 * diffuse(N) + 0.2 * ward (N, normalize(dPdu), ax, ay);
->>>>>>> 49dfd879f26664e3362faece040b34b1eaa7fed5
 }

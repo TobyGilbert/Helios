@@ -155,6 +155,9 @@ symbol
                     else if ($2 == CLOSURE){
                        t = TypeColour;
                     }
+                    else{
+                       t = TypeVoid;
+                    }
                     reader->addSymbols($1, t, $4);
                 }
             initial_values_opt hints_opt
