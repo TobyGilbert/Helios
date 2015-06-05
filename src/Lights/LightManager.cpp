@@ -221,7 +221,13 @@ void LightManager::updateLight(){
     glm::mat4 rotx = glm::mat4(1.0);
     glm::mat4 roty = glm::mat4(1.0);
     glm::mat4 rotz = glm::mat4(1.0);
-    float DtoR = 3.14159265359/180.0;
+    // Converting to radians seems to be fine on linux however not the case on Mac bug?
+    float DtoR;
+#ifdef DARWIN
+    DtoR = 1.0;
+#else
+    DtoR = 3.14159265359/180.0;
+#endif
     rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
     roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
     rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
@@ -319,7 +325,13 @@ void LightManager::transformLights(glm::mat4 _trans){
         glm::mat4 rotx = glm::mat4(1.0);
         glm::mat4 roty = glm::mat4(1.0);
         glm::mat4 rotz = glm::mat4(1.0);
-        float DtoR = 3.14159265359/180.0;
+        // Converting to radians seems to be fine on linux however not the case on Mac bug?
+        float DtoR;
+    #ifdef DARWIN
+        DtoR = 1.0;
+    #else
+        DtoR = 3.14159265359/180.0;
+    #endif
         rotx = glm::rotate(rotx, (float)m_lightTransforms[i].m_rotate.x*DtoR, glm::vec3(1.0, 0.0, 0.0));
         roty = glm::rotate(roty, (float)m_lightTransforms[i].m_rotate.y*DtoR, glm::vec3(0.0, 1.0, 0.0));
         rotz = glm::rotate(rotz, (float)m_lightTransforms[i].m_rotate.z*DtoR, glm::vec3(0.0, 0.0, 1.0));
