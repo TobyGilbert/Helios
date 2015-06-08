@@ -69,6 +69,9 @@ CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent)
     m_apertureRadiusSB = new QDoubleSpinBox(this);
     m_apertureRadiusSB->setEnabled(false);
     m_apertureRadiusSB->setValue(0.5);
+    m_apertureRadiusSB->setDecimals(3);
+    m_apertureRadiusSB->setSingleStep(0.001);
+    m_apertureRadiusSB->setMaximum(INFINITY);
     DOFgridLayout->addWidget(m_apertureRadiusSB, 1, 1, 1, 1);
 
     // Focal point
@@ -90,6 +93,9 @@ CameraWidget::CameraWidget(QWidget *parent) : QDockWidget(parent)
     m_focalPointXSB->setMinimum(-INFINITY);
     m_focalPointYSB->setMinimum(-INFINITY);
     m_focalPointZSB->setMinimum(-INFINITY);
+    m_focalPointXSB->setSingleStep(0.01);
+    m_focalPointYSB->setSingleStep(0.01);
+    m_focalPointZSB->setSingleStep(0.01);
 
     DOFgridLayout->addWidget(m_focalPointXSB, 2, 1, 1, 1);
     DOFgridLayout->addWidget(m_focalPointYSB, 2, 2, 1, 1);

@@ -87,6 +87,7 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
 
   current_prd.attenuation = current_prd.attenuation;
 
+
   for(int i = 0; i < num_lights; ++i) {
     ParallelogramLight light = lights[i];
     float z1 = rnd(current_prd.seed);
@@ -109,8 +110,21 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
       if(!shadow_prd.inShadow){
         float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
         result += light.emission * weight;
-        printf("weight %f\n", weight);
-        printf("emission %f\n", light.emission.x);
+      }
+    }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
       }
     }
   }
@@ -125,6 +139,8 @@ __device__ optix::float3 diffuse(optix::float3 _normal){
   prd.attenuation = current_prd.attenuation;
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
+
 
   Ray default_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, default_ray, prd);
@@ -189,6 +205,21 @@ __device__ optix::float3 ward(optix::float3 _normal, optix::float3 _t, float _xR
         result += light.emission * weight;
       }
     }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
   }
 
   float pdf = 1 / ( 4 * M_PI * _xRough * _yRough * optix::dot(half, ray.direction) * (cosTheta*cosTheta*cosTheta));
@@ -198,10 +229,12 @@ __device__ optix::float3 ward(optix::float3 _normal, optix::float3 _t, float _xR
   current_prd.countEmitted = false;
 
   PerRayData_pathtrace prd;
-  prd.attenuation = current_prd.attenuation * (1/pdf);
+  prd.attenuation = current_prd.attenuation * (1.0f/pdf);
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
+
 
   Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, reflection_ray, prd);
@@ -258,6 +291,21 @@ __device__ optix::float3 translucence(optix::float3 _normal){
         printf("emission %f\n", light.emission.x);
       }
     }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
   }
 
   float pdf = float(M_1_PI);
@@ -270,6 +318,7 @@ __device__ optix::float3 translucence(optix::float3 _normal){
   prd.attenuation = current_prd.attenuation;
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
 
   Ray default_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, default_ray, prd);
@@ -279,7 +328,11 @@ __device__ optix::float3 translucence(optix::float3 _normal){
 //----------------------------------------------------------------------------------------------------------------------
 __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness, float _eta){
   optix::float3 ray_origin = ray.origin + t_hit * ray.direction;
-  optix::float3 ffnormal = faceforward(_normal, ray_origin - eye, _normal);
+  optix::float3 hitpoint = ray_origin;
+  optix::float3 world_geometric_normal = normalize( rtTransformNormal( RT_OBJECT_TO_WORLD, geometric_normal ) );
+
+  optix::float3 ffnormal = faceforward( _normal, -ray.direction, world_geometric_normal );
+//  optix::float3 ffnormal = faceforward(_normal, ray_origin - eye, _normal);
 
 
   // Find a random normal
@@ -330,32 +383,48 @@ __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness,
 
   float weight = (optix::dot(optix::normalize(ray.direction), optix::normalize(m)) * G) / ( optix::dot(optix::normalize(ray.direction), optix::normalize(_normal)) * ( optix::dot(optix::normalize(m), optix::normalize(_normal)) ));
   weight *= F;
+
   optix::float3 result = make_float3(0.0);
-
   unsigned int num_lights = lights.size();
-
-
-  for(int i = 0; i < num_lights; ++i) {
+  for(int i = 0; i < num_lights; ++i) 
+  {
     ParallelogramLight light = lights[i];
-    float z1 = rnd(current_prd.seed);
-    float z2 = rnd(current_prd.seed);
-    float3 light_pos = light.corner + light.v1 * z1 + light.v2 * z2;
+    float rand1 = rnd(current_prd.seed);
+    float rand2 = rnd(current_prd.seed);
+    float3 light_pos = light.corner + light.v1 * rand1 + light.v2 * rand2;
 
-    float Ldist = length(light_pos - ray_origin);
-    float3 L = normalize(light_pos - ray_origin);
-    float nDl = dot( _normal, L );
+    float Ldist = length(light_pos - hitpoint);
+    float3 L = normalize(light_pos - hitpoint);
+    float nDl = dot( ffnormal, L );
     float LnDl = dot( light.normal, L );
     float A = length(cross(light.v1, light.v2));
 
     // cast shadow ray
-    if ( nDl > 0.0f && LnDl > 0.0f ) {
+    if ( nDl > 0.0f && LnDl > 0.0f ) 
+    {
       PerRayData_pathtrace_shadow shadow_prd;
       shadow_prd.inShadow = false;
-      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
       rtTrace(top_object, shadow_ray, shadow_prd);
 
-      if(!shadow_prd.inShadow){
+      if(!shadow_prd.inShadow)
+      {
         float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
         result += light.emission * weight;
       }
     }
@@ -368,16 +437,16 @@ __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness,
 
 
   PerRayData_pathtrace prd;
-  prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   if(_roughness == 0.0){
     prd.attenuation = current_prd.attenuation;
   }
   else{
     prd.attenuation = current_prd.attenuation * pdf * weight;
   }
+  prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
-
+  prd.countEmitted = false;
 
   Ray default_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, default_ray, prd);
@@ -392,16 +461,15 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
   // Find a random normal
   float z1 = rnd(current_prd.seed);
   float z2 = rnd(current_prd.seed);
-
   float phi = 2.0f * M_PI * z2;
-  float rough2 = _roughness* _roughness;
+  float rough2 = _roughness * _roughness;
   float theta = atan(sqrt(-rough2 * log(1.0f - z1)));
 
   // Convert spherical coordinates microsurface normal to worldspace direction
   optix::float3 m = make_float3(sin(theta)*cos(phi), sin(theta)*sin(phi), cos(theta));
 
   // fresnel
-  float cosNO = optix::dot(- _normal, ray.direction - eye);
+  float cosNO = optix::dot(-_normal, ray.direction - eye);
   float F = fresnel_dielectric(cosNO, _eta);
 
   // Distribution function
@@ -432,12 +500,12 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
     G *= ((3.535f*_roughness + 2.181f*rough2) / (1.0f + 2.276f * _roughness + 2.577f*rough2));
   }
 
-  optix::float3 ray_direction = 2.0f * optix::dot(optix::normalize(ray.direction), optix::normalize(m)) * m - ray.direction;
+  optix::float3 ray_dir = 2.0f * optix::dot(optix::normalize(ray.direction), optix::normalize(m)) * m - ray.direction;
 
-  optix::float3 U, V, W;
+  optix::float3 U, V;
   float3 reflection_direction = reflect(ray.direction, _normal);
-  createONB(reflection_direction, U, V, W);
-  ray_direction = U * ray_direction.x + V * ray_direction.y + W * ray_direction.z;
+  createONB(reflection_direction, U, V);
+  optix::float3 ray_direction = U * ray_dir.x + V * ray_dir.y + reflection_direction * ray_dir.z;
 
   //half vector
   // need to do sign
@@ -476,8 +544,22 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
         result += light.emission * weight;
       }
     }
-  }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
 
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
+  }
   current_prd.radiance = result;
   current_prd.countEmitted = false;
 
@@ -486,9 +568,10 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
 
   PerRayData_pathtrace prd;
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
-  prd.attenuation = current_prd.attenuation * pdf * weight;
+  prd.attenuation = current_prd.attenuation;// * pdf * weight;
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
 
 
   Ray default_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
@@ -547,16 +630,33 @@ __device__ optix::float3 phong(optix::float3 _normal, float _exponent){
         result += light.emission * weight;
       }
     }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
   }
 
   current_prd.radiance = result;
   current_prd.countEmitted = false;
 
   PerRayData_pathtrace prd;
-  prd.attenuation = current_prd.attenuation * (pdf);
+  prd.attenuation = current_prd.attenuation * (((_exponent + 2.0f) / (2.0f*M_PI)) * pow(dot(ray_direction, reflection_direction), _exponent)/(1.0f/(pdf)));
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
+
 
   Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, reflection_ray, prd);
@@ -595,18 +695,33 @@ __device__ optix::float3 reflection(optix::float3 _normal, float _eta){
         result += light.emission * weight;
       }
     }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
   }
 
   current_prd.radiance = result;
   current_prd.countEmitted = false;
 
-  float pdf = 1.0;
-
   PerRayData_pathtrace prd;
-  prd.attenuation = current_prd.attenuation * pdf;
+  prd.attenuation = current_prd.attenuation;
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
+
 
   Ray reflection_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, reflection_ray, prd);
@@ -652,6 +767,21 @@ __device__ optix::float3 refraction(optix::float3 _normal, float _eta){
         result += light.emission * weight;
       }
     }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
   }
 
   current_prd.radiance = result;
@@ -665,6 +795,8 @@ __device__ optix::float3 refraction(optix::float3 _normal, float _eta){
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
+
 
   Ray refraction_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, refraction_ray, prd);
@@ -712,6 +844,21 @@ __device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
         result += light.emission * weight;
       }
     }
+    float LnDlinverse = dot(-light.normal, L);
+    // cast shadow ray for other side of light
+    if ( nDl > 0.0f && LnDlinverse > 0.0f )
+    {
+      PerRayData_pathtrace_shadow shadow_prd;
+      shadow_prd.inShadow = false;
+      Ray shadow_ray = make_Ray( ray_origin, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+      rtTrace(top_object, shadow_ray, shadow_prd);
+
+      if(!shadow_prd.inShadow)
+      {
+        float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+        result += light.emission * weight;
+      }
+    }
   }
 
   current_prd.radiance = result;
@@ -740,6 +887,8 @@ __device__ optix::float3 oren_nayar(float3 _normal, float _sigma){
   prd.result = current_prd.result + (current_prd.radiance * current_prd.attenuation);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
+  prd.countEmitted = false;
+
 
   Ray refraction_ray = make_Ray( ray_origin, ray_direction, pathtrace_ray_type, scene_epsilon, RT_DEFAULT_MAX );
   rtTrace(top_object, refraction_ray, prd);

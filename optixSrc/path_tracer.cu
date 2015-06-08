@@ -239,7 +239,8 @@ RT_PROGRAM void defaultMaterial(){
     unsigned int num_lights = lights.size();
 
 
-    for(int i = 0; i < num_lights; ++i) {
+    for(int i = 0; i < num_lights; ++i)
+    {
       ParallelogramLight light = lights[i];
       float z1 = rnd(current_prd.seed);
       float z2 = rnd(current_prd.seed);
@@ -249,27 +250,42 @@ RT_PROGRAM void defaultMaterial(){
       float3 L = normalize(light_pos - hitpoint);
       float nDl = dot( ffnormal, L );
       float LnDl = dot( light.normal, L );
+      float LnDlinverse = dot(-light.normal, L);
       float A = length(cross(light.v1, light.v2));
 
       // cast shadow ray
-      if ( nDl > 0.0f && LnDl > 0.0f ) {
+      if ( nDl > 0.0f && LnDl > 0.0f )
+      {
         PerRayData_pathtrace_shadow shadow_prd;
         shadow_prd.inShadow = false;
         Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
         rtTrace(top_object, shadow_ray, shadow_prd);
 
-        if(!shadow_prd.inShadow){
+        if(!shadow_prd.inShadow)
+        {
           float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
           result += light.emission * weight;
         }
       }
+
+      // cast shadow ray for other side of light
+      if ( nDl > 0.0f && LnDlinverse > 0.0f )
+      {
+        PerRayData_pathtrace_shadow shadow_prd;
+        shadow_prd.inShadow = false;
+        Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+        rtTrace(top_object, shadow_ray, shadow_prd);
+
+        if(!shadow_prd.inShadow)
+        {
+          float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+          result += light.emission * weight;
+        }
+      }
     }
-//    if(result.x != 0.0 && result.y != 0.0  && result.z != 0.0){
-//    printf("result %f, %f, %f\n", result.x, result.y, result.z);
-//    }
+
     current_prd.radiance = result;
     current_prd.countEmitted = false;
-
 
     PerRayData_pathtrace prd;
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
@@ -285,10 +301,9 @@ RT_PROGRAM void defaultMaterial(){
     current_prd.done = true; // end the ray comming in
 }
 //-----------------------------------------------------------------------------
-rtDeclareVariable(float3,        emission_color, , );
-
+rtDeclareVariable(float3, emission_color, , );
+//-----------------------------------------------------------------------------
 RT_PROGRAM void diffuseEmitter(){
-//    current_prd.result = emission_color;//make_float3(0.f);
     if(current_prd.countEmitted){
         current_prd.result = emission_color;
     }
@@ -313,25 +328,28 @@ RT_PROGRAM void miss(){
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
+rtDeclareVariable(float, strength, , );
+rtDeclareVariable(Matrix4x4, cameraMatrix, , );
+//-----------------------------------------------------------------------------
 RT_PROGRAM void envi_miss(){
-    float theta = atan2f(ray.direction.x, ray.direction.z);
-    float phi = M_PIf * 0.5f - acos(ray.direction.y);
+    float3 ray_direction = make_float3(cameraMatrix * make_float4(ray.direction.x, ray.direction.y, ray.direction.z, 1.0));
+    float theta = atan2f(ray_direction.x, ray_direction.z);
+    float phi = M_PIf * 0.5f - acos(ray_direction.y);
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
     if(current_prd.countEmitted){
-        current_prd.result = make_float3(tex2D(envmap, u, v));
+        current_prd.result = strength * make_float3(tex2D(envmap, u, v));
     }
     else{
-        current_prd.result +=  make_float3(tex2D(envmap, u, v));
+        current_prd.result +=  strength * make_float3(tex2D(envmap, u, v));
     }
     current_prd.done = true;
 }
-
-
 //-----------------------------------------------------------------------------
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
-
+//-----------------------------------------------------------------------------
 RT_PROGRAM void shadow(){
     current_prd_shadow.inShadow = true;
     rtTerminateRay();
 }
+//-----------------------------------------------------------------------------

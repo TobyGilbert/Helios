@@ -7,26 +7,31 @@
 
 // Declare our static instance of our class
 LightManager* LightManager::m_instance;
-
 //----------------------------------------------------------------------------------------------------------------------
-LightManager* LightManager::getInstance(QWidget *parent){
-    if(!m_instance){
+LightManager* LightManager::getInstance(QWidget *parent)
+{
+    if(!m_instance)
+    {
         m_instance = new LightManager(parent);
     }
-    else{
+    else
+    {
         if(parent!=0) std::cerr<<"LightManager already has a parent class"<<std::endl;
     }
     return m_instance;
 }
 //----------------------------------------------------------------------------------------------------------------------
-LightManager::LightManager(QWidget *parent) : QDockWidget("Light Manager", parent), m_numLights(0){
+LightManager::LightManager(QWidget *parent) : QDockWidget("Light Manager", parent), m_numLights(0)
+{
     initialise();
 }
 //----------------------------------------------------------------------------------------------------------------------
-LightManager::~LightManager(){
+LightManager::~LightManager()
+{
 }
 //----------------------------------------------------------------------------------------------------------------------
-void LightManager::createGUI(){
+void LightManager::createGUI()
+{
     this->setWindowTitle("Light Manager");
     //add our grid layout to our widget
     QGroupBox * gb = new QGroupBox(this);
@@ -41,77 +46,107 @@ void LightManager::createGUI(){
     QPushButton *addLightBtn = new QPushButton("Add Light", this);
     gridLayout->addWidget(addLightBtn, 1, 0, 1, 4);
 
+    QPushButton *deleteLightBtn = new QPushButton("Delete Light", this);
+    gridLayout->addWidget(deleteLightBtn, 2, 0, 1, 4);
+
     // Some double spin boxes for light parameters
     QLabel *translate = new QLabel("Translate", this);
     translate->setHidden(true);
-    gridLayout->addWidget(translate, 2, 0, 1, 1);
+    gridLayout->addWidget(translate, 3, 0, 1, 1);
     m_translateX = new QDoubleSpinBox(this);
     m_translateY = new QDoubleSpinBox(this);
     m_translateZ = new QDoubleSpinBox(this);
-    m_translateX->setMinimum(-10.0);
-    m_translateY->setMinimum(-10.0);
-    m_translateZ->setMinimum(-10.0);
+    m_translateX->setMinimum(-INFINITY);
+    m_translateY->setMinimum(-INFINITY);
+    m_translateZ->setMinimum(-INFINITY);
+    m_translateX->setMaximum(INFINITY);
+    m_translateY->setMaximum(INFINITY);
+    m_translateZ->setMaximum(INFINITY);
     m_translateX->setHidden(true);
     m_translateY->setHidden(true);
     m_translateZ->setHidden(true);
-    gridLayout->addWidget(m_translateX, 2, 1, 1, 1);
-    gridLayout->addWidget(m_translateY, 2, 2, 1, 1);
-    gridLayout->addWidget(m_translateZ, 2, 3, 1, 1);
+    m_translateX->setSingleStep(0.01);
+    m_translateY->setSingleStep(0.01);
+    m_translateZ->setSingleStep(0.01);
+    gridLayout->addWidget(m_translateX, 3, 1, 1, 1);
+    gridLayout->addWidget(m_translateY, 3, 2, 1, 1);
+    gridLayout->addWidget(m_translateZ, 3, 3, 1, 1);
 
     QLabel *scale = new QLabel("Scale", this);
     scale->setHidden(true);
-    gridLayout->addWidget(scale, 3, 0, 1, 1);
+    gridLayout->addWidget(scale, 4, 0, 1, 1);
     m_scaleX = new QDoubleSpinBox(this);
     m_scaleY = new QDoubleSpinBox(this);
     m_scaleZ = new QDoubleSpinBox(this);
-    m_scaleX->setMinimum(-10.0);
-    m_scaleY->setMinimum(-10.0);
-    m_scaleZ->setMinimum(-10.0);
+    m_scaleX->setMinimum(-INFINITY);
+    m_scaleY->setMinimum(-INFINITY);
+    m_scaleZ->setMinimum(-INFINITY);
+    m_scaleX->setMaximum(INFINITY);
+    m_scaleY->setMaximum(INFINITY);
+    m_scaleZ->setMaximum(INFINITY);
     m_scaleX->setHidden(true);
     m_scaleY->setHidden(true);
     m_scaleZ->setHidden(true);
     m_scaleX->setValue(1.0);
     m_scaleY->setValue(1.0);
     m_scaleZ->setValue(1.0);
-    gridLayout->addWidget(m_scaleX, 3, 1, 1, 1);
-    gridLayout->addWidget(m_scaleY, 3, 2, 1, 1);
-    gridLayout->addWidget(m_scaleZ, 3, 3, 1, 1);
+    m_scaleX->setSingleStep(0.01);
+    m_scaleY->setSingleStep(0.01);
+    m_scaleZ->setSingleStep(0.01);
+    gridLayout->addWidget(m_scaleX, 4, 1, 1, 1);
+    gridLayout->addWidget(m_scaleY, 4, 2, 1, 1);
+    gridLayout->addWidget(m_scaleZ, 4, 3, 1, 1);
 
     QLabel *rotate = new QLabel("Rotate", this);
     rotate->setHidden(true);
-    gridLayout->addWidget(rotate, 4, 0, 1, 1);
+    gridLayout->addWidget(rotate, 5, 0, 1, 1);
     m_rotateX = new QDoubleSpinBox(this);
     m_rotateY = new QDoubleSpinBox(this);
     m_rotateZ = new QDoubleSpinBox(this);
-    m_rotateX->setMinimum(-10.0);
-    m_rotateY->setMinimum(-10.0);
-    m_rotateZ->setMinimum(-10.0);
+    m_rotateX->setMinimum(-INFINITY);
+    m_rotateY->setMinimum(-INFINITY);
+    m_rotateZ->setMinimum(-INFINITY);
+    m_rotateX->setMaximum(INFINITY);
+    m_rotateY->setMaximum(INFINITY);
+    m_rotateZ->setMaximum(INFINITY);
     m_rotateX->setHidden(true);
     m_rotateY->setHidden(true);
     m_rotateZ->setHidden(true);
-    gridLayout->addWidget(m_rotateX, 4, 1, 1, 1);
-    gridLayout->addWidget(m_rotateY, 4, 2, 1, 1);
-    gridLayout->addWidget(m_rotateZ, 4, 3, 1, 1);
+    m_rotateX->setSingleStep(0.01);
+    m_rotateY->setSingleStep(0.01);
+    m_rotateZ->setSingleStep(0.01);
+    gridLayout->addWidget(m_rotateX, 5, 1, 1, 1);
+    gridLayout->addWidget(m_rotateY, 5, 2, 1, 1);
+    gridLayout->addWidget(m_rotateZ, 5, 3, 1, 1);
 
     QLabel *emission = new QLabel("Emission", this);
     emission->setHidden(true);
-    gridLayout->addWidget(emission, 5, 0, 1, 1);
+    gridLayout->addWidget(emission, 6, 0, 1, 1);
     m_emissionX = new QDoubleSpinBox(this);
     m_emissionY = new QDoubleSpinBox(this);
     m_emissionZ = new QDoubleSpinBox(this);
     m_emissionX->setHidden(true);
     m_emissionY->setHidden(true);
     m_emissionZ->setHidden(true);
+    m_emissionX->setMaximum(INFINITY);
+    m_emissionY->setMaximum(INFINITY);
+    m_emissionZ->setMaximum(INFINITY);
     m_emissionX->setValue(5.0);
     m_emissionY->setValue(5.0);
     m_emissionZ->setValue(5.0);
-    gridLayout->addWidget(m_emissionX, 5, 1, 1, 1);
-    gridLayout->addWidget(m_emissionY, 5, 2, 1, 1);
-    gridLayout->addWidget(m_emissionZ, 5, 3, 1, 1);
+    m_emissionX->setDecimals(3);
+    m_emissionY->setDecimals(3);
+    m_emissionZ->setDecimals(3);
+    m_emissionX->setSingleStep(0.001);
+    m_emissionY->setSingleStep(0.001);
+    m_emissionZ->setSingleStep(0.001);
+    gridLayout->addWidget(m_emissionX, 6, 1, 1, 1);
+    gridLayout->addWidget(m_emissionY, 6, 2, 1, 1);
+    gridLayout->addWidget(m_emissionZ, 6, 3, 1, 1);
 
     // A spacer to push everything to the top
     QSpacerItem* spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    gridLayout->addItem(spacer, 6, 0, 1, 4);
+    gridLayout->addItem(spacer, 7, 0, 1, 4);
 
     // Connections
     connect(addLightBtn, SIGNAL(clicked()), this, SLOT(addLight()));
@@ -132,6 +167,8 @@ void LightManager::createGUI(){
     connect(addLightBtn, SIGNAL(clicked()), m_emissionY, SLOT(show()));
     connect(addLightBtn, SIGNAL(clicked()), m_emissionZ, SLOT(show()));
 
+    connect(deleteLightBtn, SIGNAL(clicked()), this, SLOT(deleteLight()));
+
     connect(m_lightIndexListWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(updateGUI(QModelIndex)));
     connect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
     connect(m_translateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
@@ -147,7 +184,8 @@ void LightManager::createGUI(){
     connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
 }
 //----------------------------------------------------------------------------------------------------------------------
-void LightManager::initialise(){
+void LightManager::initialise()
+{
     createGUI();
 
     // Global translation matrix
@@ -159,7 +197,8 @@ void LightManager::initialise(){
     m_lightBuffer->setSize(0u);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void LightManager::createParollelogramLight(){
+void LightManager::createParollelogramLight()
+{
     // Add our light to the buffer of lights
     Light *tmpLight = new Light();
 //    m_lights.push_back(tmpLight);
@@ -190,7 +229,8 @@ void LightManager::createParollelogramLight(){
     delete tmpLight;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::setGuiDefaults(){
+void LightManager::setGuiDefaults()
+{
     m_translateX->setValue(0.0);
     m_translateY->setValue(0.0);
     m_translateZ->setValue(0.0);
@@ -205,12 +245,29 @@ void LightManager::setGuiDefaults(){
     m_emissionZ->setValue(5.0);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::addLight(){
+void LightManager::addLight()
+{
     PathTracerScene::getInstance()->addLight();
     updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::updateLight(){
+void LightManager::deleteLight()
+{
+    std::vector<Light::ParallelogramLight>::iterator itr = m_parallelogramLights.begin() + m_selectedLight;
+    m_parallelogramLights.erase(itr);
+
+    std::cout<<"Deleting light"<<m_selectedLight+1<<std::endl;
+    PathTracerScene::getInstance()->removeLight(m_selectedLight);
+    std::cout<<"selected Light "<<m_selectedLight<<std::endl;
+    m_lightIndexListWidget->item(m_selectedLight)->setHidden(true);
+//    m_lightIndexListWidget->removeItemWidget(m_lightIndexListWidget->item(m_selectedLight));
+
+    updateScene();
+
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void LightManager::updateLight()
+{
     // Changes the light parameters for the actual light
     // A pointer to the start of the buffer of lights
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
@@ -263,9 +320,9 @@ void LightManager::updateLight(){
     point2 = glm::vec3(m_transGlobal * transform * glm::vec4(-0.5, 0.0, -0.5, 1.0));
     point3 = glm::vec3(m_transGlobal * transform * glm::vec4(0.5, 0.0, 0.5, 1.0));
 
-    std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
-    std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
-    std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
+//    std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
+//    std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
+//    std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
 
     lightBuffer[m_selectedLight].corner.x = point1.x;
     lightBuffer[m_selectedLight].corner.y = point1.y;
@@ -301,11 +358,13 @@ void LightManager::updateLight(){
     updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::transformLights(glm::mat4 _trans){
+void LightManager::transformLights(glm::mat4 _trans)
+{
     m_transGlobal = _trans;
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
     glm::vec4 point1, point2, point3;
-    for(unsigned int i=0; i<m_numLights; i++){
+    for(unsigned int i=0; i<m_numLights; i++)
+    {
         // convert to points
         point1.x = lightBuffer[i].corner.x;
         point1.y = lightBuffer[i].corner.y;
@@ -344,16 +403,16 @@ void LightManager::transformLights(glm::mat4 _trans){
         point1 = m_transGlobal * transLocal * glm::vec4(-0.5, 0.0, 0.5, 1.0);
         point2 = m_transGlobal * transLocal * glm::vec4(-0.5, 0.0, -0.5, 1.0);
         point3 = m_transGlobal * transLocal * glm::vec4(0.5, 0.0, 0.5, 1.0);
-        std::cout<<"-----------------------\n";
-        std::cout<<_trans[0][0]<<" "<<_trans[1][0]<<" "<<_trans[2][0]<<" "<<_trans[3][0]<<std::endl;
-        std::cout<<_trans[0][1]<<" "<<_trans[1][1]<<" "<<_trans[2][1]<<" "<<_trans[3][1]<<std::endl;
-        std::cout<<_trans[0][2]<<" "<<_trans[1][2]<<" "<<_trans[2][2]<<" "<<_trans[3][2]<<std::endl;
-        std::cout<<_trans[0][3]<<" "<<_trans[1][3]<<" "<<_trans[2][3]<<" "<<_trans[3][3]<<std::endl;
-        std::cout<<"-----------------------\n";
-        std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
-        std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
-        std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
-        std::cout<<"-----------------------\n";
+//        std::cout<<"-----------------------\n";
+//        std::cout<<_trans[0][0]<<" "<<_trans[1][0]<<" "<<_trans[2][0]<<" "<<_trans[3][0]<<std::endl;
+//        std::cout<<_trans[0][1]<<" "<<_trans[1][1]<<" "<<_trans[2][1]<<" "<<_trans[3][1]<<std::endl;
+//        std::cout<<_trans[0][2]<<" "<<_trans[1][2]<<" "<<_trans[2][2]<<" "<<_trans[3][2]<<std::endl;
+//        std::cout<<_trans[0][3]<<" "<<_trans[1][3]<<" "<<_trans[2][3]<<" "<<_trans[3][3]<<std::endl;
+//        std::cout<<"-----------------------\n";
+//        std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
+//        std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
+//        std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
+//        std::cout<<"-----------------------\n";
         // convert back to anchors and vectors
         lightBuffer[i].corner.x = point1.x;
         lightBuffer[i].corner.y = point1.y;
@@ -365,17 +424,18 @@ void LightManager::transformLights(glm::mat4 _trans){
         lightBuffer[i].v2.y = point3.y - lightBuffer[i].corner.y;
         lightBuffer[i].v2.z = point3.z - lightBuffer[i].corner.z;
         lightBuffer[i].normal = normalize(-cross(lightBuffer[i].v1, lightBuffer[i].v2));
-        std::cout<<"corner "<<lightBuffer[i].corner.x<<","<<lightBuffer[i].corner.y<<","<<lightBuffer[i].corner.z<<std::endl;
-        std::cout<<"v1 "<<lightBuffer[i].v1.x<<","<<lightBuffer[i].v1.y<<","<<lightBuffer[i].v1.z<<std::endl;
-        std::cout<<"v2 "<<lightBuffer[i].v2.x<<","<<lightBuffer[i].v2.y<<","<<lightBuffer[i].v2.z<<std::endl;
-        std::cout<<"-----------------------\n";
+//        std::cout<<"corner "<<lightBuffer[i].corner.x<<","<<lightBuffer[i].corner.y<<","<<lightBuffer[i].corner.z<<std::endl;
+//        std::cout<<"v1 "<<lightBuffer[i].v1.x<<","<<lightBuffer[i].v1.y<<","<<lightBuffer[i].v1.z<<std::endl;
+//        std::cout<<"v2 "<<lightBuffer[i].v2.x<<","<<lightBuffer[i].v2.y<<","<<lightBuffer[i].v2.z<<std::endl;
+//        std::cout<<"-----------------------\n";
     }
 
     m_lightBuffer->unmap();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::updateGUI(QModelIndex _index){
+void LightManager::updateGUI(QModelIndex _index)
+{
     std::cout<<"Index selected: "<<_index.row()<<std::endl;
     int row = _index.row();
     m_selectedLight = row;
@@ -401,7 +461,8 @@ void LightManager::updateGUI(QModelIndex _index){
     m_lightBuffer->unmap();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose){
+void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose)
+{
     // identity matrix to init our transformation
     float m[16];
     m[ 0] = _trans[0][0];  m[ 1] = _trans[1][0];  m[ 2] = _trans[2][0];  m[ 3] = _trans[3][0];

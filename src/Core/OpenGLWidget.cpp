@@ -23,11 +23,14 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     // mouse rotation values set to 0
     m_spinXFace=0;
     m_spinYFace=0;
+    m_spinXFaceEnvironment=0;
+    m_spinYFaceEnvironment=0;
     m_moveRenderReduction = 4;
     m_timedOut = 5;
     m_cameraMovRayDepth = 2;
     m_modelPos = glm::vec3(0);
     m_mouseGlobalTX = glm::mat4();
+    m_translateEnvironment = false;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -229,6 +232,33 @@ void OpenGLWidget::mouseMoveEvent (QMouseEvent *_event){
     // our scene has cahnged so reset our timeout
     sceneChanged();
    }
+  else if(m_translateEnvironment && _event->buttons() == Qt::MiddleButton){
+      float diffx=_event->x()-m_origX;
+      float diffy=_event->y()-m_origY;
+      m_spinYFaceEnvironment += (float) 0.01f * diffx;
+      glm::mat4 rotx,roty,finalRot;
+      rotx = glm::rotate(rotx, m_spinXFaceEnvironment,glm::vec3(1.0,0.0,0.0));
+      roty = glm::rotate(roty, m_spinYFaceEnvironment,glm::vec3(0.0,1.0,0.0));
+      finalRot = rotx*roty;
+      m_mouseGlobalTXEnvironment = finalRot;
+      m_spinXFace -= (float) 0.01f * diffy;
+      m_spinYFace += (float) 0.01f * diffx;
+      rotx = glm::mat4(1.0);
+      roty = glm::mat4(1.0);
+      rotx = glm::rotate(rotx, m_spinXFaceEnvironment,glm::vec3(1.0,0.0,0.0));
+      roty = glm::rotate(roty, m_spinYFaceEnvironment,glm::vec3(0.0,1.0,0.0));
+      finalRot = rotx*roty;
+      m_mouseGlobalTX = finalRot;
+      m_mouseGlobalTX[3][0] = m_modelPos.x;
+      m_mouseGlobalTX[3][1] = m_modelPos.y;
+      m_mouseGlobalTX[3][2] = m_modelPos.z;
+      PathTracerScene::getInstance()->setGlobalTransEnvironment(m_mouseGlobalTXEnvironment);
+      PathTracerScene::getInstance()->setGlobalTrans(m_mouseGlobalTX);
+      m_origX = _event->x();
+      m_origY = _event->y();
+      // our scene has cahnged so reset our timeout
+      sceneChanged();
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
@@ -255,6 +285,13 @@ void OpenGLWidget::mousePressEvent ( QMouseEvent * _event){
     m_curMaxRayDepth = PathTracerScene::getInstance()->getMaxRayDepth();
     PathTracerScene::getInstance()->setMaxRayDepth(m_cameraMovRayDepth);
   }
+  // right mouse translate mode
+  else if(_event->button() == Qt::MiddleButton)
+  {
+      m_origX = _event->x();
+      m_origY = _event->y();
+      m_translateEnvironment = true;
+  }
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -274,9 +311,14 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
     //return our scene max depth to original depth now we have completed our translation
     PathTracerScene::getInstance()->setMaxRayDepth(m_curMaxRayDepth);
   }
+  else if(_event->button() == Qt::MiddleButton)
+  {
+     m_translateEnvironment = false;
+  }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::wheelEvent(QWheelEvent *_event){
+void OpenGLWidget::wheelEvent(QWheelEvent *_event)
+{
     if(_event->delta() > 0)
     {
         m_modelPos.z-=ZOOM;
@@ -295,8 +337,10 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
-    switch(_event->key()){
+void OpenGLWidget::keyPressEvent(QKeyEvent *_event)
+{
+    switch(_event->key())
+    {
         case Qt::Key_Escape:
             QGuiApplication::exit();
             break;
@@ -305,7 +349,18 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::saveImage(){
+void OpenGLWidget::keyReleaseEvent(QKeyEvent *_event)
+{
+    switch(_event->key())
+    {
+        default:
+            break;
+    }
+}
+
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::saveImage()
+{
    QImage image = PathTracerScene::getInstance()->saveImage();
    QFileDialog fileDialog(this);
    fileDialog.setDefaultSuffix(".png");
@@ -314,11 +369,36 @@ void OpenGLWidget::saveImage(){
    image.save(saveFile+QString(".png"), "PNG");
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::loadEnvironmentMap(){
+void OpenGLWidget::loadEnvironmentMap()
+{
     QFileDialog fileDialog;
-    m_environmentMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
-    PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
-    // Reset the frame
+
+    QString envMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
+    if(!envMap.isEmpty())
+    {
+        m_environmentMap = envMap;
+        PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
+        // Reset the frame
+        sceneChanged();
+    }
+}
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::enableEnvironmentMap(bool _enabled){
+    std::string ptx_path = "ptx/path_tracer.cu.ptx";
+    if(_enabled)
+    {
+        PathTracerScene::getInstance()->getContext()->setMissProgram( 0, PathTracerScene::getInstance()->getContext()->createProgramFromPTXFile( ptx_path, "envi_miss" ) );
+    }
+    else
+    {
+        PathTracerScene::getInstance()->getContext()->setMissProgram( 0, PathTracerScene::getInstance()->getContext()->createProgramFromPTXFile( ptx_path, "miss" ) );
+    }
+    sceneChanged();
+}
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::setStrengthEnvironment(double _strength)
+{
+    PathTracerScene::getInstance()->getContext()["strength"]->setFloat((float)_strength);
     sceneChanged();
 }
 //----------------------------------------------------------------------------------------------------------------------

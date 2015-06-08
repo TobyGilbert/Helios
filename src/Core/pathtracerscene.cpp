@@ -7,6 +7,7 @@
 #include "Core/TextureLoader.h"
 #include "Lights/LightManager.h"
 #include <cuda_runtime.h>
+#include <glm/gtc/matrix_inverse.hpp>
 
 //Declare our static instance variable
 PathTracerScene* PathTracerScene::m_instance;
@@ -25,7 +26,8 @@ PathTracerScene::PathTracerScene()  : m_cameraChanged(false),
                                     m_sqrt_num_samples( 4u ),
                                     m_frame(0),
                                     m_width(512),
-                                    m_height(512)
+                                    m_height(512),
+                                    m_translateEnviroment(false)
 {
     // create an instance of our OptiX engine
     m_context = optix::Context::create();
@@ -105,7 +107,13 @@ void PathTracerScene::init()
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
     m_enviSampler = loadHDRTexture(m_context, "./HDRMaps/CedarCity.hdr", default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
-
+    m_context["strength"]->setFloat(1.0);
+    float m[16];
+    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
+    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
+    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
+    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
+    m_context["cameraMatrix"]->setMatrix4x4fv(false, m);
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
@@ -129,11 +137,6 @@ void PathTracerScene::init()
 
     //create our top group and set it in our engine and add a matrix for our global translation
     m_globalTrans = m_context->createTransform();
-    float m[16];
-    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
-    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
-    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
-    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
     m_globalTrans->setMatrix(false,m,0);
     m_globalTransGroup = m_context->createGroup();
     m_globalTrans->setChild(m_globalTransGroup);
@@ -216,6 +219,10 @@ void PathTracerScene::removeGeomtry(std::string _id)
     {
         std::cerr<<"Error: Could not find model to delete in path tracer"<<std::endl;
     }
+}
+void PathTracerScene::removeLight(int _id){
+    m_globalTransGroup->removeChild(LightManager::getInstance()->getGeomAndTrans()[_id]);
+    m_globalTransGroup->getAcceleration()->markDirty();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -334,6 +341,21 @@ void PathTracerScene::setGlobalTrans(glm::mat4 _trans)
     //update our scene
     cleanTopAcceleration();
 }
+void PathTracerScene::setGlobalTransEnvironment(glm::mat4 _trans)
+{
+    // identity matrix to init our transformation
+    glm::mat4 trans = glm::inverseTranspose(_trans);
+    float m[16];
+    m[ 0] = trans[0][0];  m[ 1] = trans[1][0];  m[ 2] = trans[2][0];  m[ 3] = trans[3][0];
+    m[ 4] = trans[0][1];  m[ 5] = trans[1][1];  m[ 6] = trans[2][1];  m[ 7] = trans[3][1];
+    m[ 8] = trans[0][2];  m[ 9] = trans[1][2];  m[ 10] = trans[2][2];  m[ 11] = trans[3][2];
+    m[ 12] = trans[0][3];  m[ 13] = trans[1][3];  m[ 14] = trans[2][3];  m[ 15] = trans[3][3];
+
+    m_context["cameraMatrix"]->setMatrix4x4fv(false, m);
+
+    //update our scene
+    cleanTopAcceleration();
+}
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::setEnvironmentMap(std::string _environmentMap)
 {
@@ -348,3 +370,5 @@ void PathTracerScene::cleanTopAcceleration()
     m_globalTransGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
+//----------------------------------------------------------------------------------------------------------------------
+
