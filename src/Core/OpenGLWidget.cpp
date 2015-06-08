@@ -332,3 +332,19 @@ void OpenGLWidget::loadEnvironmentMap()
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::enableEnvironmentMap(bool _enabled){
+    std::string ptx_path = "ptx/path_tracer.cu.ptx";
+    if(_enabled){
+        PathTracerScene::getInstance()->getContext()->setMissProgram( 0, PathTracerScene::getInstance()->getContext()->createProgramFromPTXFile( ptx_path, "envi_miss" ) );
+    }
+    else{
+        PathTracerScene::getInstance()->getContext()->setMissProgram( 0, PathTracerScene::getInstance()->getContext()->createProgramFromPTXFile( ptx_path, "miss" ) );
+    }
+    sceneChanged();
+}
+//----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::setStrengthEnvironment(double _strength){
+    PathTracerScene::getInstance()->getContext()["strength"]->setFloat((float)_strength);
+    sceneChanged();
+}
+//----------------------------------------------------------------------------------------------------------------------

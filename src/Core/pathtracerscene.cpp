@@ -105,7 +105,7 @@ void PathTracerScene::init()
     const float3 default_color = make_float3(1.0f, 1.0f, 1.0f);
     m_enviSampler = loadHDRTexture(m_context, "./HDRMaps/CedarCity.hdr", default_color);
     m_context["envmap"]->setTextureSampler(m_enviSampler);
-
+    m_context["strength"]->setFloat(1.0);
 
     // Setup programs
     std::string ptx_path = "ptx/path_tracer.cu.ptx";
@@ -352,3 +352,5 @@ void PathTracerScene::cleanTopAcceleration()
     m_globalTransGroup->getAcceleration()->markDirty();
     m_frame = 0;
 }
+//----------------------------------------------------------------------------------------------------------------------
+

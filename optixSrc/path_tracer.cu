@@ -301,10 +301,9 @@ RT_PROGRAM void defaultMaterial(){
     current_prd.done = true; // end the ray comming in
 }
 //-----------------------------------------------------------------------------
-rtDeclareVariable(float3,        emission_color, , );
-
+rtDeclareVariable(float3, emission_color, , );
+//-----------------------------------------------------------------------------
 RT_PROGRAM void diffuseEmitter(){
-//    current_prd.result = emission_color;//make_float3(0.f);
     if(current_prd.countEmitted){
         current_prd.result = emission_color;
     }
@@ -329,25 +328,26 @@ RT_PROGRAM void miss(){
     current_prd.done = true;
 }
 //-----------------------------------------------------------------------------
+rtDeclareVariable(float, strength, , );
+//-----------------------------------------------------------------------------
 RT_PROGRAM void envi_miss(){
     float theta = atan2f(ray.direction.x, ray.direction.z);
     float phi = M_PIf * 0.5f - acos(ray.direction.y);
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
     if(current_prd.countEmitted){
-        current_prd.result = make_float3(tex2D(envmap, u, v));
+        current_prd.result = strength * make_float3(tex2D(envmap, u, v));
     }
     else{
-        current_prd.result +=  make_float3(tex2D(envmap, u, v));
+        current_prd.result +=  strength * make_float3(tex2D(envmap, u, v));
     }
     current_prd.done = true;
 }
-
-
 //-----------------------------------------------------------------------------
 rtDeclareVariable(PerRayData_pathtrace_shadow, current_prd_shadow, rtPayload, );
-
+//-----------------------------------------------------------------------------
 RT_PROGRAM void shadow(){
     current_prd_shadow.inShadow = true;
     rtTerminateRay();
 }
+//-----------------------------------------------------------------------------

@@ -9,6 +9,7 @@
 #include <QFile>
 #include <QDataStream>
 #include "UI/CameraWidget.h"
+#include <QCheckBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) ,m_menuCreated(false){
     ui->setupUi(this);
@@ -71,6 +72,10 @@ void MainWindow::createMenus(){
     LightManager::getInstance()->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, LightManager::getInstance());
     connect(LightManager::getInstance(), SIGNAL(updateScene()), m_openGLWidget, SLOT(sceneChanged()));
+    connect(lightToolbarBtn, SIGNAL(clicked(bool)), lightToolbarBtn, SLOT(setChecked(bool)));
+//    connect(lightToolbarBtn, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
+//    connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
+    connect(lightToolbarBtn, SIGNAL(clicked()), LightManager::getInstance(), SLOT(show()));
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Mesh functionality-------------------------------------------------
     //--------------------------------------------------------------------------------------------------------------------
@@ -86,6 +91,8 @@ void MainWindow::createMenus(){
     this->addDockWidget(Qt::RightDockWidgetArea, MeshWidget::getInstance());
     connect(MeshWidget::getInstance(),SIGNAL(updateScene()),m_openGLWidget,SLOT(sceneChanged()));
     connect(meshToolbarButton, SIGNAL(clicked()), MeshWidget::getInstance(), SLOT(show()));
+    connect(meshToolbarButton, SIGNAL(clicked(bool)), meshToolbarButton,  SLOT(setChecked(bool)));
+
 
     //--------------------------------------------------------------------------------------------------------------------
     // ------------------------------------------------Environment map----------------------------------------------------
@@ -108,11 +115,34 @@ void MainWindow::createMenus(){
     environmentDockWidget->setWidget(environmentGroupBox);
     QGridLayout *environmentGridLayout = new QGridLayout(environmentGroupBox);
     environmentGroupBox->setLayout(environmentGridLayout);
+    QCheckBox* envEnableCB = new QCheckBox(QString("Enable Environment Map"), this);
+    envEnableCB->setChecked(true);
+    environmentGridLayout->addWidget(envEnableCB, 0, 0, 1, 1);
+    QDoubleSpinBox *envStrengthSB = new QDoubleSpinBox(this);
+    envStrengthSB->setMaximum(INFINITY);
+    envStrengthSB->setMinimum(0);
+    envStrengthSB->setValue(1.0);
+    environmentGridLayout->addWidget(envStrengthSB, 1, 1, 1, 1);
+    QLabel* envStrengthLbl = new QLabel(QString("Strength"), this);
+    environmentGridLayout->addWidget(envStrengthLbl, 1, 0, 1, 1);
     m_environmentLineEdit = new QLineEdit(environmentGroupBox);
-    environmentGridLayout->addWidget(m_environmentLineEdit, 0, 0, 1, 1);
+    environmentGridLayout->addWidget(m_environmentLineEdit, 2, 0, 1, 1);
     QPushButton *environmentButton = new QPushButton("Load",environmentGroupBox);
-    environmentGridLayout->addWidget(environmentButton, 0, 1, 1, 1);
+    environmentGridLayout->addWidget(environmentButton, 2, 1, 1, 1);
+    QSpacerItem* spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+    environmentGridLayout->addItem(spacer, 3, 1, 1, 1);
     this->addDockWidget(Qt::RightDockWidgetArea, environmentDockWidget);
+
+    connect(envEnableCB, SIGNAL(clicked(bool)), m_openGLWidget, SLOT(enableEnvironmentMap(bool)));
+    connect(envEnableCB, SIGNAL(clicked(bool)), environmentButton, SLOT(setEnabled(bool)));
+    connect(envEnableCB, SIGNAL(clicked(bool)), m_environmentLineEdit, SLOT(setEnabled(bool)));
+    connect(envEnableCB, SIGNAL(clicked(bool)), envStrengthLbl, SLOT(setEnabled(bool)));
+    connect(envEnableCB, SIGNAL(clicked(bool)), envStrengthSB, SLOT(setEnabled(bool)));
+    connect(envStrengthSB, SIGNAL(valueChanged(double)), m_openGLWidget, SLOT(setStrengthEnvironment(double)));
+    connect(environmentToolbarButton, SIGNAL(clicked(bool)), environmentToolbarButton, SLOT(setChecked(bool)));
+    connect(environmentToolbarButton, SIGNAL(clicked(bool)), environmentDockWidget, SLOT(setHidden(bool)));
+    connect(environmentButton, SIGNAL(clicked()), m_openGLWidget, SLOT(loadEnvironmentMap()));
+    connect(environmentButton, SIGNAL(clicked()), this, SLOT(displayEnvironmentMap()));
 
     //--------------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------------Camera--------------------------------------------------------
@@ -127,6 +157,7 @@ void MainWindow::createMenus(){
 
     CameraWidget::getInstance()->setHidden(true);
     this->addDockWidget(Qt::RightDockWidgetArea, CameraWidget::getInstance());
+    connect(cameraToolbarButton, SIGNAL(clicked()), CameraWidget::getInstance(), SLOT(show()));
     connect(CameraWidget::getInstance(), SIGNAL(updateScene()), m_openGLWidget, SLOT(sceneChanged()));
 
     //--------------------------------------------------------------------------------------------------------------------
@@ -153,19 +184,7 @@ void MainWindow::createMenus(){
     toolBar->addWidget(oslToolbarButton);
     toolBar->addSeparator();
     connect(oslToolbarButton,SIGNAL(clicked()),AbstractMaterialWidget::getInstance(),SLOT(show()));
-    //--------------------------------------------------------------------------------------------------------------------
-    //--------------------------------------------------Connections-------------------------------------------------------
-    //--------------------------------------------------------------------------------------------------------------------
-    connect(lightToolbarBtn, SIGNAL(clicked(bool)), lightToolbarBtn, SLOT(setChecked(bool)));
-//    connect(lightToolbarBtn, SIGNAL(clicked()), m_lightDockWidget, SLOT(show()));
-//    connect(m_lightColourButton, SIGNAL(clicked()), m_lightColourDialog, SLOT(show()));
-    connect(lightToolbarBtn, SIGNAL(clicked()), LightManager::getInstance(), SLOT(show()));
-    connect(meshToolbarButton, SIGNAL(clicked(bool)), meshToolbarButton,  SLOT(setChecked(bool)));
-    connect(environmentToolbarButton, SIGNAL(clicked(bool)), environmentToolbarButton, SLOT(setChecked(bool)));
-    connect(environmentToolbarButton, SIGNAL(clicked()), environmentDockWidget, SLOT(show()));
-    connect(environmentButton, SIGNAL(clicked()), m_openGLWidget, SLOT(loadEnvironmentMap()));
-    connect(environmentButton, SIGNAL(clicked()), this, SLOT(displayEnvironmentMap()));
-    connect(cameraToolbarButton, SIGNAL(clicked()), CameraWidget::getInstance(), SLOT(show()));
+
 
     //set up our menu bar
     //get problems with native menu bar so set it non native

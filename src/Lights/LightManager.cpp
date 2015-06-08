@@ -7,26 +7,31 @@
 
 // Declare our static instance of our class
 LightManager* LightManager::m_instance;
-
 //----------------------------------------------------------------------------------------------------------------------
-LightManager* LightManager::getInstance(QWidget *parent){
-    if(!m_instance){
+LightManager* LightManager::getInstance(QWidget *parent)
+{
+    if(!m_instance)
+    {
         m_instance = new LightManager(parent);
     }
-    else{
+    else
+    {
         if(parent!=0) std::cerr<<"LightManager already has a parent class"<<std::endl;
     }
     return m_instance;
 }
 //----------------------------------------------------------------------------------------------------------------------
-LightManager::LightManager(QWidget *parent) : QDockWidget("Light Manager", parent), m_numLights(0){
+LightManager::LightManager(QWidget *parent) : QDockWidget("Light Manager", parent), m_numLights(0)
+{
     initialise();
 }
 //----------------------------------------------------------------------------------------------------------------------
-LightManager::~LightManager(){
+LightManager::~LightManager()
+{
 }
 //----------------------------------------------------------------------------------------------------------------------
-void LightManager::createGUI(){
+void LightManager::createGUI()
+{
     this->setWindowTitle("Light Manager");
     //add our grid layout to our widget
     QGroupBox * gb = new QGroupBox(this);
@@ -179,7 +184,8 @@ void LightManager::createGUI(){
     connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
 }
 //----------------------------------------------------------------------------------------------------------------------
-void LightManager::initialise(){
+void LightManager::initialise()
+{
     createGUI();
 
     // Global translation matrix
@@ -191,7 +197,8 @@ void LightManager::initialise(){
     m_lightBuffer->setSize(0u);
 }
 //----------------------------------------------------------------------------------------------------------------------
-void LightManager::createParollelogramLight(){
+void LightManager::createParollelogramLight()
+{
     // Add our light to the buffer of lights
     Light *tmpLight = new Light();
 //    m_lights.push_back(tmpLight);
@@ -222,7 +229,8 @@ void LightManager::createParollelogramLight(){
     delete tmpLight;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::setGuiDefaults(){
+void LightManager::setGuiDefaults()
+{
     m_translateX->setValue(0.0);
     m_translateY->setValue(0.0);
     m_translateZ->setValue(0.0);
@@ -237,12 +245,14 @@ void LightManager::setGuiDefaults(){
     m_emissionZ->setValue(5.0);
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::addLight(){
+void LightManager::addLight()
+{
     PathTracerScene::getInstance()->addLight();
     updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::deleteLight(){
+void LightManager::deleteLight()
+{
     std::vector<Light::ParallelogramLight>::iterator itr = m_parallelogramLights.begin() + m_selectedLight;
     m_parallelogramLights.erase(itr);
 
@@ -256,7 +266,8 @@ void LightManager::deleteLight(){
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::updateLight(){
+void LightManager::updateLight()
+{
     // Changes the light parameters for the actual light
     // A pointer to the start of the buffer of lights
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
@@ -302,9 +313,9 @@ void LightManager::updateLight(){
     point2 = glm::vec3(m_transGlobal * transform * glm::vec4(-0.5, 0.0, -0.5, 1.0));
     point3 = glm::vec3(m_transGlobal * transform * glm::vec4(0.5, 0.0, 0.5, 1.0));
 
-    std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
-    std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
-    std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
+//    std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
+//    std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
+//    std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
 
     lightBuffer[m_selectedLight].corner.x = point1.x;
     lightBuffer[m_selectedLight].corner.y = point1.y;
@@ -340,11 +351,13 @@ void LightManager::updateLight(){
     updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::transformLights(glm::mat4 _trans){
+void LightManager::transformLights(glm::mat4 _trans)
+{
     m_transGlobal = _trans;
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
     glm::vec4 point1, point2, point3;
-    for(int i=0; i<m_numLights; i++){
+    for(int i=0; i<m_numLights; i++)
+    {
         // convert to points
         point1.x = lightBuffer[i].corner.x;
         point1.y = lightBuffer[i].corner.y;
@@ -376,16 +389,16 @@ void LightManager::transformLights(glm::mat4 _trans){
         point1 = m_transGlobal * transLocal * glm::vec4(-0.5, 0.0, 0.5, 1.0);
         point2 = m_transGlobal * transLocal * glm::vec4(-0.5, 0.0, -0.5, 1.0);
         point3 = m_transGlobal * transLocal * glm::vec4(0.5, 0.0, 0.5, 1.0);
-        std::cout<<"-----------------------\n";
-        std::cout<<_trans[0][0]<<" "<<_trans[1][0]<<" "<<_trans[2][0]<<" "<<_trans[3][0]<<std::endl;
-        std::cout<<_trans[0][1]<<" "<<_trans[1][1]<<" "<<_trans[2][1]<<" "<<_trans[3][1]<<std::endl;
-        std::cout<<_trans[0][2]<<" "<<_trans[1][2]<<" "<<_trans[2][2]<<" "<<_trans[3][2]<<std::endl;
-        std::cout<<_trans[0][3]<<" "<<_trans[1][3]<<" "<<_trans[2][3]<<" "<<_trans[3][3]<<std::endl;
-        std::cout<<"-----------------------\n";
-        std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
-        std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
-        std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
-        std::cout<<"-----------------------\n";
+//        std::cout<<"-----------------------\n";
+//        std::cout<<_trans[0][0]<<" "<<_trans[1][0]<<" "<<_trans[2][0]<<" "<<_trans[3][0]<<std::endl;
+//        std::cout<<_trans[0][1]<<" "<<_trans[1][1]<<" "<<_trans[2][1]<<" "<<_trans[3][1]<<std::endl;
+//        std::cout<<_trans[0][2]<<" "<<_trans[1][2]<<" "<<_trans[2][2]<<" "<<_trans[3][2]<<std::endl;
+//        std::cout<<_trans[0][3]<<" "<<_trans[1][3]<<" "<<_trans[2][3]<<" "<<_trans[3][3]<<std::endl;
+//        std::cout<<"-----------------------\n";
+//        std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
+//        std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
+//        std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
+//        std::cout<<"-----------------------\n";
         // convert back to anchors and vectors
         lightBuffer[i].corner.x = point1.x;
         lightBuffer[i].corner.y = point1.y;
@@ -397,17 +410,18 @@ void LightManager::transformLights(glm::mat4 _trans){
         lightBuffer[i].v2.y = point3.y - lightBuffer[i].corner.y;
         lightBuffer[i].v2.z = point3.z - lightBuffer[i].corner.z;
         lightBuffer[i].normal = normalize(-cross(lightBuffer[i].v1, lightBuffer[i].v2));
-        std::cout<<"corner "<<lightBuffer[i].corner.x<<","<<lightBuffer[i].corner.y<<","<<lightBuffer[i].corner.z<<std::endl;
-        std::cout<<"v1 "<<lightBuffer[i].v1.x<<","<<lightBuffer[i].v1.y<<","<<lightBuffer[i].v1.z<<std::endl;
-        std::cout<<"v2 "<<lightBuffer[i].v2.x<<","<<lightBuffer[i].v2.y<<","<<lightBuffer[i].v2.z<<std::endl;
-        std::cout<<"-----------------------\n";
+//        std::cout<<"corner "<<lightBuffer[i].corner.x<<","<<lightBuffer[i].corner.y<<","<<lightBuffer[i].corner.z<<std::endl;
+//        std::cout<<"v1 "<<lightBuffer[i].v1.x<<","<<lightBuffer[i].v1.y<<","<<lightBuffer[i].v1.z<<std::endl;
+//        std::cout<<"v2 "<<lightBuffer[i].v2.x<<","<<lightBuffer[i].v2.y<<","<<lightBuffer[i].v2.z<<std::endl;
+//        std::cout<<"-----------------------\n";
     }
 
     m_lightBuffer->unmap();
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::updateGUI(QModelIndex _index){
+void LightManager::updateGUI(QModelIndex _index)
+{
     std::cout<<"Index selected: "<<_index.row()<<std::endl;
     int row = _index.row();
     m_selectedLight = row;
@@ -433,7 +447,8 @@ void LightManager::updateGUI(QModelIndex _index){
     m_lightBuffer->unmap();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose){
+void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose)
+{
     // identity matrix to init our transformation
     float m[16];
     m[ 0] = _trans[0][0];  m[ 1] = _trans[1][0];  m[ 2] = _trans[2][0];  m[ 3] = _trans[3][0];
