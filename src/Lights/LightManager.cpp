@@ -244,10 +244,10 @@ void LightManager::updateLight(){
     glm::vec3 point3;
 
     glm::mat4 transform = glm::mat4(1.0);
-    // Scale
-    transform = glm::scale(transform, glm::vec3(m_scaleX->value(),m_scaleY->value(),m_scaleZ->value()));
     // Rotate
     transform = rotx * roty * rotz;
+    // Scale
+    transform = glm::scale(transform, glm::vec3(m_scaleX->value(),m_scaleY->value(),m_scaleZ->value()));
     // Translate
     transform[3][0] = m_translateX->value();
     transform[3][1] = m_translateY->value();
@@ -315,7 +315,6 @@ void LightManager::transformLights(glm::mat4 _trans){
         point3.w = 1.0;
         // transform
         glm::mat4 transLocal = glm::mat4(1.0);
-        transLocal = glm::scale(transLocal, glm::vec3(m_lightTransforms[i].m_scale));
         glm::mat4 rotx = glm::mat4(1.0);
         glm::mat4 roty = glm::mat4(1.0);
         glm::mat4 rotz = glm::mat4(1.0);
@@ -324,6 +323,7 @@ void LightManager::transformLights(glm::mat4 _trans){
         roty = glm::rotate(roty, (float)m_lightTransforms[i].m_rotate.y*DtoR, glm::vec3(0.0, 1.0, 0.0));
         rotz = glm::rotate(rotz, (float)m_lightTransforms[i].m_rotate.z*DtoR, glm::vec3(0.0, 0.0, 1.0));
         transLocal = rotx * roty * rotz;
+        transLocal = glm::scale(transLocal, glm::vec3(m_lightTransforms[i].m_scale));
 
         transLocal[3][0] = m_lightTransforms[i].m_translate.x;
         transLocal[3][1] = m_lightTransforms[i].m_translate.y;
@@ -332,16 +332,16 @@ void LightManager::transformLights(glm::mat4 _trans){
         point1 = m_transGlobal * transLocal * glm::vec4(-0.5, 0.0, 0.5, 1.0);
         point2 = m_transGlobal * transLocal * glm::vec4(-0.5, 0.0, -0.5, 1.0);
         point3 = m_transGlobal * transLocal * glm::vec4(0.5, 0.0, 0.5, 1.0);
-        std::cout<<"-----------------------\n";
-        std::cout<<_trans[0][0]<<" "<<_trans[1][0]<<" "<<_trans[2][0]<<" "<<_trans[3][0]<<std::endl;
-        std::cout<<_trans[0][1]<<" "<<_trans[1][1]<<" "<<_trans[2][1]<<" "<<_trans[3][1]<<std::endl;
-        std::cout<<_trans[0][2]<<" "<<_trans[1][2]<<" "<<_trans[2][2]<<" "<<_trans[3][2]<<std::endl;
-        std::cout<<_trans[0][3]<<" "<<_trans[1][3]<<" "<<_trans[2][3]<<" "<<_trans[3][3]<<std::endl;
-        std::cout<<"-----------------------\n";
-        std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
-        std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
-        std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
-        std::cout<<"-----------------------\n";
+        //std::cout<<"-----------------------\n";
+        //std::cout<<_trans[0][0]<<" "<<_trans[1][0]<<" "<<_trans[2][0]<<" "<<_trans[3][0]<<std::endl;
+        //std::cout<<_trans[0][1]<<" "<<_trans[1][1]<<" "<<_trans[2][1]<<" "<<_trans[3][1]<<std::endl;
+        //std::cout<<_trans[0][2]<<" "<<_trans[1][2]<<" "<<_trans[2][2]<<" "<<_trans[3][2]<<std::endl;
+        //std::cout<<_trans[0][3]<<" "<<_trans[1][3]<<" "<<_trans[2][3]<<" "<<_trans[3][3]<<std::endl;
+        //std::cout<<"-----------------------\n";
+        //std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
+        //std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
+        //std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
+        //std::cout<<"-----------------------\n";
         // convert back to anchors and vectors
         lightBuffer[i].corner.x = point1.x;
         lightBuffer[i].corner.y = point1.y;
@@ -353,10 +353,10 @@ void LightManager::transformLights(glm::mat4 _trans){
         lightBuffer[i].v2.y = point3.y - lightBuffer[i].corner.y;
         lightBuffer[i].v2.z = point3.z - lightBuffer[i].corner.z;
         lightBuffer[i].normal = normalize(-cross(lightBuffer[i].v1, lightBuffer[i].v2));
-        std::cout<<"corner "<<lightBuffer[i].corner.x<<","<<lightBuffer[i].corner.y<<","<<lightBuffer[i].corner.z<<std::endl;
-        std::cout<<"v1 "<<lightBuffer[i].v1.x<<","<<lightBuffer[i].v1.y<<","<<lightBuffer[i].v1.z<<std::endl;
-        std::cout<<"v2 "<<lightBuffer[i].v2.x<<","<<lightBuffer[i].v2.y<<","<<lightBuffer[i].v2.z<<std::endl;
-        std::cout<<"-----------------------\n";
+//        std::cout<<"corner "<<lightBuffer[i].corner.x<<","<<lightBuffer[i].corner.y<<","<<lightBuffer[i].corner.z<<std::endl;
+//        std::cout<<"v1 "<<lightBuffer[i].v1.x<<","<<lightBuffer[i].v1.y<<","<<lightBuffer[i].v1.z<<std::endl;
+//        std::cout<<"v2 "<<lightBuffer[i].v2.x<<","<<lightBuffer[i].v2.y<<","<<lightBuffer[i].v2.z<<std::endl;
+//        std::cout<<"-----------------------\n";
     }
 
     m_lightBuffer->unmap();

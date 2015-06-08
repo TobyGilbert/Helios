@@ -35,10 +35,10 @@ bool OslReader::compileOSL(QString _shaderName){
         std::cout << "FAILED " << oslfilename.toStdString() << "\n";
         return false;
     }
-    OsoReader osoread;
+    OsoReader *osoread = OsoReader::getOsoReader();
     QFileInfo info(_shaderName);
 
-    osoread.parseFile((info.baseName()+QString(".oso")).toStdString());
+    osoread->parseFile((info.baseName()+QString(".oso")).toStdString());
     return true;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -62,8 +62,8 @@ bool OslReader::compileOSLtoBuffer(QString _shaderName){
         return false;
     }
 
-    OsoReader osoread;
-    if(!osoread.parseBuffer(osobuffer.c_str(), oslfilename)){
+    OsoReader *osoread = OsoReader::getOsoReader();
+    if(!osoread->parseBuffer(osobuffer.c_str(), oslfilename)){
         std::cerr<<"Could not load buffer \""<<oslfilename.toStdString() << "\"\n";
         return false;
     }

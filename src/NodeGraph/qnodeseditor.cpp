@@ -28,12 +28,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #include <QGraphicsScene>
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <iostream>
 
 #include "NodeGraph/qneport.h"
 #include "NodeGraph/qneconnection.h"
 #include "NodeGraph/qneblock.h"
 #include "NodeGraph/OSLAbstractVarBlock.h"
-#include "NodeGraph/OSLBlock.h"
 #include "NodeGraph/OSLAbstractVarBlock.h"
 #include "NodeGraph/OSLVarColorBlock.h"
 #include "NodeGraph/OSLVarFloatBlock.h"
@@ -221,49 +221,49 @@ void QNodesEditor::load(QDataStream &ds)
             case(QNEPort::TypeColour):
             {
                 OSLVarColorBlock *cblock = new OSLVarColorBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(cblock);
+                connect(cblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 cblock->load(ds, portMap);
                 break;
             }
             case(QNEPort::TypeFloat):
             {
                 OSLVarFloatBlock *fblock = new OSLVarFloatBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(fblock);
+                connect(fblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 fblock->load(ds, portMap);
                 break;
             }
             case(QNEPort::TypeVector):
             {
                 OSLVarFloatThreeBlock *fblock = new OSLVarFloatThreeBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(fblock);
+                connect(fblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 fblock->load(ds, portMap);
                 break;
             }
             case(QNEPort::TypeInt):
             {
                 OSLVarIntBlock *iblock = new OSLVarIntBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(iblock);
+                connect(iblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 iblock->load(ds, portMap);
                 break;
             }
             case(QNEPort::TypeNormal):
             {
                 OSLVarNormalBlock *nblock = new OSLVarNormalBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(nblock);
+                connect(nblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 nblock->load(ds, portMap);
                 break;
             }
             case(QNEPort::TypePoint):
             {
                 OSLVarPointBlock *pblock = new OSLVarPointBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(pblock);
+                connect(pblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 pblock->load(ds, portMap);
                 break;
             }
             case(QNEPort::TypeString):
             {
                 OSLVarImageBlock *imblock = new OSLVarImageBlock(getScene(),AbstractMaterialWidget::getInstance()->getMaterial());
-                scene->addItem(imblock);
+                connect(imblock->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
                 imblock->load(ds, portMap);
                 break;
             }

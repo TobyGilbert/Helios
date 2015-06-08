@@ -23,6 +23,18 @@ OSLNodesEditor::OSLNodesEditor(QObject *parent) :
     m_optixMatDest = "OptixMaterials/tempMat.cu";
     m_materialName = "tempMat";
 
+    int v;
+    cudaRuntimeGetVersion(&v);
+    int vMajor = floor(v/1000);
+    int vMinor = (v - (floor(v/1000)*1000))/10;
+    m_cudaVersion= std::to_string(vMajor)+"."+std::to_string(vMinor);
+    std::cout<<"Compiling with CUDA Version "<<m_cudaVersion<<std::endl;
+
+    m_cudaDir = stringify(CUDA_DIRECTORY);
+    m_optixDir = stringify(OPTIX_DIRECTORY);
+    std::cout<<"Cuda Dir"<<m_cudaDir<<std::endl;
+    std::cout<<"Optix Dir"<<m_optixDir<<std::endl;
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 QString OSLNodesEditor::portTypeToString(QNEPort::variableType _type)
@@ -436,27 +448,17 @@ std::string OSLNodesEditor::compileMaterial(optix::Material &_mat)
         cudaDeviceProp prop;
         cudaGetDeviceProperties(&prop, 0);
         std::string gencodeFlag = " -gencode arch=compute_"+std::to_string(prop.major)+"0,code=sm_"+std::to_string(prop.major)+"0";
-        int v;
-        cudaRuntimeGetVersion(&v);
-        int vMajor = floor(v/1000);
-        int vMinor = (v - (floor(v/1000)*1000))/10;
-        std::string version = std::to_string(vMajor)+"."+std::to_string(vMinor);
-        std::cout<<"Compiling with CUDA Version "<<version<<std::endl;
-        std::string cudaDir,optixDir;
-        cudaDir = stringify(CUDA_DIRECTORY);
-        optixDir = stringify(OPTIX_DIRECTORY);
-        std::cout<<"Cuda Dir"<<cudaDir<<std::endl;
-        std::cout<<"Optix Dir"<<optixDir<<std::endl;
+
         std::string cudaSDKDir;
-        cudaSDKDir = cudaDir + "/samples";
-        std::string includePaths = " -I"+optixDir+"/SDK"+" -I"+optixDir+"/SDK/sutil"+
-                                   " -I"+optixDir+"/include"+" -I"+cudaDir+"/include"+
-                                   " -I"+cudaDir+"/common/inc"+" -I"+cudaDir+"/../shared/inc"+
+        cudaSDKDir = m_cudaDir + "/samples";
+        std::string includePaths = " -I"+m_optixDir+"/SDK"+" -I"+m_optixDir+"/SDK/sutil"+
+                                   " -I"+m_optixDir+"/include"+" -I"+m_cudaDir+"/include"+
+                                   " -I"+m_cudaDir+"/common/inc"+" -I"+m_cudaDir+"/../shared/inc"+
                                    " -I./include";
         //std::cout<<"includePaths "<<includePaths<<std::endl;
 
-        std::string libDirs = " -L"+cudaDir+"/lib64"+" -L"+cudaDir+"/lib"+" -L"+cudaSDKDir+"/common/lib"+
-                              " -L"+optixDir+"/lib64";
+        std::string libDirs = " -L"+m_cudaDir+"/lib64"+" -L"+m_cudaDir+"/lib"+" -L"+cudaSDKDir+"/common/lib"+
+                              " -L"+m_optixDir+"/lib64";
         std::string libs = " -lcudart -loptix -loptixu";
         std::string nvcc = "nvcc ";
 #ifdef DARWIN

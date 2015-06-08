@@ -49,6 +49,7 @@ void MainWindow::createMenus(){
     //--------------------------------------------------------------------------------------------------------------------
     //init our instance with this as the parent. this means when this class is deleted it also will be deleted
     AbstractMaterialWidget::getInstance(this)->hide();
+    connect(AbstractMaterialWidget::getInstance(),SIGNAL(matChanged()),m_openGLWidget,SLOT(sceneChanged()));
     //init our materail library
     MaterialLibrary::getInstance(this)->hide();
     MaterialLibrary::getInstance()->importAllFrom("NodeGraphs/");

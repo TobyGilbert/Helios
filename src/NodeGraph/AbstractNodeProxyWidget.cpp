@@ -10,16 +10,19 @@ AbstractNodeProxyWidget::AbstractNodeProxyWidget(QNEPort *_connectedPort, Materi
     m_connectedPort = _connectedPort;
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void AbstractNodeProxyWidget::getLinkedVarName(std::vector<std::string> &_linkedVarNames){
+void AbstractNodeProxyWidget::getLinkedVarName(std::vector<std::string> &_linkedVarNames)
+{
     foreach(QNEConnection *c,m_connectedPort->connections()){
         std::string name;
         //find the input variable we are setting
-        if(!c->port1()->isOutput()){
+        if(!c->port1()->isOutput())
+        {
             OSLShaderBlock* b = (OSLShaderBlock*)c->port1()->block();
             name = b->getBlockName() + c->port1()->getName().toStdString();
             _linkedVarNames.push_back(name);
         }
-        else{
+        else
+        {
             OSLShaderBlock* b = (OSLShaderBlock*)c->port2()->block();
             name = b->getBlockName() + c->port2()->getName().toStdString();
             _linkedVarNames.push_back(name);

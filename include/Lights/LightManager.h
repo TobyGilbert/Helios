@@ -10,6 +10,7 @@
 #include <vector>
 #include <optixu/optixpp_namespace.h>
 #include <optixu/optixu_math_namespace.h>
+#define GLM_FORCE_RADIANS
 #include <glm/gtc/matrix_transform.hpp>
 //----------------------------------------------------------------------------------------------------------------------
 // QT GUI includes
@@ -21,7 +22,6 @@
 #include <QDoubleSpinBox>
 #include <QPushButton>
 #include <QListWidget>
-//#define GLM_FORCE_RADIANS
 #include "Lights/Light.h"
 
 

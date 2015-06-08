@@ -92,6 +92,15 @@ void MeshWidget::load(QDataStream &ds)
             tempProps->materialName = matName.toStdString();
         }
 
+        //check to see if we can find our model
+        QFileInfo pathCheck(tempProps->meshPath);
+        if(!pathCheck.exists()){
+            QString error = "Cannot find model "+tempProps->name+" from location "+tempProps->meshPath+". Skipping import of model.";
+            QMessageBox::warning(this,"Mesh Load",error);
+            delete tempProps;
+            continue;
+        }
+
         //check if the name of our object is already taken in our scene
         bool nameOk = false;
         QString tempName = tempProps->name;
@@ -199,42 +208,60 @@ MeshWidget::MeshWidget(QWidget *parent) :
     //add our transform controls
     meshGridLayout->addWidget(new QLabel("Translate",gb), 2, 0, 1, 1);
     m_meshTranslateXDSpinBox = new QDoubleSpinBox(gb);
+    m_meshTranslateXDSpinBox->setDecimals(3);
+    m_meshTranslateXDSpinBox->setSingleStep(0.1);
     m_meshTranslateXDSpinBox->setMaximum(INFINITY);
     m_meshTranslateXDSpinBox->setMinimum(-INFINITY);
     meshGridLayout->addWidget(m_meshTranslateXDSpinBox, 2, 1, 1, 1);
     m_meshTranslateYDSpinBox = new QDoubleSpinBox(gb);
+    m_meshTranslateYDSpinBox->setDecimals(3);
+    m_meshTranslateYDSpinBox->setSingleStep(0.1);
     m_meshTranslateYDSpinBox->setMaximum(INFINITY);
     m_meshTranslateYDSpinBox->setMinimum(-INFINITY);
     meshGridLayout->addWidget(m_meshTranslateYDSpinBox, 2, 2, 1, 1);
     m_meshTranslateZDSpinBox = new QDoubleSpinBox(gb);
+    m_meshTranslateZDSpinBox->setDecimals(3);
+    m_meshTranslateZDSpinBox->setSingleStep(0.1);
     m_meshTranslateZDSpinBox->setMaximum(INFINITY);
     m_meshTranslateZDSpinBox->setMinimum(-INFINITY);
     meshGridLayout->addWidget(m_meshTranslateZDSpinBox, 2, 3, 1, 1);
     meshGridLayout->addWidget(new QLabel("Rotate",gb), 3, 0, 1, 1);
     m_meshRotateXDSpinBox = new QDoubleSpinBox(gb);
+    m_meshRotateXDSpinBox->setDecimals(3);
+    m_meshRotateXDSpinBox->setSingleStep(0.1);
     m_meshRotateXDSpinBox->setMaximum(INFINITY);
     m_meshRotateXDSpinBox->setMinimum(-INFINITY);
     meshGridLayout->addWidget(m_meshRotateXDSpinBox, 3, 1, 1, 1);
     m_meshRotateYDSpinBox = new QDoubleSpinBox(gb);
+    m_meshRotateYDSpinBox->setDecimals(3);
+    m_meshRotateYDSpinBox->setSingleStep(0.1);
     m_meshRotateYDSpinBox->setMaximum(INFINITY);
     m_meshRotateYDSpinBox->setMinimum(-INFINITY);
     meshGridLayout->addWidget(m_meshRotateYDSpinBox, 3, 2, 1, 1);
     m_meshRotateZDSpinBox = new QDoubleSpinBox(gb);
+    m_meshRotateZDSpinBox->setDecimals(3);
+    m_meshRotateZDSpinBox->setSingleStep(0.1);
     m_meshRotateZDSpinBox->setMaximum(INFINITY);
     m_meshRotateZDSpinBox->setMinimum(-INFINITY);
     meshGridLayout->addWidget(m_meshRotateZDSpinBox, 3, 3, 1, 1);
     meshGridLayout->addWidget(new QLabel("Scale",gb), 4, 0, 1, 1);
     m_meshScaleXDSpinBox = new QDoubleSpinBox(gb);
+    m_meshScaleXDSpinBox->setDecimals(3);
+    m_meshScaleXDSpinBox->setSingleStep(0.1);
     m_meshScaleXDSpinBox->setMaximum(INFINITY);
     m_meshScaleXDSpinBox->setMinimum(-INFINITY);
     m_meshScaleXDSpinBox->setValue(1.0);
     meshGridLayout->addWidget(m_meshScaleXDSpinBox, 4, 1, 1, 1);
     m_meshScaleYDSpinBox = new QDoubleSpinBox(gb);
+    m_meshScaleYDSpinBox->setDecimals(3);
+    m_meshScaleYDSpinBox->setSingleStep(0.1);
     m_meshScaleYDSpinBox->setMaximum(INFINITY);
     m_meshScaleYDSpinBox->setMinimum(-INFINITY);
     m_meshScaleYDSpinBox->setValue(1.0);
     meshGridLayout->addWidget(m_meshScaleYDSpinBox, 4, 2, 1, 1);
     m_meshScaleZDSpinBox = new QDoubleSpinBox(gb);
+    m_meshScaleZDSpinBox->setDecimals(3);
+    m_meshScaleZDSpinBox->setSingleStep(0.1);
     m_meshScaleZDSpinBox->setMaximum(INFINITY);
     m_meshScaleZDSpinBox->setMinimum(-INFINITY);
     m_meshScaleZDSpinBox->setValue(1.0);
@@ -435,35 +462,45 @@ void MeshWidget::modelSelected(QListWidgetItem *_item)
 void MeshWidget::signalTransformChange(double _val)
 {
 
-    if(m_curMeshName.isEmpty()) return;
+    QList<QListWidgetItem*> items = m_modelList->selectedItems();
+    std::map <QString, modelProp *>::const_iterator model;
+    for(int i=0;i<items.size();i++)
+    {
+        model=m_modelProperties.find(items[i]->text());
+        if(model==m_modelProperties.end())
+        {
+            QString error = QString("Cannot find properties of model %1").arg(items[i]->text());
+            QMessageBox::warning(this,"Model Library",error);
+            continue;
+        }
+        // get our transform values
+        model->second->transX = m_meshTranslateXDSpinBox->value();
+        model->second->transY = m_meshTranslateYDSpinBox->value();
+        model->second->transZ = m_meshTranslateZDSpinBox->value();
+        model->second->rotX = m_meshRotateXDSpinBox->value();
+        model->second->rotY = m_meshRotateYDSpinBox->value();
+        model->second->rotZ = m_meshRotateZDSpinBox->value();
+        model->second->scaleX = m_meshScaleXDSpinBox->value();
+        model->second->scaleY = m_meshScaleYDSpinBox->value();
+        model->second->scaleZ = m_meshScaleZDSpinBox->value();
 
-    // get our transform values
-    m_curModelProp->transX = m_meshTranslateXDSpinBox->value();
-    m_curModelProp->transY = m_meshTranslateYDSpinBox->value();
-    m_curModelProp->transZ = m_meshTranslateZDSpinBox->value();
-    m_curModelProp->rotX = m_meshRotateXDSpinBox->value();
-    m_curModelProp->rotY = m_meshRotateYDSpinBox->value();
-    m_curModelProp->rotZ = m_meshRotateZDSpinBox->value();
-    m_curModelProp->scaleX = m_meshScaleXDSpinBox->value();
-    m_curModelProp->scaleY = m_meshScaleYDSpinBox->value();
-    m_curModelProp->scaleZ = m_meshScaleZDSpinBox->value();
-
-    //create our transform matrix
-    glm::mat4 rotXMat,rotYMat,rotZMat,finalRot;
-    float DtoR = 3.14159265359/180.0;
-    glm::mat4 finalTrans;
-    finalTrans[0][0] = m_curModelProp->scaleX;
-    finalTrans[1][1] = m_curModelProp->scaleY;
-    finalTrans[2][2] = m_curModelProp->scaleZ;
-    rotXMat = glm::rotate(rotXMat,m_curModelProp->rotX*DtoR,glm::vec3(1,0,0));
-    rotYMat = glm::rotate(rotYMat,m_curModelProp->rotY*DtoR,glm::vec3(0,1,0));
-    rotZMat = glm::rotate(rotZMat,m_curModelProp->rotZ*DtoR,glm::vec3(0,0,1));
-    finalRot = rotXMat * rotYMat * rotZMat;
-    finalTrans*=finalRot;
-    finalTrans[3][0] = m_curModelProp->transX;
-    finalTrans[3][1] = m_curModelProp->transY;
-    finalTrans[3][2] = m_curModelProp->transZ;
-    PathTracerScene::getInstance()->transformModel(m_curMeshName.toStdString(),finalTrans);
+        //create our transform matrix
+        glm::mat4 rotXMat,rotYMat,rotZMat,finalRot;
+        float DtoR = 3.14159265359/180.0;
+        glm::mat4 finalTrans;
+        finalTrans[0][0] = m_curModelProp->scaleX;
+        finalTrans[1][1] = m_curModelProp->scaleY;
+        finalTrans[2][2] = m_curModelProp->scaleZ;
+        rotXMat = glm::rotate(rotXMat,m_curModelProp->rotX*DtoR,glm::vec3(1,0,0));
+        rotYMat = glm::rotate(rotYMat,m_curModelProp->rotY*DtoR,glm::vec3(0,1,0));
+        rotZMat = glm::rotate(rotZMat,m_curModelProp->rotZ*DtoR,glm::vec3(0,0,1));
+        finalRot = rotXMat * rotYMat * rotZMat;
+        finalTrans*=finalRot;
+        finalTrans[3][0] = m_curModelProp->transX;
+        finalTrans[3][1] = m_curModelProp->transY;
+        finalTrans[3][2] = m_curModelProp->transZ;
+        PathTracerScene::getInstance()->transformModel(m_curMeshName.toStdString(),finalTrans);
+    }
     updateScene();
 
 }

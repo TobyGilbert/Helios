@@ -1,11 +1,11 @@
 #ifndef MeshWidget_H
 #define MeshWidget_H
-
+//----------------------------------------------------------------------------------------------------------------------
 /// @class MeshWidget
 /// @date 29/01/14
 /// @author Declan Russell
 /// @brief This class is an extention of QWidget that adds all our mesh properties controls as default
-
+//----------------------------------------------------------------------------------------------------------------------
 #include <QDockWidget>
 #include <QGridLayout>
 #include <QLabel>

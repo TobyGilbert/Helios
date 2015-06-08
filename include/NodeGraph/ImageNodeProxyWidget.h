@@ -1,6 +1,14 @@
 #ifndef IMAGENODEPROXYWIDGET_H
 #define IMAGENODEPROXYWIDGET_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class ImageNodeProxyWidget
+/// @brief Extention of AbstractNodeProxyWidget that allows us to select an image and apply it to a attribute of a material.
+/// @brief This Widget consists of a button to load in an image and a label to display the image.
+/// @author Declan Russell
+/// @date 05/05/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include <QGraphicsItem>
 #include <optixu/optixpp_namespace.h>
 #include "AbstractNodeProxyWidget.h"

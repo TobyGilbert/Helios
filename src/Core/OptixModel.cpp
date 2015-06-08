@@ -71,23 +71,11 @@ OptiXModel::OptiXModel(OptiXModel *_instance){
     m_texCoordsBuffer = _instance->m_texCoordsBuffer;
     m_tangentsBuffer = _instance->m_tangentsBuffer;
     m_bitangentsBuffer = _instance->m_bitangentsBuffer;
-    m_vertIdxBuffer = _instance->m_vertIdxBuffer;
-    m_normIdxBuffer = _instance->m_normIdxBuffer;
-    m_texCoordIdxBuffer = _instance->m_texCoordIdxBuffer;
-    m_tangentsIdxBuffer = _instance->m_tangentsIdxBuffer;
-    m_bitangentsIdxBuffer = _instance->m_bitangentsIdxBuffer;
-    m_matIdxBuffer = _instance->m_matIdxBuffer;
     m_vertices = _instance->m_vertices;
     m_normals = _instance->m_normals;
     m_texCoords = _instance->m_texCoords;
     m_tangents = _instance->m_tangents;
     m_bitangents = _instance->m_bitangents;
-//    m_indices = _instance->m_indices;
-//    m_vertIndices = _instance->m_vertIndices;
-//    m_normalIndices = _instance->m_normalIndices;
-//    m_texCoordIndices = _instance->m_texCoordIndices;
-//    m_tangentIndices = _instance->m_tangentIndices;
-//    m_bitangentIndices = _instance->m_bitangentIndices;
 }
 //----------------------------------------------------------------------------------------------------------------------
 OptiXModel::~OptiXModel(){
@@ -98,12 +86,6 @@ OptiXModel::~OptiXModel(){
         m_texCoordsBuffer->destroy();
         m_tangentsBuffer->destroy();
         m_bitangentsBuffer->destroy();
-        m_vertIdxBuffer->destroy();
-        m_normIdxBuffer->destroy();
-        m_texCoordIdxBuffer->destroy();
-        m_tangentsIdxBuffer->destroy();
-        m_bitangentsIdxBuffer->destroy();
-        m_matIdxBuffer->destroy();
         m_trans->destroy();
         m_instanceCount.erase(inst);
     }
@@ -185,26 +167,7 @@ void OptiXModel::processMesh(const aiMesh *_mesh){
         }
     }
 
-    //lets fill up our idx buffers
-//    typedef struct { int x; int y; int z;} ixyz;
-//    unsigned int i;
-//    for(i=0; i<_mesh->mNumFaces;i++){
-//        m_vertIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-//    }
 
-//    for(i=0; i<_mesh->mNumFaces;i++){
-//        m_normalIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-//    }
-
-//    for(i=0; i<_mesh->mNumFaces;i++){
-//        m_texCoordIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-//    }
-//    for(i=0; i<_mesh->mNumFaces; i++){
-//        m_tangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-//    }
-//    for(i=0; i<_mesh->mNumFaces; i++){
-//        m_bitangentIndices.push_back(glm::vec3(i*3, i*3+1, i*3+2));
-//    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OptiXModel::createBuffers(){
@@ -269,69 +232,6 @@ void OptiXModel::createBuffers(){
     }
     m_bitangentsBuffer->unmap();
 
-    //now lets set up our index buffers
-    m_vertIdxBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
-    m_normIdxBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
-    m_texCoordIdxBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
-    m_tangentsIdxBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
-    m_bitangentsIdxBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_INT3, m_vertices.size()/3 );
-    m_matIdxBuffer = PathTracerScene::getInstance()->getContext()->createBuffer( RT_BUFFER_INPUT, RT_FORMAT_UNSIGNED_INT, m_vertices.size()/3 );
-
-    //lets fill up our idx buffers
-    void *idxPtr = m_vertIdxBuffer->map();
-    typedef struct { int x; int y; int z;} ixyz;
-    ixyz* idxData = (ixyz*)idxPtr;
-    for(i=0; i<m_vertices.size()/3;i++){
-        idxData[i].x = i*3;
-        idxData[i].y = i*3+1;
-        idxData[i].z = i*3+2;
-    }
-    m_vertIdxBuffer->unmap();
-
-    idxPtr = m_normIdxBuffer->map();
-    idxData = (ixyz*)idxPtr;
-    for(i=0; i<m_vertices.size()/3;i++){
-        idxData[i].x = i*3;
-        idxData[i].y = i*3+1;
-        idxData[i].z = i*3+2;
-    }
-    m_normIdxBuffer->unmap();
-
-    idxPtr = m_texCoordIdxBuffer->map();
-    idxData = (ixyz*)idxPtr;
-    for(i=0; i<m_vertices.size()/3;i++){
-        idxData[i].x = i*3;
-        idxData[i].y = i*3+1;
-        idxData[i].z = i*3+2;
-    }
-    m_texCoordIdxBuffer->unmap();
-
-    idxPtr = m_tangentsIdxBuffer->map();
-    idxData = (ixyz*)idxPtr;
-    for(i=0; i<m_vertices.size()/3; i++){
-        idxData[i].x = i*3;
-        idxData[i].y = i*3+1;
-        idxData[i].z = i*3+2;
-    }
-    m_tangentsIdxBuffer->unmap();
-
-    idxPtr = m_bitangentsIdxBuffer->map();
-    idxData = (ixyz*)idxPtr;
-    for(i=0; i<m_vertices.size()/3; i++){
-        idxData[i].x = i*3;
-        idxData[i].y = i*3+1;
-        idxData[i].z = i*3+2;
-    }
-    m_bitangentsIdxBuffer->unmap();
-
-    //Dont really know what to do with materials yet so lets just have them all default to 0
-    unsigned int matIndices[m_vertices.size()/3];
-    unsigned int * matPtr = static_cast<unsigned int*>(m_matIdxBuffer->map());
-    for(i=0;i<m_vertices.size()/3;i++){
-        matPtr[i]=0u;
-        matIndices[i]=0u;
-    }
-    m_matIdxBuffer->unmap();
 
     //create our geometry in our engine
     m_geometry = PathTracerScene::getInstance()->getContext()->createGeometry();
@@ -343,21 +243,11 @@ void OptiXModel::createBuffers(){
 
     //set our buffers for our geomtry
     m_geometry["vertex_buffer"]->setBuffer( m_vertexBuffer );
-    m_geometry["vindex_buffer"]->setBuffer( m_vertIdxBuffer );
-
     m_geometry["normal_buffer"]->setBuffer( m_normalBuffer );
-    m_geometry["nindex_buffer"]->setBuffer( m_normIdxBuffer );
-
     m_geometry["texcoord_buffer"]->setBuffer( m_texCoordsBuffer );
-    m_geometry["tindex_buffer"]->setBuffer(m_texCoordIdxBuffer );
-
     m_geometry["tangent_buffer"]->setBuffer( m_tangentsBuffer );
-    m_geometry["tanindex_buffer"]->setBuffer( m_tangentsIdxBuffer);
-
     m_geometry["bitangent_buffer"]->setBuffer( m_bitangentsBuffer );
-    m_geometry["biindex_buffer"]->setBuffer( m_bitangentsIdxBuffer );
 
-    m_geometry["material_buffer"]->setBuffer( m_matIdxBuffer );
 
     //create our cluster mesh thing
 //    unsigned int usePTX32InHost64 = 0;

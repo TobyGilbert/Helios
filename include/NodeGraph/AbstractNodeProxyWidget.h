@@ -1,6 +1,15 @@
 #ifndef ABSTRACTNODEPROXYWIDGET_H
 #define ABSTRACTNODEPROXYWIDGET_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class AbstractNodeProxyWidget
+/// @brief Abstract base class for all variable proxy widgets in our scene.
+/// @brief This extends from QGraphicsProxyWidget which allows us to attach QWidgets onto QGraphicsItems.
+/// @brief We need this got the ability to user signals and slots to change attributes in our optix material
+/// @author Declan Russell
+/// @date 05/05/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include <QGraphicsProxyWidget>
 #include <optixu/optixpp_namespace.h>
 #include "Core/pathtracerscene.h"
@@ -22,6 +31,12 @@ public:
     /// @brief virtual method to set whatever linked variables we have
     //------------------------------------------------------------------------------------------------------------------------------------
     virtual void setLinkedVar(){}
+    //------------------------------------------------------------------------------------------------------------------------------------
+signals:
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief signal to notify if an attribute has changed
+    //------------------------------------------------------------------------------------------------------------------------------------
+    void attributeChanged();
     //------------------------------------------------------------------------------------------------------------------------------------
 protected:
     //------------------------------------------------------------------------------------------------------------------------------------

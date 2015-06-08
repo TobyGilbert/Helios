@@ -1,64 +1,74 @@
-#ifndef OSLABSTRACTVARBLOCK_H
-#define OSLABSTRACTVARBLOCK_H
+#ifndef COLORNODEPROXYWIDGET_H
+#define COLORNODEPROXYWIDGET_H
 
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @class ColorNodeProxyWidget
-/// @brief Extension of QNEblock, This Abstract class provides a basis for all variable blocks to be drawn in our scene
+/// @brief Extention of AbstractNodeProxyWidget that allows us to select a color and apply it to a attribute of a material
 /// @author Declan Russell
 /// @date 05/05/2015
 //------------------------------------------------------------------------------------------------------------------------------------
 
-#include "NodeGraph/qneblock.h"
+#include <QGraphicsItem>
 #include <optixu/optixpp_namespace.h>
-#include <QDoubleSpinBox>
-#include <QGraphicsScene>
-#include "AbstractNodeProxyWidget.h"
+#include <QGroupBox>
+#include <QColorDialog>
+#include "NodeGraph/AbstractNodeProxyWidget.h"
+#include "NodeGraph/qneport.h"
 
-class   OSLAbstractVarBlock : public QNEBlock
+class ColorNodeProxyWidget : public AbstractNodeProxyWidget
 {
+    Q_OBJECT
 public:
-    //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief this means you can define a new QGraphicsItem type. Woudln't of done it like this myself but lets go along with Stanislaw Adaszewski's implementation.
-    enum { Type = QGraphicsItem::UserType + 5 };
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief default constructor
     //------------------------------------------------------------------------------------------------------------------------------------
-    OSLAbstractVarBlock(QGraphicsScene *_scene,optix::Material &_mat,QGraphicsItem * parent = 0);
+    ColorNodeProxyWidget(QNEPort *_portConnected, optix::Material &_mat, QGraphicsItem *parent = 0);
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief default destuctor
+    /// @brief defualt destructor
     //------------------------------------------------------------------------------------------------------------------------------------
-    ~OSLAbstractVarBlock(){}
+    ~ColorNodeProxyWidget();
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief Set the name of our variable block
-    /// @param _name - desired name
+    /// @brief overite our setLinkedVar function to put our own functionality in
     //------------------------------------------------------------------------------------------------------------------------------------
-    QNEPort *setBlockName(std::string _name);
+    void setLinkedVar();
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief overiden virtual function to return the block name
+    /// @brief overload our save function for float 3 node implimentation
     //------------------------------------------------------------------------------------------------------------------------------------
-    inline std::string getBlockName(){return m_blockName;}
+    void save(QDataStream &ds);
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief manualy set whatever our block variable is linked to to
+    /// @brief overload our load function for float 3 node implimentation
     //------------------------------------------------------------------------------------------------------------------------------------
-    inline void setLinkedVar(){m_widgetProxy->setLinkedVar();}
+    void load(QDataStream &, QMap<quint64, QNEPort *> &portMap);
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief returns the type of our class
+    /// @brief red intensity
     //------------------------------------------------------------------------------------------------------------------------------------
-    int type() const { return Type; }
+    float m_red;
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief a member to hold our widget proxy
+    /// @brief green intensity
     //------------------------------------------------------------------------------------------------------------------------------------
-    AbstractNodeProxyWidget *m_widgetProxy;
+    float m_green;
     //------------------------------------------------------------------------------------------------------------------------------------
-protected:
+    /// @brief blue intensity
     //------------------------------------------------------------------------------------------------------------------------------------
-    /// @brief the material which out variable belongs to
+    float m_blue;
     //------------------------------------------------------------------------------------------------------------------------------------
-    optix::Material m_material;
+public slots:
     //------------------------------------------------------------------------------------------------------------------------------------
-
-
+    /// @brief a slot to set the varibles in our material when our spin box values is changed
+    /// @param _col - color selected
+    //------------------------------------------------------------------------------------------------------------------------------------
+    void setMaterialVars(QColor _col);
+    //------------------------------------------------------------------------------------------------------------------------------------
+private:
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief our colour button
+    //------------------------------------------------------------------------------------------------------------------------------------
+    QPushButton *m_colBtn;
+    //------------------------------------------------------------------------------------------------------------------------------------
+    /// @brief Color Dialog widget
+    //------------------------------------------------------------------------------------------------------------------------------------
+    QColorDialog *m_colorDialog;
+    //------------------------------------------------------------------------------------------------------------------------------------
 };
 
-
-#endif // OSLABSTRACTVARBLOCK_H
+#endif // COLORNODEPROXYWIDGET_H

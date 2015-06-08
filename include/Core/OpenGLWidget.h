@@ -20,6 +20,9 @@
 #include <QMessageBox>
 #include <glm/glm.hpp>
 #include <QTime>
+#include <QGridLayout>
+#include <QLineEdit>
+
 
 class OpenGLWidget : public QGLWidget
 {

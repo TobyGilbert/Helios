@@ -7,9 +7,9 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     QDockWidget(parent)
 {
     //add the layout to our widget
-    m_layout = new QGridLayout();
     //add our group box
     m_genSetGroupBox = new QGroupBox("General Settings",this);
+    m_layout = new QGridLayout(m_genSetGroupBox);
     m_genSetGroupBox->setLayout(m_layout);
     this->setWidget(m_genSetGroupBox);
     // set the style sheet

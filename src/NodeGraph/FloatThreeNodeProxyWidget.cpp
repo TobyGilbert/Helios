@@ -12,16 +12,22 @@ FloatThreeNodeProxyWidget::FloatThreeNodeProxyWidget(QNEPort *_portConnected,opt
     QGridLayout *layout = new QGridLayout(m_groupBox);
     m_groupBox->setLayout(layout);
     m_spinBoxX = new QDoubleSpinBox(m_groupBox);
+    m_spinBoxX->setDecimals(3);
+    m_spinBoxX->setSingleStep(0.005);
     m_spinBoxX->setMinimum((float)-INFINITY);
     m_spinBoxX->setMaximum((float)INFINITY);
     layout->addWidget(m_spinBoxX,0,0,1,1);
     connect(m_spinBoxX,SIGNAL(editingFinished()),this,SLOT(setMaterialVars()));
     m_spinBoxY = new QDoubleSpinBox(m_groupBox);
+    m_spinBoxY->setDecimals(3);
+    m_spinBoxY->setSingleStep(0.005);
     m_spinBoxY->setMinimum((float)-INFINITY);
     m_spinBoxY->setMaximum((float)INFINITY);
     layout->addWidget(m_spinBoxY,1,0,1,1);
     connect(m_spinBoxY,SIGNAL(editingFinished()),this,SLOT(setMaterialVars()));
     m_spinBoxZ = new QDoubleSpinBox(m_groupBox);
+    m_spinBoxZ->setDecimals(3);
+    m_spinBoxZ->setSingleStep(0.005);
     m_spinBoxZ->setMinimum((float)-INFINITY);
     m_spinBoxZ->setMaximum((float)INFINITY);
     layout->addWidget(m_spinBoxZ,2,0,1,1);
@@ -37,6 +43,7 @@ void FloatThreeNodeProxyWidget::setMaterialVars(){
     for(unsigned int i=0;i<_varNames.size();i++){
         m_material[_varNames[i].c_str()]->setFloat(m_spinBoxX->value(),m_spinBoxY->value(),m_spinBoxZ->value());
     }
+    attributeChanged();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void FloatThreeNodeProxyWidget::setLinkedVar(){

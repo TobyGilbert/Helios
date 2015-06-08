@@ -37,8 +37,9 @@ MaterialLibrary::MaterialLibrary(QWidget *parent) :
     this->setMinimumWidth(200);
     this->setMinimumHeight(100);
     //set our layout
-    m_widgetLayout = new QGridLayout(this);
-    this->setLayout(m_widgetLayout);
+    QGroupBox *gb = new QGroupBox(this);
+    m_widgetLayout = new QGridLayout(gb);
+    gb->setLayout(m_widgetLayout);
     m_matListWidget = new QListWidget(this);
     m_widgetLayout->addWidget(m_matListWidget,0,0,1,1);
     connect(m_matListWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(matSelected(QListWidgetItem*)));
