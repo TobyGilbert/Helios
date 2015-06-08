@@ -30,12 +30,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 /// @class QNEBlock
 /// @brief This class originally written by STANISLAW ADASZEWSKI has been modified
 /// @brief to be used for a node based user interface for creating OSL shaders.
-/// @brief Original source can be found at http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/
-/// @brief The parts modified will be specified
 /// @brief This Block class handles our node in our scene. It manages all inputs and
 /// @brief outputs to the node which will be determined by the OSL shader read in.
+/// @date Modifed from 18/03/2015
 /// @author STANISLAW ADASZEWSKI modified by Declan Russell
-/// @date Modifed 18/03/2015
+/// @brief [Accessed 2015]. availible from http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <QGraphicsPathItem>
@@ -45,9 +44,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 class QNEBlock : public QGraphicsPathItem
 {
 public:
-    //this means you can define a new QGraphicsItem type. Woudln't of done it like this myself.
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief this means you can define a new QGraphicsItem type. Woudln't of done it like this myself but its a dependency in STANISLAW ADASZEWSKI's implementation
+    //----------------------------------------------------------------------------------------------------------------------
     enum { Type = QGraphicsItem::UserType + 3 };
-
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief our defualt constructor
+    //----------------------------------------------------------------------------------------------------------------------
     QNEBlock(QGraphicsItem *parent = 0);
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief adds a port to our node. This has been modified to also set the varibel type and initial paramiters.
@@ -72,22 +75,23 @@ public:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief virtual function to return the name of our block
     //----------------------------------------------------------------------------------------------------------------------
-    virtual inline std::string getBlockName() {}
+    virtual inline std::string getBlockName() {return m_blockName;}
     //----------------------------------------------------------------------------------------------------------------------
-
-    //----------------------------------------------------------------------------------------------------------------------
-    /// @brief save function made virtual to allow implimentation of new blocks
+    /// @brief save function modified to be virtual to allow implimentation of new blocks
     //----------------------------------------------------------------------------------------------------------------------
     virtual void save(QDataStream&);
     //----------------------------------------------------------------------------------------------------------------------
-    /// @brief load fucntion made virtual to allow implimentaiton of new blocks
+    /// @brief load fucntion modified to be virtual to allow implimentaiton of new blocks
     //----------------------------------------------------------------------------------------------------------------------
     virtual void load(QDataStream&, QMap<quint64, QNEPort*> &portMap);
     //----------------------------------------------------------------------------------------------------------------------
+    /// @brief overwritten paint function for our own drawing of this graphics item
+    //----------------------------------------------------------------------------------------------------------------------
 	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-	QNEBlock* clone();
-	QVector<QNEPort*> ports();
-
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief returns the ports connected to this block
+    //----------------------------------------------------------------------------------------------------------------------
+    QVector<QNEPort*> ports();
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief changed to virtual so we can overide this with our inherited classes
     //----------------------------------------------------------------------------------------------------------------------
@@ -98,12 +102,32 @@ public:
 
 protected:
 	QVariant itemChange(GraphicsItemChange change, const QVariant &value);
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief the name of our block
+    //----------------------------------------------------------------------------------------------------------------------
+    std::string m_blockName;
+    //----------------------------------------------------------------------------------------------------------------------
 
 private:
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief horizontal margin for drawing our block
+    //----------------------------------------------------------------------------------------------------------------------
 	int horzMargin;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief vertical margin for drawing our block
+    //----------------------------------------------------------------------------------------------------------------------
 	int vertMargin;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief width for drawing our block
+    //----------------------------------------------------------------------------------------------------------------------
 	int width;
+    //----------------------------------------------------------------------------------------------------------------------
+    /// @brief height for drawing our block
+    //----------------------------------------------------------------------------------------------------------------------
 	int height;
+    //----------------------------------------------------------------------------------------------------------------------
+
+
 
 
 };

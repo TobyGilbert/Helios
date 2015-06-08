@@ -51,6 +51,7 @@ AbstractMaterialWidget::AbstractMaterialWidget(QWidget *parent) :
     m_graphicsView->setRenderHint(QPainter::Antialiasing, true);
     //create our node editor, could become useful in the future
     m_nodeEditor = new OSLNodesEditor(this);
+    connect(m_nodeEditor,SIGNAL(matChanged()),this,SLOT(signalMatChanged()));
     m_nodeEditor->install(m_nodeInterfaceScene);
 
     //group box for our buttons
@@ -124,9 +125,10 @@ void AbstractMaterialWidget::compileAndAddToLib(QString _path)
 //------------------------------------------------------------------------------------------------------------------------------------
 AbstractMaterialWidget::~AbstractMaterialWidget()
 {
-    for(unsigned int i=0; i<m_nodes.size();i++)
-    {
-        delete m_nodes[i];
+    //remove any objects still left in our scene
+    QObjectList sceneItems = m_graphicsView->children();
+    for(int i=0;i<sceneItems.size();i++){
+        delete sceneItems[i];
     }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -266,6 +268,9 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos)
 
     //find out if something has been clicked
     QAction* selectedItem = myMenu.exec(globalPos);
+
+    //Its important to note that we do not need to keep a pointer to these peices
+    //of memory as we can simply query our scenes children and delete them from there
     if(selectedItem){
         switch(selectedItem->data().toInt())
         {
@@ -274,43 +279,49 @@ void AbstractMaterialWidget::showContextMenu(const QPoint &pos)
         {
             //create a float block
             OSLVarFloatBlock *f = new OSLVarFloatBlock(m_nodeInterfaceScene, m_material);
-            m_nodes.push_back(f);
+            connect(f->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         case(2):
         {
+            //create an int block
             OSLVarIntBlock *i = new OSLVarIntBlock(m_nodeInterfaceScene, m_material);
-            m_nodes.push_back(i);
+            connect(i->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         case(3):
         {
-            OSLVarFloatThreeBlock *v = new OSLVarFloatThreeBlock(m_nodeInterfaceScene,m_material);
-            m_nodes.push_back(v);
+            //create a float 3 block
+            OSLVarFloatThreeBlock *f = new OSLVarFloatThreeBlock(m_nodeInterfaceScene,m_material);
+            connect(f->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         case(4):
         {
+            //create a color block
             OSLVarColorBlock *c = new OSLVarColorBlock(m_nodeInterfaceScene,m_material);
-            m_nodes.push_back(c);
+            connect(c->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         case(5):
         {
+            //create a normal block
             OSLVarNormalBlock *n = new OSLVarNormalBlock(m_nodeInterfaceScene,m_material);
-            m_nodes.push_back(n);
+            connect(n->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         case(6):
         {
+            //create a point block
             OSLVarPointBlock *p = new OSLVarPointBlock(m_nodeInterfaceScene,m_material);
-            m_nodes.push_back(p);
+            connect(p->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         case(7):
         {
+            //create a var image block
             OSLVarImageBlock *i = new OSLVarImageBlock(m_nodeInterfaceScene,m_material);
-            m_nodes.push_back(i);
+            connect(i->m_widgetProxy,SIGNAL(attributeChanged()),this,SLOT(signalMatChanged()));
         }
         break;
         //if nothing do nothing
@@ -342,11 +353,6 @@ void AbstractMaterialWidget::addShaderNode()
             QMessageBox::warning(this,"Compile Error","OSL Shader could not be compiled!");
             m_nodeInterfaceScene->removeItem(b);
             delete b;
-        }
-        else
-        {
-            //add it to our list of nodes
-            m_nodes.push_back(b);
         }
     }
 }

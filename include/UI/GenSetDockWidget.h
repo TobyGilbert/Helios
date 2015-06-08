@@ -1,12 +1,12 @@
 #ifndef GENSETDOCKWIDGET_H
 #define GENSETDOCKWIDGET_H
-
+//----------------------------------------------------------------------------------------------------------------------
 /// @class GenSetDockWiget
 /// @date 26/02/2015
 /// @author Declan Russell
 /// @brief A Dockable widget which will hold controls to change the general settings of our application
 /// @version 1.0
-
+//----------------------------------------------------------------------------------------------------------------------
 #include <QDockWidget>
 #include <QGridLayout>
 #include <QSpacerItem>

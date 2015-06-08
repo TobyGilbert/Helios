@@ -170,22 +170,6 @@ void QNEBlock::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 
 }
 
-QNEBlock* QNEBlock::clone()
-{
-    QNEBlock *b = new QNEBlock(0);
-    this->scene()->addItem(b);
-
-	foreach(QGraphicsItem *port_, childItems())
-	{
-		if (port_->type() == QNEPort::Type)
-		{
-			QNEPort *port = (QNEPort*) port_;
-            b->addPort(port->portName(), port->isOutput(),port->getInitParams(),port->getVaribleType(), port->portFlags(), port->ptr());
-		}
-	}
-
-	return b;
-}
 
 QVector<QNEPort*> QNEBlock::ports()
 {

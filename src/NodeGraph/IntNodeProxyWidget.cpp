@@ -23,6 +23,7 @@ void IntNodeProxyWidget::setMaterialVariables(int _val){
     for(unsigned int i=0;i<_varNames.size();i++){
         m_material[_varNames[i].c_str()]->setInt(_val);
     }
+    attributeChanged();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void IntNodeProxyWidget::setLinkedVar(){

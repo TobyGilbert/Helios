@@ -5,8 +5,8 @@
 OSLVarColorBlock::OSLVarColorBlock(QGraphicsScene *_scene, optix::Material _mat, QGraphicsItem *parent) : OSLAbstractVarBlock(_scene,_mat,parent)
 {
     //draw our block a little bigger
-    setWidth(50);
-    setHeight(140);
+    setWidth(40);
+    setHeight(150);
     //set the name of our block
     setBlockName("Color");
     //create our output port
@@ -14,7 +14,8 @@ OSLVarColorBlock::OSLVarColorBlock(QGraphicsScene *_scene, optix::Material _mat,
     QNEPort* varPort = addOutputPort("",zeroParams,QNEPort::TypeColour);
     //Now lets add our float spin box which will change the value of our variable
     m_widgetProxy = new FloatThreeNodeProxyWidget(varPort,m_material,this);
-
+    //name of our block
+    m_blockName = "ColorBlock";
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void OSLVarColorBlock::save(QDataStream &ds)
@@ -61,16 +62,14 @@ void OSLVarColorBlock::load(QDataStream &ds, QMap<quint64, QNEPort *> &portMap)
     }
 
     //get the values of our spinboxes
-    double x,y,z;
-    ds >> x;
-    ds >> y;
-    ds >> z;
+    double r,g,b;
+    ds >> r;
+    ds >> g;
+    ds >> b;
     FloatThreeNodeProxyWidget * proxy = ((FloatThreeNodeProxyWidget*)m_widgetProxy);
-    proxy->m_spinBoxX->setValue(x);
-    proxy->m_spinBoxY->setValue(y);
-    proxy->m_spinBoxZ->setValue(z);
-
-
+    proxy->m_spinBoxX->setValue(r);
+    proxy->m_spinBoxY->setValue(g);
+    proxy->m_spinBoxZ->setValue(b);
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------

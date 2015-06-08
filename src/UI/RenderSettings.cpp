@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSpinBox>
+#include <QGroupBox>
 #include "Core/pathtracerscene.h"
 
 RenderSettings::RenderSettings(QWidget *parent) : QWidget(parent,Qt::Window),
@@ -12,8 +13,9 @@ RenderSettings::RenderSettings(QWidget *parent) : QWidget(parent,Qt::Window),
                                                   m_imgFormat("png")
 
 {
-    QGridLayout *layout = new QGridLayout(this);
-    setLayout(layout);
+    QGroupBox *gb = new QGroupBox(this);
+    QGridLayout *layout = new QGridLayout(gb);
+    gb->setLayout(layout);
 
     //Image width field
     layout->addWidget(new QLabel("Image Width:",this),0,0,1,1);

@@ -192,11 +192,11 @@ private:
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief remove any access to copy constructor as we dont want copies of our singleton class
     //----------------------------------------------------------------------------------------------------------------------
-    PathTracerScene(PathTracerScene const&){;}
+    PathTracerScene(PathTracerScene const&){}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief remove access to our assignment operator as we dont want copies of our signton class
     //----------------------------------------------------------------------------------------------------------------------
-    PathTracerScene& operator=(PathTracerScene const&){;}
+    PathTracerScene& operator=(PathTracerScene const&){return *this;}
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief a pointer to our instance of our singleton class
     //----------------------------------------------------------------------------------------------------------------------

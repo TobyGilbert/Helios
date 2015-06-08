@@ -1,6 +1,14 @@
 #ifndef INTNODEPROXYWIDGET_H
 #define INTNODEPROXYWIDGET_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class IntNodeProxyWidget
+/// @brief Extention of AbstractNodeProxyWidget that allows us to select an int and apply it to a attribute of a material
+/// @brief This widget consists of a single SpinBox to select a integer value.
+/// @author Declan Russell
+/// @date 05/05/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include <QGraphicsItem>
 #include <optixu/optixpp_namespace.h>
 #include "AbstractNodeProxyWidget.h"

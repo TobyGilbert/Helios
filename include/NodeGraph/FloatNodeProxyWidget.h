@@ -1,6 +1,14 @@
 #ifndef FLOATNODEPROXYWIDGET_H
 #define FLOATNODEPROXYWIDGET_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class FloatNodeProxyWidget
+/// @brief Extention of AbstractNodeProxyWidget that allows us to select a float and apply it to a attribute of a material.
+/// @brief This widget consists of a single Double spinbox to input a float value.
+/// @author Declan Russell
+/// @date 05/05/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include <QGraphicsItem>
 #include <optixu/optixpp_namespace.h>
 #include "AbstractNodeProxyWidget.h"

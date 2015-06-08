@@ -6,9 +6,6 @@
 #include <iostream>
 #include <optixu/optixpp_namespace.h>
 
-#include "OSLCompiler/OslReader.h"
-#include "OSLCompiler/OsoReader.h"
-
 const static float INCREMENT=0.15;
 //------------------------------------------------------------------------------------------------------------------------------------
 /// @brief the increment for the wheel zoom
@@ -37,6 +34,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
 //----------------------------------------------------------------------------------------------------------------------
 OpenGLWidget::~OpenGLWidget(){
     PathTracerScene::getInstance()->destroy();
+    //delete m_statsLineEdit;
     delete m_shaderProgram;
     delete m_cam;
     glDeleteVertexArrays(1, &m_VAO);
@@ -138,6 +136,9 @@ void OpenGLWidget::initializeGL(){
     pathTracerCreated();
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
+
+
+
     startTimer(0);
 
 }
@@ -185,6 +186,7 @@ void OpenGLWidget::paintGL(){
     glBindVertexArray(m_VAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::loadMatricesToShader(glm::mat4 _modelMatrix, glm::mat4 _viewMatrix, glm::mat4 _perspectiveMatrix){

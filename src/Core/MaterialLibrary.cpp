@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDir>
 #include <QPushButton>
+#include <QLayout>
 #include "Core/pathtracerscene.h"
 #include "UI/AbstractMaterialWidget.h"
 #include "UI/MeshWidget.h"

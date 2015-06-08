@@ -85,7 +85,7 @@ void QNEPort::setIsOutput(bool o)
 {
 	isOutput_ = o;
     QFontMetrics fm(scene()->font());
-	QRect r = fm.boundingRect(name);
+//	QRect r = fm.boundingRect(name);
 
 	if (isOutput_)
     {
@@ -143,6 +143,7 @@ void QNEPort::setVaribleType(QNEPort::variableType _type)
     case(TypeInt): setBrush(Qt::darkCyan); break;
     case(TypeString): setBrush(Qt::darkMagenta); break;
     case(TypeMatrix): setBrush(Qt::blue); break;
+    default:break;
     }
 }
 

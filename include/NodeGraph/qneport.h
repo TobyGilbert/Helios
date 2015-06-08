@@ -30,10 +30,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 /// @class QNEBlock
 /// @brief This class originally written by STANISLAW ADASZEWSKI has been modified
 /// @brief to be used for a node based user interface for creating OSL shaders.
-/// @brief Original source can be found at http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/
-/// @brief The parts modified will be specified
+/// @date Modifed from 18/03/2015
 /// @author STANISLAW ADASZEWSKI modified by Declan Russell
-/// @date Modifed 18/03/2015
+/// @brief [Accessed 2015]. availible from http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/
 //----------------------------------------------------------------------------------------------------------------------
 
 #include <QGraphicsPathItem>

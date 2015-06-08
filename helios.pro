@@ -31,7 +31,6 @@ SOURCES += \
     src/NodeGraph/qneconnection.cpp \
     src/NodeGraph/qneport.cpp \
     src/NodeGraph/qnodeseditor.cpp \
-    src/NodeGraph/OSLBlock.cpp \
     src/NodeGraph/OSLShaderBlock.cpp \
     src/NodeGraph/OSLVarFloatBlock.cpp \
     src/NodeGraph/OSLNodesEditor.cpp \
@@ -60,7 +59,8 @@ SOURCES += \
     src/UI/RenderSettings.cpp \
     src/UI/CameraWidget.cpp \
     src/Core/PathTraceCamera.cpp \
-    src/Core/OptixModel.cpp
+    src/Core/OptixModel.cpp \
+    src/NodeGraph/ColorNodeProxyWidget.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -93,7 +93,6 @@ HEADERS += \
     include/NodeGraph/qneconnection.h \
     include/NodeGraph/qneport.h \
     include/NodeGraph/qnodeseditor.h \
-    include/NodeGraph/OSLBlock.h \
     include/NodeGraph/OSLShaderBlock.h \
     include/NodeGraph/OSLVarFloatBlock.h \
     include/NodeGraph/OSLNodesEditor.h \
@@ -117,7 +116,8 @@ HEADERS += \
     include/OSLCompiler/export.h \
     include/UI/CameraWidget.h \
     include/Core/PathTraceCamera.h \
-    include/Core/OptixModel.h
+    include/Core/OptixModel.h \
+    include/NodeGraph/ColorNodeProxyWidget.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll

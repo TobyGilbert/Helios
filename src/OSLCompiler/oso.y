@@ -61,7 +61,7 @@ oso_file
 version
         : IDENTIFIER FLOAT_LITERAL ENDOFLINE
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->version($2, 0.0);
                 }
         ;
@@ -69,7 +69,7 @@ version
 shader_declaration
         : shader_type IDENTIFIER
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->shader($1, $2);
                 }
             hints_opt ENDOFLINE
@@ -97,7 +97,7 @@ instructions
 instruction
         : label opcode
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     int lineNo = reader->getLineNo();
                     reader->instruction($2, lineNo);
                     reader->incrimentLineNo();
@@ -123,7 +123,7 @@ symbols
 symbol
         : SYMTYPE typespec arraylen_opt IDENTIFIER
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     Type t;
                     if ($2 == FLOATTYPE){
                        t = TypeFloat;
@@ -214,7 +214,7 @@ simple_typename
 
 arraylen_opt
         : '[' INT_LITERAL ']'           {
-                                          OsoReader* reader = getOsoReader();
+                                          OsoReader* reader = OsoReader::getOsoReader();
                                           reader->makeSymbolArrayType(std::to_string($2));
                                         }
         | /* empty */                   { ; }
@@ -233,17 +233,17 @@ initial_values
 initial_value
         : FLOAT_LITERAL
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->addSymbolDefaults(std::to_string($1));
                 }
         | INT_LITERAL
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->addSymbolDefaults(std::to_string($1));
                 }
         | STRING_LITERAL
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->addSymbolDefaults($1);
                 }
         ;
@@ -274,7 +274,7 @@ arguments
 argument
         : IDENTIFIER
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->instructionArguments($1);
                 }
         ;
@@ -292,7 +292,7 @@ jumptargets
 jumptarget
         : INT_LITERAL
                 {
-                    OsoReader* reader = getOsoReader();
+                    OsoReader* reader = OsoReader::getOsoReader();
                     reader->instructionArguments(std::to_string($1));
                 }
         ;

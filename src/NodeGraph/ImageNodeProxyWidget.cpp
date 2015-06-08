@@ -49,6 +49,7 @@ void ImageNodeProxyWidget::getImage()
     for(unsigned int i=0;i<_varNames.size();i++){
         m_material[_varNames[i].c_str()]->setTextureSampler(m_texure);
     }
+    //attributeChanged();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void ImageNodeProxyWidget::setLinkedVar(){
@@ -67,8 +68,8 @@ void ImageNodeProxyWidget::setLinkedVar(){
 void ImageNodeProxyWidget::loadImage(QString _path)
 {
     QPixmap img(_path);
-    if(!img.isNull()){
-        std::cout<<"w "<<m_imgLabel->width()<<" h "<<m_imgLabel->height()<<std::endl;
+    if(!img.isNull())
+    {
         m_imgLabel->setPixmap(img.scaled(200,255,Qt::KeepAspectRatio));
 
         if(m_imgCreated)m_texure->destroy();
@@ -81,11 +82,13 @@ void ImageNodeProxyWidget::loadImage(QString _path)
         getLinkedVarName(_varNames);
 
         //set all our variables in our material
-        for(unsigned int i=0;i<_varNames.size();i++){
+        for(unsigned int i=0;i<_varNames.size();i++)
+        {
             m_material[_varNames[i].c_str()]->setTextureSampler(m_texure);
         }
     }
-    else{
+    else
+    {
         std::cerr<<"Could not load image "<<_path.toStdString()<<std::endl;
     }
 }

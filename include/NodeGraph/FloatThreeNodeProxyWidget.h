@@ -1,6 +1,14 @@
 #ifndef FLOATTHREENODEPROXYWIDGET_H
 #define FLOATTHREENODEPROXYWIDGET_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class FloatThreeNodeProxyWidget
+/// @brief Extention of AbstractNodeProxyWidget that allows us to select 3 floats and apply it to a attribute of a material.
+/// @brief This widget consists of 3 Double Spinbox's. This is to be used for such tripplets as Vectors.
+/// @author Declan Russell
+/// @date 05/05/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include <QGraphicsItem>
 #include <optixu/optixpp_namespace.h>
 #include <QGroupBox>
@@ -45,7 +53,6 @@ public:
     //------------------------------------------------------------------------------------------------------------------------------------
     void load(QDataStream &, QMap<quint64, QNEPort *> &portMap);
     //------------------------------------------------------------------------------------------------------------------------------------
-
 public slots:
     //------------------------------------------------------------------------------------------------------------------------------------
     /// @brief a slot to set the varibles in our material when our spin box values is changed

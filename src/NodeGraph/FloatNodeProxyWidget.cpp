@@ -24,6 +24,7 @@ void FloatNodeProxyWidget::setMaterialVariables(double _val){
     for(unsigned int i=0;i<_varNames.size();i++){
         m_material[_varNames[i].c_str()]->setFloat(_val);
     }
+    attributeChanged();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void FloatNodeProxyWidget::setLinkedVar(){

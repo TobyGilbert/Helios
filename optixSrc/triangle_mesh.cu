@@ -35,13 +35,8 @@ rtBuffer<float3> normal_buffer;
 rtBuffer<float2> texcoord_buffer;
 rtBuffer<float3> tangent_buffer;
 rtBuffer<float3> bitangent_buffer;
-rtBuffer<int3>   vindex_buffer;    // position indices 
-rtBuffer<int3>   nindex_buffer;    // normal indices
-rtBuffer<int3>   tindex_buffer;    // texcoord indices
-rtBuffer<int3>   tanindex_buffer;  // tangents indices
-rtBuffer<int3>   biindex_buffer;   // bitangent indices
 
-rtBuffer<uint>   material_buffer; // per-face material index
+
 rtDeclareVariable(float3, texcoord, attribute texcoord, ); 
 rtDeclareVariable(float3, geometric_normal, attribute geometric_normal, ); 
 rtDeclareVariable(float3, shading_normal, attribute shading_normal, );
@@ -51,9 +46,12 @@ rtDeclareVariable(optix::Ray, ray, rtCurrentRay, );
 
 RT_PROGRAM void mesh_intersect( int primIdx )
 {
-  int3 v_idx = vindex_buffer[primIdx];
+  int3 v_idx;
+  v_idx.x = primIdx*3;
+  v_idx.y = v_idx.x+1;
+  v_idx.z = v_idx.y+1;
 
-  float3 p0 = vertex_buffer[ v_idx.x ];
+  float3 p0 = vertex_buffer[ v_idx.x];
   float3 p1 = vertex_buffer[ v_idx.y ];
   float3 p2 = vertex_buffer[ v_idx.z ];
 
@@ -64,58 +62,56 @@ RT_PROGRAM void mesh_intersect( int primIdx )
 
     if(  rtPotentialIntersection( t ) ) {
 
-      int3 n_idx = nindex_buffer[ primIdx ];
-
-      if ( normal_buffer.size() == 0 || n_idx.x < 0 || n_idx.y < 0 || n_idx.z < 0 ) {
+      if ( normal_buffer.size() == 0 || v_idx.x < 0 || v_idx.y < 0 || v_idx.z < 0 ) {
         shading_normal = normalize( n );
       } else {
-        float3 n0 = normal_buffer[ n_idx.x ];
-        float3 n1 = normal_buffer[ n_idx.y ];
-        float3 n2 = normal_buffer[ n_idx.z ];
+        float3 n0 = normal_buffer[ v_idx.x ];
+        float3 n1 = normal_buffer[ v_idx.y ];
+        float3 n2 = normal_buffer[ v_idx.z ];
         shading_normal = normalize( n1*beta + n2*gamma + n0*(1.0f-beta-gamma) );
       }
       geometric_normal = normalize( n );
 
-      int3 t_idx = tindex_buffer[ primIdx ];
-      if ( texcoord_buffer.size() == 0 || t_idx.x < 0 || t_idx.y < 0 || t_idx.z < 0 ) {
+      if ( texcoord_buffer.size() == 0 || v_idx.x < 0 || v_idx.y < 0 || v_idx.z < 0 ) {
         texcoord = make_float3( 1.0f, 0.0f, 0.0f );
       } else {
-        float2 t0 = texcoord_buffer[ t_idx.x ];
-        float2 t1 = texcoord_buffer[ t_idx.y ];
-        float2 t2 = texcoord_buffer[ t_idx.z ];
+        float2 t0 = texcoord_buffer[ v_idx.x ];
+        float2 t1 = texcoord_buffer[ v_idx.y ];
+        float2 t2 = texcoord_buffer[ v_idx.z ];
         texcoord = make_float3( t1*beta + t2*gamma + t0*(1.0f-beta-gamma) );
       }
 
-      int3 tan_idx = tanindex_buffer[ primIdx ];
-      if( tangent_buffer.size() == 0 || tan_idx.x < 0 || tan_idx.y < 0 || tan_idx.z < 0) {
+      if( tangent_buffer.size() == 0 || v_idx.x < 0 || v_idx.y < 0 || v_idx.z < 0) {
           tangent = make_float3(0.0f, 0.0f, 0.0f);
       }
       else{
-          float3 tan0 = tangent_buffer[ tan_idx.x ];
-          float3 tan1 = tangent_buffer[ tan_idx.y ];
-          float3 tan2 = tangent_buffer[ tan_idx.z ];
+          float3 tan0 = tangent_buffer[ v_idx.x ];
+          float3 tan1 = tangent_buffer[ v_idx.y ];
+          float3 tan2 = tangent_buffer[ v_idx.z ];
           tangent = normalize( tan1*beta + tan2*gamma + tan0*(1.0f-beta-gamma) );
       }
 
-      int3 bitan_idx = biindex_buffer[ primIdx ];
-      if( biindex_buffer.size() == 0 || bitan_idx.x < 0 || bitan_idx.y < 0 || bitan_idx.z < 0) {
+      if( bitangent_buffer.size() == 0 || v_idx.x < 0 || v_idx.y < 0 || v_idx.z < 0) {
           bitangent = make_float3(0.0f, 0.0f, 0.0f);
       }
       else{
-          float3 bitan0 = bitangent_buffer[ bitan_idx.x ];
-          float3 bitan1 = bitangent_buffer[ bitan_idx.y ];
-          float3 bitan2 = bitangent_buffer[ bitan_idx.z ];
+          float3 bitan0 = bitangent_buffer[ v_idx.x ];
+          float3 bitan1 = bitangent_buffer[ v_idx.y ];
+          float3 bitan2 = bitangent_buffer[ v_idx.z ];
           bitangent = normalize( bitan1*beta + bitan2*gamma + bitan0*(1.0f-beta-gamma) );
       }
 
-      rtReportIntersection(material_buffer[primIdx]);
+      rtReportIntersection(0u);
     }
   }
 }
 
 RT_PROGRAM void mesh_bounds (int primIdx, float result[6])
 {
-  const int3 v_idx = vindex_buffer[primIdx];
+  int3 v_idx;
+  v_idx.x = primIdx*3;
+  v_idx.y = v_idx.x+1;
+  v_idx.z = v_idx.y+1;
 
   const float3 v0   = vertex_buffer[ v_idx.x ];
   const float3 v1   = vertex_buffer[ v_idx.y ];

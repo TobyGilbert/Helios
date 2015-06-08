@@ -113,7 +113,7 @@ bool OSLShaderBlock::loadShader(QString _path)
         return false;
     }
 
-    OsoReader* reader = getOsoReader();
+    OsoReader* reader = OsoReader::getOsoReader();
     m_cudaKernal = reader->generateDeviceFunction();
     m_shaderName = reader->getShaderName();
     std::vector<std::string> zeroInitParams;

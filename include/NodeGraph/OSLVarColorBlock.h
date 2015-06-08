@@ -1,6 +1,13 @@
 #ifndef OSLVARCOLORBLOCK_H
 #define OSLVARCOLORBLOCK_H
 
+//------------------------------------------------------------------------------------------------------------------------------------
+/// @class OSLVarFloatBlock
+/// @brief This class is used for creating a color variable node in our node graphics interface.
+/// @author Declan Russell
+/// @date 21/03/2015
+//------------------------------------------------------------------------------------------------------------------------------------
+
 #include "NodeGraph/OSLAbstractVarBlock.h"
 #include <optixu/optixpp_namespace.h>
 #include <QGraphicsScene>
