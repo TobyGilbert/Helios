@@ -329,10 +329,12 @@ RT_PROGRAM void miss(){
 }
 //-----------------------------------------------------------------------------
 rtDeclareVariable(float, strength, , );
+rtDeclareVariable(Matrix4x4, cameraMatrix, , );
 //-----------------------------------------------------------------------------
 RT_PROGRAM void envi_miss(){
-    float theta = atan2f(ray.direction.x, ray.direction.z);
-    float phi = M_PIf * 0.5f - acos(ray.direction.y);
+    float3 ray_direction = make_float3(cameraMatrix * make_float4(ray.direction.x, ray.direction.y, ray.direction.z, 1.0));
+    float theta = atan2f(ray_direction.x, ray_direction.z);
+    float phi = M_PIf * 0.5f - acos(ray_direction.y);
     float u = (theta + M_PIf) * (0.5f * M_1_PIf);
     float v = 0.5f * ( 1.0f + sin(phi));
     if(current_prd.countEmitted){
