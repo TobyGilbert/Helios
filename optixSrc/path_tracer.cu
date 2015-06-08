@@ -239,7 +239,8 @@ RT_PROGRAM void defaultMaterial(){
     unsigned int num_lights = lights.size();
 
 
-    for(int i = 0; i < num_lights; ++i) {
+    for(int i = 0; i < num_lights; ++i)
+    {
       ParallelogramLight light = lights[i];
       float z1 = rnd(current_prd.seed);
       float z2 = rnd(current_prd.seed);
@@ -249,27 +250,42 @@ RT_PROGRAM void defaultMaterial(){
       float3 L = normalize(light_pos - hitpoint);
       float nDl = dot( ffnormal, L );
       float LnDl = dot( light.normal, L );
+      float LnDlinverse = dot(-light.normal, L);
       float A = length(cross(light.v1, light.v2));
 
       // cast shadow ray
-      if ( nDl > 0.0f && LnDl > 0.0f ) {
+      if ( nDl > 0.0f && LnDl > 0.0f )
+      {
         PerRayData_pathtrace_shadow shadow_prd;
         shadow_prd.inShadow = false;
         Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
         rtTrace(top_object, shadow_ray, shadow_prd);
 
-        if(!shadow_prd.inShadow){
+        if(!shadow_prd.inShadow)
+        {
           float weight=nDl * LnDl * A / (M_PIf*Ldist*Ldist);
           result += light.emission * weight;
         }
       }
+
+      // cast shadow ray for other side of light
+      if ( nDl > 0.0f && LnDlinverse > 0.0f )
+      {
+        PerRayData_pathtrace_shadow shadow_prd;
+        shadow_prd.inShadow = false;
+        Ray shadow_ray = make_Ray( hitpoint, L, pathtrace_shadow_ray_type, scene_epsilon, Ldist );
+        rtTrace(top_object, shadow_ray, shadow_prd);
+
+        if(!shadow_prd.inShadow)
+        {
+          float weight=nDl * LnDlinverse * A / (M_PIf*Ldist*Ldist);
+          result += light.emission * weight;
+        }
+      }
     }
-//    if(result.x != 0.0 && result.y != 0.0  && result.z != 0.0){
-//    printf("result %f, %f, %f\n", result.x, result.y, result.z);
-//    }
+
     current_prd.radiance = result;
     current_prd.countEmitted = false;
-
 
     PerRayData_pathtrace prd;
     prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);

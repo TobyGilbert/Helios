@@ -41,77 +41,107 @@ void LightManager::createGUI(){
     QPushButton *addLightBtn = new QPushButton("Add Light", this);
     gridLayout->addWidget(addLightBtn, 1, 0, 1, 4);
 
+    QPushButton *deleteLightBtn = new QPushButton("Delete Light", this);
+    gridLayout->addWidget(deleteLightBtn, 2, 0, 1, 4);
+
     // Some double spin boxes for light parameters
     QLabel *translate = new QLabel("Translate", this);
     translate->setHidden(true);
-    gridLayout->addWidget(translate, 2, 0, 1, 1);
+    gridLayout->addWidget(translate, 3, 0, 1, 1);
     m_translateX = new QDoubleSpinBox(this);
     m_translateY = new QDoubleSpinBox(this);
     m_translateZ = new QDoubleSpinBox(this);
-    m_translateX->setMinimum(-10.0);
-    m_translateY->setMinimum(-10.0);
-    m_translateZ->setMinimum(-10.0);
+    m_translateX->setMinimum(-INFINITY);
+    m_translateY->setMinimum(-INFINITY);
+    m_translateZ->setMinimum(-INFINITY);
+    m_translateX->setMaximum(INFINITY);
+    m_translateY->setMaximum(INFINITY);
+    m_translateZ->setMaximum(INFINITY);
     m_translateX->setHidden(true);
     m_translateY->setHidden(true);
     m_translateZ->setHidden(true);
-    gridLayout->addWidget(m_translateX, 2, 1, 1, 1);
-    gridLayout->addWidget(m_translateY, 2, 2, 1, 1);
-    gridLayout->addWidget(m_translateZ, 2, 3, 1, 1);
+    m_translateX->setSingleStep(0.01);
+    m_translateY->setSingleStep(0.01);
+    m_translateZ->setSingleStep(0.01);
+    gridLayout->addWidget(m_translateX, 3, 1, 1, 1);
+    gridLayout->addWidget(m_translateY, 3, 2, 1, 1);
+    gridLayout->addWidget(m_translateZ, 3, 3, 1, 1);
 
     QLabel *scale = new QLabel("Scale", this);
     scale->setHidden(true);
-    gridLayout->addWidget(scale, 3, 0, 1, 1);
+    gridLayout->addWidget(scale, 4, 0, 1, 1);
     m_scaleX = new QDoubleSpinBox(this);
     m_scaleY = new QDoubleSpinBox(this);
     m_scaleZ = new QDoubleSpinBox(this);
-    m_scaleX->setMinimum(-10.0);
-    m_scaleY->setMinimum(-10.0);
-    m_scaleZ->setMinimum(-10.0);
+    m_scaleX->setMinimum(-INFINITY);
+    m_scaleY->setMinimum(-INFINITY);
+    m_scaleZ->setMinimum(-INFINITY);
+    m_scaleX->setMaximum(INFINITY);
+    m_scaleY->setMaximum(INFINITY);
+    m_scaleZ->setMaximum(INFINITY);
     m_scaleX->setHidden(true);
     m_scaleY->setHidden(true);
     m_scaleZ->setHidden(true);
     m_scaleX->setValue(1.0);
     m_scaleY->setValue(1.0);
     m_scaleZ->setValue(1.0);
-    gridLayout->addWidget(m_scaleX, 3, 1, 1, 1);
-    gridLayout->addWidget(m_scaleY, 3, 2, 1, 1);
-    gridLayout->addWidget(m_scaleZ, 3, 3, 1, 1);
+    m_scaleX->setSingleStep(0.01);
+    m_scaleY->setSingleStep(0.01);
+    m_scaleZ->setSingleStep(0.01);
+    gridLayout->addWidget(m_scaleX, 4, 1, 1, 1);
+    gridLayout->addWidget(m_scaleY, 4, 2, 1, 1);
+    gridLayout->addWidget(m_scaleZ, 4, 3, 1, 1);
 
     QLabel *rotate = new QLabel("Rotate", this);
     rotate->setHidden(true);
-    gridLayout->addWidget(rotate, 4, 0, 1, 1);
+    gridLayout->addWidget(rotate, 5, 0, 1, 1);
     m_rotateX = new QDoubleSpinBox(this);
     m_rotateY = new QDoubleSpinBox(this);
     m_rotateZ = new QDoubleSpinBox(this);
-    m_rotateX->setMinimum(-10.0);
-    m_rotateY->setMinimum(-10.0);
-    m_rotateZ->setMinimum(-10.0);
+    m_rotateX->setMinimum(-INFINITY);
+    m_rotateY->setMinimum(-INFINITY);
+    m_rotateZ->setMinimum(-INFINITY);
+    m_rotateX->setMaximum(INFINITY);
+    m_rotateY->setMaximum(INFINITY);
+    m_rotateZ->setMaximum(INFINITY);
     m_rotateX->setHidden(true);
     m_rotateY->setHidden(true);
     m_rotateZ->setHidden(true);
-    gridLayout->addWidget(m_rotateX, 4, 1, 1, 1);
-    gridLayout->addWidget(m_rotateY, 4, 2, 1, 1);
-    gridLayout->addWidget(m_rotateZ, 4, 3, 1, 1);
+    m_rotateX->setSingleStep(0.01);
+    m_rotateY->setSingleStep(0.01);
+    m_rotateZ->setSingleStep(0.01);
+    gridLayout->addWidget(m_rotateX, 5, 1, 1, 1);
+    gridLayout->addWidget(m_rotateY, 5, 2, 1, 1);
+    gridLayout->addWidget(m_rotateZ, 5, 3, 1, 1);
 
     QLabel *emission = new QLabel("Emission", this);
     emission->setHidden(true);
-    gridLayout->addWidget(emission, 5, 0, 1, 1);
+    gridLayout->addWidget(emission, 6, 0, 1, 1);
     m_emissionX = new QDoubleSpinBox(this);
     m_emissionY = new QDoubleSpinBox(this);
     m_emissionZ = new QDoubleSpinBox(this);
     m_emissionX->setHidden(true);
     m_emissionY->setHidden(true);
     m_emissionZ->setHidden(true);
+    m_emissionX->setMaximum(INFINITY);
+    m_emissionY->setMaximum(INFINITY);
+    m_emissionZ->setMaximum(INFINITY);
     m_emissionX->setValue(5.0);
     m_emissionY->setValue(5.0);
     m_emissionZ->setValue(5.0);
-    gridLayout->addWidget(m_emissionX, 5, 1, 1, 1);
-    gridLayout->addWidget(m_emissionY, 5, 2, 1, 1);
-    gridLayout->addWidget(m_emissionZ, 5, 3, 1, 1);
+    m_emissionX->setDecimals(3);
+    m_emissionY->setDecimals(3);
+    m_emissionZ->setDecimals(3);
+    m_emissionX->setSingleStep(0.001);
+    m_emissionY->setSingleStep(0.001);
+    m_emissionZ->setSingleStep(0.001);
+    gridLayout->addWidget(m_emissionX, 6, 1, 1, 1);
+    gridLayout->addWidget(m_emissionY, 6, 2, 1, 1);
+    gridLayout->addWidget(m_emissionZ, 6, 3, 1, 1);
 
     // A spacer to push everything to the top
     QSpacerItem* spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
-    gridLayout->addItem(spacer, 6, 0, 1, 4);
+    gridLayout->addItem(spacer, 7, 0, 1, 4);
 
     // Connections
     connect(addLightBtn, SIGNAL(clicked()), this, SLOT(addLight()));
@@ -131,6 +161,8 @@ void LightManager::createGUI(){
     connect(addLightBtn, SIGNAL(clicked()), m_emissionX, SLOT(show()));
     connect(addLightBtn, SIGNAL(clicked()), m_emissionY, SLOT(show()));
     connect(addLightBtn, SIGNAL(clicked()), m_emissionZ, SLOT(show()));
+
+    connect(deleteLightBtn, SIGNAL(clicked()), this, SLOT(deleteLight()));
 
     connect(m_lightIndexListWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(updateGUI(QModelIndex)));
     connect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
@@ -208,6 +240,20 @@ void LightManager::setGuiDefaults(){
 void LightManager::addLight(){
     PathTracerScene::getInstance()->addLight();
     updateScene();
+}
+//------------------------------------------------------------------------------------------------------------------------------------
+void LightManager::deleteLight(){
+    std::vector<Light::ParallelogramLight>::iterator itr = m_parallelogramLights.begin() + m_selectedLight;
+    m_parallelogramLights.erase(itr);
+
+    std::cout<<"Deleting light"<<m_selectedLight+1<<std::endl;
+    PathTracerScene::getInstance()->removeLight(m_selectedLight);
+    std::cout<<"selected Light "<<m_selectedLight<<std::endl;
+    m_lightIndexListWidget->item(m_selectedLight)->setHidden(true);
+//    m_lightIndexListWidget->removeItemWidget(m_lightIndexListWidget->item(m_selectedLight));
+
+    updateScene();
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::updateLight(){

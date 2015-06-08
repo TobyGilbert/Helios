@@ -276,7 +276,8 @@ void OpenGLWidget::mouseReleaseEvent ( QMouseEvent * _event ){
   }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::wheelEvent(QWheelEvent *_event){
+void OpenGLWidget::wheelEvent(QWheelEvent *_event)
+{
     if(_event->delta() > 0)
     {
         m_modelPos.z-=ZOOM;
@@ -295,8 +296,10 @@ void OpenGLWidget::wheelEvent(QWheelEvent *_event){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
-    switch(_event->key()){
+void OpenGLWidget::keyPressEvent(QKeyEvent *_event)
+{
+    switch(_event->key())
+    {
         case Qt::Key_Escape:
             QGuiApplication::exit();
             break;
@@ -305,7 +308,8 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *_event){
     }
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::saveImage(){
+void OpenGLWidget::saveImage()
+{
    QImage image = PathTracerScene::getInstance()->saveImage();
    QFileDialog fileDialog(this);
    fileDialog.setDefaultSuffix(".png");
@@ -314,11 +318,17 @@ void OpenGLWidget::saveImage(){
    image.save(saveFile+QString(".png"), "PNG");
 }
 //----------------------------------------------------------------------------------------------------------------------
-void OpenGLWidget::loadEnvironmentMap(){
+void OpenGLWidget::loadEnvironmentMap()
+{
     QFileDialog fileDialog;
-    m_environmentMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
-    PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
-    // Reset the frame
-    sceneChanged();
+
+    QString envMap = fileDialog.getOpenFileName(this, tr("Load Image File"));
+    if(!envMap.isEmpty())
+    {
+        m_environmentMap = envMap;
+        PathTracerScene::getInstance()->setEnvironmentMap(m_environmentMap.toUtf8().constData());
+        // Reset the frame
+        sceneChanged();
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------

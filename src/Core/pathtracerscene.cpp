@@ -217,6 +217,10 @@ void PathTracerScene::removeGeomtry(std::string _id)
         std::cerr<<"Error: Could not find model to delete in path tracer"<<std::endl;
     }
 }
+void PathTracerScene::removeLight(int _id){
+    m_globalTransGroup->removeChild(LightManager::getInstance()->getGeomAndTrans()[_id]);
+    m_globalTransGroup->getAcceleration()->markDirty();
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans)
