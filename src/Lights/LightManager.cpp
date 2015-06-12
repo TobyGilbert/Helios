@@ -4,6 +4,7 @@
 #include "Lights/LightManager.h"
 #include "Core/pathtracerscene.h"
 #include <iostream>
+#include <QMessageBox>
 
 // Declare our static instance of our class
 LightManager* LightManager::m_instance;
@@ -182,6 +183,7 @@ void LightManager::createGUI()
     connect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
     connect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
     connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+
 }
 //----------------------------------------------------------------------------------------------------------------------
 void LightManager::initialise()
@@ -201,16 +203,16 @@ void LightManager::createParollelogramLight()
 {
     // Add our light to the buffer of lights
     Light *tmpLight = new Light();
-//    m_lights.push_back(tmpLight);
     m_parallelogramLights.push_back(tmpLight->getParallelogromLight());
 
-
     // Add the default information for our gui defaults vector, resize and reset the gui
-    m_lightTransforms.resize((unsigned int)m_numLights+1);
-    m_lightTransforms.back().m_translate = glm::vec3(0.0, 0.0, 0.0);
-    m_lightTransforms.back().m_rotate = glm::vec3(0.0, 0.0, 0.0);
-    m_lightTransforms.back().m_scale = glm::vec3(1.0, 1.0, 1.0);
-    setGuiDefaults();
+    LightTransforms trans;
+    trans.m_translate = glm::vec3(0.0, 0.0, 0.0);
+    trans.m_rotate = glm::vec3(0.0, 0.0, 0.0);
+    trans.m_scale = glm::vec3(1.0, 1.0, 1.0);
+    trans.m_emission = glm::vec3(5.0, 5.0, 5.0);
+    m_lightTransforms.push_back(trans);
+
 
     // Resize the light information buffer and copy back the data
     m_lightBuffer->setSize((unsigned int)m_numLights+1);
@@ -222,8 +224,9 @@ void LightManager::createParollelogramLight()
 
     m_lightIndexListWidget->addItem(tr((std::string("light") + std::to_string(m_numLights+1)).c_str()));
     m_lightIndexListWidget->item(m_numLights)->setSelected(true);
-    m_selectedLight = m_numLights;
 
+    m_selectedLight = m_numLights;
+    setGuiDefaults();
     m_numLights++;
 
     delete tmpLight;
@@ -231,6 +234,20 @@ void LightManager::createParollelogramLight()
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::setGuiDefaults()
 {
+    // We have to discoonect before setting the values to avois calling the signal valueChanged()
+    disconnect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_translateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_translateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_rotateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_rotateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_rotateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_scaleX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_scaleY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_scaleZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+
     m_translateX->setValue(0.0);
     m_translateY->setValue(0.0);
     m_translateZ->setValue(0.0);
@@ -243,119 +260,163 @@ void LightManager::setGuiDefaults()
     m_emissionX->setValue(5.0);
     m_emissionY->setValue(5.0);
     m_emissionZ->setValue(5.0);
+
+    connect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_translateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_translateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::addLight()
 {
+    createParollelogramLight();
     PathTracerScene::getInstance()->addLight();
     updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::deleteLight()
-{
-    std::vector<Light::ParallelogramLight>::iterator itr = m_parallelogramLights.begin() + m_selectedLight;
-    m_parallelogramLights.erase(itr);
+{   
+    if (m_selectedLight == 9999)
+    {
+        QMessageBox::warning(this,"Lihgt Manager","No light selected");
+    }
+    else
+    {
+        std::cout<<"Deleting light"<<m_selectedLight+1<<std::endl;
+        PathTracerScene::getInstance()->removeLight(m_selectedLight);
+        std::cout<<"selected Light "<<m_selectedLight<<std::endl;
+        m_lightIndexListWidget->removeItemWidget(m_lightIndexListWidget->item(m_selectedLight));
+        delete m_lightIndexListWidget->item(m_selectedLight);
+        std::cout<<"deleted list widget"<<std::endl;
 
-    std::cout<<"Deleting light"<<m_selectedLight+1<<std::endl;
-    PathTracerScene::getInstance()->removeLight(m_selectedLight);
-    std::cout<<"selected Light "<<m_selectedLight<<std::endl;
-    m_lightIndexListWidget->item(m_selectedLight)->setHidden(true);
-//    m_lightIndexListWidget->removeItemWidget(m_lightIndexListWidget->item(m_selectedLight));
+        m_lightTransforms.erase(m_lightTransforms.begin()+m_selectedLight);
+        m_numLights-=1;
+        std::cout<<"erase Transform"<<std::endl;
 
-    updateScene();
+        m_parallelogramLights.erase(m_parallelogramLights.begin()+m_selectedLight);
+        std::cout<<"num lights "<<m_numLights<<std::endl;
+        m_lightBuffer->setSize((unsigned int)m_numLights);
+        memcpy(m_lightBuffer->map(), &(m_parallelogramLights[0]), m_parallelogramLights.size()*sizeof(ParallelogramLight));
+        m_lightBuffer->unmap();
+
+        m_geoAndTrans.erase(m_geoAndTrans.begin() + m_selectedLight);
+
+        m_selectedLight = 9999;
+        updateScene();
+    }
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::updateLight()
 {
-    // Changes the light parameters for the actual light
-    // A pointer to the start of the buffer of lights
-    ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
-    lightBuffer[m_selectedLight].emission.x = m_emissionX->value();
-    lightBuffer[m_selectedLight].emission.y = m_emissionY->value();
-    lightBuffer[m_selectedLight].emission.z = m_emissionZ->value();
+    if (m_selectedLight == 9999)
+    {
+        QMessageBox::warning(this,"Lihgt Manager","No light selected");
+    }
+    else
+    {
+        std::cout<<"Update Light"<<std::endl;
+        // Changes the light parameters for the actual light
+        // A pointer to the start of the buffer of lights
 
-    glm::mat4 rotx = glm::mat4(1.0);
-    glm::mat4 roty = glm::mat4(1.0);
-    glm::mat4 rotz = glm::mat4(1.0);
-    // Converting to radians seems to be fine on linux however not the case on Mac bug?
-    float DtoR;
-#ifdef DARWIN
-    DtoR = 1.0;
-#else
-    DtoR = 3.14159265359/180.0;
-#endif
-    rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
-    roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
-    rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
+        ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
+        lightBuffer[m_selectedLight].emission.x = m_emissionX->value();
+        lightBuffer[m_selectedLight].emission.y = m_emissionY->value();
+        lightBuffer[m_selectedLight].emission.z = m_emissionZ->value();
 
-    glm::vec4 corner;
-    glm::vec4 v1;
-    glm::vec4 v2;
-    corner.x = lightBuffer[m_selectedLight].corner.x;
-    corner.y = lightBuffer[m_selectedLight].corner.y;
-    corner.z = lightBuffer[m_selectedLight].corner.z;
-    v1.x = lightBuffer[m_selectedLight].v1.x;
-    v1.y = lightBuffer[m_selectedLight].v1.y;
-    v1.z = lightBuffer[m_selectedLight].v1.z;
-    v2.x = lightBuffer[m_selectedLight].v2.x;
-    v2.y = lightBuffer[m_selectedLight].v2.y;
-    v2.z = lightBuffer[m_selectedLight].v2.z;
+        glm::mat4 rotx = glm::mat4(1.0);
+        glm::mat4 roty = glm::mat4(1.0);
+        glm::mat4 rotz = glm::mat4(1.0);
+        // Converting to radians seems to be fine on linux however not the case on Mac bug?
+        float DtoR;
+    #ifdef DARWIN
+        DtoR = 1.0;
+    #else
+        DtoR = 3.14159265359/180.0;
+    #endif
+        rotx = glm::rotate(rotx, (float)m_rotateX->value()*DtoR, glm::vec3(1.0, 0.0, 0.0));
+        roty = glm::rotate(roty, (float)m_rotateY->value()*DtoR, glm::vec3(0.0, 1.0, 0.0));
+        rotz = glm::rotate(rotz, (float)m_rotateZ->value()*DtoR, glm::vec3(0.0, 0.0, 1.0));
 
-    glm::vec3 point1;
-    glm::vec3 point2;
-    glm::vec3 point3;
+        glm::vec4 corner;
+        glm::vec4 v1;
+        glm::vec4 v2;
+        corner.x = lightBuffer[m_selectedLight].corner.x;
+        corner.y = lightBuffer[m_selectedLight].corner.y;
+        corner.z = lightBuffer[m_selectedLight].corner.z;
+        v1.x = lightBuffer[m_selectedLight].v1.x;
+        v1.y = lightBuffer[m_selectedLight].v1.y;
+        v1.z = lightBuffer[m_selectedLight].v1.z;
+        v2.x = lightBuffer[m_selectedLight].v2.x;
+        v2.y = lightBuffer[m_selectedLight].v2.y;
+        v2.z = lightBuffer[m_selectedLight].v2.z;
 
-    glm::mat4 transform = glm::mat4(1.0);
-    // Rotate
-    transform = rotx * roty * rotz;
-    // Scale
-    transform = glm::scale(transform, glm::vec3(m_scaleX->value(),m_scaleY->value(),m_scaleZ->value()));
-    // Translate
-    transform[3][0] = m_translateX->value();
-    transform[3][1] = m_translateY->value();
-    transform[3][2] = m_translateZ->value();
+        glm::vec3 point1;
+        glm::vec3 point2;
+        glm::vec3 point3;
 
-    point1 = glm::vec3(m_transGlobal * transform * glm::vec4(-0.5, 0.0, 0.5, 1.0));
-    point2 = glm::vec3(m_transGlobal * transform * glm::vec4(-0.5, 0.0, -0.5, 1.0));
-    point3 = glm::vec3(m_transGlobal * transform * glm::vec4(0.5, 0.0, 0.5, 1.0));
+        glm::mat4 transform = glm::mat4(1.0);
+        // Rotate
+        transform = rotx * roty * rotz;
+        // Scale
+        transform = glm::scale(transform, glm::vec3(m_scaleX->value(),m_scaleY->value(),m_scaleZ->value()));
+        // Translate
+        transform[3][0] = m_translateX->value();
+        transform[3][1] = m_translateY->value();
+        transform[3][2] = m_translateZ->value();
 
-//    std::cout<<"point1 "<<point1.x<<","<<point1.y<<","<<point1.z<<std::endl;
-//    std::cout<<"point2 "<<point2.x<<","<<point2.y<<","<<point2.z<<std::endl;
-//    std::cout<<"point3 "<<point3.x<<","<<point3.y<<","<<point3.z<<std::endl;
+        point1 = glm::vec3(m_transGlobal * transform * glm::vec4(-0.5, 0.0, 0.5, 1.0));
+        point2 = glm::vec3(m_transGlobal * transform * glm::vec4(-0.5, 0.0, -0.5, 1.0));
+        point3 = glm::vec3(m_transGlobal * transform * glm::vec4(0.5, 0.0, 0.5, 1.0));
 
-    lightBuffer[m_selectedLight].corner.x = point1.x;
-    lightBuffer[m_selectedLight].corner.y = point1.y;
-    lightBuffer[m_selectedLight].corner.z = point1.z;
+        lightBuffer[m_selectedLight].corner.x = point1.x;
+        lightBuffer[m_selectedLight].corner.y = point1.y;
+        lightBuffer[m_selectedLight].corner.z = point1.z;
 
-    lightBuffer[m_selectedLight].v1.x = (point2.x - lightBuffer[m_selectedLight].corner.x);
-    lightBuffer[m_selectedLight].v1.y = (point2.y - lightBuffer[m_selectedLight].corner.y);
-    lightBuffer[m_selectedLight].v1.z = (point2.z - lightBuffer[m_selectedLight].corner.z);
+        lightBuffer[m_selectedLight].v1.x = (point2.x - lightBuffer[m_selectedLight].corner.x);
+        lightBuffer[m_selectedLight].v1.y = (point2.y - lightBuffer[m_selectedLight].corner.y);
+        lightBuffer[m_selectedLight].v1.z = (point2.z - lightBuffer[m_selectedLight].corner.z);
 
-    lightBuffer[m_selectedLight].v2.x = (point3.x - lightBuffer[m_selectedLight].corner.x);
-    lightBuffer[m_selectedLight].v2.y = (point3.y - lightBuffer[m_selectedLight].corner.y);
-    lightBuffer[m_selectedLight].v2.z = (point3.z - lightBuffer[m_selectedLight].corner.z);
+        lightBuffer[m_selectedLight].v2.x = (point3.x - lightBuffer[m_selectedLight].corner.x);
+        lightBuffer[m_selectedLight].v2.y = (point3.y - lightBuffer[m_selectedLight].corner.y);
+        lightBuffer[m_selectedLight].v2.z = (point3.z - lightBuffer[m_selectedLight].corner.z);
 
-    lightBuffer[m_selectedLight].normal = normalize(-cross(lightBuffer[m_selectedLight].v1, lightBuffer[m_selectedLight].v2));
+        lightBuffer[m_selectedLight].normal = normalize(-cross(lightBuffer[m_selectedLight].v1, lightBuffer[m_selectedLight].v2));
 
-    m_lightBuffer->unmap();
+        m_lightBuffer->unmap();
 
-    // Update the vector to store transforms
-    LightTransforms lightTrans;
-    lightTrans.m_translate = glm::vec3(m_translateX->value(), m_translateY->value(), m_translateZ->value());
-    lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
-    lightTrans.m_scale = glm::vec3(m_scaleX->value(), m_scaleY->value(), m_scaleZ->value());
-    m_lightTransforms[m_selectedLight]= lightTrans;
+        m_parallelogramLights[m_selectedLight].corner = make_float3(point1.x,point1.y,point1.z);
+        m_parallelogramLights[m_selectedLight].v1 = make_float3((point2 - point1).x, (point2 - point1).y, (point2 - point1).z);
+        m_parallelogramLights[m_selectedLight].v2 = make_float3((point3 - point1).x, (point3 - point1).y, (point3 - point1).z);
+        m_parallelogramLights[m_selectedLight].emission = make_float3(m_emissionX->value(), m_emissionY->value(), m_emissionZ->value());
 
-    // Translate the optix::Translate node using the new transform matrix
-    setTrans(m_geoAndTrans[m_selectedLight], transform);
+        // Update the vector to store transforms
+        LightTransforms lightTrans;
+        lightTrans.m_translate = glm::vec3(m_translateX->value(), m_translateY->value(), m_translateZ->value());
+        lightTrans.m_rotate = glm::vec3(m_rotateX->value(), m_rotateY->value(), m_rotateZ->value());
+        lightTrans.m_scale = glm::vec3(m_scaleX->value(), m_scaleY->value(), m_scaleZ->value());
+        lightTrans.m_emission = glm::vec3(m_emissionX->value(), m_emissionY->value(), m_emissionZ->value());
+        m_lightTransforms[m_selectedLight]= lightTrans;
 
-    // Changes the emission paramters for the light
-    m_geoAndTrans[m_selectedLight]->getChild<optix::GeometryGroup>()->getChild(0)["emission_color"]->setFloat(m_emissionX->value(), m_emissionY->value(), m_emissionZ->value());
+        // Translate the optix::Translate node using the new transform matrix
+        setTrans(m_geoAndTrans[m_selectedLight], transform);
 
-    // Update accelleration structure
-    PathTracerScene::getInstance()->cleanTopAcceleration();
-    updateScene();
+        // Changes the emission paramters for the light
+        m_geoAndTrans[m_selectedLight]->getChild<optix::GeometryGroup>()->getChild(0)["emission_color"]->setFloat(m_emissionX->value(), m_emissionY->value(), m_emissionZ->value());
+
+        // Update accelleration structure
+        PathTracerScene::getInstance()->cleanTopAcceleration();
+        updateScene();
+    }
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::transformLights(glm::mat4 _trans)
@@ -415,7 +476,6 @@ void LightManager::transformLights(glm::mat4 _trans)
         lightBuffer[i].v2.y = point3.y - lightBuffer[i].corner.y;
         lightBuffer[i].v2.z = point3.z - lightBuffer[i].corner.z;
         lightBuffer[i].normal = normalize(-cross(lightBuffer[i].v1, lightBuffer[i].v2));
-
     }
 
     m_lightBuffer->unmap();
@@ -427,8 +487,20 @@ void LightManager::updateGUI(QModelIndex _index)
     std::cout<<"Index selected: "<<_index.row()<<std::endl;
     int row = _index.row();
     m_selectedLight = row;
-    // A pointer to the start of the buffer of lights
-    ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
+
+    // We have to discoonect before setting the values to avois calling the signal valueChanged()
+    disconnect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_translateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_translateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_rotateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_rotateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_rotateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_scaleX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_scaleY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_scaleZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    disconnect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
 
     m_translateX->setValue(m_lightTransforms[m_selectedLight].m_translate.x);
     m_translateY->setValue(m_lightTransforms[m_selectedLight].m_translate.y);
@@ -442,11 +514,22 @@ void LightManager::updateGUI(QModelIndex _index)
     m_scaleY->setValue(m_lightTransforms[m_selectedLight].m_scale.y);
     m_scaleZ->setValue(m_lightTransforms[m_selectedLight].m_scale.z);
 
-    m_emissionX->setValue(lightBuffer[m_selectedLight].emission.x);
-    m_emissionY->setValue(lightBuffer[m_selectedLight].emission.y);
-    m_emissionZ->setValue(lightBuffer[m_selectedLight].emission.z);
+    m_emissionX->setValue(m_lightTransforms[m_selectedLight].m_emission.x);
+    m_emissionY->setValue(m_lightTransforms[m_selectedLight].m_emission.y);
+    m_emissionZ->setValue(m_lightTransforms[m_selectedLight].m_emission.z);
 
-    m_lightBuffer->unmap();
+    connect(m_translateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_translateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_translateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_rotateZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_scaleZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+    connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose)

@@ -154,7 +154,6 @@ void PathTracerScene::init()
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::addLight()
 {
-    LightManager::getInstance()->createParollelogramLight();
     m_context["lights"]->setBuffer( LightManager::getInstance()->getLightsBuffer() );
 
     // Only add the last one on the vector to avoid duplicates

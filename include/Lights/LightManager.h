@@ -32,6 +32,7 @@ public:
         glm::vec3 m_translate;
         glm::vec3 m_scale;
         glm::vec3 m_rotate;
+        glm::vec3 m_emission;
     };
     //----------------------------------------------------------------------------------------------------------------------
     /// @brief returns an instance of our singleton class
