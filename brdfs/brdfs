@@ -222,14 +222,16 @@ __device__ optix::float3 ward(optix::float3 _normal, optix::float3 _t, float _xR
     }
   }
 
-  float pdf = 1 / ( 4 * M_PI * _xRough * _yRough * optix::dot(half, ray.direction) * (cosTheta*cosTheta*cosTheta));
+  float pdf = 1.0f / ( 4.0f * M_PI * _xRough * _yRough * optix::dot(half, ray.direction) * (cosTheta*cosTheta*cosTheta));
   pdf *= exp(-(tan(theta)*tan(theta)) * ( ( (cosPhi * cosPhi) / (_xRough*_xRough) )  + ( (sinPhi*sinPhi) / (_yRough *_yRough) )  ));
 
+  float exponetial = exp(- ((((half.x/_xRough)*(half.x/_xRough)) + ((half.y/_yRough)*(half.y/_yRough))) / (optix::dot(half,_normal)*optix::dot(half,_normal))) );
+  float eval = (1.0f / (4.0f * M_PI * _xRough * _yRough * sqrt(optix::dot(ray.direction, _normal)*optix::dot(ray_direction, _normal)))) * exponetial;
   current_prd.radiance = result;
   current_prd.countEmitted = false;
 
   PerRayData_pathtrace prd;
-  prd.attenuation = current_prd.attenuation * (1.0f/pdf);
+  prd.attenuation = current_prd.attenuation * eval * (1.0f/pdf);
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
@@ -441,7 +443,7 @@ __device__ optix::float3 microfacet_ggx(optix::float3 _normal, float _roughness,
     prd.attenuation = current_prd.attenuation;
   }
   else{
-    prd.attenuation = current_prd.attenuation * pdf * weight;
+    prd.attenuation = current_prd.attenuation * (1.0/pdf) * weight;
   }
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
   prd.seed = current_prd.seed;
@@ -568,7 +570,12 @@ __device__ optix::float3 microfacet_beckmann(optix::float3 _normal, float _rough
 
   PerRayData_pathtrace prd;
   prd.result = current_prd.result + (current_prd.attenuation * current_prd.radiance);
-  prd.attenuation = current_prd.attenuation;// * pdf * weight;
+  if(_roughness == 0.0){
+    prd.attenuation = current_prd.attenuation;
+  }
+  else{
+    prd.attenuation = current_prd.attenuation * (1.0/pdf) * weight;
+  }
   prd.seed = current_prd.seed;
   prd.depth = current_prd.depth+1;
   prd.countEmitted = false;

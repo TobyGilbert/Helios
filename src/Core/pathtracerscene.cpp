@@ -41,7 +41,7 @@ PathTracerScene::~PathTracerScene()
     for(models=m_meshArray.begin();models!=m_meshArray.end();models++)
     {
         delete models->second;
-        m_meshArray.erase(models);
+//        m_meshArray.erase(models);
     }
     m_outputBuffer->destroy();
     m_enviSampler->destroy();
