@@ -137,8 +137,6 @@ void OpenGLWidget::initializeGL(){
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
 
-
-
     startTimer(0);
 
 }
@@ -404,3 +402,15 @@ void OpenGLWidget::setStrengthEnvironment(double _strength)
     sceneChanged();
 }
 //----------------------------------------------------------------------------------------------------------------------
+void OpenGLWidget::resetGlobalTrans(){
+    m_mouseGlobalTX = glm::mat4(1.0);
+    float m[16];
+    m[ 0] = 1.0f;  m[ 1] = 0.0f;  m[ 2] = 0.0f;  m[ 3] = 0.0f;
+    m[ 4] = 0.0f;  m[ 5] = 1.0f;  m[ 6] = 0.0f;  m[ 7] = 0.0f;
+    m[ 8] = 0.0f;  m[ 9] = 0.0f;  m[10] = 1.0f;  m[11] = 0.0f;
+    m[12] = 0.0f;  m[13] = 0.0f;  m[14] = 0.0f;  m[15] = 1.0f;
+    PathTracerScene::getInstance()->getGlobalTrans()->setMatrix(false, m, 0);
+
+    sceneChanged();
+
+}

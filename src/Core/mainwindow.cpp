@@ -163,6 +163,7 @@ void MainWindow::createMenus(){
     this->addDockWidget(Qt::RightDockWidgetArea, CameraWidget::getInstance());
     connect(cameraToolbarButton, SIGNAL(clicked()), CameraWidget::getInstance(), SLOT(show()));
     connect(CameraWidget::getInstance(), SIGNAL(updateScene()), m_openGLWidget, SLOT(sceneChanged()));
+    connect(CameraWidget::getInstance(), SIGNAL(resetGlabalTrans()), m_openGLWidget, SLOT(resetGlobalTrans()));
 
     //--------------------------------------------------------------------------------------------------------------------
     // -----------------------------------------------Material Library----------------------------------------------------
