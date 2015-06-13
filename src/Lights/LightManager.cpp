@@ -430,6 +430,12 @@ void LightManager::updateGUI(QModelIndex _index)
     // A pointer to the start of the buffer of lights
     ParallelogramLight* lightBuffer = (ParallelogramLight*)m_lightBuffer->map();
 
+    m_emissionX->setValue(lightBuffer[m_selectedLight].emission.x);
+    m_emissionY->setValue(lightBuffer[m_selectedLight].emission.y);
+    m_emissionZ->setValue(lightBuffer[m_selectedLight].emission.z);
+
+    m_lightBuffer->unmap();
+
     m_translateX->setValue(m_lightTransforms[m_selectedLight].m_translate.x);
     m_translateY->setValue(m_lightTransforms[m_selectedLight].m_translate.y);
     m_translateZ->setValue(m_lightTransforms[m_selectedLight].m_translate.z);
@@ -442,11 +448,6 @@ void LightManager::updateGUI(QModelIndex _index)
     m_scaleY->setValue(m_lightTransforms[m_selectedLight].m_scale.y);
     m_scaleZ->setValue(m_lightTransforms[m_selectedLight].m_scale.z);
 
-    m_emissionX->setValue(lightBuffer[m_selectedLight].emission.x);
-    m_emissionY->setValue(lightBuffer[m_selectedLight].emission.y);
-    m_emissionZ->setValue(lightBuffer[m_selectedLight].emission.z);
-
-    m_lightBuffer->unmap();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose)

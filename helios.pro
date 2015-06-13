@@ -60,7 +60,8 @@ SOURCES += \
     src/UI/CameraWidget.cpp \
     src/Core/PathTraceCamera.cpp \
     src/Core/OptixModel.cpp \
-    src/NodeGraph/ColorNodeProxyWidget.cpp
+    src/NodeGraph/ColorNodeProxyWidget.cpp \
+    src/Core/Text.cpp
 
 SOURCES -= optixSrc/*.cu \
            src/OSLCompiler/oso.y \
@@ -117,7 +118,8 @@ HEADERS += \
     include/UI/CameraWidget.h \
     include/Core/PathTraceCamera.h \
     include/Core/OptixModel.h \
-    include/NodeGraph/ColorNodeProxyWidget.h
+    include/NodeGraph/ColorNodeProxyWidget.h \
+    include/Core/Text.h
 
 INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
 macx:LIBS += -ll
@@ -192,7 +194,9 @@ OTHER_FILES += \
     shaders/OSL/ground.osl \
     shaders/OSL/Cerberus.osl \
     brdfs/brdfs \
-    shaders/OSL/beckmann.osl
+    shaders/OSL/beckmann.osl \
+    shaders/TextVert.glsl \
+    shaders/TextFrag.glsl
 
 
 #Sources we want compiled with bison

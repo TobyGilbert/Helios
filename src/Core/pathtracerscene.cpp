@@ -230,17 +230,31 @@ void PathTracerScene::removeLight(int _id){
 void PathTracerScene::transformModel(std::string _id, glm::mat4 _trans)
 {
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
-    OptiXModel* mdl = it->second;
-    mdl->setTrans(_trans);
-    m_globalTransGroup->getAcceleration()->markDirty();
-    m_frame = 0;
+    if(it!=m_meshArray.end())
+    {
+        OptiXModel* mdl = it->second;
+        mdl->setTrans(_trans);
+        m_globalTransGroup->getAcceleration()->markDirty();
+        m_frame = 0;
+    }
+    else
+    {
+        std::cerr<<"Something went wrong cannot find "<<_id<<" in path tracer"<<std::endl;
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::setModelMaterial(std::string _id, Material _mat){
     std::map<std::string,OptiXModel*>::iterator it = m_meshArray.find(_id);
-    OptiXModel* mdl = it->second;
-    mdl->setMaterial(_mat);
-    m_frame=0;
+    if(it!=m_meshArray.end())
+    {
+        OptiXModel* mdl = it->second;
+        mdl->setMaterial(_mat);
+        m_frame=0;
+    }
+    else
+    {
+        std::cerr<<"Something went wrong cannot find "<<_id<<" in path tracer"<<std::endl;
+    }
 }
 //----------------------------------------------------------------------------------------------------------------------
 void PathTracerScene::trace()

@@ -433,6 +433,7 @@ void MeshWidget::removeSelected()
         m_modelList->removeItemWidget(items[i]);
         delete items[i];
     }
+    m_modelList->clearSelection();
     updateScene();
 }
 //----------------------------------------------------------------------------------------------------------------------
