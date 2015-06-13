@@ -230,6 +230,7 @@ void LightManager::createParollelogramLight()
     m_numLights++;
 
     delete tmpLight;
+    updateScene();
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::setGuiDefaults()
@@ -313,6 +314,7 @@ void LightManager::deleteLight()
         m_selectedLight = 9999;
         updateScene();
     }
+    m_lightIndexListWidget->clearSelection();
 
 }
 //------------------------------------------------------------------------------------------------------------------------------------
@@ -530,6 +532,7 @@ void LightManager::updateGUI(QModelIndex _index)
     connect(m_emissionX, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
     connect(m_emissionY, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
     connect(m_emissionZ, SIGNAL(valueChanged(double)), this, SLOT(updateLight()));
+
 }
 //------------------------------------------------------------------------------------------------------------------------------------
 void LightManager::setTrans(optix::Transform _transform, glm::mat4 _trans, bool _transpose)

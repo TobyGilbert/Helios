@@ -86,10 +86,10 @@ OptiXModel::~OptiXModel(){
         m_texCoordsBuffer->destroy();
         m_tangentsBuffer->destroy();
         m_bitangentsBuffer->destroy();
-        m_trans->destroy();
         m_instanceCount.erase(inst);
     }
     else{
+        m_trans->destroy();
         inst->second--;
     }
 }

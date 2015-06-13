@@ -1,6 +1,7 @@
 #include "UI/GenSetDockWidget.h"
 #include <QSpinBox>
 #include <QFile>
+#include <QCheckBox>
 
 
 GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
@@ -63,7 +64,12 @@ GenSetDockWidget::GenSetDockWidget(QWidget *parent) :
     connect(maxDepthSpn,SIGNAL(valueChanged(int)),this,SLOT(setMaxRayDepth(int)));
     m_layout->addWidget(maxDepthSpn,2,1,1,1);
 
-
+    //add a field to toggle the HUD
+    m_layout->addWidget(new QLabel("Toggle HUD",this),4,0,1,1);
+    QCheckBox *tglHud = new QCheckBox(this);
+    tglHud->setChecked(true);
+    connect(tglHud,SIGNAL(toggled(bool)),this,SLOT(signalToggleHUD(bool)));
+    m_layout->addWidget(tglHud,4,1,1,1);
 
     QSpacerItem *spacer = new QSpacerItem(1, 1, QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
     m_layout->addItem(spacer,5,0,1,1);

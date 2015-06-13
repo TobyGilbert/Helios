@@ -244,7 +244,7 @@ void MainWindow::createMenus(){
     connect(generalSettings, SIGNAL(triggered()), genSetwdg, SLOT(show()));
     connect(genSetwdg, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
     connect(genSetwdg, SIGNAL(signalSetTimeOutDur(int)),m_openGLWidget,SLOT(setTimeOutDur(int)));
-
+    connect(genSetwdg,SIGNAL(toggleHUD(bool)),m_openGLWidget,SLOT(drawHUD(bool)));
 }
 
 void MainWindow::saveScene()

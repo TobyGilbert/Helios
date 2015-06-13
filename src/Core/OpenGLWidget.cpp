@@ -28,6 +28,7 @@ OpenGLWidget::OpenGLWidget(const QGLFormat _format, QWidget *_parent) : QGLWidge
     m_modelPos = glm::vec3(0);
     m_mouseGlobalTX = glm::mat4();
     m_translateEnvironment = false;
+    m_drawHud = true;
     // re-size the widget to that of the parent (in this case the GLFrame passed in on construction)
     this->resize(_parent->size());
 }
@@ -37,6 +38,7 @@ OpenGLWidget::~OpenGLWidget(){
     //delete m_statsLineEdit;
     delete m_shaderProgram;
     delete m_cam;
+    delete m_textDrawer;
     glDeleteVertexArrays(1, &m_VAO);
     glDeleteBuffers(2, m_VBO);
 }
@@ -137,6 +139,10 @@ void OpenGLWidget::initializeGL(){
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
 
+    m_textDrawer = new Text(QFont("Arial",14));
+    m_textDrawer->setColour(255,0,0);
+    m_textDrawer->setScreenSize(width(),height());
+
     startTimer(0);
 
 }
@@ -148,6 +154,7 @@ void OpenGLWidget::resizeGL(const int _w, const int _h){
     glViewport(0,0,_w,_h);
     PathTracerScene::getInstance()->resize(_w,_h);
     m_cam->setShape(width(), height());
+    m_textDrawer->setScreenSize(width(),height());
     sceneChanged();
 
 }
@@ -158,14 +165,22 @@ void OpenGLWidget::timerEvent(QTimerEvent *){
 //----------------------------------------------------------------------------------------------------------------------
 void OpenGLWidget::paintGL(){
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    m_shaderProgram->use();
+    bool timedOut;
     QTime currentTime = m_timeOutStart.currentTime();
     int secsPassed = m_timeOutStart.secsTo(currentTime);
     //if we haven't timed out then render another frame with our path tracer
     if(secsPassed<m_timedOut||m_timedOut==0){
+        timedOut = false;
         PathTracerScene::getInstance()->trace();
+    }
+    else
+    {
+        timedOut = true;
     }
     GLuint vboId = PathTracerScene::getInstance()->getOutputBuffer()->getGLBOId();
 
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture( GL_TEXTURE_2D, m_texID);
     // send pbo to texture
     glBindBuffer(GL_PIXEL_UNPACK_BUFFER, vboId);
@@ -179,11 +194,24 @@ void OpenGLWidget::paintGL(){
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F_ARB, PathTracerScene::getInstance()->getWidth(), PathTracerScene::getInstance()->getHeight(), 0, GL_RGBA, GL_FLOAT, 0);
 
     loadMatricesToShader(glm::mat4(1.0), m_cam->getViewMatrix(), m_cam->getProjectionMatrix());
-
     glBindBuffer( GL_PIXEL_UNPACK_BUFFER, 0 );
     glBindVertexArray(m_VAO);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
+
+    if(m_drawHud)
+    {
+        int textIndent  = (width()-height())/2;
+        if(textIndent<0) textIndent = 0;
+        if(timedOut)
+        {
+            m_textDrawer->renderText(textIndent,5,QString("Render Timed Out"));
+        }
+        else
+        {
+            m_textDrawer->renderText(textIndent,5,QString("Rendering"));
+        }
+    }
 
 }
 //----------------------------------------------------------------------------------------------------------------------
