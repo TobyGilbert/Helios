@@ -9,6 +9,7 @@
 #include "Lights/LightManager.h"
 #include <cuda_runtime.h>
 #include <glm/gtc/matrix_inverse.hpp>
+#include <QTime>
 
 //Declare our static instance variable
 PathTracerScene* PathTracerScene::m_instance;
