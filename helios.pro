@@ -121,10 +121,11 @@ HEADERS += \
     include/NodeGraph/ColorNodeProxyWidget.h \
     include/Core/Text.h
 
-INCLUDEPATH +=./include /opt/local/include /usr/local/include ./include/OSL /usr/local/oiio/src/include
+
+INCLUDEPATH +=./include /opt/local/include /usr/local/include /usr/local/oiio/src/include ${OSL_DIR}/build/include/OSL/
 macx:LIBS += -ll
 linux:LIBS += -lfl
-LIBS += -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L./osl/lib -loslcomp
+LIBS += -L/usr/local/lib -lOpenImageIO -lassimp -lboost_system -L${OSL_DIR}/build/src/liboslcomp/ -loslcomp
 DESTDIR=./
 
 CONFIG += console
