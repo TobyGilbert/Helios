@@ -322,11 +322,10 @@ void LightManager::updateLight()
 {
     if (m_selectedLight == 9999)
     {
-        QMessageBox::warning(this,"Lihgt Manager","No light selected");
+        QMessageBox::warning(this,"Light Manager","No light selected");
     }
     else
     {
-        std::cout<<"Update Light"<<std::endl;
         // Changes the light parameters for the actual light
         // A pointer to the start of the buffer of lights
 
