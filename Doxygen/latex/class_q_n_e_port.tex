@@ -1,0 +1,279 @@
+\hypertarget{class_q_n_e_port}{\section{Q\-N\-E\-Port Class Reference}
+\label{class_q_n_e_port}\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}}
+}
+
+
+Inheritance diagram for Q\-N\-E\-Port\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{class_q_n_e_port__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Q\-N\-E\-Port\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_q_n_e_port__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries Type} = Q\-Graphics\-Item\-:\-:User\-Type + 1
+ \}
+\item 
+enum \{ {\bfseries Name\-Port} = 1, 
+{\bfseries Type\-Port} = 2
+ \}
+\item 
+enum \hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{variable\-Type} \{ \\*
+{\bfseries Type\-Int}, 
+{\bfseries Type\-Float}, 
+{\bfseries Type\-String}, 
+{\bfseries Type\-Colour}, 
+\\*
+{\bfseries Type\-Matrix}, 
+{\bfseries Type\-Normal}, 
+{\bfseries Type\-Point}, 
+{\bfseries Type\-Void}, 
+\\*
+{\bfseries Type\-Vector}
+ \}
+\begin{DoxyCompactList}\small\item\em enumorator to hold the variable type of the port \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_port_a7ca5ae980d6809a5e6994c338db194ac}{{\bfseries Q\-N\-E\-Port} (Q\-Graphics\-Item $\ast$parent=0)}\label{class_q_n_e_port_a7ca5ae980d6809a5e6994c338db194ac}
+
+\item 
+\hypertarget{class_q_n_e_port_ac7d1d1c0b7b55e77b640dfb80681be4d}{void {\bfseries set\-N\-E\-Block} (\hyperlink{class_q_n_e_block}{Q\-N\-E\-Block} $\ast$)}\label{class_q_n_e_port_ac7d1d1c0b7b55e77b640dfb80681be4d}
+
+\item 
+\hypertarget{class_q_n_e_port_a53712f6bdf37af5f320bdb98fb61ca3a}{void {\bfseries set\-Name} (const Q\-String \&n)}\label{class_q_n_e_port_a53712f6bdf37af5f320bdb98fb61ca3a}
+
+\item 
+\hypertarget{class_q_n_e_port_a03cb578313db7dcc02ae71ce255c8828}{void {\bfseries set\-Is\-Output} (bool o)}\label{class_q_n_e_port_a03cb578313db7dcc02ae71ce255c8828}
+
+\item 
+\hypertarget{class_q_n_e_port_a0cd04e3c29946b03f9be7515c45a5dde}{int {\bfseries radius} ()}\label{class_q_n_e_port_a0cd04e3c29946b03f9be7515c45a5dde}
+
+\item 
+\hypertarget{class_q_n_e_port_aeabbbd177088c1b8c677b840059afd2c}{bool {\bfseries is\-Output} ()}\label{class_q_n_e_port_aeabbbd177088c1b8c677b840059afd2c}
+
+\item 
+\hypertarget{class_q_n_e_port_aedd757c36a252a8db6d96cf2f2c30212}{Q\-Vector$<$ \hyperlink{class_q_n_e_connection}{Q\-N\-E\-Connection} $\ast$ $>$ \& {\bfseries connections} ()}\label{class_q_n_e_port_aedd757c36a252a8db6d96cf2f2c30212}
+
+\item 
+\hypertarget{class_q_n_e_port_a72547f77d8b6fef4131734a408f33ea3}{void {\bfseries set\-Port\-Flags} (int)}\label{class_q_n_e_port_a72547f77d8b6fef4131734a408f33ea3}
+
+\item 
+\hypertarget{class_q_n_e_port_a91c19714936714a79b009be92341073e}{const Q\-String \& {\bfseries port\-Name} () const }\label{class_q_n_e_port_a91c19714936714a79b009be92341073e}
+
+\item 
+\hypertarget{class_q_n_e_port_af09c75fe08175fbcf4c152300ad35afb}{int {\bfseries port\-Flags} () const }\label{class_q_n_e_port_af09c75fe08175fbcf4c152300ad35afb}
+
+\item 
+\hypertarget{class_q_n_e_port_a2bd7ef43c6358d14e2edc1206cbc0349}{int {\bfseries type} () const }\label{class_q_n_e_port_a2bd7ef43c6358d14e2edc1206cbc0349}
+
+\item 
+void \hyperlink{class_q_n_e_port_aa8e18998a29ef7ec2d26143d6835d0cd}{set\-Varible\-Type} (\hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{variable\-Type} \-\_\-type)
+\begin{DoxyCompactList}\small\item\em mutator for the variable type of the port \end{DoxyCompactList}\item 
+\hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{variable\-Type} \hyperlink{class_q_n_e_port_a64115add3b4da6d58d287fe9530ca696}{get\-Varible\-Type} ()
+\begin{DoxyCompactList}\small\item\em accessor to the varible type of the port \end{DoxyCompactList}\item 
+Q\-String \hyperlink{class_q_n_e_port_afb0f6931a74eaaeee1975b21dc754051}{get\-Name} ()
+\begin{DoxyCompactList}\small\item\em accessor to the port name \end{DoxyCompactList}\item 
+void \hyperlink{class_q_n_e_port_af880fe558d12955f874b4f1eef5261b2}{set\-Init\-Params} (std\-::vector$<$ std\-::string $>$ \-\_\-init\-Params)
+\begin{DoxyCompactList}\small\item\em set initial paramiters string \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_port_a43790ff1780c4efe01494e6b9182d21e}{std\-::vector$<$ std\-::string $>$ \hyperlink{class_q_n_e_port_a43790ff1780c4efe01494e6b9182d21e}{get\-Init\-Params} ()}\label{class_q_n_e_port_a43790ff1780c4efe01494e6b9182d21e}
+
+\begin{DoxyCompactList}\small\item\em accessor to initial paramiters to port \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_port_aca918fc27382de55761b2b2045f4d9f4}{Q\-String \hyperlink{class_q_n_e_port_aca918fc27382de55761b2b2045f4d9f4}{get\-Label\-Text} ()}\label{class_q_n_e_port_aca918fc27382de55761b2b2045f4d9f4}
+
+\begin{DoxyCompactList}\small\item\em accessor to the the ports label text \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_port_a1c24bc9014ffb444f0abe00bc5f41866}{\hyperlink{class_q_n_e_block}{Q\-N\-E\-Block} $\ast$ {\bfseries block} () const }\label{class_q_n_e_port_a1c24bc9014ffb444f0abe00bc5f41866}
+
+\item 
+\hypertarget{class_q_n_e_port_a6ffedde045065ee5a288932c8f345be0}{quint64 {\bfseries ptr} ()}\label{class_q_n_e_port_a6ffedde045065ee5a288932c8f345be0}
+
+\item 
+\hypertarget{class_q_n_e_port_a0cb9b838cfe26e9c1d626a1647f13f7a}{void {\bfseries set\-Ptr} (quint64)}\label{class_q_n_e_port_a0cb9b838cfe26e9c1d626a1647f13f7a}
+
+\item 
+\hypertarget{class_q_n_e_port_a54aece3613f3f467a28c134d4bb22b80}{bool {\bfseries is\-Connected} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$)}\label{class_q_n_e_port_a54aece3613f3f467a28c134d4bb22b80}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_port_a778ced2a07713dd73de1f41f9d050b23}{Q\-Variant {\bfseries item\-Change} (Graphics\-Item\-Change change, const Q\-Variant \&value)}\label{class_q_n_e_port_a778ced2a07713dd73de1f41f9d050b23}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_port_ae826423b46dd47f18ca369db72829bac}{\hyperlink{class_q_n_e_block}{Q\-N\-E\-Block} $\ast$ {\bfseries m\-\_\-block}}\label{class_q_n_e_port_ae826423b46dd47f18ca369db72829bac}
+
+\item 
+\hypertarget{class_q_n_e_port_a24cf1081d500ccc82db1872090a2a957}{Q\-String {\bfseries name}}\label{class_q_n_e_port_a24cf1081d500ccc82db1872090a2a957}
+
+\item 
+\hypertarget{class_q_n_e_port_aec718e2f28a26e05ac3c04ec1437a332}{bool {\bfseries is\-Output\-\_\-}}\label{class_q_n_e_port_aec718e2f28a26e05ac3c04ec1437a332}
+
+\item 
+\hypertarget{class_q_n_e_port_a9cf8c5494c6f3391f8ae3dd1df53ef90}{Q\-Graphics\-Text\-Item $\ast$ {\bfseries label}}\label{class_q_n_e_port_a9cf8c5494c6f3391f8ae3dd1df53ef90}
+
+\item 
+\hypertarget{class_q_n_e_port_a9cf231612c975ffa8ea580af37e11930}{int {\bfseries radius\-\_\-}}\label{class_q_n_e_port_a9cf231612c975ffa8ea580af37e11930}
+
+\item 
+\hypertarget{class_q_n_e_port_adfbd9af7053a68e3fe575ec2c7ba34c1}{int {\bfseries margin}}\label{class_q_n_e_port_adfbd9af7053a68e3fe575ec2c7ba34c1}
+
+\item 
+\hypertarget{class_q_n_e_port_a560d3979694649c274e6ac9ce3bf64bc}{Q\-Vector$<$ \hyperlink{class_q_n_e_connection}{Q\-N\-E\-Connection} $\ast$ $>$ {\bfseries m\-\_\-connections}}\label{class_q_n_e_port_a560d3979694649c274e6ac9ce3bf64bc}
+
+\item 
+\hypertarget{class_q_n_e_port_a02664b5f37d8adf647d6c6fcd42e2d43}{int {\bfseries m\-\_\-port\-Flags}}\label{class_q_n_e_port_a02664b5f37d8adf647d6c6fcd42e2d43}
+
+\item 
+\hypertarget{class_q_n_e_port_adc71781b153c8c5a26d62323756f4a7a}{quint64 {\bfseries m\-\_\-ptr}}\label{class_q_n_e_port_adc71781b153c8c5a26d62323756f4a7a}
+
+\item 
+\hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{variable\-Type} \hyperlink{class_q_n_e_port_a05cfe84736c4f2af8f177f0acf58116b}{m\-\_\-varible\-Type}
+\begin{DoxyCompactList}\small\item\em a member to store the varible type of the port \end{DoxyCompactList}\item 
+std\-::vector$<$ std\-::string $>$ \hyperlink{class_q_n_e_port_ad6ace5a3c7aa1498da47efc4ff712f26}{m\-\_\-init\-Params}
+\begin{DoxyCompactList}\small\item\em Initial paramiters string vector. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\hypertarget{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!variable\-Type@{variable\-Type}}
+\index{variable\-Type@{variable\-Type}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{variable\-Type}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Q\-N\-E\-Port\-::variable\-Type}}}\label{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}
+
+
+enumorator to hold the variable type of the port 
+
+These are used becuase Oso\-Readers Types are in global name space and clash wish Qt so I have type cast them to something else now. Bit of a hack \-:( \begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000010}{Todo}]Get toby to romove is types from global name space so this class can just use Oso\-Reader\-::\-Type \end{DoxyRefDesc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_n_e_port_afb0f6931a74eaaeee1975b21dc754051}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!get\-Name@{get\-Name}}
+\index{get\-Name@{get\-Name}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{get\-Name}]{\setlength{\rightskip}{0pt plus 5cm}Q\-String Q\-N\-E\-Port\-::get\-Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_q_n_e_port_afb0f6931a74eaaeee1975b21dc754051}
+
+
+accessor to the port name 
+
+added by Declan Russell 
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_q_n_e_port_afb0f6931a74eaaeee1975b21dc754051_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_q_n_e_port_a64115add3b4da6d58d287fe9530ca696}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!get\-Varible\-Type@{get\-Varible\-Type}}
+\index{get\-Varible\-Type@{get\-Varible\-Type}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{get\-Varible\-Type}]{\setlength{\rightskip}{0pt plus 5cm}{\bf variable\-Type} Q\-N\-E\-Port\-::get\-Varible\-Type (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_q_n_e_port_a64115add3b4da6d58d287fe9530ca696}
+
+
+accessor to the varible type of the port 
+
+added by Declan Russell 
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_q_n_e_port_a64115add3b4da6d58d287fe9530ca696_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_q_n_e_port_af880fe558d12955f874b4f1eef5261b2}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!set\-Init\-Params@{set\-Init\-Params}}
+\index{set\-Init\-Params@{set\-Init\-Params}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{set\-Init\-Params}]{\setlength{\rightskip}{0pt plus 5cm}void Q\-N\-E\-Port\-::set\-Init\-Params (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ std\-::string $>$}]{\-\_\-init\-Params}
+\end{DoxyParamCaption}
+)}}\label{class_q_n_e_port_af880fe558d12955f874b4f1eef5261b2}
+
+
+set initial paramiters string 
+
+added by Declan Russell 
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_q_n_e_port_af880fe558d12955f874b4f1eef5261b2_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_q_n_e_port_aa8e18998a29ef7ec2d26143d6835d0cd}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!set\-Varible\-Type@{set\-Varible\-Type}}
+\index{set\-Varible\-Type@{set\-Varible\-Type}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{set\-Varible\-Type}]{\setlength{\rightskip}{0pt plus 5cm}void Q\-N\-E\-Port\-::set\-Varible\-Type (
+\begin{DoxyParamCaption}
+\item[{{\bf Q\-N\-E\-Port\-::variable\-Type}}]{\-\_\-type}
+\end{DoxyParamCaption}
+)}}\label{class_q_n_e_port_aa8e18998a29ef7ec2d26143d6835d0cd}
+
+
+mutator for the variable type of the port 
+
+added by Declan Russell 
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_q_n_e_port_aa8e18998a29ef7ec2d26143d6835d0cd_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_q_n_e_port_ad6ace5a3c7aa1498da47efc4ff712f26}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!m\-\_\-init\-Params@{m\-\_\-init\-Params}}
+\index{m\-\_\-init\-Params@{m\-\_\-init\-Params}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{m\-\_\-init\-Params}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$std\-::string$>$ Q\-N\-E\-Port\-::m\-\_\-init\-Params\hspace{0.3cm}{\ttfamily [private]}}}\label{class_q_n_e_port_ad6ace5a3c7aa1498da47efc4ff712f26}
+
+
+Initial paramiters string vector. 
+
+added by Declan Russell \hypertarget{class_q_n_e_port_a05cfe84736c4f2af8f177f0acf58116b}{\index{Q\-N\-E\-Port@{Q\-N\-E\-Port}!m\-\_\-varible\-Type@{m\-\_\-varible\-Type}}
+\index{m\-\_\-varible\-Type@{m\-\_\-varible\-Type}!QNEPort@{Q\-N\-E\-Port}}
+\subsubsection[{m\-\_\-varible\-Type}]{\setlength{\rightskip}{0pt plus 5cm}{\bf variable\-Type} Q\-N\-E\-Port\-::m\-\_\-varible\-Type\hspace{0.3cm}{\ttfamily [private]}}}\label{class_q_n_e_port_a05cfe84736c4f2af8f177f0acf58116b}
+
+
+a member to store the varible type of the port 
+
+added by Declan Russell 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/qneport.\-h\item 
+src/\-Node\-Graph/qneport.\-cpp\end{DoxyCompactItemize}

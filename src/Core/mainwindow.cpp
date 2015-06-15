@@ -10,6 +10,7 @@
 #include <QDataStream>
 #include "UI/CameraWidget.h"
 #include <QCheckBox>
+#include <QDesktopServices>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) ,m_menuCreated(false){
     ui->setupUi(this);
@@ -245,6 +246,16 @@ void MainWindow::createMenus(){
     connect(genSetwdg, SIGNAL(signalMoveRenderReduction(int)),m_openGLWidget,SLOT(setMoveRenderReduction(int)));
     connect(genSetwdg, SIGNAL(signalSetTimeOutDur(int)),m_openGLWidget,SLOT(setTimeOutDur(int)));
     connect(genSetwdg,SIGNAL(toggleHUD(bool)),m_openGLWidget,SLOT(drawHUD(bool)));
+
+    //add our help tab
+    QMenu *helpMenu = new QMenu("Help",this->menuBar());
+    this->menuBar()->addAction(helpMenu->menuAction());
+    QAction *userGuide = new QAction("User Guide",this);
+    userGuide->setStatusTip(tr("Open The User Guide For Helios"));
+    helpMenu->addAction(userGuide);
+    connect(userGuide,SIGNAL(triggered()),this,SLOT(openUserGuide()));
+
+
 }
 
 void MainWindow::saveScene()
@@ -327,3 +338,6 @@ void MainWindow::displayEnvironmentMap()
     m_environmentLineEdit->setText(m_openGLWidget->getEnvironmentMap());
 }
 
+void MainWindow::openUserGuide(){
+     QDesktopServices::openUrl(QUrl(QDir::currentPath() + "/UserManual/HeliosUserManual.pdf"));
+}

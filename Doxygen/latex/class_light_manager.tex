@@ -1,0 +1,188 @@
+\hypertarget{class_light_manager}{\section{Light\-Manager Class Reference}
+\label{class_light_manager}\index{Light\-Manager@{Light\-Manager}}
+}
+
+
+Inheritance diagram for Light\-Manager\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=218pt]{class_light_manager__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Light\-Manager\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=293pt]{class_light_manager__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_light_manager_1_1_light_transforms}{Light\-Transforms}
+\end{DoxyCompactItemize}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_manager_aa25de876fdf8e06b33e6d8e161f8a44e}{void \hyperlink{class_light_manager_aa25de876fdf8e06b33e6d8e161f8a44e}{add\-Light} ()}\label{class_light_manager_aa25de876fdf8e06b33e6d8e161f8a44e}
+
+\begin{DoxyCompactList}\small\item\em Adds a light to the scene. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a403f28b82c78e0b9946848f16ecd7581}{void \hyperlink{class_light_manager_a403f28b82c78e0b9946848f16ecd7581}{update\-Light} ()}\label{class_light_manager_a403f28b82c78e0b9946848f16ecd7581}
+
+\begin{DoxyCompactList}\small\item\em Update a light already created. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ad50e75aa287fa5c623fef70c820de9b6}{void \hyperlink{class_light_manager_ad50e75aa287fa5c623fef70c820de9b6}{update\-G\-U\-I} (Q\-Model\-Index \-\_\-index)}\label{class_light_manager_ad50e75aa287fa5c623fef70c820de9b6}
+
+\begin{DoxyCompactList}\small\item\em Update the gui for the current light selected. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a277063837cd2e2d17fd1e221e39add4a}{void \hyperlink{class_light_manager_a277063837cd2e2d17fd1e221e39add4a}{delete\-Light} ()}\label{class_light_manager_a277063837cd2e2d17fd1e221e39add4a}
+
+\begin{DoxyCompactList}\small\item\em Deletes a light from the scene. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_manager_a8292d4fd581eb7f72c68976732f5fa3b}{void {\bfseries update\-Scene} ()}\label{class_light_manager_a8292d4fd581eb7f72c68976732f5fa3b}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_manager_a07c7063f02e20a33c0984965991aa4af}{\hyperlink{class_light_manager_a07c7063f02e20a33c0984965991aa4af}{$\sim$\-Light\-Manager} ()}\label{class_light_manager_a07c7063f02e20a33c0984965991aa4af}
+
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ae415dd0ef2294e649b546d928837b860}{void \hyperlink{class_light_manager_ae415dd0ef2294e649b546d928837b860}{initialise} ()}\label{class_light_manager_ae415dd0ef2294e649b546d928837b860}
+
+\begin{DoxyCompactList}\small\item\em Initialise the light buffer. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ae54246d612d778d892d6473a43a83d32}{void \hyperlink{class_light_manager_ae54246d612d778d892d6473a43a83d32}{destroy} ()}\label{class_light_manager_ae54246d612d778d892d6473a43a83d32}
+
+\begin{DoxyCompactList}\small\item\em destroys our singleton class \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a714fcbcf37902d8bd0e0b5676d00e121}{void \hyperlink{class_light_manager_a714fcbcf37902d8bd0e0b5676d00e121}{create\-Parollelogram\-Light} ()}\label{class_light_manager_a714fcbcf37902d8bd0e0b5676d00e121}
+
+\begin{DoxyCompactList}\small\item\em Create a new parallelogram light. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ad265f49547aeb715f2b33642a7a22fe6}{optix\-::\-Buffer \hyperlink{class_light_manager_ad265f49547aeb715f2b33642a7a22fe6}{get\-Lights\-Buffer} ()}\label{class_light_manager_ad265f49547aeb715f2b33642a7a22fe6}
+
+\begin{DoxyCompactList}\small\item\em Returns our optix buffer containing information about our lights. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a1c67bccf06073356ab849c42a6cc9c36}{std\-::vector$<$ optix\-::\-Transform $>$ \hyperlink{class_light_manager_a1c67bccf06073356ab849c42a6cc9c36}{get\-Geom\-And\-Trans} ()}\label{class_light_manager_a1c67bccf06073356ab849c42a6cc9c36}
+
+\begin{DoxyCompactList}\small\item\em Returns the transform node for attaching to the scene graph. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ae22469b57f40bd5b7d21ac6d857f8ce6}{void \hyperlink{class_light_manager_ae22469b57f40bd5b7d21ac6d857f8ce6}{set\-Trans} (optix\-::\-Transform \-\_\-transform, glm\-::mat4 \-\_\-trans, bool \-\_\-transpose=0)}\label{class_light_manager_ae22469b57f40bd5b7d21ac6d857f8ce6}
+
+\begin{DoxyCompactList}\small\item\em Used for translating lights. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_acef6714d411c825fc6599a1c892fc9ff}{void \hyperlink{class_light_manager_acef6714d411c825fc6599a1c892fc9ff}{set\-Gui\-Defaults} ()}\label{class_light_manager_acef6714d411c825fc6599a1c892fc9ff}
+
+\begin{DoxyCompactList}\small\item\em Sets the G\-U\-I to the default values. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a50a3c0743afffc6db604e5eb325968c2}{void \hyperlink{class_light_manager_a50a3c0743afffc6db604e5eb325968c2}{transform\-Lights} (glm\-::mat4 \-\_\-trans)}\label{class_light_manager_a50a3c0743afffc6db604e5eb325968c2}
+
+\begin{DoxyCompactList}\small\item\em Transforms lights when scene camera moves. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_manager_a340b84ff20d73b644cbdab2f77eba5e6}{static \hyperlink{class_light_manager}{Light\-Manager} $\ast$ \hyperlink{class_light_manager_a340b84ff20d73b644cbdab2f77eba5e6}{get\-Instance} (Q\-Widget $\ast$parent=0)}\label{class_light_manager_a340b84ff20d73b644cbdab2f77eba5e6}
+
+\begin{DoxyCompactList}\small\item\em returns an instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_manager_af7566c95a70bbf2b8fb03f9565dd4f2e}{\hyperlink{class_light_manager_af7566c95a70bbf2b8fb03f9565dd4f2e}{Light\-Manager} (Q\-Widget $\ast$parent=0)}\label{class_light_manager_af7566c95a70bbf2b8fb03f9565dd4f2e}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_af36184ad28565d27b80f213ef8ac04a1}{void \hyperlink{class_light_manager_af36184ad28565d27b80f213ef8ac04a1}{create\-G\-U\-I} ()}\label{class_light_manager_af36184ad28565d27b80f213ef8ac04a1}
+
+\begin{DoxyCompactList}\small\item\em Creates our G\-U\-I elements. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_manager_adf0c079124707803ea2e0a96b67eb68c}{optix\-::\-Buffer \hyperlink{class_light_manager_adf0c079124707803ea2e0a96b67eb68c}{m\-\_\-light\-Buffer}}\label{class_light_manager_adf0c079124707803ea2e0a96b67eb68c}
+
+\begin{DoxyCompactList}\small\item\em A buffer to hold our lights. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_aba2dca016525dace316ce7c3b38f5f99}{unsigned int \hyperlink{class_light_manager_aba2dca016525dace316ce7c3b38f5f99}{m\-\_\-num\-Lights}}\label{class_light_manager_aba2dca016525dace316ce7c3b38f5f99}
+
+\begin{DoxyCompactList}\small\item\em A variable to store the number of lights in our buffer. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a5ac6ccaa5449249f75536df87c0709a9}{Q\-List\-Widget $\ast$ \hyperlink{class_light_manager_a5ac6ccaa5449249f75536df87c0709a9}{m\-\_\-light\-Index\-List\-Widget}}\label{class_light_manager_a5ac6ccaa5449249f75536df87c0709a9}
+
+\begin{DoxyCompactList}\small\item\em A list to hold all our lights. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a1d232847280fef0ad277c27bf7c2ec5e}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a1d232847280fef0ad277c27bf7c2ec5e}{m\-\_\-translate\-X}}\label{class_light_manager_a1d232847280fef0ad277c27bf7c2ec5e}
+
+\begin{DoxyCompactList}\small\item\em Our translation gui box for the x axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a1129eb4551830ded49621b7a35638315}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a1129eb4551830ded49621b7a35638315}{m\-\_\-translate\-Y}}\label{class_light_manager_a1129eb4551830ded49621b7a35638315}
+
+\begin{DoxyCompactList}\small\item\em Our translation gui box for the y axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a2232c6c7b450e7df6ca60a6c1ea213a3}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a2232c6c7b450e7df6ca60a6c1ea213a3}{m\-\_\-translate\-Z}}\label{class_light_manager_a2232c6c7b450e7df6ca60a6c1ea213a3}
+
+\begin{DoxyCompactList}\small\item\em Our translation gui box for the z axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_aca75021f31de7a7a768f772fd6598f47}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_aca75021f31de7a7a768f772fd6598f47}{m\-\_\-scale\-X}}\label{class_light_manager_aca75021f31de7a7a768f772fd6598f47}
+
+\begin{DoxyCompactList}\small\item\em Our scale gui box for the x axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a28a8e0d2d55168c3e2ed39dc4ad28a18}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a28a8e0d2d55168c3e2ed39dc4ad28a18}{m\-\_\-scale\-Y}}\label{class_light_manager_a28a8e0d2d55168c3e2ed39dc4ad28a18}
+
+\begin{DoxyCompactList}\small\item\em Our scale gui box for the y axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a48dc4d350be4c136f3283dccdc31b613}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a48dc4d350be4c136f3283dccdc31b613}{m\-\_\-scale\-Z}}\label{class_light_manager_a48dc4d350be4c136f3283dccdc31b613}
+
+\begin{DoxyCompactList}\small\item\em Our scale gui box for the z axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a6ce05fd3dae1c6e537d98695efd1f833}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a6ce05fd3dae1c6e537d98695efd1f833}{m\-\_\-rotate\-X}}\label{class_light_manager_a6ce05fd3dae1c6e537d98695efd1f833}
+
+\begin{DoxyCompactList}\small\item\em Our rotation gui box for the x axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ae89f970c4c1b460c00a58e89c680a8df}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_ae89f970c4c1b460c00a58e89c680a8df}{m\-\_\-rotate\-Y}}\label{class_light_manager_ae89f970c4c1b460c00a58e89c680a8df}
+
+\begin{DoxyCompactList}\small\item\em Our rotation gui box for the y axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a1405165d73e3fc61b6ec5c358c230934}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a1405165d73e3fc61b6ec5c358c230934}{m\-\_\-rotate\-Z}}\label{class_light_manager_a1405165d73e3fc61b6ec5c358c230934}
+
+\begin{DoxyCompactList}\small\item\em Our rotation gui box for the z axis. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ad0f1a51434ca8004b6bac56376523e31}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_ad0f1a51434ca8004b6bac56376523e31}{m\-\_\-emission\-X}}\label{class_light_manager_ad0f1a51434ca8004b6bac56376523e31}
+
+\begin{DoxyCompactList}\small\item\em Our emission gui box for the red componant. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a124f943b2a15b441cc0ab4d0e1d81cf0}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_a124f943b2a15b441cc0ab4d0e1d81cf0}{m\-\_\-emission\-Y}}\label{class_light_manager_a124f943b2a15b441cc0ab4d0e1d81cf0}
+
+\begin{DoxyCompactList}\small\item\em Our emission gui box for the green componant. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_acd3490628257ee8e583135df9361afb2}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_light_manager_acd3490628257ee8e583135df9361afb2}{m\-\_\-emission\-Z}}\label{class_light_manager_acd3490628257ee8e583135df9361afb2}
+
+\begin{DoxyCompactList}\small\item\em Our emission gui box for the blue componant. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ae63de2268878a6e0c1cec5e8cf281fe9}{int \hyperlink{class_light_manager_ae63de2268878a6e0c1cec5e8cf281fe9}{m\-\_\-selected\-Light}}\label{class_light_manager_ae63de2268878a6e0c1cec5e8cf281fe9}
+
+\begin{DoxyCompactList}\small\item\em The currently seleted item. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a2bb4b0ed1b75099da9182be3dcb057f0}{std\-::vector$<$ \hyperlink{class_light}{Light} $\ast$ $>$ \hyperlink{class_light_manager_a2bb4b0ed1b75099da9182be3dcb057f0}{m\-\_\-lights}}\label{class_light_manager_a2bb4b0ed1b75099da9182be3dcb057f0}
+
+\begin{DoxyCompactList}\small\item\em A vector to hold pointers to all the lights in our scene. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a83fbf9d166e1b56d596be89bfe49df6e}{std\-::vector\\*
+$<$ \hyperlink{struct_light_1_1_parallelogram_light}{Light\-::\-Parallelogram\-Light} $>$ \hyperlink{class_light_manager_a83fbf9d166e1b56d596be89bfe49df6e}{m\-\_\-parallelogram\-Lights}}\label{class_light_manager_a83fbf9d166e1b56d596be89bfe49df6e}
+
+\begin{DoxyCompactList}\small\item\em A vector to store parallelogram light structs for copying to the G\-P\-U. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_ae36c82ae88082c679818f7259ef4fde3}{std\-::vector$<$ optix\-::\-Transform $>$ \hyperlink{class_light_manager_ae36c82ae88082c679818f7259ef4fde3}{m\-\_\-geo\-And\-Trans}}\label{class_light_manager_ae36c82ae88082c679818f7259ef4fde3}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_light}{Light} transforms. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_a01dabdbdcfd9b2a6d6a87e0ab15a1f59}{std\-::vector$<$ \hyperlink{struct_light_manager_1_1_light_transforms}{Light\-Transforms} $>$ \hyperlink{class_light_manager_a01dabdbdcfd9b2a6d6a87e0ab15a1f59}{m\-\_\-light\-Transforms}}\label{class_light_manager_a01dabdbdcfd9b2a6d6a87e0ab15a1f59}
+
+\begin{DoxyCompactList}\small\item\em \hyperlink{class_light}{Light} transform struct for use with G\-U\-I. \end{DoxyCompactList}\item 
+\hypertarget{class_light_manager_af38a6efb2392351eb6d18de638d389ed}{glm\-::mat4 \hyperlink{class_light_manager_af38a6efb2392351eb6d18de638d389ed}{m\-\_\-trans\-Global}}\label{class_light_manager_af38a6efb2392351eb6d18de638d389ed}
+
+\begin{DoxyCompactList}\small\item\em The global translation matrix. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{class_light_manager}{Light\-Manager} $\ast$ \hyperlink{class_light_manager_af439e6d09dac9e10130945129e8211cc}{m\-\_\-instance}
+\begin{DoxyCompactList}\small\item\em a pointer to our instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_light_manager_af439e6d09dac9e10130945129e8211cc}{\index{Light\-Manager@{Light\-Manager}!m\-\_\-instance@{m\-\_\-instance}}
+\index{m\-\_\-instance@{m\-\_\-instance}!LightManager@{Light\-Manager}}
+\subsubsection[{m\-\_\-instance}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Light\-Manager} $\ast$ Light\-Manager\-::m\-\_\-instance\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}}\label{class_light_manager_af439e6d09dac9e10130945129e8211cc}
+
+
+a pointer to our instance of our singleton class 
+
+A class to manage all the lights in our scene.
+
+\begin{DoxyAuthor}{Author}
+Toby Gilbert 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Lights/Light\-Manager.\-h\item 
+moc/moc\-\_\-\-Light\-Manager.\-cpp\item 
+src/\-Lights/Light\-Manager.\-cpp\end{DoxyCompactItemize}

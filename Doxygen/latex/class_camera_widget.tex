@@ -1,0 +1,146 @@
+\hypertarget{class_camera_widget}{\section{Camera\-Widget Class Reference}
+\label{class_camera_widget}\index{Camera\-Widget@{Camera\-Widget}}
+}
+
+
+Inheritance diagram for Camera\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=194pt]{class_camera_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Camera\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=270pt]{class_camera_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_camera_widget_a61afcd6f680d6ec43b9949c6f324c047}{void \hyperlink{class_camera_widget_a61afcd6f680d6ec43b9949c6f324c047}{enable\-D\-O\-F} (bool \-\_\-enabled)}\label{class_camera_widget_a61afcd6f680d6ec43b9949c6f324c047}
+
+\begin{DoxyCompactList}\small\item\em Enables the depth of field controls. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a94acbc0fd82c07bb2f77c09dc8aafd84}{void \hyperlink{class_camera_widget_a94acbc0fd82c07bb2f77c09dc8aafd84}{update\-D\-O\-F} ()}\label{class_camera_widget_a94acbc0fd82c07bb2f77c09dc8aafd84}
+
+\begin{DoxyCompactList}\small\item\em Update D\-O\-F camera settings. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_aafcf078d596c85bd61031163f855e3fa}{void \hyperlink{class_camera_widget_aafcf078d596c85bd61031163f855e3fa}{update\-Camera} ()}\label{class_camera_widget_aafcf078d596c85bd61031163f855e3fa}
+
+\begin{DoxyCompactList}\small\item\em Update other camera settings. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a708a4a1499b94ed542268cd1de8fcb6e}{void \hyperlink{class_camera_widget_a708a4a1499b94ed542268cd1de8fcb6e}{reset\-Camera} ()}\label{class_camera_widget_a708a4a1499b94ed542268cd1de8fcb6e}
+
+\begin{DoxyCompactList}\small\item\em Resets the camera. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_camera_widget_a2d52203c831cd5bc904013def64f5e8e}{void \hyperlink{class_camera_widget_a2d52203c831cd5bc904013def64f5e8e}{update\-Scene} ()}\label{class_camera_widget_a2d52203c831cd5bc904013def64f5e8e}
+
+\begin{DoxyCompactList}\small\item\em Update other camera settings. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a720c2c65e5c6189aa34f5d4485a1c9e6}{void \hyperlink{class_camera_widget_a720c2c65e5c6189aa34f5d4485a1c9e6}{reset\-Glabal\-Trans} ()}\label{class_camera_widget_a720c2c65e5c6189aa34f5d4485a1c9e6}
+
+\begin{DoxyCompactList}\small\item\em Reset the global trans matrix. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_camera_widget_a295cbb74d2843858399fdc45777b580d}{static \hyperlink{class_camera_widget}{Camera\-Widget} $\ast$ \hyperlink{class_camera_widget_a295cbb74d2843858399fdc45777b580d}{get\-Instance} (Q\-Widget $\ast$parent=0)}\label{class_camera_widget_a295cbb74d2843858399fdc45777b580d}
+
+\begin{DoxyCompactList}\small\item\em returns the instance of our camera widget \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_ad50a84d433e82fdf8f1f5c7633abad17}{static void \hyperlink{class_camera_widget_ad50a84d433e82fdf8f1f5c7633abad17}{destroy} ()}\label{class_camera_widget_ad50a84d433e82fdf8f1f5c7633abad17}
+
+\begin{DoxyCompactList}\small\item\em destroys our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_camera_widget_ac8ceae1653382675b396ec01a376d124}{\hyperlink{class_camera_widget_ac8ceae1653382675b396ec01a376d124}{$\sim$\-Camera\-Widget} ()}\label{class_camera_widget_ac8ceae1653382675b396ec01a376d124}
+
+\begin{DoxyCompactList}\small\item\em our destructor \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a637ffd88fb213dad01dfa7294248029e}{\hyperlink{class_camera_widget_a637ffd88fb213dad01dfa7294248029e}{Camera\-Widget} (Q\-Widget $\ast$parent=0)}\label{class_camera_widget_a637ffd88fb213dad01dfa7294248029e}
+
+\begin{DoxyCompactList}\small\item\em our default constructor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_camera_widget_a7096b1c7d9d37fc5c981a079e1963b89}{Q\-Label $\ast$ \hyperlink{class_camera_widget_a7096b1c7d9d37fc5c981a079e1963b89}{m\-\_\-aperture\-Label}}\label{class_camera_widget_a7096b1c7d9d37fc5c981a079e1963b89}
+
+\begin{DoxyCompactList}\small\item\em \char`\"{}\-Aperture Radius\char`\"{} \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a6a36053193d17510092a539742a5c1c1}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_a6a36053193d17510092a539742a5c1c1}{m\-\_\-aperture\-Radius\-S\-B}}\label{class_camera_widget_a6a36053193d17510092a539742a5c1c1}
+
+\begin{DoxyCompactList}\small\item\em The aperture radius of our camera. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a7bab43f24bafeeacae680392bfe4fb01}{Q\-Label $\ast$ \hyperlink{class_camera_widget_a7bab43f24bafeeacae680392bfe4fb01}{m\-\_\-focal\-Point\-Label}}\label{class_camera_widget_a7bab43f24bafeeacae680392bfe4fb01}
+
+\begin{DoxyCompactList}\small\item\em \char`\"{}\-Focal Point\char`\"{} \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a94cbeedaabf12cff56da2c5101b72550}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_a94cbeedaabf12cff56da2c5101b72550}{m\-\_\-focal\-Point\-X\-S\-B}}\label{class_camera_widget_a94cbeedaabf12cff56da2c5101b72550}
+
+\begin{DoxyCompactList}\small\item\em X componant of focal point. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a18e05f4dd656799f60f6bd520e6a8e5e}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_a18e05f4dd656799f60f6bd520e6a8e5e}{m\-\_\-focal\-Point\-Y\-S\-B}}\label{class_camera_widget_a18e05f4dd656799f60f6bd520e6a8e5e}
+
+\begin{DoxyCompactList}\small\item\em Y componant of focal point. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a4f6e80ab98fcba8de923bcf159abadf5}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_a4f6e80ab98fcba8de923bcf159abadf5}{m\-\_\-focal\-Point\-Z\-S\-B}}\label{class_camera_widget_a4f6e80ab98fcba8de923bcf159abadf5}
+
+\begin{DoxyCompactList}\small\item\em Z componant of focal point. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_aa01beb2aa9b4eb78f88f1433490817be}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_aa01beb2aa9b4eb78f88f1433490817be}{m\-\_\-h\-F\-O\-V}}\label{class_camera_widget_aa01beb2aa9b4eb78f88f1433490817be}
+
+\begin{DoxyCompactList}\small\item\em Horizontal F\-O\-V. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a5ba2d1104a375c371157e30b9c28973f}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_a5ba2d1104a375c371157e30b9c28973f}{m\-\_\-v\-F\-O\-V}}\label{class_camera_widget_a5ba2d1104a375c371157e30b9c28973f}
+
+\begin{DoxyCompactList}\small\item\em Vertical F\-O\-V. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_ab2ab0d0c35b2b70d5cc87a4265dcd91f}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_ab2ab0d0c35b2b70d5cc87a4265dcd91f}{m\-\_\-position\-X}}\label{class_camera_widget_ab2ab0d0c35b2b70d5cc87a4265dcd91f}
+
+\begin{DoxyCompactList}\small\item\em Position X. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_ae62120dd7ae045f10b44f13114c0bd5e}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_ae62120dd7ae045f10b44f13114c0bd5e}{m\-\_\-position\-Y}}\label{class_camera_widget_ae62120dd7ae045f10b44f13114c0bd5e}
+
+\begin{DoxyCompactList}\small\item\em Position Y. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_a1ecc54b54e23afd4c46405208f16d6ab}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_a1ecc54b54e23afd4c46405208f16d6ab}{m\-\_\-position\-Z}}\label{class_camera_widget_a1ecc54b54e23afd4c46405208f16d6ab}
+
+\begin{DoxyCompactList}\small\item\em Position Z. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_aa87021eccdaddf9ff7801e1367b0103e}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_aa87021eccdaddf9ff7801e1367b0103e}{m\-\_\-look\-At\-X}}\label{class_camera_widget_aa87021eccdaddf9ff7801e1367b0103e}
+
+\begin{DoxyCompactList}\small\item\em Look At X. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_ac381bd1fcf7089435caa12945d953561}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_ac381bd1fcf7089435caa12945d953561}{m\-\_\-look\-At\-Y}}\label{class_camera_widget_ac381bd1fcf7089435caa12945d953561}
+
+\begin{DoxyCompactList}\small\item\em Look At Y. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_ab96419da04f99f5fb8283c41eda2bf82}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_ab96419da04f99f5fb8283c41eda2bf82}{m\-\_\-look\-At\-Z}}\label{class_camera_widget_ab96419da04f99f5fb8283c41eda2bf82}
+
+\begin{DoxyCompactList}\small\item\em Look At Z. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_aac07842474a7353e6c302d547072fed3}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_aac07842474a7353e6c302d547072fed3}{m\-\_\-up\-X}}\label{class_camera_widget_aac07842474a7353e6c302d547072fed3}
+
+\begin{DoxyCompactList}\small\item\em Up X. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_ae547efffd14b050165628ca508d65619}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_ae547efffd14b050165628ca508d65619}{m\-\_\-up\-Y}}\label{class_camera_widget_ae547efffd14b050165628ca508d65619}
+
+\begin{DoxyCompactList}\small\item\em Up Y. \end{DoxyCompactList}\item 
+\hypertarget{class_camera_widget_af6ff3de049f5174aa3072e8f5efaa506}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_camera_widget_af6ff3de049f5174aa3072e8f5efaa506}{m\-\_\-up\-Z}}\label{class_camera_widget_af6ff3de049f5174aa3072e8f5efaa506}
+
+\begin{DoxyCompactList}\small\item\em Z \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{class_camera_widget}{Camera\-Widget} $\ast$ \hyperlink{class_camera_widget_afa9cb153c3153472ed53bd5428753fe4}{m\-\_\-instance}
+\begin{DoxyCompactList}\small\item\em pointer to the instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_camera_widget_afa9cb153c3153472ed53bd5428753fe4}{\index{Camera\-Widget@{Camera\-Widget}!m\-\_\-instance@{m\-\_\-instance}}
+\index{m\-\_\-instance@{m\-\_\-instance}!CameraWidget@{Camera\-Widget}}
+\subsubsection[{m\-\_\-instance}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Camera\-Widget} $\ast$ Camera\-Widget\-::m\-\_\-instance\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}}\label{class_camera_widget_afa9cb153c3153472ed53bd5428753fe4}
+
+
+pointer to the instance of our singleton class 
+
+A camera widget used to update camera setting e.\-g. depth of field.
+
+\begin{DoxyAuthor}{Author}
+Toby Gilbert 
+\end{DoxyAuthor}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-U\-I/Camera\-Widget.\-h\item 
+moc/moc\-\_\-\-Camera\-Widget.\-cpp\item 
+src/\-U\-I/Camera\-Widget.\-cpp\end{DoxyCompactItemize}

@@ -1,0 +1,186 @@
+\hypertarget{class_text}{\section{Text Class Reference}
+\label{class_text}\index{Text@{Text}}
+}
+
+
+Collaboration diagram for Text\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=210pt]{class_text__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_text_1_1_font_char}{Font\-Char}
+\begin{DoxyCompactList}\small\item\em a structure to hold the font char texture id and the vao. The vao for each font will be a different size need to investigate is a scale would be quicker / more efficient than storing multiple billboards (some will be the same size) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_text_a71c71bad833eccb26357945fc10fd085}{Text} (const Q\-Font \&\-\_\-f)
+\begin{DoxyCompactList}\small\item\em ctor must pass in a ready constructed Q\-Font make sure the size and emphasis is set before doing this as you can't modify the font after construction and you will need a new \hyperlink{class_text}{Text} class for each different type of text / font \end{DoxyCompactList}\item 
+\hypertarget{class_text_a2d49e5c280e205125b149f7777ae30c7}{\hyperlink{class_text_a2d49e5c280e205125b149f7777ae30c7}{$\sim$\-Text} ()}\label{class_text_a2d49e5c280e205125b149f7777ae30c7}
+
+\begin{DoxyCompactList}\small\item\em dtor will clean / remove textures and V\-A\-O's for the class \end{DoxyCompactList}\item 
+void \hyperlink{class_text_a012d1b8a4a25f06e73091c232eb91fa4}{render\-Text} (float \-\_\-x, float \-\_\-y, const Q\-String \&\-\_\-text) const 
+\begin{DoxyCompactList}\small\item\em render the text to the screen at \-\_\-x,\-\_\-y where 0,0 is top left of the screen all positioning is relative to the screen size set with the set\-Screen\-Size method so it is important that changes in screen size are updated. These value will be sent to the ngl\-Text\-Shader to be rendered (see source ) \end{DoxyCompactList}\item 
+void \hyperlink{class_text_adf20a23bc781824e83dc50c121f56aea}{set\-Screen\-Size} (int \-\_\-w, int \-\_\-h)
+\begin{DoxyCompactList}\small\item\em set the size of the screen to scale our font to fit correctly this basically creates the orthographic projection needed for x/y assuming that the open\-G\-L window has 0,0 at the center and we use N\-D\-C co-\/ordinates -\/1 -\/$>$ 1 in X and Y we then get x=(x$\ast$x\-Scale)+xtran y=(y$\ast$y\-Scale)+ytrans; to place the text in screen space \end{DoxyCompactList}\item 
+void \hyperlink{class_text_a85589d9fc53821cb75dd963d41eafed0}{set\-Colour} (float \-\_\-r, float \-\_\-g, float \-\_\-b)
+\begin{DoxyCompactList}\small\item\em set the colour of the font from three floats as a convenience method \end{DoxyCompactList}\item 
+\hypertarget{class_text_a6ec9d77b284824829150b8ebb436c358}{void {\bfseries set\-Transform} (float \-\_\-x, float \-\_\-y)}\label{class_text_a6ec9d77b284824829150b8ebb436c358}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_text_a9e326c18df0bb53f8f2459de7322c837}{Q\-Hash$<$ char, \hyperlink{struct_text_1_1_font_char}{Font\-Char} $>$ \hyperlink{class_text_a9e326c18df0bb53f8f2459de7322c837}{m\-\_\-characters}}\label{class_text_a9e326c18df0bb53f8f2459de7322c837}
+
+\begin{DoxyCompactList}\small\item\em a hash to store our \hyperlink{struct_text_1_1_font_char}{Font\-Char} data looked up by the char we want to render according to the Qt Docs a hash has faster lookups than Q\-Map so using this \end{DoxyCompactList}\item 
+\hypertarget{class_text_a6f23d1cd7e442ccfc13d4a86c5965e24}{\hyperlink{class_shader_program}{Shader\-Program} $\ast$ \hyperlink{class_text_a6f23d1cd7e442ccfc13d4a86c5965e24}{m\-\_\-text\-Shader}}\label{class_text_a6f23d1cd7e442ccfc13d4a86c5965e24}
+
+\begin{DoxyCompactList}\small\item\em our text shader \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_text_a71c71bad833eccb26357945fc10fd085}{\index{Text@{Text}!Text@{Text}}
+\index{Text@{Text}!Text@{Text}}
+\subsubsection[{Text}]{\setlength{\rightskip}{0pt plus 5cm}Text\-::\-Text (
+\begin{DoxyParamCaption}
+\item[{const Q\-Font \&}]{\-\_\-f}
+\end{DoxyParamCaption}
+)}}\label{class_text_a71c71bad833eccb26357945fc10fd085}
+
+
+ctor must pass in a ready constructed Q\-Font make sure the size and emphasis is set before doing this as you can't modify the font after construction and you will need a new \hyperlink{class_text}{Text} class for each different type of text / font 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em \-\_\-f} & the font to use for drawing the text \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=262pt]{class_text_a71c71bad833eccb26357945fc10fd085_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_text_a012d1b8a4a25f06e73091c232eb91fa4}{\index{Text@{Text}!render\-Text@{render\-Text}}
+\index{render\-Text@{render\-Text}!Text@{Text}}
+\subsubsection[{render\-Text}]{\setlength{\rightskip}{0pt plus 5cm}void Text\-::render\-Text (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-x, }
+\item[{float}]{\-\_\-y, }
+\item[{const Q\-String \&}]{\-\_\-text}
+\end{DoxyParamCaption}
+) const}}\label{class_text_a012d1b8a4a25f06e73091c232eb91fa4}
+
+
+render the text to the screen at \-\_\-x,\-\_\-y where 0,0 is top left of the screen all positioning is relative to the screen size set with the set\-Screen\-Size method so it is important that changes in screen size are updated. These value will be sent to the ngl\-Text\-Shader to be rendered (see source ) 
+
+\begin{DoxyNote}{Note}
+font quad is drawn as 0,0 being bottom left so if we draw at 0,0 the font will not be visible, we need to add the offset of the font height to any y value (i.\-e. a 16pt font drawn at 0,16 will appear at top right of the screen) 
+\end{DoxyNote}
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em \-\_\-x} & the x position of the text in screen space \\
+\hline
+\mbox{\tt in}  & {\em \-\_\-y} & the y position of the text in screen space \\
+\hline
+\mbox{\tt in}  & {\em \-\_\-text} & the text to draw (this is limited to A\-S\-C\-I\-I chars ' '-\/$>$'$\sim$' at present but unicode will be done soon \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=330pt]{class_text_a012d1b8a4a25f06e73091c232eb91fa4_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_text_a85589d9fc53821cb75dd963d41eafed0}{\index{Text@{Text}!set\-Colour@{set\-Colour}}
+\index{set\-Colour@{set\-Colour}!Text@{Text}}
+\subsubsection[{set\-Colour}]{\setlength{\rightskip}{0pt plus 5cm}void Text\-::set\-Colour (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-r, }
+\item[{float}]{\-\_\-g, }
+\item[{float}]{\-\_\-b}
+\end{DoxyParamCaption}
+)}}\label{class_text_a85589d9fc53821cb75dd963d41eafed0}
+
+
+set the colour of the font from three floats as a convenience method 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em \-\_\-r} & the red component of the colour for the font \\
+\hline
+\mbox{\tt in}  & {\em \-\_\-g} & the green component of the colour for the font \\
+\hline
+\mbox{\tt in}  & {\em \-\_\-b} & the blue component of the colour for the font \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=338pt]{class_text_a85589d9fc53821cb75dd963d41eafed0_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_text_adf20a23bc781824e83dc50c121f56aea}{\index{Text@{Text}!set\-Screen\-Size@{set\-Screen\-Size}}
+\index{set\-Screen\-Size@{set\-Screen\-Size}!Text@{Text}}
+\subsubsection[{set\-Screen\-Size}]{\setlength{\rightskip}{0pt plus 5cm}void Text\-::set\-Screen\-Size (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-w, }
+\item[{int}]{\-\_\-h}
+\end{DoxyParamCaption}
+)}}\label{class_text_adf20a23bc781824e83dc50c121f56aea}
+
+
+set the size of the screen to scale our font to fit correctly this basically creates the orthographic projection needed for x/y assuming that the open\-G\-L window has 0,0 at the center and we use N\-D\-C co-\/ordinates -\/1 -\/$>$ 1 in X and Y we then get x=(x$\ast$x\-Scale)+xtran y=(y$\ast$y\-Scale)+ytrans; to place the text in screen space 
+
+
+\begin{DoxyParams}[1]{Parameters}
+\mbox{\tt in}  & {\em \-\_\-w} & the current width of the screen \\
+\hline
+\mbox{\tt in}  & {\em \-\_\-h} & the current height of the screen \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_text_adf20a23bc781824e83dc50c121f56aea_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Core/\hyperlink{_text_8h}{Text.\-h}\item 
+src/\-Core/Text.\-cpp\end{DoxyCompactItemize}

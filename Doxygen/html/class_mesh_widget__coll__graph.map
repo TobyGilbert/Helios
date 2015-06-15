@@ -1,0 +1,4 @@
+<map id="MeshWidget" name="MeshWidget">
+<area shape="rect" id="node3" href="$struct_mesh_widget_1_1model_prop.html" title="structure for our model properties " alt="" coords="133,499,297,752"/>
+<area shape="rect" id="node4" href="$class_opti_x_model.html" title="This is a class to import models ready to be used with the OptiX ray tracing engine. " alt="" coords="133,5,299,435"/>
+</map>

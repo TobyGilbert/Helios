@@ -1,0 +1,6 @@
+<map id="MaterialLibrary::getMatFromLib" name="MaterialLibrary::getMatFromLib">
+<area shape="rect" id="node2" href="$class_mesh_widget.html#a47bdbf5350b44dd43a08e27b16c407d7" title="loads scene from file " alt="" coords="257,5,383,32"/>
+<area shape="rect" id="node3" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="433,5,599,32"/>
+<area shape="rect" id="node4" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="649,5,829,32"/>
+<area shape="rect" id="node5" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="878,5,1058,32"/>
+</map>

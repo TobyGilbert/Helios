@@ -1,0 +1,569 @@
+\hypertarget{class_path_tracer_scene}{\section{Path\-Tracer\-Scene Class Reference}
+\label{class_path_tracer_scene}\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}}
+}
+
+
+A class to manage our Opti\-X path tracer.  
+
+
+
+
+{\ttfamily \#include $<$pathtracerscene.\-h$>$}
+
+
+
+Collaboration diagram for Path\-Tracer\-Scene\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_path_tracer_scene__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_tracer_scene_a9f08902a26a5563b62df07f427cd656a}{\hyperlink{class_path_tracer_scene_a9f08902a26a5563b62df07f427cd656a}{$\sim$\-Path\-Tracer\-Scene} ()}\label{class_path_tracer_scene_a9f08902a26a5563b62df07f427cd656a}
+
+\begin{DoxyCompactList}\small\item\em dtor \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_acf716516054d2afead58edc76c65f609}{optix\-::\-Context \& \hyperlink{class_path_tracer_scene_acf716516054d2afead58edc76c65f609}{get\-Context} ()}\label{class_path_tracer_scene_acf716516054d2afead58edc76c65f609}
+
+\begin{DoxyCompactList}\small\item\em accessor to our context \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a4daa09a33eeb4dfbbf7b736ac2626732}{void \hyperlink{class_path_tracer_scene_a4daa09a33eeb4dfbbf7b736ac2626732}{init} ()}\label{class_path_tracer_scene_a4daa09a33eeb4dfbbf7b736ac2626732}
+
+\begin{DoxyCompactList}\small\item\em initialise our class \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_af1617b7ddb8ea3eeadc2f6a45be74e04}{void \hyperlink{class_path_tracer_scene_af1617b7ddb8ea3eeadc2f6a45be74e04}{trace} ()}\label{class_path_tracer_scene_af1617b7ddb8ea3eeadc2f6a45be74e04}
+
+\begin{DoxyCompactList}\small\item\em our trace function that launches our Optix context \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a679a405721ffcb67bd4b7d2152e0f539}{optix\-::\-Buffer \hyperlink{class_path_tracer_scene_a679a405721ffcb67bd4b7d2152e0f539}{get\-Output\-Buffer} ()}\label{class_path_tracer_scene_a679a405721ffcb67bd4b7d2152e0f539}
+
+\begin{DoxyCompactList}\small\item\em returns our output buffer \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a89903d6abd08922f30a65282283cb1f9}{void \hyperlink{class_path_tracer_scene_a89903d6abd08922f30a65282283cb1f9}{set\-Num\-Samples} (float sns)}\label{class_path_tracer_scene_a89903d6abd08922f30a65282283cb1f9}
+
+\begin{DoxyCompactList}\small\item\em set the square root number of samples \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_af35baf9498a6c8300011ff6ed5d4da01}{int \hyperlink{class_path_tracer_scene_af35baf9498a6c8300011ff6ed5d4da01}{get\-Num\-Samples} ()}\label{class_path_tracer_scene_af35baf9498a6c8300011ff6ed5d4da01}
+
+\begin{DoxyCompactList}\small\item\em accessor to our total number of samples \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a3c2ffc8299ecfa8b2cd3170c0eb739b6}{void \hyperlink{class_path_tracer_scene_a3c2ffc8299ecfa8b2cd3170c0eb739b6}{set\-Size} (unsigned int \-\_\-width, unsigned int \-\_\-height)}\label{class_path_tracer_scene_a3c2ffc8299ecfa8b2cd3170c0eb739b6}
+
+\begin{DoxyCompactList}\small\item\em a mutator to set the width and height of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a254d52b95e947cf9985fae1ab8b7aef3}{unsigned int \hyperlink{class_path_tracer_scene_a254d52b95e947cf9985fae1ab8b7aef3}{get\-Width} ()}\label{class_path_tracer_scene_a254d52b95e947cf9985fae1ab8b7aef3}
+
+\begin{DoxyCompactList}\small\item\em an accessor to the width of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a4721b0624e32486504128357bbcd9be9}{unsigned int \hyperlink{class_path_tracer_scene_a4721b0624e32486504128357bbcd9be9}{get\-Height} ()}\label{class_path_tracer_scene_a4721b0624e32486504128357bbcd9be9}
+
+\begin{DoxyCompactList}\small\item\em an accessor to the height of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_ade7933e8e00e39892797a0ef5a138abf}{void \hyperlink{class_path_tracer_scene_ade7933e8e00e39892797a0ef5a138abf}{resize} (int \-\_\-width, int \-\_\-height)}\label{class_path_tracer_scene_ade7933e8e00e39892797a0ef5a138abf}
+
+\begin{DoxyCompactList}\small\item\em resize our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_ab2ac93bea8d8aea5accdd47e9a7a4c0c}{void \hyperlink{class_path_tracer_scene_ab2ac93bea8d8aea5accdd47e9a7a4c0c}{set\-Device\-Pixel\-Ratio} (int \-\_\-ratio=1)}\label{class_path_tracer_scene_ab2ac93bea8d8aea5accdd47e9a7a4c0c}
+
+\begin{DoxyCompactList}\small\item\em mutator for our device pixel ratio \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a0683e08cf7fd1aa498fc186311e52230}{void \hyperlink{class_path_tracer_scene_a0683e08cf7fd1aa498fc186311e52230}{signal\-Camera\-Changed} ()}\label{class_path_tracer_scene_a0683e08cf7fd1aa498fc186311e52230}
+
+\begin{DoxyCompactList}\small\item\em signals if our camera has changed \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a14887fe3324d2f6c0fb7bf32c6f8d3b3}{void \hyperlink{class_path_tracer_scene_a14887fe3324d2f6c0fb7bf32c6f8d3b3}{signal\-Scene\-Changed} ()}\label{class_path_tracer_scene_a14887fe3324d2f6c0fb7bf32c6f8d3b3}
+
+\begin{DoxyCompactList}\small\item\em resets the frame count if the scene has changed \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_abc185fb2c0cd40aa439437c41109cb12}{void \hyperlink{class_path_tracer_scene_abc185fb2c0cd40aa439437c41109cb12}{update\-Camera} ()}\label{class_path_tracer_scene_abc185fb2c0cd40aa439437c41109cb12}
+
+\begin{DoxyCompactList}\small\item\em updates our camera the instance of our camera \end{DoxyCompactList}\item 
+\hyperlink{class_path_trace_camera}{Path\-Trace\-Camera} $\ast$ \hyperlink{class_path_tracer_scene_ac60793bd6cb9c0b45efbe0db1231e596}{get\-Camera} ()
+\begin{DoxyCompactList}\small\item\em accesor to our scenes camera \end{DoxyCompactList}\item 
+\hyperlink{class_opti_x_model}{Opti\-X\-Model} $\ast$ \hyperlink{class_path_tracer_scene_ab41f55350a5a50b60381cd46120c45aa}{import\-Mesh} (std\-::string \-\_\-id, std\-::string \-\_\-path)
+\begin{DoxyCompactList}\small\item\em function to import a mesh to our scene \end{DoxyCompactList}\item 
+\hyperlink{class_opti_x_model}{Opti\-X\-Model} $\ast$ \hyperlink{class_path_tracer_scene_a3980f3179a2f1d1a97ea5698f76eb317}{create\-Instance} (std\-::string \-\_\-geom\-Id, std\-::string \-\_\-instance\-Name)
+\begin{DoxyCompactList}\small\item\em creates an instance of geometry in our scene \end{DoxyCompactList}\item 
+void \hyperlink{class_path_tracer_scene_ac65c3f2b50b67511416cc80ca9abc179}{remove\-Geomtry} (std\-::string \-\_\-id)
+\begin{DoxyCompactList}\small\item\em removes a geometry from our scene \end{DoxyCompactList}\item 
+void \hyperlink{class_path_tracer_scene_adeddc6d4c2df9c23baebb32ee016c57b}{transform\-Model} (std\-::string \-\_\-id, glm\-::mat4 \-\_\-trans)
+\begin{DoxyCompactList}\small\item\em transforms a model in our scene \end{DoxyCompactList}\item 
+void \hyperlink{class_path_tracer_scene_a2930f6745167861525ce431487daa40f}{set\-Model\-Material} (std\-::string \-\_\-id, Material \-\_\-mat)
+\begin{DoxyCompactList}\small\item\em sets the material of a model in our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a6bffe49d297fed54fad3e5461f870f2d}{Q\-Image \hyperlink{class_path_tracer_scene_a6bffe49d297fed54fad3e5461f870f2d}{save\-Image} ()}\label{class_path_tracer_scene_a6bffe49d297fed54fad3e5461f870f2d}
+
+\begin{DoxyCompactList}\small\item\em render scene to image file \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a60a7dde523ef5873fef1a6f48492c274}{void \hyperlink{class_path_tracer_scene_a60a7dde523ef5873fef1a6f48492c274}{set\-Environment\-Map} (std\-::string \-\_\-environment\-Map)}\label{class_path_tracer_scene_a60a7dde523ef5873fef1a6f48492c274}
+
+\begin{DoxyCompactList}\small\item\em Sets a new environment map. \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_add93884ceb6909b3c19f78ecd6916eed}{void \hyperlink{class_path_tracer_scene_add93884ceb6909b3c19f78ecd6916eed}{destroy} ()}\label{class_path_tracer_scene_add93884ceb6909b3c19f78ecd6916eed}
+
+\begin{DoxyCompactList}\small\item\em removes our path tracer instance \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a02f2f4a4adf5b435f3b87d731b93b0c8}{void \hyperlink{class_path_tracer_scene_a02f2f4a4adf5b435f3b87d731b93b0c8}{add\-Light} ()}\label{class_path_tracer_scene_a02f2f4a4adf5b435f3b87d731b93b0c8}
+
+\begin{DoxyCompactList}\small\item\em Adds a light to the scene. \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a0888079f72be5e9cc893173029f4581a}{void \hyperlink{class_path_tracer_scene_a0888079f72be5e9cc893173029f4581a}{clean\-Top\-Acceleration} ()}\label{class_path_tracer_scene_a0888079f72be5e9cc893173029f4581a}
+
+\begin{DoxyCompactList}\small\item\em Reevaluate the acceleration structure of the top model. \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a5e3cf9c3b16a8e9a87ec88d937d6c47e}{void \hyperlink{class_path_tracer_scene_a5e3cf9c3b16a8e9a87ec88d937d6c47e}{set\-Max\-Ray\-Depth} (int \-\_\-depth)}\label{class_path_tracer_scene_a5e3cf9c3b16a8e9a87ec88d937d6c47e}
+
+\begin{DoxyCompactList}\small\item\em sets the max ray depth in our path tracer \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a497b9e8516f9654acaca48a7c4f6ab84}{int \hyperlink{class_path_tracer_scene_a497b9e8516f9654acaca48a7c4f6ab84}{get\-Max\-Ray\-Depth} ()}\label{class_path_tracer_scene_a497b9e8516f9654acaca48a7c4f6ab84}
+
+\begin{DoxyCompactList}\small\item\em accesor to the max ray depth of our path tracer \end{DoxyCompactList}\item 
+void \hyperlink{class_path_tracer_scene_a0af394a6fed9de78c3f4d215bfdd1129}{set\-Global\-Trans} (glm\-::mat4 \-\_\-trans)
+\begin{DoxyCompactList}\small\item\em mutator for our global transform \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a4833efcdf8e90050b6f72eeffd3cb715}{void \hyperlink{class_path_tracer_scene_a4833efcdf8e90050b6f72eeffd3cb715}{set\-Global\-Trans\-Environment} (glm\-::mat4 \-\_\-trans)}\label{class_path_tracer_scene_a4833efcdf8e90050b6f72eeffd3cb715}
+
+\begin{DoxyCompactList}\small\item\em set the tranformation of our environement map \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a985c787f3a950b0378e3998035c54e62}{void \hyperlink{class_path_tracer_scene_a985c787f3a950b0378e3998035c54e62}{remove\-Light} (int \-\_\-id)}\label{class_path_tracer_scene_a985c787f3a950b0378e3998035c54e62}
+
+\begin{DoxyCompactList}\small\item\em remove a light from our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_aab2d3d392377547d37ce1eb4b17c3eb4}{void \hyperlink{class_path_tracer_scene_aab2d3d392377547d37ce1eb4b17c3eb4}{set\-Trans\-Late\-Environment} (bool \-\_\-trans)}\label{class_path_tracer_scene_aab2d3d392377547d37ce1eb4b17c3eb4}
+
+\begin{DoxyCompactList}\small\item\em Sets the translate environment variable;. \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a8f178699fbd142dda137f76bf65e6723}{Transform \hyperlink{class_path_tracer_scene_a8f178699fbd142dda137f76bf65e6723}{get\-Global\-Trans} ()}\label{class_path_tracer_scene_a8f178699fbd142dda137f76bf65e6723}
+
+\begin{DoxyCompactList}\small\item\em Get global trans transform. \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a77851dbba5a8549f028fe68ae45f68cd}{int \hyperlink{class_path_tracer_scene_a77851dbba5a8549f028fe68ae45f68cd}{get\-Total\-Scene\-Polygons} ()}\label{class_path_tracer_scene_a77851dbba5a8549f028fe68ae45f68cd}
+
+\begin{DoxyCompactList}\small\item\em accesor to the total number of polygons in our scene \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_tracer_scene_aaf30f931afe7fc4df149c5754ec273d0}{static \hyperlink{class_path_tracer_scene}{Path\-Tracer\-Scene} $\ast$ \hyperlink{class_path_tracer_scene_aaf30f931afe7fc4df149c5754ec273d0}{get\-Instance} ()}\label{class_path_tracer_scene_aaf30f931afe7fc4df149c5754ec273d0}
+
+\begin{DoxyCompactList}\small\item\em returns an instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Types}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_tracer_scene_aa3ea1f854f75f6b6a2f432d4525dfb92}{typedef optix\-::float3 {\bfseries float3}}\label{class_path_tracer_scene_aa3ea1f854f75f6b6a2f432d4525dfb92}
+
+\item 
+\hypertarget{class_path_tracer_scene_a47510172bf7d645109a033327e3899a2}{typedef optix\-::float4 {\bfseries float4}}\label{class_path_tracer_scene_a47510172bf7d645109a033327e3899a2}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_tracer_scene_a0d27c55a17505f3cde35fe7ff89f3c3d}{optix\-::\-Context \hyperlink{class_path_tracer_scene_a0d27c55a17505f3cde35fe7ff89f3c3d}{m\-\_\-context}}\label{class_path_tracer_scene_a0d27c55a17505f3cde35fe7ff89f3c3d}
+
+\begin{DoxyCompactList}\small\item\em An instance of the optix engine. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_path_tracer_scene_adb714b43e1a14346af4cda2ffc34a9c7}{Path\-Tracer\-Scene} ()
+\begin{DoxyCompactList}\small\item\em our default constructor \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_ab9a8a66ab0736ee5244f10a979b3c9e1}{\hyperlink{class_path_tracer_scene_ab9a8a66ab0736ee5244f10a979b3c9e1}{Path\-Tracer\-Scene} (\hyperlink{class_path_tracer_scene}{Path\-Tracer\-Scene} const \&)}\label{class_path_tracer_scene_ab9a8a66ab0736ee5244f10a979b3c9e1}
+
+\begin{DoxyCompactList}\small\item\em remove any access to copy constructor as we dont want copies of our singleton class \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a2bd36edf8e4842b4f56e050108483502}{\hyperlink{class_path_tracer_scene}{Path\-Tracer\-Scene} \& \hyperlink{class_path_tracer_scene_a2bd36edf8e4842b4f56e050108483502}{operator=} (\hyperlink{class_path_tracer_scene}{Path\-Tracer\-Scene} const \&)}\label{class_path_tracer_scene_a2bd36edf8e4842b4f56e050108483502}
+
+\begin{DoxyCompactList}\small\item\em remove access to our assignment operator as we dont want copies of our signton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_tracer_scene_a5890db30f89d9ae99c6451d6e3bd0a93}{int \hyperlink{class_path_tracer_scene_a5890db30f89d9ae99c6451d6e3bd0a93}{m\-\_\-total\-Num\-Polygons}}\label{class_path_tracer_scene_a5890db30f89d9ae99c6451d6e3bd0a93}
+
+\begin{DoxyCompactList}\small\item\em total number of polygons in the scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a40480ccd36667e5af769492dcaab7ae0}{int \hyperlink{class_path_tracer_scene_a40480ccd36667e5af769492dcaab7ae0}{m\-\_\-max\-Ray\-Depth}}\label{class_path_tracer_scene_a40480ccd36667e5af769492dcaab7ae0}
+
+\begin{DoxyCompactList}\small\item\em the max ray traversal depth of our path tracer \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a24da785cb80229fb58551fd9aa9ac04a}{Group \hyperlink{class_path_tracer_scene_a24da785cb80229fb58551fd9aa9ac04a}{m\-\_\-top\-Group}}\label{class_path_tracer_scene_a24da785cb80229fb58551fd9aa9ac04a}
+
+\begin{DoxyCompactList}\small\item\em the top group of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a883bee42e482df12c580d3adf20c7e1e}{Transform \hyperlink{class_path_tracer_scene_a883bee42e482df12c580d3adf20c7e1e}{m\-\_\-global\-Trans}}\label{class_path_tracer_scene_a883bee42e482df12c580d3adf20c7e1e}
+
+\begin{DoxyCompactList}\small\item\em the global transform our our scene used for camera controls \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a5279e7f6b920634fc023d0a486645f3c}{Group \hyperlink{class_path_tracer_scene_a5279e7f6b920634fc023d0a486645f3c}{m\-\_\-global\-Trans\-Group}}\label{class_path_tracer_scene_a5279e7f6b920634fc023d0a486645f3c}
+
+\begin{DoxyCompactList}\small\item\em group with our global transform applied. Any child of this will be effected by our global transform node \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_ae08f725aa3672880d604626f62f30f00}{std\-::map$<$ std\-::string, \\*
+\hyperlink{class_opti_x_model}{Opti\-X\-Model} $\ast$ $>$ \hyperlink{class_path_tracer_scene_ae08f725aa3672880d604626f62f30f00}{m\-\_\-mesh\-Array}}\label{class_path_tracer_scene_ae08f725aa3672880d604626f62f30f00}
+
+\begin{DoxyCompactList}\small\item\em an array of all our mesh's \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a6f3e75d8f6d34c894eca866d2f4543c8}{bool \hyperlink{class_path_tracer_scene_a6f3e75d8f6d34c894eca866d2f4543c8}{m\-\_\-camera\-Changed}}\label{class_path_tracer_scene_a6f3e75d8f6d34c894eca866d2f4543c8}
+
+\begin{DoxyCompactList}\small\item\em a bool to notify us if the camera has changed and we need to update engine camera paramiters \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_adc71b6fbee66993aa7ee8f75c417c061}{\hyperlink{class_path_trace_camera}{Path\-Trace\-Camera} $\ast$ \hyperlink{class_path_tracer_scene_adc71b6fbee66993aa7ee8f75c417c061}{m\-\_\-camera}}\label{class_path_tracer_scene_adc71b6fbee66993aa7ee8f75c417c061}
+
+\begin{DoxyCompactList}\small\item\em the camera of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_ae2ad01374166effa0627944f8a866517}{int \hyperlink{class_path_tracer_scene_ae2ad01374166effa0627944f8a866517}{m\-\_\-device\-Pixel\-Ratio}}\label{class_path_tracer_scene_ae2ad01374166effa0627944f8a866517}
+
+\begin{DoxyCompactList}\small\item\em our device pixel ratio default set to 1 but for mac this could be different \end{DoxyCompactList}\item 
+optix\-::\-Program \hyperlink{class_path_tracer_scene_a9eff6b99097c6edb6e4da1ab6da1f494}{m\-\_\-pgram\-\_\-bounding\-\_\-box}
+\begin{DoxyCompactList}\small\item\em our bounding box program \end{DoxyCompactList}\item 
+optix\-::\-Program \hyperlink{class_path_tracer_scene_a50f096b5a5941c50a87fdd8864304852}{m\-\_\-pgram\-\_\-intersection}
+\begin{DoxyCompactList}\small\item\em our intersection program \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_aac4979f4c1814b66c83195f0e81149f4}{optix\-::\-Program \hyperlink{class_path_tracer_scene_aac4979f4c1814b66c83195f0e81149f4}{m\-\_\-pgram\-\_\-sphere\-Intersection}}\label{class_path_tracer_scene_aac4979f4c1814b66c83195f0e81149f4}
+
+\begin{DoxyCompactList}\small\item\em our sphere bounding box program \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a7578510f6fb82fa8cc4e519ca5a0fc5f}{optix\-::\-Program \hyperlink{class_path_tracer_scene_a7578510f6fb82fa8cc4e519ca5a0fc5f}{m\-\_\-pgram\-\_\-bounding\-\_\-sphere}}\label{class_path_tracer_scene_a7578510f6fb82fa8cc4e519ca5a0fc5f}
+
+\begin{DoxyCompactList}\small\item\em our sphere intersection program \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_aedc9c1743d34386c4e093ffffd79958b}{unsigned int \hyperlink{class_path_tracer_scene_aedc9c1743d34386c4e093ffffd79958b}{m\-\_\-rr\-\_\-begin\-\_\-depth}}\label{class_path_tracer_scene_aedc9c1743d34386c4e093ffffd79958b}
+
+\begin{DoxyCompactList}\small\item\em the depth of our ray? \end{DoxyCompactList}\item 
+unsigned int \hyperlink{class_path_tracer_scene_a54c990fc584924a849a91c345781ba1f}{m\-\_\-sqrt\-\_\-num\-\_\-samples}
+\begin{DoxyCompactList}\small\item\em the sqrt of the number of samples we want \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_abcc2dc1fbfebf761b5efc99a2ba8396b}{unsigned int \hyperlink{class_path_tracer_scene_abcc2dc1fbfebf761b5efc99a2ba8396b}{m\-\_\-frame}}\label{class_path_tracer_scene_abcc2dc1fbfebf761b5efc99a2ba8396b}
+
+\begin{DoxyCompactList}\small\item\em current frame number \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a5946ba11937faeed09da1a96a60bb359}{unsigned int \hyperlink{class_path_tracer_scene_a5946ba11937faeed09da1a96a60bb359}{m\-\_\-sampling\-\_\-strategy}}\label{class_path_tracer_scene_a5946ba11937faeed09da1a96a60bb359}
+
+\begin{DoxyCompactList}\small\item\em our sampling strategy, dont think that we need this \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a6be2decdb83ccb31bfc55ba7beeca1b1}{unsigned int \hyperlink{class_path_tracer_scene_a6be2decdb83ccb31bfc55ba7beeca1b1}{m\-\_\-width}}\label{class_path_tracer_scene_a6be2decdb83ccb31bfc55ba7beeca1b1}
+
+\begin{DoxyCompactList}\small\item\em the width of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_afd4bc305e519207809faaf163524a971}{unsigned int \hyperlink{class_path_tracer_scene_afd4bc305e519207809faaf163524a971}{m\-\_\-height}}\label{class_path_tracer_scene_afd4bc305e519207809faaf163524a971}
+
+\begin{DoxyCompactList}\small\item\em the height of our scene \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_ab440af603a366434b3298e1550622623}{optix\-::\-Buffer \hyperlink{class_path_tracer_scene_ab440af603a366434b3298e1550622623}{m\-\_\-output\-Buffer}}\label{class_path_tracer_scene_ab440af603a366434b3298e1550622623}
+
+\begin{DoxyCompactList}\small\item\em our output buffer \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a2c0d1db397274c91a36c599c2a45e0cd}{optix\-::\-Texture\-Sampler \hyperlink{class_path_tracer_scene_a2c0d1db397274c91a36c599c2a45e0cd}{m\-\_\-envi\-Sampler}}\label{class_path_tracer_scene_a2c0d1db397274c91a36c599c2a45e0cd}
+
+\begin{DoxyCompactList}\small\item\em Our environment map texture sample. \end{DoxyCompactList}\item 
+\hypertarget{class_path_tracer_scene_a2e82b5dd4468dd9c70202e4627523f93}{bool \hyperlink{class_path_tracer_scene_a2e82b5dd4468dd9c70202e4627523f93}{m\-\_\-translate\-Enviroment}}\label{class_path_tracer_scene_a2e82b5dd4468dd9c70202e4627523f93}
+
+\begin{DoxyCompactList}\small\item\em Translates the environment relative to the camera translations. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_tracer_scene_a6f3e9f04a5c6cb4ec630eaf7820a2992}{static \hyperlink{class_path_tracer_scene}{Path\-Tracer\-Scene} $\ast$ \hyperlink{class_path_tracer_scene_a6f3e9f04a5c6cb4ec630eaf7820a2992}{m\-\_\-instance}}\label{class_path_tracer_scene_a6f3e9f04a5c6cb4ec630eaf7820a2992}
+
+\begin{DoxyCompactList}\small\item\em a pointer to our instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A class to manage our Opti\-X path tracer. 
+
+\begin{DoxyDate}{Date}
+06/01/15 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Declan Russell This is a singleton class for easy access in other areas of the program 
+\end{DoxyAuthor}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_path_tracer_scene_adb714b43e1a14346af4cda2ffc34a9c7}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!Path\-Tracer\-Scene@{Path\-Tracer\-Scene}}
+\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{Path\-Tracer\-Scene}]{\setlength{\rightskip}{0pt plus 5cm}Path\-Tracer\-Scene\-::\-Path\-Tracer\-Scene (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{class_path_tracer_scene_adb714b43e1a14346af4cda2ffc34a9c7}
+
+
+our default constructor 
+
+these must be private so that we dont have copies of our singleton class created 
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_adb714b43e1a14346af4cda2ffc34a9c7_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_path_tracer_scene_a3980f3179a2f1d1a97ea5698f76eb317}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!create\-Instance@{create\-Instance}}
+\index{create\-Instance@{create\-Instance}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{create\-Instance}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Opti\-X\-Model} $\ast$ Path\-Tracer\-Scene\-::create\-Instance (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-geom\-Id, }
+\item[{std\-::string}]{\-\_\-instance\-Name}
+\end{DoxyParamCaption}
+)}}\label{class_path_tracer_scene_a3980f3179a2f1d1a97ea5698f76eb317}
+
+
+creates an instance of geometry in our scene 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-geom\-Id} & -\/ geometry Id to create an instance of \\
+\hline
+{\em \-\_\-instance\-Name} & -\/ desired name for instance created \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_a3980f3179a2f1d1a97ea5698f76eb317_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_a3980f3179a2f1d1a97ea5698f76eb317_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_tracer_scene_ac60793bd6cb9c0b45efbe0db1231e596}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!get\-Camera@{get\-Camera}}
+\index{get\-Camera@{get\-Camera}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{get\-Camera}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Path\-Trace\-Camera}$\ast$ Path\-Tracer\-Scene\-::get\-Camera (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_path_tracer_scene_ac60793bd6cb9c0b45efbe0db1231e596}
+
+
+accesor to our scenes camera 
+
+\begin{DoxyReturn}{Returns}
+our camera 
+\end{DoxyReturn}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_ac60793bd6cb9c0b45efbe0db1231e596_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_tracer_scene_ab41f55350a5a50b60381cd46120c45aa}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!import\-Mesh@{import\-Mesh}}
+\index{import\-Mesh@{import\-Mesh}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{import\-Mesh}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Opti\-X\-Model} $\ast$ Path\-Tracer\-Scene\-::import\-Mesh (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-id, }
+\item[{std\-::string}]{\-\_\-path}
+\end{DoxyParamCaption}
+)}}\label{class_path_tracer_scene_ab41f55350a5a50b60381cd46120c45aa}
+
+
+function to import a mesh to our scene 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ the path to our mesh \\
+\hline
+{\em \-\_\-id} & -\/ the id of our mesh \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000012}{Todo}]maybe have all this stuff in a model management class rather than the scene \end{DoxyRefDesc}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000013}{Todo}]meshes are all set with detault diffuse texture, we need some sort of material management \end{DoxyRefDesc}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_ab41f55350a5a50b60381cd46120c45aa_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_ab41f55350a5a50b60381cd46120c45aa_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_tracer_scene_ac65c3f2b50b67511416cc80ca9abc179}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!remove\-Geomtry@{remove\-Geomtry}}
+\index{remove\-Geomtry@{remove\-Geomtry}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{remove\-Geomtry}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Tracer\-Scene\-::remove\-Geomtry (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-id}
+\end{DoxyParamCaption}
+)}}\label{class_path_tracer_scene_ac65c3f2b50b67511416cc80ca9abc179}
+
+
+removes a geometry from our scene 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-id} & -\/ id of geomtry to remove \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_ac65c3f2b50b67511416cc80ca9abc179_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_tracer_scene_a0af394a6fed9de78c3f4d215bfdd1129}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!set\-Global\-Trans@{set\-Global\-Trans}}
+\index{set\-Global\-Trans@{set\-Global\-Trans}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{set\-Global\-Trans}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Tracer\-Scene\-::set\-Global\-Trans (
+\begin{DoxyParamCaption}
+\item[{glm\-::mat4}]{\-\_\-trans}
+\end{DoxyParamCaption}
+)}}\label{class_path_tracer_scene_a0af394a6fed9de78c3f4d215bfdd1129}
+
+
+mutator for our global transform 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-trans} & -\/ desired global transform \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_a0af394a6fed9de78c3f4d215bfdd1129_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_a0af394a6fed9de78c3f4d215bfdd1129_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_tracer_scene_a2930f6745167861525ce431487daa40f}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!set\-Model\-Material@{set\-Model\-Material}}
+\index{set\-Model\-Material@{set\-Model\-Material}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{set\-Model\-Material}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Tracer\-Scene\-::set\-Model\-Material (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-id, }
+\item[{Material}]{\-\_\-mat}
+\end{DoxyParamCaption}
+)}}\label{class_path_tracer_scene_a2930f6745167861525ce431487daa40f}
+
+
+sets the material of a model in our scene 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-id} & -\/ the id of the model in our map \\
+\hline
+{\em \-\_\-mat} & -\/ the material that we wish to apply to the object \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_a2930f6745167861525ce431487daa40f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_a2930f6745167861525ce431487daa40f_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_tracer_scene_adeddc6d4c2df9c23baebb32ee016c57b}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!transform\-Model@{transform\-Model}}
+\index{transform\-Model@{transform\-Model}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{transform\-Model}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Tracer\-Scene\-::transform\-Model (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-id, }
+\item[{glm\-::mat4}]{\-\_\-trans}
+\end{DoxyParamCaption}
+)}}\label{class_path_tracer_scene_adeddc6d4c2df9c23baebb32ee016c57b}
+
+
+transforms a model in our scene 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-id} & -\/ the id of our model \\
+\hline
+{\em \-\_\-trans} & -\/ the transform we wish to apply to our model \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_adeddc6d4c2df9c23baebb32ee016c57b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_tracer_scene_adeddc6d4c2df9c23baebb32ee016c57b_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_path_tracer_scene_a9eff6b99097c6edb6e4da1ab6da1f494}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!m\-\_\-pgram\-\_\-bounding\-\_\-box@{m\-\_\-pgram\-\_\-bounding\-\_\-box}}
+\index{m\-\_\-pgram\-\_\-bounding\-\_\-box@{m\-\_\-pgram\-\_\-bounding\-\_\-box}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{m\-\_\-pgram\-\_\-bounding\-\_\-box}]{\setlength{\rightskip}{0pt plus 5cm}optix\-::\-Program Path\-Tracer\-Scene\-::m\-\_\-pgram\-\_\-bounding\-\_\-box\hspace{0.3cm}{\ttfamily [private]}}}\label{class_path_tracer_scene_a9eff6b99097c6edb6e4da1ab6da1f494}
+
+
+our bounding box program 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000005}{Todo}]probably doesnt need to be a member but we'll get rid of that later \end{DoxyRefDesc}
+\hypertarget{class_path_tracer_scene_a50f096b5a5941c50a87fdd8864304852}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!m\-\_\-pgram\-\_\-intersection@{m\-\_\-pgram\-\_\-intersection}}
+\index{m\-\_\-pgram\-\_\-intersection@{m\-\_\-pgram\-\_\-intersection}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{m\-\_\-pgram\-\_\-intersection}]{\setlength{\rightskip}{0pt plus 5cm}optix\-::\-Program Path\-Tracer\-Scene\-::m\-\_\-pgram\-\_\-intersection\hspace{0.3cm}{\ttfamily [private]}}}\label{class_path_tracer_scene_a50f096b5a5941c50a87fdd8864304852}
+
+
+our intersection program 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000006}{Todo}]probably doesn't need to be a member but we'll get rid of that later \end{DoxyRefDesc}
+\hypertarget{class_path_tracer_scene_a54c990fc584924a849a91c345781ba1f}{\index{Path\-Tracer\-Scene@{Path\-Tracer\-Scene}!m\-\_\-sqrt\-\_\-num\-\_\-samples@{m\-\_\-sqrt\-\_\-num\-\_\-samples}}
+\index{m\-\_\-sqrt\-\_\-num\-\_\-samples@{m\-\_\-sqrt\-\_\-num\-\_\-samples}!PathTracerScene@{Path\-Tracer\-Scene}}
+\subsubsection[{m\-\_\-sqrt\-\_\-num\-\_\-samples}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int Path\-Tracer\-Scene\-::m\-\_\-sqrt\-\_\-num\-\_\-samples\hspace{0.3cm}{\ttfamily [private]}}}\label{class_path_tracer_scene_a54c990fc584924a849a91c345781ba1f}
+
+
+the sqrt of the number of samples we want 
+
+sqrt's are expensive G\-P\-U so lets do it on the C\-P\-U 
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Core/pathtracerscene.\-h\item 
+src/\-Core/pathtracerscene.\-cpp\end{DoxyCompactItemize}

@@ -1,0 +1,159 @@
+\hypertarget{class_q_n_e_block}{\section{Q\-N\-E\-Block Class Reference}
+\label{class_q_n_e_block}\index{Q\-N\-E\-Block@{Q\-N\-E\-Block}}
+}
+
+
+This class originally written by S\-T\-A\-N\-I\-S\-L\-A\-W A\-D\-A\-S\-Z\-E\-W\-S\-K\-I has been modified.  
+
+
+
+
+{\ttfamily \#include $<$qneblock.\-h$>$}
+
+
+
+Inheritance diagram for Q\-N\-E\-Block\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_q_n_e_block__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Q\-N\-E\-Block\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=182pt]{class_q_n_e_block__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries Type} = Q\-Graphics\-Item\-:\-:User\-Type + 3
+ \}
+\begin{DoxyCompactList}\small\item\em this means you can define a new Q\-Graphics\-Item type. Woudln't of done it like this myself but its a dependency in S\-T\-A\-N\-I\-S\-L\-A\-W A\-D\-A\-S\-Z\-E\-W\-S\-K\-I's implementation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_block_af41dba36c55f97cf6f2556cf7daf138f}{\hyperlink{class_q_n_e_block_af41dba36c55f97cf6f2556cf7daf138f}{Q\-N\-E\-Block} (Q\-Graphics\-Item $\ast$parent=0)}\label{class_q_n_e_block_af41dba36c55f97cf6f2556cf7daf138f}
+
+\begin{DoxyCompactList}\small\item\em our defualt constructor \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_a1e45a9b7f2ace3da607662a84af3388a}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ \hyperlink{class_q_n_e_block_a1e45a9b7f2ace3da607662a84af3388a}{add\-Port} (const Q\-String \&name, bool is\-Output, std\-::vector$<$ std\-::string $>$ \-\_\-init\-Params, \hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{Q\-N\-E\-Port\-::variable\-Type} \-\_\-type=Q\-N\-E\-Port\-::\-Type\-Void, int flags=0, int ptr=0)}\label{class_q_n_e_block_a1e45a9b7f2ace3da607662a84af3388a}
+
+\begin{DoxyCompactList}\small\item\em adds a port to our node. This has been modified to also set the varibel type and initial paramiters. \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_a17510e88ed95706eea4adb6ce05c0b37}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ \hyperlink{class_q_n_e_block_a17510e88ed95706eea4adb6ce05c0b37}{add\-Input\-Port} (const Q\-String \&name, std\-::vector$<$ std\-::string $>$ \-\_\-init\-Params, \hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{Q\-N\-E\-Port\-::variable\-Type} \-\_\-type=Q\-N\-E\-Port\-::\-Type\-Void)}\label{class_q_n_e_block_a17510e88ed95706eea4adb6ce05c0b37}
+
+\begin{DoxyCompactList}\small\item\em adds an input port to our node. Modified to also set the varible type and initial paramiters. \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_afb9d697f080d9bc14166304f6da91a59}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ \hyperlink{class_q_n_e_block_afb9d697f080d9bc14166304f6da91a59}{add\-Output\-Port} (const Q\-String \&name, std\-::vector$<$ std\-::string $>$ \-\_\-init\-Params, \hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{Q\-N\-E\-Port\-::variable\-Type} \-\_\-type=Q\-N\-E\-Port\-::\-Type\-Void)}\label{class_q_n_e_block_afb9d697f080d9bc14166304f6da91a59}
+
+\begin{DoxyCompactList}\small\item\em adds an output port to our node. Modified to also set the varible type and initial paramiters. \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_a7af0502c39a078dc58dfb80703492f37}{void \hyperlink{class_q_n_e_block_a7af0502c39a078dc58dfb80703492f37}{set\-Width} (int \-\_\-w)}\label{class_q_n_e_block_a7af0502c39a078dc58dfb80703492f37}
+
+\begin{DoxyCompactList}\small\item\em mutator to hard code the width of our node. \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_a9e67e1fafb2a8f23e24848a084f0884f}{void \hyperlink{class_q_n_e_block_a9e67e1fafb2a8f23e24848a084f0884f}{set\-Height} (int \-\_\-h)}\label{class_q_n_e_block_a9e67e1fafb2a8f23e24848a084f0884f}
+
+\begin{DoxyCompactList}\small\item\em mutator to hard code the height of our node. \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_ac4108ddff3e3e0c8825238fff81d5811}{virtual std\-::string \hyperlink{class_q_n_e_block_ac4108ddff3e3e0c8825238fff81d5811}{get\-Block\-Name} ()}\label{class_q_n_e_block_ac4108ddff3e3e0c8825238fff81d5811}
+
+\begin{DoxyCompactList}\small\item\em virtual function to return the name of our block \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_adef2de51ebb7558e61205b535fbebb49}{virtual void \hyperlink{class_q_n_e_block_adef2de51ebb7558e61205b535fbebb49}{save} (Q\-Data\-Stream \&)}\label{class_q_n_e_block_adef2de51ebb7558e61205b535fbebb49}
+
+\begin{DoxyCompactList}\small\item\em save function modified to be virtual to allow implimentation of new blocks \end{DoxyCompactList}\item 
+virtual void \hyperlink{class_q_n_e_block_ab7fb118bd4bcf8aa224d03807a6dc315}{load} (Q\-Data\-Stream \&, Q\-Map$<$ quint64, \hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ $>$ \&port\-Map)
+\begin{DoxyCompactList}\small\item\em load fucntion modified to be virtual to allow implimentaiton of new blocks \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_ad30bdf5493a7fefa49747b147fd655d4}{void \hyperlink{class_q_n_e_block_ad30bdf5493a7fefa49747b147fd655d4}{paint} (Q\-Painter $\ast$painter, const Q\-Style\-Option\-Graphics\-Item $\ast$option, Q\-Widget $\ast$widget)}\label{class_q_n_e_block_ad30bdf5493a7fefa49747b147fd655d4}
+
+\begin{DoxyCompactList}\small\item\em overwritten paint function for our own drawing of this graphics item \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_ab36daa69f4c9ef4e6f415c591d9257b7}{Q\-Vector$<$ \hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ $>$ \hyperlink{class_q_n_e_block_ab36daa69f4c9ef4e6f415c591d9257b7}{ports} ()}\label{class_q_n_e_block_ab36daa69f4c9ef4e6f415c591d9257b7}
+
+\begin{DoxyCompactList}\small\item\em returns the ports connected to this block \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_ae89757c66e7f97583aabb3dc72b66a55}{virtual int \hyperlink{class_q_n_e_block_ae89757c66e7f97583aabb3dc72b66a55}{type} () const }\label{class_q_n_e_block_ae89757c66e7f97583aabb3dc72b66a55}
+
+\begin{DoxyCompactList}\small\item\em changed to virtual so we can overide this with our inherited classes \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_block_a594af80d0c6079bcb4175c9152e36310}{Q\-Variant {\bfseries item\-Change} (Graphics\-Item\-Change change, const Q\-Variant \&value)}\label{class_q_n_e_block_a594af80d0c6079bcb4175c9152e36310}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_block_ad62454889e17fbae99f52ea46766cafb}{std\-::string \hyperlink{class_q_n_e_block_ad62454889e17fbae99f52ea46766cafb}{m\-\_\-block\-Name}}\label{class_q_n_e_block_ad62454889e17fbae99f52ea46766cafb}
+
+\begin{DoxyCompactList}\small\item\em the name of our block \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_block_abc0e0661e1df45f11da586e49e9b0d1e}{int \hyperlink{class_q_n_e_block_abc0e0661e1df45f11da586e49e9b0d1e}{horz\-Margin}}\label{class_q_n_e_block_abc0e0661e1df45f11da586e49e9b0d1e}
+
+\begin{DoxyCompactList}\small\item\em horizontal margin for drawing our block \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_af27a41bfcedcea8989ac8c966a3c1f2e}{int \hyperlink{class_q_n_e_block_af27a41bfcedcea8989ac8c966a3c1f2e}{vert\-Margin}}\label{class_q_n_e_block_af27a41bfcedcea8989ac8c966a3c1f2e}
+
+\begin{DoxyCompactList}\small\item\em vertical margin for drawing our block \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_a856cbc062f9eaf82aff9a3cc9bdb8b0d}{int \hyperlink{class_q_n_e_block_a856cbc062f9eaf82aff9a3cc9bdb8b0d}{width}}\label{class_q_n_e_block_a856cbc062f9eaf82aff9a3cc9bdb8b0d}
+
+\begin{DoxyCompactList}\small\item\em width for drawing our block \end{DoxyCompactList}\item 
+\hypertarget{class_q_n_e_block_abaf5eb58d2106da25129e14da4ab7825}{int \hyperlink{class_q_n_e_block_abaf5eb58d2106da25129e14da4ab7825}{height}}\label{class_q_n_e_block_abaf5eb58d2106da25129e14da4ab7825}
+
+\begin{DoxyCompactList}\small\item\em height for drawing our block \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class originally written by S\-T\-A\-N\-I\-S\-L\-A\-W A\-D\-A\-S\-Z\-E\-W\-S\-K\-I has been modified. 
+
+to be used for a node based user interface for creating O\-S\-L shaders. This Block class handles our node in our scene. It manages all inputs and outputs to the node which will be determined by the O\-S\-L shader read in. \begin{DoxyDate}{Date}
+Modifed from 18/03/2015 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+S\-T\-A\-N\-I\-S\-L\-A\-W A\-D\-A\-S\-Z\-E\-W\-S\-K\-I modified by Declan Russell \mbox{[}Accessed 2015\mbox{]}. availible from \href{http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/}{\tt http\-://algoholic.\-eu/qnodeseditor-\/qt-\/nodesports-\/based-\/data-\/processing-\/flow-\/editor/}
+\end{DoxyAuthor}
+to be used for a node based user interface for creating O\-S\-L shaders. \begin{DoxyDate}{Date}
+Modifed from 18/03/2015 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+S\-T\-A\-N\-I\-S\-L\-A\-W A\-D\-A\-S\-Z\-E\-W\-S\-K\-I modified by Declan Russell \mbox{[}Accessed 2015\mbox{]}. availible from \href{http://algoholic.eu/qnodeseditor-qt-nodesports-based-data-processing-flow-editor/}{\tt http\-://algoholic.\-eu/qnodeseditor-\/qt-\/nodesports-\/based-\/data-\/processing-\/flow-\/editor/} 
+\end{DoxyAuthor}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_q_n_e_block_ab7fb118bd4bcf8aa224d03807a6dc315}{\index{Q\-N\-E\-Block@{Q\-N\-E\-Block}!load@{load}}
+\index{load@{load}!QNEBlock@{Q\-N\-E\-Block}}
+\subsubsection[{load}]{\setlength{\rightskip}{0pt plus 5cm}void Q\-N\-E\-Block\-::load (
+\begin{DoxyParamCaption}
+\item[{Q\-Data\-Stream \&}]{ds, }
+\item[{Q\-Map$<$ quint64, {\bf Q\-N\-E\-Port} $\ast$ $>$ \&}]{port\-Map}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_q_n_e_block_ab7fb118bd4bcf8aa224d03807a6dc315}
+
+
+load fucntion modified to be virtual to allow implimentaiton of new blocks 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000014}{Todo}]load and save new osl port data \end{DoxyRefDesc}
+
+
+Reimplemented in \hyperlink{class_o_s_l_shader_block_a9cf63f4ceb335aea5b6c2d7ba77d9d2c}{O\-S\-L\-Shader\-Block}, \hyperlink{class_o_s_l_var_float_three_block_a6c310fbded12f17c05e850a42b18f1e9}{O\-S\-L\-Var\-Float\-Three\-Block}, \hyperlink{class_o_s_l_var_float_block_ac0a7985ab09570956941088e53ad5956}{O\-S\-L\-Var\-Float\-Block}, \hyperlink{class_o_s_l_var_color_block_a53261128122303d6f22f0c92d77ef773}{O\-S\-L\-Var\-Color\-Block}, \hyperlink{class_o_s_l_var_image_block_a155e7a032f9df5e3c49edff6216a7348}{O\-S\-L\-Var\-Image\-Block}, \hyperlink{class_o_s_l_var_int_block_ad568fcf28fd1fd7824970bf0fd040149}{O\-S\-L\-Var\-Int\-Block}, \hyperlink{class_o_s_l_var_normal_block_a405ced7c8d4102426b41fac53e552771}{O\-S\-L\-Var\-Normal\-Block}, and \hyperlink{class_o_s_l_var_point_block_a47092371b17447b6ddb9b16af2253463}{O\-S\-L\-Var\-Point\-Block}.
+
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_q_n_e_block_ab7fb118bd4bcf8aa224d03807a6dc315_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/qneblock.\-h\item 
+src/\-Node\-Graph/qneblock.\-cpp\end{DoxyCompactItemize}

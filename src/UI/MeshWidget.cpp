@@ -179,6 +179,7 @@ void MeshWidget::clearScene()
 MeshWidget::MeshWidget(QWidget *parent) :
     QDockWidget(parent)
 {
+    m_update = true;
     this->setWindowTitle("Model Library");
     m_curMeshName.clear();
     //add our grid layout to our widget
@@ -448,6 +449,7 @@ void MeshWidget::modelSelected(QListWidgetItem *_item)
     }
     m_curMeshName = model->first;
     m_curModelProp = model->second;
+    m_update = false;
     m_meshTranslateXDSpinBox->setValue(m_curModelProp->transX);
     m_meshTranslateYDSpinBox->setValue(m_curModelProp->transY);
     m_meshTranslateZDSpinBox->setValue(m_curModelProp->transZ);
@@ -457,52 +459,56 @@ void MeshWidget::modelSelected(QListWidgetItem *_item)
     m_meshScaleXDSpinBox->setValue(m_curModelProp->scaleX);
     m_meshScaleYDSpinBox->setValue(m_curModelProp->scaleY);
     m_meshScaleZDSpinBox->setValue(m_curModelProp->scaleZ);
+    m_update = true;
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 void MeshWidget::signalTransformChange(double _val)
 {
 
-    QList<QListWidgetItem*> items = m_modelList->selectedItems();
-    std::map <QString, modelProp *>::const_iterator model;
-    for(int i=0;i<items.size();i++)
+    if(m_update)
     {
-        model=m_modelProperties.find(items[i]->text());
-        if(model==m_modelProperties.end())
+        QList<QListWidgetItem*> items = m_modelList->selectedItems();
+        std::map <QString, modelProp *>::const_iterator model;
+        for(int i=0;i<items.size();i++)
         {
-            QString error = QString("Cannot find properties of model %1").arg(items[i]->text());
-            QMessageBox::warning(this,"Model Library",error);
-            continue;
-        }
-        // get our transform values
-        model->second->transX = m_meshTranslateXDSpinBox->value();
-        model->second->transY = m_meshTranslateYDSpinBox->value();
-        model->second->transZ = m_meshTranslateZDSpinBox->value();
-        model->second->rotX = m_meshRotateXDSpinBox->value();
-        model->second->rotY = m_meshRotateYDSpinBox->value();
-        model->second->rotZ = m_meshRotateZDSpinBox->value();
-        model->second->scaleX = m_meshScaleXDSpinBox->value();
-        model->second->scaleY = m_meshScaleYDSpinBox->value();
-        model->second->scaleZ = m_meshScaleZDSpinBox->value();
+            model=m_modelProperties.find(items[i]->text());
+            if(model==m_modelProperties.end())
+            {
+                QString error = QString("Cannot find properties of model %1").arg(items[i]->text());
+                QMessageBox::warning(this,"Model Library",error);
+                continue;
+            }
+            // get our transform values
+            model->second->transX = m_meshTranslateXDSpinBox->value();
+            model->second->transY = m_meshTranslateYDSpinBox->value();
+            model->second->transZ = m_meshTranslateZDSpinBox->value();
+            model->second->rotX = m_meshRotateXDSpinBox->value();
+            model->second->rotY = m_meshRotateYDSpinBox->value();
+            model->second->rotZ = m_meshRotateZDSpinBox->value();
+            model->second->scaleX = m_meshScaleXDSpinBox->value();
+            model->second->scaleY = m_meshScaleYDSpinBox->value();
+            model->second->scaleZ = m_meshScaleZDSpinBox->value();
 
-        //create our transform matrix
-        glm::mat4 rotXMat,rotYMat,rotZMat,finalRot;
-        float DtoR = 3.14159265359/180.0;
-        glm::mat4 finalTrans;
-        finalTrans[0][0] = m_curModelProp->scaleX;
-        finalTrans[1][1] = m_curModelProp->scaleY;
-        finalTrans[2][2] = m_curModelProp->scaleZ;
-        rotXMat = glm::rotate(rotXMat,m_curModelProp->rotX*DtoR,glm::vec3(1,0,0));
-        rotYMat = glm::rotate(rotYMat,m_curModelProp->rotY*DtoR,glm::vec3(0,1,0));
-        rotZMat = glm::rotate(rotZMat,m_curModelProp->rotZ*DtoR,glm::vec3(0,0,1));
-        finalRot = rotXMat * rotYMat * rotZMat;
-        finalTrans*=finalRot;
-        finalTrans[3][0] = m_curModelProp->transX;
-        finalTrans[3][1] = m_curModelProp->transY;
-        finalTrans[3][2] = m_curModelProp->transZ;
-        PathTracerScene::getInstance()->transformModel(m_curMeshName.toStdString(),finalTrans);
+            //create our transform matrix
+            glm::mat4 rotXMat,rotYMat,rotZMat,finalRot;
+            float DtoR = 3.14159265359/180.0;
+            glm::mat4 finalTrans;
+            finalTrans[0][0] = m_curModelProp->scaleX;
+            finalTrans[1][1] = m_curModelProp->scaleY;
+            finalTrans[2][2] = m_curModelProp->scaleZ;
+            rotXMat = glm::rotate(rotXMat,m_curModelProp->rotX*DtoR,glm::vec3(1,0,0));
+            rotYMat = glm::rotate(rotYMat,m_curModelProp->rotY*DtoR,glm::vec3(0,1,0));
+            rotZMat = glm::rotate(rotZMat,m_curModelProp->rotZ*DtoR,glm::vec3(0,0,1));
+            finalRot = rotXMat * rotYMat * rotZMat;
+            finalTrans*=finalRot;
+            finalTrans[3][0] = m_curModelProp->transX;
+            finalTrans[3][1] = m_curModelProp->transY;
+            finalTrans[3][2] = m_curModelProp->transZ;
+            PathTracerScene::getInstance()->transformModel(m_curMeshName.toStdString(),finalTrans);
+        }
+        updateScene();
     }
-    updateScene();
 
 }
 //----------------------------------------------------------------------------------------------------------------------

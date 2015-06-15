@@ -1,0 +1,21 @@
+<map id="PathTracerScene::setGlobalTrans" name="PathTracerScene::setGlobalTrans">
+<area shape="rect" id="node2" href="$class_light_manager.html#a340b84ff20d73b644cbdab2f77eba5e6" title="returns an instance of our singleton class " alt="" coords="252,308,428,335"/>
+<area shape="rect" id="node14" href="$class_path_tracer_scene.html#a0888079f72be5e9cc893173029f4581a" title="Reevaluate the acceleration structure of the top model. " alt="" coords="2133,390,2317,431"/>
+<area shape="rect" id="node20" href="$class_light_manager.html#a50a3c0743afffc6db604e5eb325968c2" title="Transforms lights when scene camera moves. " alt="" coords="241,477,439,504"/>
+<area shape="rect" id="node3" href="$class_light_manager.html#af7566c95a70bbf2b8fb03f9565dd4f2e" title="Constructor. " alt="" coords="488,241,675,268"/>
+<area shape="rect" id="node4" href="$class_light_manager.html#ae415dd0ef2294e649b546d928837b860" title="Initialise the light buffer. " alt="" coords="723,157,877,184"/>
+<area shape="rect" id="node5" href="$class_light_manager.html#af36184ad28565d27b80f213ef8ac04a1" title="Creates our GUI elements. " alt="" coords="939,183,1107,209"/>
+<area shape="rect" id="node12" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="2126,157,2325,184"/>
+<area shape="rect" id="node19" href="$class_path_tracer_scene.html#acf716516054d2afead58edc76c65f609" title="accessor to our context " alt="" coords="925,132,1120,159"/>
+<area shape="rect" id="node6" href="$class_light_manager.html#aa25de876fdf8e06b33e6d8e161f8a44e" title="Adds a light to the scene. " alt="" coords="1175,237,1332,264"/>
+<area shape="rect" id="node10" href="$class_light_manager.html#a403f28b82c78e0b9946848f16ecd7581" title="Update a light already created. " alt="" coords="1902,309,2077,336"/>
+<area shape="rect" id="node16" href="$class_light_manager.html#a277063837cd2e2d17fd1e221e39add4a" title="Deletes a light from the scene. " alt="" coords="1168,107,1339,133"/>
+<area shape="rect" id="node18" href="$class_light_manager.html#ad50e75aa287fa5c623fef70c820de9b6" title="Update the gui for the current light selected. " alt="" coords="1671,360,1841,387"/>
+<area shape="rect" id="node7" href="$class_light_manager.html#a714fcbcf37902d8bd0e0b5676d00e121" title="Create a new parallelogram light. " alt="" coords="1387,259,1610,301"/>
+<area shape="rect" id="node15" href="$class_path_tracer_scene.html#a02f2f4a4adf5b435f3b87d731b93b0c8" title="Adds a light to the scene. " alt="" coords="1409,376,1589,403"/>
+<area shape="rect" id="node8" href="$class_light.html#a4a50c1f55863d0e7bcb6e15c56161f89" title="Returns the Parallelogram data structure for holding the light information. " alt="" coords="1665,259,1847,285"/>
+<area shape="rect" id="node9" href="$class_light_manager.html#acef6714d411c825fc6599a1c892fc9ff" title="Sets the GUI to the default values. " alt="" coords="1659,309,1853,336"/>
+<area shape="rect" id="node11" href="$class_light_manager.html#ae22469b57f40bd5b7d21ac6d857f8ce6" title="Used for translating lights. " alt="" coords="2146,309,2305,336"/>
+<area shape="rect" id="node13" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="2373,150,2568,191"/>
+<area shape="rect" id="node17" href="$class_path_tracer_scene.html#a985c787f3a950b0378e3998035c54e62" title="remove a light from our scene " alt="" coords="1397,5,1600,32"/>
+</map>

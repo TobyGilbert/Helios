@@ -283,7 +283,7 @@ void Text::renderText( float _x, float _y,  const QString &text ) const
   GLuint yPosLoc = m_textShader->getUniformLoc("ypos");
   // the y pos will always be the same so set it once for each
   // string we are rendering
-  glUniform1i(yPosLoc,_y);
+  glUniform1f(yPosLoc,_y);
   // now enable blending and disable depth sorting so the font renders
   // correctly
   glEnable(GL_BLEND);

@@ -1,0 +1,236 @@
+\hypertarget{class_oso_reader}{\section{Oso\-Reader Class Reference}
+\label{class_oso_reader}\index{Oso\-Reader@{Oso\-Reader}}
+}
+
+
+Collaboration diagram for Oso\-Reader\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=299pt]{class_oso_reader__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_oso_reader_a7c250441e714b1ed213dc390f941fab7}{\hyperlink{class_oso_reader_a7c250441e714b1ed213dc390f941fab7}{$\sim$\-Oso\-Reader} ()}\label{class_oso_reader_a7c250441e714b1ed213dc390f941fab7}
+
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a35a37d1eaf5c997542f9002420c6bbe7}{void \hyperlink{class_oso_reader_a35a37d1eaf5c997542f9002420c6bbe7}{version} (float \-\_\-major, int \-\_\-minor)}\label{class_oso_reader_a35a37d1eaf5c997542f9002420c6bbe7}
+
+\begin{DoxyCompactList}\small\item\em Set the oso version. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_adf00a6dc6731f40bbac2934d8c648bf6}{void \hyperlink{class_oso_reader_adf00a6dc6731f40bbac2934d8c648bf6}{shader} (std\-::string \-\_\-shader\-Type, std\-::string \-\_\-shader\-Name)}\label{class_oso_reader_adf00a6dc6731f40bbac2934d8c648bf6}
+
+\begin{DoxyCompactList}\small\item\em Create the shader. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_aa4df700268fcad6da25a4d6b7c7c2049}{void \hyperlink{class_oso_reader_aa4df700268fcad6da25a4d6b7c7c2049}{parameter} (std\-::pair$<$ std\-::string, std\-::string $>$ \-\_\-params)}\label{class_oso_reader_aa4df700268fcad6da25a4d6b7c7c2049}
+
+\begin{DoxyCompactList}\small\item\em Save the parameters passed to the shader. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a4587ad9c490317097956bb82c8b69ecb}{void \hyperlink{class_oso_reader_a4587ad9c490317097956bb82c8b69ecb}{add\-Symbols} (int \-\_\-symtype, Type \-\_\-type, std\-::string \-\_\-identifier)}\label{class_oso_reader_a4587ad9c490317097956bb82c8b69ecb}
+
+\begin{DoxyCompactList}\small\item\em Add a symbols a vector storing all symbols used. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a25a7abbbf34ef2504f1f442206d18998}{void \hyperlink{class_oso_reader_a25a7abbbf34ef2504f1f442206d18998}{make\-Symbol\-Array\-Type} (std\-::string \-\_\-array\-Length)}\label{class_oso_reader_a25a7abbbf34ef2504f1f442206d18998}
+
+\begin{DoxyCompactList}\small\item\em Makes the symbol of type array. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a40420f55aaafd4f006204f6d4240127d}{void \hyperlink{class_oso_reader_a40420f55aaafd4f006204f6d4240127d}{add\-Symbol\-Defaults} (std\-::string \-\_\-default)}\label{class_oso_reader_a40420f55aaafd4f006204f6d4240127d}
+
+\begin{DoxyCompactList}\small\item\em Add the default parameters for a symbol. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_ae8411b4acd37c94e749d4cfdb140695c}{void \hyperlink{class_oso_reader_ae8411b4acd37c94e749d4cfdb140695c}{instruction} (std\-::string \-\_\-opcode, int \-\_\-line\-No)}\label{class_oso_reader_ae8411b4acd37c94e749d4cfdb140695c}
+
+\begin{DoxyCompactList}\small\item\em An instruction within the shader code. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_afa815b45d1f74238f8b141382df388f3}{void \hyperlink{class_oso_reader_afa815b45d1f74238f8b141382df388f3}{instruction\-Arguments} (std\-::string \-\_\-argument)}\label{class_oso_reader_afa815b45d1f74238f8b141382df388f3}
+
+\begin{DoxyCompactList}\small\item\em argument for the instructions \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a1416bafd061691edacb6b38b63d66431}{bool \hyperlink{class_oso_reader_a1416bafd061691edacb6b38b63d66431}{parse\-File} (const std\-::string \&\-\_\-filename)}\label{class_oso_reader_a1416bafd061691edacb6b38b63d66431}
+
+\begin{DoxyCompactList}\small\item\em Parse the oso file. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a6858caaf259dee3078c92aba1749cce5}{bool \hyperlink{class_oso_reader_a6858caaf259dee3078c92aba1749cce5}{parse\-Buffer} (const std\-::string \&\-\_\-buffer, Q\-String \-\_\-filename)}\label{class_oso_reader_a6858caaf259dee3078c92aba1749cce5}
+
+\begin{DoxyCompactList}\small\item\em Parse the oso buffer. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_aee84bc1da468283d18f33fef025b4172}{void \hyperlink{class_oso_reader_aee84bc1da468283d18f33fef025b4172}{print\-Version} ()}\label{class_oso_reader_aee84bc1da468283d18f33fef025b4172}
+
+\begin{DoxyCompactList}\small\item\em Print the osl shader version. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_aeb9f3728a8f71686e2f98905bf6a850b}{std\-::string \hyperlink{class_oso_reader_aeb9f3728a8f71686e2f98905bf6a850b}{get\-Shader\-Name} ()}\label{class_oso_reader_aeb9f3728a8f71686e2f98905bf6a850b}
+
+\begin{DoxyCompactList}\small\item\em accessor to shader name \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a03886b44f396fea6f5342c3b37476f19}{std\-::string \hyperlink{class_oso_reader_a03886b44f396fea6f5342c3b37476f19}{get\-Shader\-Type} ()}\label{class_oso_reader_a03886b44f396fea6f5342c3b37476f19}
+
+\begin{DoxyCompactList}\small\item\em accessor to shader type \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_ab2cbe5e100ae52e68537057c69d4faba}{void \hyperlink{class_oso_reader_ab2cbe5e100ae52e68537057c69d4faba}{print\-Shader} ()}\label{class_oso_reader_ab2cbe5e100ae52e68537057c69d4faba}
+
+\begin{DoxyCompactList}\small\item\em Print the osl shader currently being parsed;. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_ae0629d78ffeb6111cb72c8354074e8d4}{void \hyperlink{class_oso_reader_ae0629d78ffeb6111cb72c8354074e8d4}{print\-Params} ()}\label{class_oso_reader_ae0629d78ffeb6111cb72c8354074e8d4}
+
+\begin{DoxyCompactList}\small\item\em Print the parameters input into the O\-S\-L shader. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_aea174af45dda3f23270c73cd5e67f204}{void \hyperlink{class_oso_reader_aea174af45dda3f23270c73cd5e67f204}{print\-Instructions} ()}\label{class_oso_reader_aea174af45dda3f23270c73cd5e67f204}
+
+\begin{DoxyCompactList}\small\item\em Print the instructions and its arguments. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a0a244e8ed195f3752af6738e0de045b4}{void \hyperlink{class_oso_reader_a0a244e8ed195f3752af6738e0de045b4}{print\-Device\-Function} ()}\label{class_oso_reader_a0a244e8ed195f3752af6738e0de045b4}
+
+\begin{DoxyCompactList}\small\item\em Print the cuda device function. \end{DoxyCompactList}\item 
+std\-::string \hyperlink{class_oso_reader_a73b356139df5730e756f2366ec1e1924}{generate\-Device\-Function} ()
+\begin{DoxyCompactList}\small\item\em Generate a cuda device function. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a7929682e9581cd8fa5c9c80fbb27e12a}{std\-::vector$<$ \hyperlink{struct_symbol}{Symbol} $>$ \hyperlink{class_oso_reader_a7929682e9581cd8fa5c9c80fbb27e12a}{get\-Input\-Params} ()}\label{class_oso_reader_a7929682e9581cd8fa5c9c80fbb27e12a}
+
+\begin{DoxyCompactList}\small\item\em Returns the input parameters for the current O\-S\-L shader. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_af7c60fc9a4d066d9e6689ef0f54e2baa}{std\-::vector$<$ \hyperlink{struct_symbol}{Symbol} $>$ \hyperlink{class_oso_reader_af7c60fc9a4d066d9e6689ef0f54e2baa}{get\-Output\-Params} ()}\label{class_oso_reader_af7c60fc9a4d066d9e6689ef0f54e2baa}
+
+\begin{DoxyCompactList}\small\item\em Returns the outpu parameters for the current O\-S\-L shader. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a90d5c3b4f09cceeffff0d5ff1d3dde41}{void \hyperlink{class_oso_reader_a90d5c3b4f09cceeffff0d5ff1d3dde41}{reset\-Vectors} ()}\label{class_oso_reader_a90d5c3b4f09cceeffff0d5ff1d3dde41}
+
+\begin{DoxyCompactList}\small\item\em Reset all vectors. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a6549d0c2b47de835cdcb67994af8a65b}{int \hyperlink{class_oso_reader_a6549d0c2b47de835cdcb67994af8a65b}{get\-Line\-No} ()}\label{class_oso_reader_a6549d0c2b47de835cdcb67994af8a65b}
+
+\begin{DoxyCompactList}\small\item\em Returns the current line number being read by the compiler. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a8d21cee511d258a3b82e0781b406a265}{void \hyperlink{class_oso_reader_a8d21cee511d258a3b82e0781b406a265}{incriment\-Line\-No} ()}\label{class_oso_reader_a8d21cee511d258a3b82e0781b406a265}
+
+\begin{DoxyCompactList}\small\item\em Incriments the line number variable. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_ad338cc5bc40d56729831448bbcd4651d}{void \hyperlink{class_oso_reader_ad338cc5bc40d56729831448bbcd4651d}{evaluate\-Line} ()}\label{class_oso_reader_ad338cc5bc40d56729831448bbcd4651d}
+
+\begin{DoxyCompactList}\small\item\em Evaluates lines in an oso function and outputs a string. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a8d58bcba035401b2e59ad8d053dd91cf}{bool \hyperlink{class_oso_reader_a8d58bcba035401b2e59ad8d053dd91cf}{check\-Shader\-Globals} (std\-::string \-\_\-variable)}\label{class_oso_reader_a8d58bcba035401b2e59ad8d053dd91cf}
+
+\begin{DoxyCompactList}\small\item\em Check if the vaiable is a shader global. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a8fbdd221292ac5eac13fac373456bca5}{Type \hyperlink{class_oso_reader_a8fbdd221292ac5eac13fac373456bca5}{get\-Symbol\-Type} (std\-::string \-\_\-variable)}\label{class_oso_reader_a8fbdd221292ac5eac13fac373456bca5}
+
+\begin{DoxyCompactList}\small\item\em Return the type of symbol \-\_\-variable. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a6a3e710f4ed28396847353cb69b9f15b}{std\-::vector$<$ \hyperlink{struct_symbol}{Symbol} $>$\-::iterator \hyperlink{class_oso_reader_a6a3e710f4ed28396847353cb69b9f15b}{get\-Symbol} (std\-::string \-\_\-symbol\-Name)}\label{class_oso_reader_a6a3e710f4ed28396847353cb69b9f15b}
+
+\begin{DoxyCompactList}\small\item\em Returns the iterator to the symbol in the symbols array. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_oso_reader_ab7a5a31334d84529054d412e879993e2}{static \hyperlink{class_oso_reader}{Oso\-Reader} $\ast$ \hyperlink{class_oso_reader_ab7a5a31334d84529054d412e879993e2}{get\-Oso\-Reader} ()}\label{class_oso_reader_ab7a5a31334d84529054d412e879993e2}
+
+\begin{DoxyCompactList}\small\item\em Return the singleton instance of the the class \hyperlink{class_oso_reader}{Oso\-Reader}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_oso_reader_aee9e7e92aa5b132e81e850e3578058ab}{std\-::vector$<$ \hyperlink{struct_symbol}{Symbol} $>$ \hyperlink{class_oso_reader_aee9e7e92aa5b132e81e850e3578058ab}{m\-\_\-symbols}}\label{class_oso_reader_aee9e7e92aa5b132e81e850e3578058ab}
+
+\begin{DoxyCompactList}\small\item\em A vector containing all the symbols used in an O\-S\-L shader. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_oso_reader_a6792e222d40495ce57725c5410b27aab}{\hyperlink{class_oso_reader_a6792e222d40495ce57725c5410b27aab}{Oso\-Reader} ()}\label{class_oso_reader_a6792e222d40495ce57725c5410b27aab}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_oso_reader_aa85bc116665b7d04446ae5600181ddf8}{float \hyperlink{class_oso_reader_aa85bc116665b7d04446ae5600181ddf8}{m\-\_\-oso\-Major}}\label{class_oso_reader_aa85bc116665b7d04446ae5600181ddf8}
+
+\begin{DoxyCompactList}\small\item\em Oso major version. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a1cc6e749a85a487323ec82c7709691c5}{int \hyperlink{class_oso_reader_a1cc6e749a85a487323ec82c7709691c5}{m\-\_\-oso\-Minor}}\label{class_oso_reader_a1cc6e749a85a487323ec82c7709691c5}
+
+\begin{DoxyCompactList}\small\item\em Oso minor version. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a0ad8d3f177c8c8269afe76c53db54b9c}{std\-::string \hyperlink{class_oso_reader_a0ad8d3f177c8c8269afe76c53db54b9c}{m\-\_\-shader\-Type}}\label{class_oso_reader_a0ad8d3f177c8c8269afe76c53db54b9c}
+
+\begin{DoxyCompactList}\small\item\em The type of shader. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a0539542488b827db046a9acf105f7c49}{std\-::string \hyperlink{class_oso_reader_a0539542488b827db046a9acf105f7c49}{m\-\_\-shader\-Name}}\label{class_oso_reader_a0539542488b827db046a9acf105f7c49}
+
+\begin{DoxyCompactList}\small\item\em The shader name. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a95df7244a3e56ade2e59d9fdf89a15e2}{std\-::vector$<$ std\-::pair\\*
+$<$ std\-::string, std\-::string $>$ $>$ \hyperlink{class_oso_reader_a95df7244a3e56ade2e59d9fdf89a15e2}{m\-\_\-i\-Params}}\label{class_oso_reader_a95df7244a3e56ade2e59d9fdf89a15e2}
+
+\begin{DoxyCompactList}\small\item\em The shaders input parameters. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_af1afa408ccfb8db99069b5f807433e5f}{std\-::vector$<$ \hyperlink{struct_instruction}{Instruction} $>$ \hyperlink{class_oso_reader_af1afa408ccfb8db99069b5f807433e5f}{m\-\_\-instructions}}\label{class_oso_reader_af1afa408ccfb8db99069b5f807433e5f}
+
+\begin{DoxyCompactList}\small\item\em The shaders instructions. \end{DoxyCompactList}\item 
+int \hyperlink{class_oso_reader_a2573c4b6a21a1db045eba041ed52b321}{m\-\_\-line\-No}
+\begin{DoxyCompactList}\small\item\em The functions the shader is using. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_ab53a0d7b47c56c15f2921963e9081d72}{std\-::vector$<$ std\-::string $>$ \hyperlink{class_oso_reader_ab53a0d7b47c56c15f2921963e9081d72}{m\-\_\-lines}}\label{class_oso_reader_ab53a0d7b47c56c15f2921963e9081d72}
+
+\begin{DoxyCompactList}\small\item\em A vector to store every inturpretted line. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a5fdfc7b8e24eea194e7d8984ed74dfa9}{std\-::vector$<$ \hyperlink{struct_jump_target}{Jump\-Target} $>$ \hyperlink{class_oso_reader_a5fdfc7b8e24eea194e7d8984ed74dfa9}{m\-\_\-jump\-Targets}}\label{class_oso_reader_a5fdfc7b8e24eea194e7d8984ed74dfa9}
+
+\begin{DoxyCompactList}\small\item\em A vector to store jump targets for use with if statements. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a9f6a42a31794ddb721b864469134f98b}{std\-::vector$<$ \hyperlink{struct_for_loop}{For\-Loop} $>$ {\bfseries m\-\_\-for\-Loop\-Jump\-Targets}}\label{class_oso_reader_a9f6a42a31794ddb721b864469134f98b}
+
+\item 
+\hypertarget{class_oso_reader_a94f869890826ca70d5c0ecaaaea16f20}{bool \hyperlink{class_oso_reader_a94f869890826ca70d5c0ecaaaea16f20}{m\-\_\-array}}\label{class_oso_reader_a94f869890826ca70d5c0ecaaaea16f20}
+
+\begin{DoxyCompactList}\small\item\em Dictates whether the next symbol is an array. \end{DoxyCompactList}\item 
+\hypertarget{class_oso_reader_a22c9cd4eb9b56bfe50d1200d0f4379fc}{std\-::string \hyperlink{class_oso_reader_a22c9cd4eb9b56bfe50d1200d0f4379fc}{m\-\_\-array\-Length}}\label{class_oso_reader_a22c9cd4eb9b56bfe50d1200d0f4379fc}
+
+\begin{DoxyCompactList}\small\item\em If the next symbol to be added is an array this is the length. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{class_oso_reader}{Oso\-Reader} $\ast$ \hyperlink{class_oso_reader_ad2bd03b85104e4ed4badb2ee5f93d959}{m\-\_\-oso\-Reader}
+\begin{DoxyCompactList}\small\item\em An instance of the class \hyperlink{class_oso_reader}{Oso\-Reader} used as a singleton. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_oso_reader_a73b356139df5730e756f2366ec1e1924}{\index{Oso\-Reader@{Oso\-Reader}!generate\-Device\-Function@{generate\-Device\-Function}}
+\index{generate\-Device\-Function@{generate\-Device\-Function}!OsoReader@{Oso\-Reader}}
+\subsubsection[{generate\-Device\-Function}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string Oso\-Reader\-::generate\-Device\-Function (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_oso_reader_a73b356139df5730e756f2366ec1e1924}
+
+
+Generate a cuda device function. 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000015}{Todo}]implement a fully 0 matrix \end{DoxyRefDesc}
+
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000016}{Todo}]take into account the first parameter which specifies the coordinate space \end{DoxyRefDesc}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_oso_reader_a73b356139df5730e756f2366ec1e1924_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_oso_reader_a73b356139df5730e756f2366ec1e1924_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_oso_reader_a2573c4b6a21a1db045eba041ed52b321}{\index{Oso\-Reader@{Oso\-Reader}!m\-\_\-line\-No@{m\-\_\-line\-No}}
+\index{m\-\_\-line\-No@{m\-\_\-line\-No}!OsoReader@{Oso\-Reader}}
+\subsubsection[{m\-\_\-line\-No}]{\setlength{\rightskip}{0pt plus 5cm}int Oso\-Reader\-::m\-\_\-line\-No\hspace{0.3cm}{\ttfamily [private]}}}\label{class_oso_reader_a2573c4b6a21a1db045eba041ed52b321}
+
+
+The functions the shader is using. 
+
+The current line number being read \hypertarget{class_oso_reader_ad2bd03b85104e4ed4badb2ee5f93d959}{\index{Oso\-Reader@{Oso\-Reader}!m\-\_\-oso\-Reader@{m\-\_\-oso\-Reader}}
+\index{m\-\_\-oso\-Reader@{m\-\_\-oso\-Reader}!OsoReader@{Oso\-Reader}}
+\subsubsection[{m\-\_\-oso\-Reader}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Oso\-Reader} $\ast$ Oso\-Reader\-::m\-\_\-oso\-Reader\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}}\label{class_oso_reader_ad2bd03b85104e4ed4badb2ee5f93d959}
+
+
+An instance of the class \hyperlink{class_oso_reader}{Oso\-Reader} used as a singleton. 
+
+Class to interpret the oso code and turn it into a device function.
+
+\begin{DoxyAuthor}{Author}
+Toby Gilbert 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+04/03/15 
+\end{DoxyDate}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-O\-S\-L\-Compiler/Oso\-Reader.\-h\item 
+src/\-O\-S\-L\-Compiler/Oso\-Reader.\-cpp\end{DoxyCompactItemize}

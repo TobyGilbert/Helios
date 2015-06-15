@@ -1,0 +1,5 @@
+<map id="OSLNodesEditor::getLastBlock" name="OSLNodesEditor::getLastBlock">
+<area shape="rect" id="node2" href="$class_q_nodes_editor.html#a381b679a27db1a4aeaaa271631c8c699" title="accesor to our scene " alt="" coords="259,5,426,32"/>
+<area shape="rect" id="node3" href="$class_q_n_e_block.html#ab36daa69f4c9ef4e6f415c591d9257b7" title="returns the ports connected to this block " alt="" coords="282,56,403,83"/>
+<area shape="rect" id="node4" href="$class_q_n_e_port.html#afb0f6931a74eaaeee1975b21dc754051" title="accessor to the port name " alt="" coords="275,107,411,133"/>
+</map>

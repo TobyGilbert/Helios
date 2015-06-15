@@ -1,0 +1,139 @@
+\hypertarget{class_color_node_proxy_widget}{\section{Color\-Node\-Proxy\-Widget Class Reference}
+\label{class_color_node_proxy_widget}\index{Color\-Node\-Proxy\-Widget@{Color\-Node\-Proxy\-Widget}}
+}
+
+
+Extention of \hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} that allows us to select a color and apply it to a attribute of a material.  
+
+
+
+
+{\ttfamily \#include $<$Color\-Node\-Proxy\-Widget.\-h$>$}
+
+
+
+Inheritance diagram for Color\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=228pt]{class_color_node_proxy_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Color\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_color_node_proxy_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_color_node_proxy_widget_add07d21a9e816205e9771214ec2fa6f4}{set\-Material\-Vars} (Q\-Color \-\_\-col)
+\begin{DoxyCompactList}\small\item\em a slot to set the varibles in our material when our spin box values is changed \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_color_node_proxy_widget_a7a3ed9e2294413a74f5f1470df0fd5c8}{\hyperlink{class_color_node_proxy_widget_a7a3ed9e2294413a74f5f1470df0fd5c8}{Color\-Node\-Proxy\-Widget} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$\-\_\-port\-Connected, optix\-::\-Material \&\-\_\-mat, Q\-Graphics\-Item $\ast$parent=0)}\label{class_color_node_proxy_widget_a7a3ed9e2294413a74f5f1470df0fd5c8}
+
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_a88d96309b54f772c61bbb9861587f444}{\hyperlink{class_color_node_proxy_widget_a88d96309b54f772c61bbb9861587f444}{$\sim$\-Color\-Node\-Proxy\-Widget} ()}\label{class_color_node_proxy_widget_a88d96309b54f772c61bbb9861587f444}
+
+\begin{DoxyCompactList}\small\item\em defualt destructor \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_aba24c0f8211c399c29c458a8ee0dd912}{void \hyperlink{class_color_node_proxy_widget_aba24c0f8211c399c29c458a8ee0dd912}{set\-Linked\-Var} ()}\label{class_color_node_proxy_widget_aba24c0f8211c399c29c458a8ee0dd912}
+
+\begin{DoxyCompactList}\small\item\em overite our set\-Linked\-Var function to put our own functionality in \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_a77c04ecaa265462cf7c06ffaab801c7e}{void \hyperlink{class_color_node_proxy_widget_a77c04ecaa265462cf7c06ffaab801c7e}{save} (Q\-Data\-Stream \&ds)}\label{class_color_node_proxy_widget_a77c04ecaa265462cf7c06ffaab801c7e}
+
+\begin{DoxyCompactList}\small\item\em overload our save function for float 3 node implimentation \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_acf3559d410469d180d064d9e352ccbcb}{void \hyperlink{class_color_node_proxy_widget_acf3559d410469d180d064d9e352ccbcb}{load} (Q\-Data\-Stream \&, Q\-Map$<$ quint64, \hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ $>$ \&port\-Map)}\label{class_color_node_proxy_widget_acf3559d410469d180d064d9e352ccbcb}
+
+\begin{DoxyCompactList}\small\item\em overload our load function for float 3 node implimentation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_color_node_proxy_widget_a8c47703e34c239ffb18833a3eb734fe6}{float \hyperlink{class_color_node_proxy_widget_a8c47703e34c239ffb18833a3eb734fe6}{m\-\_\-red}}\label{class_color_node_proxy_widget_a8c47703e34c239ffb18833a3eb734fe6}
+
+\begin{DoxyCompactList}\small\item\em red intensity \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_aa28cea0795b16ec5834e1b4aedc6100e}{float \hyperlink{class_color_node_proxy_widget_aa28cea0795b16ec5834e1b4aedc6100e}{m\-\_\-green}}\label{class_color_node_proxy_widget_aa28cea0795b16ec5834e1b4aedc6100e}
+
+\begin{DoxyCompactList}\small\item\em green intensity \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_a7d819513b88223e46a2740b9528cbd44}{float \hyperlink{class_color_node_proxy_widget_a7d819513b88223e46a2740b9528cbd44}{m\-\_\-blue}}\label{class_color_node_proxy_widget_a7d819513b88223e46a2740b9528cbd44}
+
+\begin{DoxyCompactList}\small\item\em blue intensity \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_color_node_proxy_widget_a68395843f6fcae8ef7995388a309930c}{Q\-Push\-Button $\ast$ \hyperlink{class_color_node_proxy_widget_a68395843f6fcae8ef7995388a309930c}{m\-\_\-col\-Btn}}\label{class_color_node_proxy_widget_a68395843f6fcae8ef7995388a309930c}
+
+\begin{DoxyCompactList}\small\item\em our colour button \end{DoxyCompactList}\item 
+\hypertarget{class_color_node_proxy_widget_a6bdf3c7038a0e52fc1f293fcb04dd28c}{Q\-Color\-Dialog $\ast$ \hyperlink{class_color_node_proxy_widget_a6bdf3c7038a0e52fc1f293fcb04dd28c}{m\-\_\-color\-Dialog}}\label{class_color_node_proxy_widget_a6bdf3c7038a0e52fc1f293fcb04dd28c}
+
+\begin{DoxyCompactList}\small\item\em Color Dialog widget. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Extention of \hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} that allows us to select a color and apply it to a attribute of a material. 
+
+Extension of Q\-N\-Eblock, This Abstract class provides a basis for all variable blocks to be drawn in our scene.
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/05/2015 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_color_node_proxy_widget_add07d21a9e816205e9771214ec2fa6f4}{\index{Color\-Node\-Proxy\-Widget@{Color\-Node\-Proxy\-Widget}!set\-Material\-Vars@{set\-Material\-Vars}}
+\index{set\-Material\-Vars@{set\-Material\-Vars}!ColorNodeProxyWidget@{Color\-Node\-Proxy\-Widget}}
+\subsubsection[{set\-Material\-Vars}]{\setlength{\rightskip}{0pt plus 5cm}void Color\-Node\-Proxy\-Widget\-::set\-Material\-Vars (
+\begin{DoxyParamCaption}
+\item[{Q\-Color}]{\-\_\-col}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_color_node_proxy_widget_add07d21a9e816205e9771214ec2fa6f4}
+
+
+a slot to set the varibles in our material when our spin box values is changed 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-col} & -\/ color selected \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_color_node_proxy_widget_add07d21a9e816205e9771214ec2fa6f4_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_color_node_proxy_widget_add07d21a9e816205e9771214ec2fa6f4_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/Color\-Node\-Proxy\-Widget.\-h\item 
+src/\-Node\-Graph/Color\-Node\-Proxy\-Widget.\-cpp\end{DoxyCompactItemize}

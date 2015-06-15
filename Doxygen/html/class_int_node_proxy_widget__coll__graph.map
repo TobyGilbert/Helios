@@ -1,0 +1,5 @@
+<map id="IntNodeProxyWidget" name="IntNodeProxyWidget">
+<area shape="rect" id="node2" href="$class_abstract_node_proxy_widget.html" title="Abstract base class for all variable proxy widgets in our scene. " alt="" coords="36,944,233,1051"/>
+<area shape="rect" id="node4" href="$class_q_n_e_port.html" title="{QNEPort\n|&#45; name\l&#45; isOutput_\l&#45; label\l&#45; radius_\l&#45; margin\l&#45; m_connections\l&#45; m_portFlags\l&#45; m_ptr\l&#45; m_varibleType\l&#45; m_initParams\l|+ QNEPort()\l+ ~QNEPort()\l+ setNEBlock()\l+ setName()\l+ setIsOutput()\l+ radius()\l+ isOutput()\l+ connections()\l+ setPortFlags()\l+ portName()\land 12 more...\l# itemChange()\l}" alt="" coords="187,509,305,880"/>
+<area shape="rect" id="node6" href="$class_q_n_e_block.html" title="This class originally written by STANISLAW ADASZEWSKI has been modified. " alt="" coords="233,133,361,445"/>
+</map>

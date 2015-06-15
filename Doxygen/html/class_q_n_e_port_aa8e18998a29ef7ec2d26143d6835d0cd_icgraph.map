@@ -1,0 +1,38 @@
+<map id="QNEPort::setVaribleType" name="QNEPort::setVaribleType">
+<area shape="rect" id="node2" href="$class_q_n_e_block.html#a1e45a9b7f2ace3da607662a84af3388a" title="adds a port to our node. This has been modified to also set the varibel type and initial paramiters..." alt="" coords="225,453,362,480"/>
+<area shape="rect" id="node3" href="$class_o_s_l_abstract_var_block.html#a833548c33ea2a0eee22984507a3ffc24" title="Set the name of our variable block. " alt="" coords="423,263,574,305"/>
+<area shape="rect" id="node11" href="$class_o_s_l_shader_block.html#a9cf63f4ceb335aea5b6c2d7ba77d9d2c" title="overide our load function to give our new implimentation " alt="" coords="421,529,576,556"/>
+<area shape="rect" id="node12" href="$class_o_s_l_shader_block.html#a4c5f75777bcd1a81bd66294f3d736214" title="compiles our osl shader and sets up our ports and obtains required data about shader ..." alt="" coords="635,523,829,549"/>
+<area shape="rect" id="node35" href="$class_q_n_e_block.html#a17510e88ed95706eea4adb6ce05c0b37" title="adds an input port to our node. Modified to also set the varible type and initial paramiters..." alt="" coords="415,479,582,505"/>
+<area shape="rect" id="node36" href="$class_q_n_e_block.html#afb9d697f080d9bc14166304f6da91a59" title="adds an output port to our node. Modified to also set the varible type and initial paramiters..." alt="" coords="411,333,587,360"/>
+<area shape="rect" id="node37" href="$class_q_n_e_block.html#ab7fb118bd4bcf8aa224d03807a6dc315" title="load fucntion modified to be virtual to allow implimentaiton of new blocks " alt="" coords="441,580,557,607"/>
+<area shape="rect" id="node4" href="$class_o_s_l_var_color_block.html#a2750ed93bad65dad99b22f02b4ecdfb1" title="default constructor " alt="" coords="639,391,825,433"/>
+<area shape="rect" id="node5" href="$class_o_s_l_var_float_block.html#a03a827e44bb26be99581d7aff5e57398" title="default constructor " alt="" coords="640,457,824,498"/>
+<area shape="rect" id="node6" href="$class_o_s_l_var_float_three_block.html#a61b6ed21aa2cf47cc98ca128fa568972" title="default constructor " alt="" coords="647,65,817,106"/>
+<area shape="rect" id="node7" href="$class_o_s_l_var_image_block.html#a371aa661555240e202283bdb2868d823" title="default constructor " alt="" coords="637,130,827,171"/>
+<area shape="rect" id="node8" href="$class_o_s_l_var_int_block.html#a64d269693abfaab7529447642e54777e" title="default constructor " alt="" coords="639,195,825,237"/>
+<area shape="rect" id="node9" href="$class_o_s_l_var_normal_block.html#a2a8b40300400ae29bd3983224bac8efb" title="default constructor " alt="" coords="657,261,807,302"/>
+<area shape="rect" id="node10" href="$class_o_s_l_var_point_block.html#a8fe3a3a231deb2e939cbe03e5b243024" title="default constructor " alt="" coords="639,326,825,367"/>
+<area shape="rect" id="node13" href="$class_abstract_material_widget.html#a24133fd1d3a66d898ca30a69b8f9cff3" title="adds a shader node to our user interface " alt="" coords="878,515,1037,557"/>
+<area shape="rect" id="node14" href="$class_abstract_material_widget.html#a5ef500ae0f272d97fb4687ac0c6fd114" title="Create a slot to show our context menu if we right click anywhere on our widget. " alt="" coords="1086,515,1245,557"/>
+<area shape="rect" id="node15" href="$class_abstract_material_widget.html#ace749c971293b2aef90e2861500be8bd" title="our default constructor " alt="" coords="1294,515,1461,557"/>
+<area shape="rect" id="node16" href="$class_abstract_material_widget.html#a96533d07fe6cc79527f5df9ddf2199a7" title="accessor to our instance of our class " alt="" coords="1510,86,1669,127"/>
+<area shape="rect" id="node17" href="$class_main_window.html#ae98d00a93bc118200eeef9f9bba1dba7" title="Destructor. " alt="" coords="3113,167,3301,193"/>
+<area shape="rect" id="node18" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="3350,309,3530,336"/>
+<area shape="rect" id="node20" href="$class_material_library.html#a93a390e382f15c20a3ba3d760cdb4bc5" title="imports all materials from a directory " alt="" coords="2649,43,2845,69"/>
+<area shape="rect" id="node21" href="$class_material_library.html#a2e77c2e90d100dec3a113c2ea1e94fb5" title="slot to be called if something is selected in our material list " alt="" coords="1718,232,1906,259"/>
+<area shape="rect" id="node19" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="3579,309,3759,336"/>
+<area shape="rect" id="node22" href="$class_material_library.html#ac0fdd21aa44b30e4ef14f252f26c3f1e" title="defalut constructor " alt="" coords="1955,225,2117,266"/>
+<area shape="rect" id="node23" href="$class_material_library.html#a9dddb26d8ba882414f96bf5e4e6c3cf6" title="get an instance of our material library " alt="" coords="2166,388,2349,415"/>
+<area shape="rect" id="node24" href="$class_abstract_material_widget.html#a965876cda41ec655a45c2c34d86a97ae" title="compiles destination file and adds to material library " alt="" coords="2419,145,2578,186"/>
+<area shape="rect" id="node25" href="$class_abstract_material_widget.html#ab4350dfde2aadd6e6c42210ec03a4dd1" title="slot to add our material to our library " alt="" coords="2419,515,2578,557"/>
+<area shape="rect" id="node28" href="$class_mesh_widget.html#a47bdbf5350b44dd43a08e27b16c407d7" title="loads scene from file " alt="" coords="2915,392,3042,419"/>
+<area shape="rect" id="node30" href="$class_mesh_widget.html#aac3bcbbfb389bf17505d4eb894ae5693" title="applies material from library to mesh " alt="" coords="2397,363,2600,389"/>
+<area shape="rect" id="node26" href="$class_abstract_material_widget.html#a02cc4a4c8e489854363c646cd67c03f7" title="applies material to currently selected mesh " alt="" coords="3127,515,3286,557"/>
+<area shape="rect" id="node27" href="$class_abstract_material_widget.html#a314c224671ac3e3aa56d313eaa95398f" title="saves our current node graph " alt="" coords="2667,570,2826,611"/>
+<area shape="rect" id="node29" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="3123,385,3290,412"/>
+<area shape="rect" id="node31" href="$class_mesh_widget.html#a2a83b4ce21ff9a33d5b7315faefb8fed" title="our default constructor " alt="" coords="2659,363,2835,389"/>
+<area shape="rect" id="node32" href="$class_mesh_widget.html#ab69e785150bd1802124a3fea62940866" title="returns the instance of our mesh widget " alt="" coords="2893,327,3064,353"/>
+<area shape="rect" id="node33" href="$class_main_window.html#a8c5c70395af911e771dbf61da52169ab" title="saves our scene " alt="" coords="3121,284,3292,311"/>
+<area shape="rect" id="node34" href="$class_material_library.html#a25fbe1df01423d3c29f17b068c1fa93e" title="applys selected material to current selected in mesh widget " alt="" coords="3123,218,3291,259"/>
+</map>

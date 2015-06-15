@@ -1,0 +1,21 @@
+<map id="OSLShaderBlock::loadShader" name="OSLShaderBlock::loadShader">
+<area shape="rect" id="node2" href="$class_osl_reader.html#a9409c31526e8530cee322f06b74f29b4" title="Compiles osl code to oso and dumps to buffer. " alt="" coords="249,30,458,57"/>
+<area shape="rect" id="node3" href="$class_oso_reader.html#ab7a5a31334d84529054d412e879993e2" title="Return the singleton instance of the the class OsoReader. " alt="" coords="990,30,1170,57"/>
+<area shape="rect" id="node7" href="$class_oso_reader.html#a73b356139df5730e756f2366ec1e1924" title="Generate a cuda device function. " alt="" coords="260,132,447,173"/>
+<area shape="rect" id="node11" href="$class_oso_reader.html#aeb9f3728a8f71686e2f98905bf6a850b" title="accessor to shader name " alt="" coords="258,198,449,225"/>
+<area shape="rect" id="node12" href="$class_q_n_e_block.html#a1e45a9b7f2ace3da607662a84af3388a" title="adds a port to our node. This has been modified to also set the varibel type and initial paramiters..." alt="" coords="546,401,683,427"/>
+<area shape="rect" id="node16" href="$class_oso_reader.html#a03886b44f396fea6f5342c3b37476f19" title="accessor to shader type " alt="" coords="261,299,445,326"/>
+<area shape="rect" id="node17" href="$class_oso_reader.html#a7929682e9581cd8fa5c9c80fbb27e12a" title="Returns the input parameters for the current OSL shader. " alt="" coords="259,350,447,377"/>
+<area shape="rect" id="node18" href="$class_q_n_e_block.html#a17510e88ed95706eea4adb6ce05c0b37" title="adds an input port to our node. Modified to also set the varible type and initial paramiters..." alt="" coords="270,401,437,427"/>
+<area shape="rect" id="node19" href="$class_oso_reader.html#af7c60fc9a4d066d9e6689ef0f54e2baa" title="Returns the outpu parameters for the current OSL shader. " alt="" coords="254,451,453,478"/>
+<area shape="rect" id="node20" href="$class_q_n_e_block.html#afb9d697f080d9bc14166304f6da91a59" title="adds an output port to our node. Modified to also set the varible type and initial paramiters..." alt="" coords="265,502,441,529"/>
+<area shape="rect" id="node5" href="$class_oso_reader.html#a6858caaf259dee3078c92aba1749cce5" title="Parse the oso buffer. " alt="" coords="533,30,696,57"/>
+<area shape="rect" id="node4" href="$class_oso_reader.html#a6792e222d40495ce57725c5410b27aab" title="Constructor. " alt="" coords="1219,30,1381,57"/>
+<area shape="rect" id="node6" href="$class_oso_reader.html#a90d5c3b4f09cceeffff0d5ff1d3dde41" title="Reset all vectors. " alt="" coords="771,30,941,57"/>
+<area shape="rect" id="node8" href="$class_oso_reader.html#a8d58bcba035401b2e59ad8d053dd91cf" title="Check if the vaiable is a shader global. " alt="" coords="507,131,723,158"/>
+<area shape="rect" id="node9" href="$class_oso_reader.html#a8fbdd221292ac5eac13fac373456bca5" title="Return the type of symbol _variable. " alt="" coords="521,182,708,209"/>
+<area shape="rect" id="node10" href="$class_oso_reader.html#a6a3e710f4ed28396847353cb69b9f15b" title="Returns the iterator to the symbol in the symbols array. " alt="" coords="535,233,694,259"/>
+<area shape="rect" id="node13" href="$class_q_n_e_port.html#af880fe558d12955f874b4f1eef5261b2" title="set initial paramiters string " alt="" coords="774,350,938,377"/>
+<area shape="rect" id="node14" href="$class_q_n_e_port.html#aa8e18998a29ef7ec2d26143d6835d0cd" title="mutator for the variable type of the port " alt="" coords="771,401,941,427"/>
+<area shape="rect" id="node15" href="$class_q_n_e_port.html#aca918fc27382de55761b2b2045f4d9f4" title="accessor to the the ports label text " alt="" coords="777,451,935,478"/>
+</map>

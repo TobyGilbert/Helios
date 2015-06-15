@@ -1,0 +1,352 @@
+\hypertarget{class_opti_x_model}{\section{Opti\-X\-Model Class Reference}
+\label{class_opti_x_model}\index{Opti\-X\-Model@{Opti\-X\-Model}}
+}
+
+
+This is a class to import models ready to be used with the Opti\-X ray tracing engine.  
+
+
+
+
+{\ttfamily \#include $<$Optix\-Model.\-h$>$}
+
+
+
+Collaboration diagram for Opti\-X\-Model\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=204pt]{class_opti_x_model__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_opti_x_model_a38269b05e4286011e3a83b2abe3b25b6}{Opti\-X\-Model} (std\-::string \-\_\-path)
+\begin{DoxyCompactList}\small\item\em our default constructor, doesnt really do anything apart from init our members \end{DoxyCompactList}\item 
+\hyperlink{class_opti_x_model_ae090cf6bb20600227351b98c9248c56a}{Opti\-X\-Model} (\hyperlink{class_opti_x_model}{Opti\-X\-Model} $\ast$\-\_\-instance)
+\begin{DoxyCompactList}\small\item\em our copy contructor that will create an instance of geomtry in our scene \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a64c0fd3c8459b81aa44ade1cf9d0a90b}{\hyperlink{class_opti_x_model_a64c0fd3c8459b81aa44ade1cf9d0a90b}{$\sim$\-Opti\-X\-Model} ()}\label{class_opti_x_model_a64c0fd3c8459b81aa44ade1cf9d0a90b}
+
+\begin{DoxyCompactList}\small\item\em our destructor \end{DoxyCompactList}\item 
+void \hyperlink{class_opti_x_model_ab98c422ba0ebd8f89ad702c827f2dacc}{create\-Geometry} (std\-::string \-\_\-loc)
+\begin{DoxyCompactList}\small\item\em creates our geomtry \end{DoxyCompactList}\item 
+void \hyperlink{class_opti_x_model_a901337f12a6b306703e29c7b57c4af86}{set\-Trans} (glm\-::mat4 \-\_\-trans, bool \-\_\-transpose=false)
+\begin{DoxyCompactList}\small\item\em a mutator for our transformation matrix for our geomtry \end{DoxyCompactList}\item 
+void \hyperlink{class_opti_x_model_ada3b7d6057e62aee8d88567c0806475c}{set\-Trans} (float $\ast$\-\_\-m, bool \-\_\-transpose=false, float $\ast$\-\_\-inv\-M=0)
+\begin{DoxyCompactList}\small\item\em a mutator for our transformation matrix for our geomtry \end{DoxyCompactList}\item 
+void \hyperlink{class_opti_x_model_aedaab5dc8da3cea6d1f6d8bc76d37903}{set\-Material} (Material \-\_\-mat)
+\begin{DoxyCompactList}\small\item\em set our models material \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a47916c5dd22bbcc2d6bec581e76f7a54}{Geometry \hyperlink{class_opti_x_model_a47916c5dd22bbcc2d6bec581e76f7a54}{get\-Geometry} ()}\label{class_opti_x_model_a47916c5dd22bbcc2d6bec581e76f7a54}
+
+\begin{DoxyCompactList}\small\item\em an accessor to our model geomtry \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a5b9b10ed9b5df1104a2bdb5019fcd06d}{Transform \hyperlink{class_opti_x_model_a5b9b10ed9b5df1104a2bdb5019fcd06d}{get\-Geom\-And\-Trans} ()}\label{class_opti_x_model_a5b9b10ed9b5df1104a2bdb5019fcd06d}
+
+\begin{DoxyCompactList}\small\item\em an accessor to our model with a transformation applied \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_af4413a009cacd533af2922a34fe35d81}{Geometry\-Instance \hyperlink{class_opti_x_model_af4413a009cacd533af2922a34fe35d81}{get\-Geometry\-Instance} ()}\label{class_opti_x_model_af4413a009cacd533af2922a34fe35d81}
+
+\begin{DoxyCompactList}\small\item\em an accessor to our geomtry instance \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_aba60cfa935329bacb5c55b9e4dac0b7b}{int \hyperlink{class_opti_x_model_aba60cfa935329bacb5c55b9e4dac0b7b}{get\-Num\-Polygons} ()}\label{class_opti_x_model_aba60cfa935329bacb5c55b9e4dac0b7b}
+
+\begin{DoxyCompactList}\small\item\em accessor to query number of polygons \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_opti_x_model_a67c070a756231acd6a7ad9aef7c8c505}{void \hyperlink{class_opti_x_model_a67c070a756231acd6a7ad9aef7c8c505}{load\-Mesh} (const ai\-Node $\ast$\-\_\-node, const ai\-Scene $\ast$\-\_\-scene)}\label{class_opti_x_model_a67c070a756231acd6a7ad9aef7c8c505}
+
+\begin{DoxyCompactList}\small\item\em loads a mesh from our current assimp scene \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a6c35b710b10cb8671fb7644d8832d837}{void \hyperlink{class_opti_x_model_a6c35b710b10cb8671fb7644d8832d837}{process\-Mesh} (const ai\-Mesh $\ast$\-\_\-mesh)}\label{class_opti_x_model_a6c35b710b10cb8671fb7644d8832d837}
+
+\begin{DoxyCompactList}\small\item\em processes an imported mesh \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a48b8aed79fd7eae1d03bd58f2a57b95a}{void \hyperlink{class_opti_x_model_a48b8aed79fd7eae1d03bd58f2a57b95a}{create\-Buffers} ()}\label{class_opti_x_model_a48b8aed79fd7eae1d03bd58f2a57b95a}
+
+\begin{DoxyCompactList}\small\item\em creates our buffers in our Opti\-X context and sets our data \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_opti_x_model_ac229141f93d671f891f85ca5434ffcae}{int \hyperlink{class_opti_x_model_ac229141f93d671f891f85ca5434ffcae}{m\-\_\-num\-Polygons}}\label{class_opti_x_model_ac229141f93d671f891f85ca5434ffcae}
+
+\begin{DoxyCompactList}\small\item\em number of polygons in our mesh \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_ad813ee22588786e7344b4f522c646500}{std\-::string \hyperlink{class_opti_x_model_ad813ee22588786e7344b4f522c646500}{m\-\_\-instance\-Id}}\label{class_opti_x_model_ad813ee22588786e7344b4f522c646500}
+
+\begin{DoxyCompactList}\small\item\em Id of this instance. \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a2d550524640b487d4e3e97b9ce0f327f}{Geometry\-Instance \hyperlink{class_opti_x_model_a2d550524640b487d4e3e97b9ce0f327f}{m\-\_\-geometry\-Instance}}\label{class_opti_x_model_a2d550524640b487d4e3e97b9ce0f327f}
+
+\begin{DoxyCompactList}\small\item\em our Opti\-X geometry instance \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_aad478427dc6e2b94277ea2fadeeb1883}{Geometry \hyperlink{class_opti_x_model_aad478427dc6e2b94277ea2fadeeb1883}{m\-\_\-geometry}}\label{class_opti_x_model_aad478427dc6e2b94277ea2fadeeb1883}
+
+\begin{DoxyCompactList}\small\item\em our Opti\-X geomtry \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_aef194c31844edeb16603167668a791dd}{Transform \hyperlink{class_opti_x_model_aef194c31844edeb16603167668a791dd}{m\-\_\-trans}}\label{class_opti_x_model_aef194c31844edeb16603167668a791dd}
+
+\begin{DoxyCompactList}\small\item\em our model tranformation \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a2ab4e23aafcd993b382d51b97a2af0fc}{Geometry\-Group \hyperlink{class_opti_x_model_a2ab4e23aafcd993b382d51b97a2af0fc}{m\-\_\-geometry\-Group}}\label{class_opti_x_model_a2ab4e23aafcd993b382d51b97a2af0fc}
+
+\begin{DoxyCompactList}\small\item\em our geomtry group \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_afd0f97a285b7b598a0a4b372232e0bb1}{Buffer \hyperlink{class_opti_x_model_afd0f97a285b7b598a0a4b372232e0bb1}{m\-\_\-vertex\-Buffer}}\label{class_opti_x_model_afd0f97a285b7b598a0a4b372232e0bb1}
+
+\begin{DoxyCompactList}\small\item\em our vertex buffer \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_ac281d3c3cab01efa5602f2d4af66cf58}{Buffer \hyperlink{class_opti_x_model_ac281d3c3cab01efa5602f2d4af66cf58}{m\-\_\-normal\-Buffer}}\label{class_opti_x_model_ac281d3c3cab01efa5602f2d4af66cf58}
+
+\begin{DoxyCompactList}\small\item\em our normals buffer \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a807877787d24c586fb37c1ec9c8a866d}{Buffer \hyperlink{class_opti_x_model_a807877787d24c586fb37c1ec9c8a866d}{m\-\_\-tex\-Coords\-Buffer}}\label{class_opti_x_model_a807877787d24c586fb37c1ec9c8a866d}
+
+\begin{DoxyCompactList}\small\item\em texture coordinates buffer \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a8b37cdc409e968df301dcfba91b7b908}{Buffer \hyperlink{class_opti_x_model_a8b37cdc409e968df301dcfba91b7b908}{m\-\_\-tangents\-Buffer}}\label{class_opti_x_model_a8b37cdc409e968df301dcfba91b7b908}
+
+\begin{DoxyCompactList}\small\item\em our tangents buffer \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a6105c543ecfc8a87a13444c1a060284f}{Buffer \hyperlink{class_opti_x_model_a6105c543ecfc8a87a13444c1a060284f}{m\-\_\-bitangents\-Buffer}}\label{class_opti_x_model_a6105c543ecfc8a87a13444c1a060284f}
+
+\begin{DoxyCompactList}\small\item\em our bitangents buffer \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a4506c44afb4f00265acddb0aebd1c710}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a4506c44afb4f00265acddb0aebd1c710}{m\-\_\-vertices}}\label{class_opti_x_model_a4506c44afb4f00265acddb0aebd1c710}
+
+\begin{DoxyCompactList}\small\item\em our client side vertices \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a04b0f22a49f2a3f02fa93dbbce4b9c8e}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a04b0f22a49f2a3f02fa93dbbce4b9c8e}{m\-\_\-normals}}\label{class_opti_x_model_a04b0f22a49f2a3f02fa93dbbce4b9c8e}
+
+\begin{DoxyCompactList}\small\item\em our client side normals \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a78d4acec55affd8e13a2a924f9a0dd51}{std\-::vector$<$ glm\-::vec2 $>$ \hyperlink{class_opti_x_model_a78d4acec55affd8e13a2a924f9a0dd51}{m\-\_\-tex\-Coords}}\label{class_opti_x_model_a78d4acec55affd8e13a2a924f9a0dd51}
+
+\begin{DoxyCompactList}\small\item\em our client side texture coordinates \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a9eb66c65e00f58dc9a1f9fda1fa1d009}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a9eb66c65e00f58dc9a1f9fda1fa1d009}{m\-\_\-tangents}}\label{class_opti_x_model_a9eb66c65e00f58dc9a1f9fda1fa1d009}
+
+\begin{DoxyCompactList}\small\item\em our client side tangents \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a86c48571467f2697d08b9e33c582203f}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a86c48571467f2697d08b9e33c582203f}{m\-\_\-bitangents}}\label{class_opti_x_model_a86c48571467f2697d08b9e33c582203f}
+
+\begin{DoxyCompactList}\small\item\em our client side bitangents \end{DoxyCompactList}\item 
+std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a4ef713de613b12da4e49a7599516b081}{m\-\_\-indices}
+\begin{DoxyCompactList}\small\item\em our client side indicies of some discription. Material I think \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_ad2defa4bcd86318249396cc658f6c16c}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_ad2defa4bcd86318249396cc658f6c16c}{m\-\_\-vert\-Indices}}\label{class_opti_x_model_ad2defa4bcd86318249396cc658f6c16c}
+
+\begin{DoxyCompactList}\small\item\em our client side vertex indicies \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a6f402e8e41ae2a26d8670284dda931f7}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a6f402e8e41ae2a26d8670284dda931f7}{m\-\_\-normal\-Indices}}\label{class_opti_x_model_a6f402e8e41ae2a26d8670284dda931f7}
+
+\begin{DoxyCompactList}\small\item\em our client side normal indicies \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a08463933d695b3d78989c79b7123f5fc}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a08463933d695b3d78989c79b7123f5fc}{m\-\_\-tex\-Coord\-Indices}}\label{class_opti_x_model_a08463933d695b3d78989c79b7123f5fc}
+
+\begin{DoxyCompactList}\small\item\em our client side texture coordinate indicies \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a3baa4b3f8be71f5ca246e095a1b4ea46}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a3baa4b3f8be71f5ca246e095a1b4ea46}{m\-\_\-tangent\-Indices}}\label{class_opti_x_model_a3baa4b3f8be71f5ca246e095a1b4ea46}
+
+\begin{DoxyCompactList}\small\item\em our client side tangents indicies \end{DoxyCompactList}\item 
+\hypertarget{class_opti_x_model_a1b7e646a331010d59c0628a857b24a7b}{std\-::vector$<$ glm\-::vec3 $>$ \hyperlink{class_opti_x_model_a1b7e646a331010d59c0628a857b24a7b}{m\-\_\-bitangent\-Indices}}\label{class_opti_x_model_a1b7e646a331010d59c0628a857b24a7b}
+
+\begin{DoxyCompactList}\small\item\em our client side bitangents indicies \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_opti_x_model_ab64b58ae7b33fdc1f9728baeab01e11a}{static std\-::map$<$ std\-::string, int $>$ \hyperlink{class_opti_x_model_ab64b58ae7b33fdc1f9728baeab01e11a}{m\-\_\-instance\-Count}}\label{class_opti_x_model_ab64b58ae7b33fdc1f9728baeab01e11a}
+
+\begin{DoxyCompactList}\small\item\em static map to keep track of our instances of models \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is a class to import models ready to be used with the Opti\-X ray tracing engine. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell \& Toby Gilbert 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+28/01/2014 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000001}{Todo}]do something with the material buffer, atm it all just defaults to 0 \end{DoxyRefDesc}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_opti_x_model_a38269b05e4286011e3a83b2abe3b25b6}{\index{Opti\-X\-Model@{Opti\-X\-Model}!Opti\-X\-Model@{Opti\-X\-Model}}
+\index{Opti\-X\-Model@{Opti\-X\-Model}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{Opti\-X\-Model}]{\setlength{\rightskip}{0pt plus 5cm}Opti\-X\-Model\-::\-Opti\-X\-Model (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-path}
+\end{DoxyParamCaption}
+)}}\label{class_opti_x_model_a38269b05e4286011e3a83b2abe3b25b6}
+
+
+our default constructor, doesnt really do anything apart from init our members 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ the path to the geometry we want to import \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_opti_x_model_a38269b05e4286011e3a83b2abe3b25b6_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_opti_x_model_ae090cf6bb20600227351b98c9248c56a}{\index{Opti\-X\-Model@{Opti\-X\-Model}!Opti\-X\-Model@{Opti\-X\-Model}}
+\index{Opti\-X\-Model@{Opti\-X\-Model}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{Opti\-X\-Model}]{\setlength{\rightskip}{0pt plus 5cm}Opti\-X\-Model\-::\-Opti\-X\-Model (
+\begin{DoxyParamCaption}
+\item[{{\bf Opti\-X\-Model} $\ast$}]{\-\_\-instance}
+\end{DoxyParamCaption}
+)}}\label{class_opti_x_model_ae090cf6bb20600227351b98c9248c56a}
+
+
+our copy contructor that will create an instance of geomtry in our scene 
+
+instancing is great becuase it means we need less data on the gpu! 
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-instance} & -\/ the model that we wish to create an instance of \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_opti_x_model_ae090cf6bb20600227351b98c9248c56a_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_opti_x_model_ab98c422ba0ebd8f89ad702c827f2dacc}{\index{Opti\-X\-Model@{Opti\-X\-Model}!create\-Geometry@{create\-Geometry}}
+\index{create\-Geometry@{create\-Geometry}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{create\-Geometry}]{\setlength{\rightskip}{0pt plus 5cm}void Opti\-X\-Model\-::create\-Geometry (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-loc}
+\end{DoxyParamCaption}
+)}}\label{class_opti_x_model_ab98c422ba0ebd8f89ad702c827f2dacc}
+
+
+creates our geomtry 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-loc} & -\/ the location of the mesh we wish to import \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_opti_x_model_ab98c422ba0ebd8f89ad702c827f2dacc_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_opti_x_model_ab98c422ba0ebd8f89ad702c827f2dacc_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_opti_x_model_aedaab5dc8da3cea6d1f6d8bc76d37903}{\index{Opti\-X\-Model@{Opti\-X\-Model}!set\-Material@{set\-Material}}
+\index{set\-Material@{set\-Material}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{set\-Material}]{\setlength{\rightskip}{0pt plus 5cm}void Opti\-X\-Model\-::set\-Material (
+\begin{DoxyParamCaption}
+\item[{Material}]{\-\_\-mat}
+\end{DoxyParamCaption}
+)}}\label{class_opti_x_model_aedaab5dc8da3cea6d1f6d8bc76d37903}
+
+
+set our models material 
+
+
+\begin{DoxyParams}{Parameters}
+{\em matrial} & we wish to apply to our model \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_opti_x_model_aedaab5dc8da3cea6d1f6d8bc76d37903_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_opti_x_model_a901337f12a6b306703e29c7b57c4af86}{\index{Opti\-X\-Model@{Opti\-X\-Model}!set\-Trans@{set\-Trans}}
+\index{set\-Trans@{set\-Trans}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{set\-Trans}]{\setlength{\rightskip}{0pt plus 5cm}void Opti\-X\-Model\-::set\-Trans (
+\begin{DoxyParamCaption}
+\item[{glm\-::mat4}]{\-\_\-trans, }
+\item[{bool}]{\-\_\-transpose = {\ttfamily false}}
+\end{DoxyParamCaption}
+)}}\label{class_opti_x_model_a901337f12a6b306703e29c7b57c4af86}
+
+
+a mutator for our transformation matrix for our geomtry 
+
+this function converts glm matricies to Opti\-X compatible array of floats 
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-trans} & our translation matrix \\
+\hline
+{\em \-\_\-transpose} & -\/ is our matrix transposed \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_opti_x_model_a901337f12a6b306703e29c7b57c4af86_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_opti_x_model_ada3b7d6057e62aee8d88567c0806475c}{\index{Opti\-X\-Model@{Opti\-X\-Model}!set\-Trans@{set\-Trans}}
+\index{set\-Trans@{set\-Trans}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{set\-Trans}]{\setlength{\rightskip}{0pt plus 5cm}void Opti\-X\-Model\-::set\-Trans (
+\begin{DoxyParamCaption}
+\item[{float $\ast$}]{\-\_\-m, }
+\item[{bool}]{\-\_\-transpose = {\ttfamily false}, }
+\item[{float $\ast$}]{\-\_\-inv\-M = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_opti_x_model_ada3b7d6057e62aee8d88567c0806475c}
+
+
+a mutator for our transformation matrix for our geomtry 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-trans} & -\/ our translation matrix \\
+\hline
+{\em \-\_\-transpose} & -\/ is our matrix transposed \\
+\hline
+{\em \-\_\-inv\-M} & -\/ the inverse of our matrix, default not required. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_opti_x_model_a4ef713de613b12da4e49a7599516b081}{\index{Opti\-X\-Model@{Opti\-X\-Model}!m\-\_\-indices@{m\-\_\-indices}}
+\index{m\-\_\-indices@{m\-\_\-indices}!OptiXModel@{Opti\-X\-Model}}
+\subsubsection[{m\-\_\-indices}]{\setlength{\rightskip}{0pt plus 5cm}std\-::vector$<$glm\-::vec3$>$ Opti\-X\-Model\-::m\-\_\-indices\hspace{0.3cm}{\ttfamily [private]}}}\label{class_opti_x_model_a4ef713de613b12da4e49a7599516b081}
+
+
+our client side indicies of some discription. Material I think 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000002}{Todo}]not let toby touch my classes, toby what is this member for?? \end{DoxyRefDesc}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Core/Optix\-Model.\-h\item 
+src/\-Core/Optix\-Model.\-cpp\end{DoxyCompactItemize}

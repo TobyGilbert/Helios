@@ -1,0 +1,5 @@
+<map id="GenSetDockWidget::setMaxRayDepth" name="GenSetDockWidget::setMaxRayDepth">
+<area shape="rect" id="node2" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="243,12,442,39"/>
+<area shape="rect" id="node4" href="$class_path_tracer_scene.html#a5e3cf9c3b16a8e9a87ec88d937d6c47e" title="sets the max ray depth in our path tracer " alt="" coords="243,63,442,105"/>
+<area shape="rect" id="node3" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="491,5,685,46"/>
+</map>

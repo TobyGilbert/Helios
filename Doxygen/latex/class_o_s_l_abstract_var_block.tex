@@ -1,0 +1,111 @@
+\hypertarget{class_o_s_l_abstract_var_block}{\section{O\-S\-L\-Abstract\-Var\-Block Class Reference}
+\label{class_o_s_l_abstract_var_block}\index{O\-S\-L\-Abstract\-Var\-Block@{O\-S\-L\-Abstract\-Var\-Block}}
+}
+
+
+Inheritance diagram for O\-S\-L\-Abstract\-Var\-Block\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_abstract_var_block__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for O\-S\-L\-Abstract\-Var\-Block\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_o_s_l_abstract_var_block__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries Type} = Q\-Graphics\-Item\-:\-:User\-Type + 5
+ \}
+\begin{DoxyCompactList}\small\item\em this means you can define a new Q\-Graphics\-Item type. Woudln't of done it like this myself but lets go along with Stanislaw Adaszewski's implementation. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_o_s_l_abstract_var_block_a1b472022af7f54cae930dab0ef77afc9}{\hyperlink{class_o_s_l_abstract_var_block_a1b472022af7f54cae930dab0ef77afc9}{O\-S\-L\-Abstract\-Var\-Block} (Q\-Graphics\-Scene $\ast$\-\_\-scene, optix\-::\-Material \&\-\_\-mat, Q\-Graphics\-Item $\ast$parent=0)}\label{class_o_s_l_abstract_var_block_a1b472022af7f54cae930dab0ef77afc9}
+
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_abstract_var_block_ae24352aa1c2beebbf7aa3bcfd7e4a261}{\hyperlink{class_o_s_l_abstract_var_block_ae24352aa1c2beebbf7aa3bcfd7e4a261}{$\sim$\-O\-S\-L\-Abstract\-Var\-Block} ()}\label{class_o_s_l_abstract_var_block_ae24352aa1c2beebbf7aa3bcfd7e4a261}
+
+\begin{DoxyCompactList}\small\item\em default destuctor \end{DoxyCompactList}\item 
+\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ \hyperlink{class_o_s_l_abstract_var_block_a833548c33ea2a0eee22984507a3ffc24}{set\-Block\-Name} (std\-::string \-\_\-name)
+\begin{DoxyCompactList}\small\item\em Set the name of our variable block. \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_abstract_var_block_a190d98a39c35e6febc3f1839c9b9053e}{std\-::string \hyperlink{class_o_s_l_abstract_var_block_a190d98a39c35e6febc3f1839c9b9053e}{get\-Block\-Name} ()}\label{class_o_s_l_abstract_var_block_a190d98a39c35e6febc3f1839c9b9053e}
+
+\begin{DoxyCompactList}\small\item\em overiden virtual function to return the block name \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_abstract_var_block_a27c90e6a4193b8794e9e2efa0520bb15}{void \hyperlink{class_o_s_l_abstract_var_block_a27c90e6a4193b8794e9e2efa0520bb15}{set\-Linked\-Var} ()}\label{class_o_s_l_abstract_var_block_a27c90e6a4193b8794e9e2efa0520bb15}
+
+\begin{DoxyCompactList}\small\item\em manualy set whatever our block variable is linked to to \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_abstract_var_block_adf69c1ae74b06326e7f868d0637e9b72}{int \hyperlink{class_o_s_l_abstract_var_block_adf69c1ae74b06326e7f868d0637e9b72}{type} () const }\label{class_o_s_l_abstract_var_block_adf69c1ae74b06326e7f868d0637e9b72}
+
+\begin{DoxyCompactList}\small\item\em returns the type of our class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_o_s_l_abstract_var_block_a37602ac95b47ff0257b4a1f46799bb02}{\hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} $\ast$ \hyperlink{class_o_s_l_abstract_var_block_a37602ac95b47ff0257b4a1f46799bb02}{m\-\_\-widget\-Proxy}}\label{class_o_s_l_abstract_var_block_a37602ac95b47ff0257b4a1f46799bb02}
+
+\begin{DoxyCompactList}\small\item\em a member to hold our widget proxy \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_o_s_l_abstract_var_block_a913247d8558da16bbfe8fdd65f65dfce}{optix\-::\-Material \hyperlink{class_o_s_l_abstract_var_block_a913247d8558da16bbfe8fdd65f65dfce}{m\-\_\-material}}\label{class_o_s_l_abstract_var_block_a913247d8558da16bbfe8fdd65f65dfce}
+
+\begin{DoxyCompactList}\small\item\em the material which out variable belongs to \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_o_s_l_abstract_var_block_a833548c33ea2a0eee22984507a3ffc24}{\index{O\-S\-L\-Abstract\-Var\-Block@{O\-S\-L\-Abstract\-Var\-Block}!set\-Block\-Name@{set\-Block\-Name}}
+\index{set\-Block\-Name@{set\-Block\-Name}!OSLAbstractVarBlock@{O\-S\-L\-Abstract\-Var\-Block}}
+\subsubsection[{set\-Block\-Name}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\-N\-E\-Port} $\ast$ O\-S\-L\-Abstract\-Var\-Block\-::set\-Block\-Name (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-name}
+\end{DoxyParamCaption}
+)}}\label{class_o_s_l_abstract_var_block_a833548c33ea2a0eee22984507a3ffc24}
+
+
+Set the name of our variable block. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-name} & -\/ desired name \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_abstract_var_block_a833548c33ea2a0eee22984507a3ffc24_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_abstract_var_block_a833548c33ea2a0eee22984507a3ffc24_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/O\-S\-L\-Abstract\-Var\-Block.\-h\item 
+src/\-Node\-Graph/O\-S\-L\-Abstract\-Var\-Block.\-cpp\end{DoxyCompactItemize}

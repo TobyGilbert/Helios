@@ -1,0 +1,15 @@
+<map id="OSLNodesEditor::compileMaterial" name="OSLNodesEditor::compileMaterial">
+<area shape="rect" id="node2" href="$class_q_nodes_editor.html#a381b679a27db1a4aeaaa271631c8c699" title="accesor to our scene " alt="" coords="550,75,717,102"/>
+<area shape="rect" id="node3" href="$class_o_s_l_shader_block.html#a1af4f62c3a39d6eed25123695bcbceee" title="accessor to the shader name " alt="" coords="272,42,488,68"/>
+<area shape="rect" id="node4" href="$class_o_s_l_nodes_editor.html#ab5c850b082cd87c467b16d33596afa03" title="takes in an QNEPort::type and returns the type in string form " alt="" coords="291,93,469,134"/>
+<area shape="rect" id="node5" href="$class_q_n_e_port.html#a64115add3b4da6d58d287fe9530ca696" title="accessor to the varible type of the port " alt="" coords="295,159,465,186"/>
+<area shape="rect" id="node6" href="$class_q_n_e_port.html#afb0f6931a74eaaeee1975b21dc754051" title="accessor to the port name " alt="" coords="565,286,701,312"/>
+<area shape="rect" id="node7" href="$class_q_n_e_port.html#a43790ff1780c4efe01494e6b9182d21e" title="accessor to initial paramiters to port " alt="" coords="298,260,462,287"/>
+<area shape="rect" id="node8" href="$class_o_s_l_nodes_editor.html#ab662050f4cb531c1d1a7980ca0327e82" title="iterates through our scenes children to the last block to be written in our material. " alt="" coords="278,210,482,236"/>
+<area shape="rect" id="node10" href="$class_o_s_l_nodes_editor.html#a2847eb45d0080e03b5accca596ea43d8" title="a recursive function to to evaluate our blocks to find there order " alt="" coords="291,362,469,404"/>
+<area shape="rect" id="node11" href="$class_q_n_e_block.html#ac4108ddff3e3e0c8825238fff81d5811" title="virtual function to return the name of our block " alt="" coords="291,428,469,455"/>
+<area shape="rect" id="node12" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="281,479,479,506"/>
+<area shape="rect" id="node14" href="$class_path_tracer_scene.html#acf716516054d2afead58edc76c65f609" title="accessor to our context " alt="" coords="283,530,477,556"/>
+<area shape="rect" id="node9" href="$class_q_n_e_block.html#ab36daa69f4c9ef4e6f415c591d9257b7" title="returns the ports connected to this block " alt="" coords="573,210,694,236"/>
+<area shape="rect" id="node13" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="536,472,731,513"/>
+</map>

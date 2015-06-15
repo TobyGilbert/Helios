@@ -1,0 +1,4 @@
+<map id="Text::setColour" name="Text::setColour">
+<area shape="rect" id="node2" href="$class_open_g_l_widget.html#a570df546f7206455c57addb624906576" title="the virtual initialize class is called once when the window is created and we have a valid GL context..." alt="" coords="166,5,349,32"/>
+<area shape="rect" id="node3" href="$class_text.html#a71c71bad833eccb26357945fc10fd085" title="ctor must pass in a ready constructed QFont make sure the size and emphasis is set before doing this ..." alt="" coords="216,56,299,83"/>
+</map>

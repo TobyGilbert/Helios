@@ -1,0 +1,5 @@
+<map id="PathTracerScene::importMesh" name="PathTracerScene::importMesh">
+<area shape="rect" id="node2" href="$class_opti_x_model.html#aedaab5dc8da3cea6d1f6d8bc76d37903" title="set our models material " alt="" coords="276,5,439,32"/>
+<area shape="rect" id="node3" href="$class_opti_x_model.html#a5b9b10ed9b5df1104a2bdb5019fcd06d" title="an accessor to our model with a transformation applied " alt="" coords="254,56,461,83"/>
+<area shape="rect" id="node4" href="$class_opti_x_model.html#aba60cfa935329bacb5c55b9e4dac0b7b" title="accessor to query number of polygons " alt="" coords="258,107,457,133"/>
+</map>

@@ -1,0 +1,351 @@
+\hypertarget{class_path_trace_camera}{\section{Path\-Trace\-Camera Class Reference}
+\label{class_path_trace_camera}\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}}
+}
+
+
+this in a simple camera for path tracing. This is converted code from N\-Vidia's demo's  
+
+
+
+
+{\ttfamily \#include $<$Path\-Trace\-Camera.\-h$>$}
+
+
+
+Collaboration diagram for Path\-Trace\-Camera\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=190pt]{class_path_trace_camera__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_path_trace_camera_ae4a78b282905e582d5d3b3954ecbb6c6}{Path\-Trace\-Camera} (float3 \-\_\-eye, float3 \-\_\-lookat, float3 \-\_\-up, float \-\_\-hfov, float \-\_\-vfov)
+\begin{DoxyCompactList}\small\item\em our default contructor that does all our calculations \end{DoxyCompactList}\item 
+void \hyperlink{class_path_trace_camera_a5ab2d42a39520558a7d536fca99bdddf}{set\-Parameters} (float3 \-\_\-eye, float3 \-\_\-lookat, float3 \-\_\-up, float \-\_\-hfov, float \-\_\-vfov)
+\begin{DoxyCompactList}\small\item\em a mutator for our paramters \end{DoxyCompactList}\item 
+void \hyperlink{class_path_trace_camera_aea0823037719057194646b8ff5eb9a2d}{get\-Eye\-U\-V\-W} (float3 \&\-\_\-eye, float3 \&\-\_\-\-U, float3 \&\-\_\-\-V, float3 \&\-\_\-\-W)
+\begin{DoxyCompactList}\small\item\em a function to return \end{DoxyCompactList}\item 
+void \hyperlink{class_path_trace_camera_a552d6fd15505df0553fc1c87a7520848}{translate} (float \-\_\-x, float \-\_\-y)
+\begin{DoxyCompactList}\small\item\em Translate our camera. \end{DoxyCompactList}\item 
+void \hyperlink{class_path_trace_camera_a96f2c8e5b33f2d2503891c4d9c431948}{rotate} (glm\-::mat4 \-\_\-trans)
+\begin{DoxyCompactList}\small\item\em rotates our camera \end{DoxyCompactList}\item 
+void \hyperlink{class_path_trace_camera_a28b8c742021899cc72760977ad864764}{dolly} (float \-\_\-scale)
+\begin{DoxyCompactList}\small\item\em zoom in and out our camera \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_trace_camera_ac9127de546ce945978f7f1e54349f8f2}{\hyperlink{class_path_trace_camera_ac9127de546ce945978f7f1e54349f8f2}{Path\-Trace\-Camera} ()}\label{class_path_trace_camera_ac9127de546ce945978f7f1e54349f8f2}
+
+\begin{DoxyCompactList}\small\item\em basic constructor, we dont want this to be used. \end{DoxyCompactList}\item 
+void \hyperlink{class_path_trace_camera_a15324d53baba74608fe8efa0252ac15f}{calc\-Vectors} (float3 \-\_\-eye, float3 \-\_\-lookat, float3 \-\_\-up, float \-\_\-hfov, float \-\_\-vfov)
+\begin{DoxyCompactList}\small\item\em calculates our Eye U V W vectors \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_a3640ebf43a68bef9b29ab869b15aafaa}{Matrix4x4 {\bfseries init\-With\-Basis} (const float3 \&u, const float3 \&v, const float3 \&w, const float3 \&t)}\label{class_path_trace_camera_a3640ebf43a68bef9b29ab869b15aafaa}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_trace_camera_a28449c858d39cb10d59f37a962c04af3}{float \hyperlink{class_path_trace_camera_a28449c858d39cb10d59f37a962c04af3}{Dto\-R} (float d)}\label{class_path_trace_camera_a28449c858d39cb10d59f37a962c04af3}
+
+\begin{DoxyCompactList}\small\item\em convertion from degrees to radians \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_path_trace_camera_a2bab3a2e9b4cb14a5ed76d97ec7566fd}{float3 \hyperlink{class_path_trace_camera_a2bab3a2e9b4cb14a5ed76d97ec7566fd}{m\-\_\-eye}}\label{class_path_trace_camera_a2bab3a2e9b4cb14a5ed76d97ec7566fd}
+
+\begin{DoxyCompactList}\small\item\em our eye location \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_a1859f92d08e2d30e2b7144cbaf5ded61}{float3 \hyperlink{class_path_trace_camera_a1859f92d08e2d30e2b7144cbaf5ded61}{m\-\_\-\-U}}\label{class_path_trace_camera_a1859f92d08e2d30e2b7144cbaf5ded61}
+
+\begin{DoxyCompactList}\small\item\em our U vector of our camera \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_a5bc97c3d83972e589c738e5a60c29620}{float3 \hyperlink{class_path_trace_camera_a5bc97c3d83972e589c738e5a60c29620}{m\-\_\-\-V}}\label{class_path_trace_camera_a5bc97c3d83972e589c738e5a60c29620}
+
+\begin{DoxyCompactList}\small\item\em our V vector of our camera \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_af9c007afaf76663e01f156df19ee17f4}{float3 \hyperlink{class_path_trace_camera_af9c007afaf76663e01f156df19ee17f4}{m\-\_\-\-W}}\label{class_path_trace_camera_af9c007afaf76663e01f156df19ee17f4}
+
+\begin{DoxyCompactList}\small\item\em our W vector of our camera \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_a96e71c66cb235b3738467c78b5fd8861}{float3 \hyperlink{class_path_trace_camera_a96e71c66cb235b3738467c78b5fd8861}{m\-\_\-up}}\label{class_path_trace_camera_a96e71c66cb235b3738467c78b5fd8861}
+
+\begin{DoxyCompactList}\small\item\em our up vector \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_ad4170b243891e25eb7f3e3e448a5f191}{float3 \hyperlink{class_path_trace_camera_ad4170b243891e25eb7f3e3e448a5f191}{m\-\_\-lookat}}\label{class_path_trace_camera_ad4170b243891e25eb7f3e3e448a5f191}
+
+\begin{DoxyCompactList}\small\item\em our camera lookat \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_ae09bd8e6770a93c72c82fbf9e5b1e73e}{float \hyperlink{class_path_trace_camera_ae09bd8e6770a93c72c82fbf9e5b1e73e}{m\-\_\-hfov}}\label{class_path_trace_camera_ae09bd8e6770a93c72c82fbf9e5b1e73e}
+
+\begin{DoxyCompactList}\small\item\em our horizontal field of view \end{DoxyCompactList}\item 
+\hypertarget{class_path_trace_camera_aaea87e102ae515b1b73b6f98e6b8937c}{float \hyperlink{class_path_trace_camera_aaea87e102ae515b1b73b6f98e6b8937c}{m\-\_\-vfov}}\label{class_path_trace_camera_aaea87e102ae515b1b73b6f98e6b8937c}
+
+\begin{DoxyCompactList}\small\item\em our verticle field of view \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+this in a simple camera for path tracing. This is converted code from N\-Vidia's demo's 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+27/01/2015 
+\end{DoxyDate}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_path_trace_camera_ae4a78b282905e582d5d3b3954ecbb6c6}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!Path\-Trace\-Camera@{Path\-Trace\-Camera}}
+\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{Path\-Trace\-Camera}]{\setlength{\rightskip}{0pt plus 5cm}Path\-Trace\-Camera\-::\-Path\-Trace\-Camera (
+\begin{DoxyParamCaption}
+\item[{float3}]{\-\_\-eye, }
+\item[{float3}]{\-\_\-lookat, }
+\item[{float3}]{\-\_\-up, }
+\item[{float}]{\-\_\-hfov, }
+\item[{float}]{\-\_\-vfov}
+\end{DoxyParamCaption}
+)}}\label{class_path_trace_camera_ae4a78b282905e582d5d3b3954ecbb6c6}
+
+
+our default contructor that does all our calculations 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-eye} & -\/ the eye of our pinhole camera \\
+\hline
+{\em \-\_\-lookat} & -\/ the direction that our camera is facing \\
+\hline
+{\em \-\_\-up} & -\/ which direction up is \\
+\hline
+{\em \-\_\-hfov} & -\/ the horizontal field of view of our camera \\
+\hline
+{\em \-\_\-vfov} & -\/ the virtical field of view of our camera \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_ae4a78b282905e582d5d3b3954ecbb6c6_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_path_trace_camera_a15324d53baba74608fe8efa0252ac15f}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!calc\-Vectors@{calc\-Vectors}}
+\index{calc\-Vectors@{calc\-Vectors}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{calc\-Vectors}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Trace\-Camera\-::calc\-Vectors (
+\begin{DoxyParamCaption}
+\item[{float3}]{\-\_\-eye, }
+\item[{float3}]{\-\_\-lookat, }
+\item[{float3}]{\-\_\-up, }
+\item[{float}]{\-\_\-hfov, }
+\item[{float}]{\-\_\-vfov}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_path_trace_camera_a15324d53baba74608fe8efa0252ac15f}
+
+
+calculates our Eye U V W vectors 
+
+this is called by our defualt constructor and set\-Paramiters functions 
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_a15324d53baba74608fe8efa0252ac15f_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_a15324d53baba74608fe8efa0252ac15f_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_trace_camera_a28b8c742021899cc72760977ad864764}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!dolly@{dolly}}
+\index{dolly@{dolly}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{dolly}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Trace\-Camera\-::dolly (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-scale}
+\end{DoxyParamCaption}
+)}}\label{class_path_trace_camera_a28b8c742021899cc72760977ad864764}
+
+
+zoom in and out our camera 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-scale} & -\/ the scale of our zoom \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000004}{Todo}]fix this, you are using m\-\_\-\-W instead of lookat in places \end{DoxyRefDesc}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_a28b8c742021899cc72760977ad864764_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_trace_camera_aea0823037719057194646b8ff5eb9a2d}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!get\-Eye\-U\-V\-W@{get\-Eye\-U\-V\-W}}
+\index{get\-Eye\-U\-V\-W@{get\-Eye\-U\-V\-W}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{get\-Eye\-U\-V\-W}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Trace\-Camera\-::get\-Eye\-U\-V\-W (
+\begin{DoxyParamCaption}
+\item[{float3 \&}]{\-\_\-eye, }
+\item[{float3 \&}]{\-\_\-\-U, }
+\item[{float3 \&}]{\-\_\-\-V, }
+\item[{float3 \&}]{\-\_\-\-W}
+\end{DoxyParamCaption}
+)}}\label{class_path_trace_camera_aea0823037719057194646b8ff5eb9a2d}
+
+
+a function to return 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-eye} & call by reference to set the eye postion of our camera \\
+\hline
+{\em \-\_\-\-U} & call by reference to set the U vector of of our camera \\
+\hline
+{\em \-\_\-\-V} & call by reference to set the V vector of of our camera \\
+\hline
+{\em \-\_\-\-W} & call by reference to set the W vector of of our camera \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_aea0823037719057194646b8ff5eb9a2d_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_trace_camera_a96f2c8e5b33f2d2503891c4d9c431948}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!rotate@{rotate}}
+\index{rotate@{rotate}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{rotate}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Trace\-Camera\-::rotate (
+\begin{DoxyParamCaption}
+\item[{glm\-::mat4}]{\-\_\-trans}
+\end{DoxyParamCaption}
+)}}\label{class_path_trace_camera_a96f2c8e5b33f2d2503891c4d9c431948}
+
+
+rotates our camera 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-trans} & -\/ our rotation matrix \\
+\hline
+\end{DoxyParams}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000003}{Todo}]fix this, you are using m\-\_\-\-W instead of lookat in places \end{DoxyRefDesc}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_a96f2c8e5b33f2d2503891c4d9c431948_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_trace_camera_a5ab2d42a39520558a7d536fca99bdddf}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!set\-Parameters@{set\-Parameters}}
+\index{set\-Parameters@{set\-Parameters}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{set\-Parameters}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Trace\-Camera\-::set\-Parameters (
+\begin{DoxyParamCaption}
+\item[{float3}]{\-\_\-eye, }
+\item[{float3}]{\-\_\-lookat, }
+\item[{float3}]{\-\_\-up, }
+\item[{float}]{\-\_\-hfov, }
+\item[{float}]{\-\_\-vfov}
+\end{DoxyParamCaption}
+)}}\label{class_path_trace_camera_a5ab2d42a39520558a7d536fca99bdddf}
+
+
+a mutator for our paramters 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-eye} & -\/ the eye of our pinhole camera \\
+\hline
+{\em \-\_\-lookat} & -\/ the direction that our camera is facing \\
+\hline
+{\em \-\_\-up} & -\/ which direction up is \\
+\hline
+{\em \-\_\-hfov} & -\/ the horizontal field of view of our camera \\
+\hline
+{\em \-\_\-vfov} & -\/ the virtical field of view of our camera \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_a5ab2d42a39520558a7d536fca99bdddf_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_path_trace_camera_a5ab2d42a39520558a7d536fca99bdddf_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_path_trace_camera_a552d6fd15505df0553fc1c87a7520848}{\index{Path\-Trace\-Camera@{Path\-Trace\-Camera}!translate@{translate}}
+\index{translate@{translate}!PathTraceCamera@{Path\-Trace\-Camera}}
+\subsubsection[{translate}]{\setlength{\rightskip}{0pt plus 5cm}void Path\-Trace\-Camera\-::translate (
+\begin{DoxyParamCaption}
+\item[{float}]{\-\_\-x, }
+\item[{float}]{\-\_\-y}
+\end{DoxyParamCaption}
+)}}\label{class_path_trace_camera_a552d6fd15505df0553fc1c87a7520848}
+
+
+Translate our camera. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-x} & -\/ the translation of our camera in the x direction \\
+\hline
+{\em \-\_\-y} & -\/ the translation of our camera in the y direction \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Core/Path\-Trace\-Camera.\-h\item 
+src/\-Core/Path\-Trace\-Camera.\-cpp\end{DoxyCompactItemize}

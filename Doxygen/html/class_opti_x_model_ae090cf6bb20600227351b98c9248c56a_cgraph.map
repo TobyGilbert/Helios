@@ -1,0 +1,7 @@
+<map id="OptiXModel::OptiXModel" name="OptiXModel::OptiXModel">
+<area shape="rect" id="node2" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="234,12,433,39"/>
+<area shape="rect" id="node4" href="$class_path_tracer_scene.html#acf716516054d2afead58edc76c65f609" title="accessor to our context " alt="" coords="236,63,431,89"/>
+<area shape="rect" id="node5" href="$class_opti_x_model.html#af4413a009cacd533af2922a34fe35d81" title="an accessor to our geomtry instance " alt="" coords="222,113,445,140"/>
+<area shape="rect" id="node6" href="$class_opti_x_model.html#aedaab5dc8da3cea6d1f6d8bc76d37903" title="set our models material " alt="" coords="252,164,415,191"/>
+<area shape="rect" id="node3" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="493,5,688,46"/>
+</map>

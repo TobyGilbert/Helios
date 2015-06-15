@@ -1,0 +1,8 @@
+<map id="PathTracerScene::getCamera" name="PathTracerScene::getCamera">
+<area shape="rect" id="node2" href="$class_camera_widget.html#aafcf078d596c85bd61031163f855e3fa" title="Update other camera settings. " alt="" coords="248,5,451,32"/>
+<area shape="rect" id="node7" href="$class_camera_widget.html#a708a4a1499b94ed542268cd1de8fcb6e" title="Resets the camera. " alt="" coords="253,56,445,83"/>
+<area shape="rect" id="node3" href="$class_camera_widget.html#a637ffd88fb213dad01dfa7294248029e" title="our default constructor " alt="" coords="499,31,703,57"/>
+<area shape="rect" id="node4" href="$class_camera_widget.html#a295cbb74d2843858399fdc45777b580d" title="returns the instance of our camera widget " alt="" coords="753,31,938,57"/>
+<area shape="rect" id="node5" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="987,31,1167,57"/>
+<area shape="rect" id="node6" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="1217,31,1397,57"/>
+</map>

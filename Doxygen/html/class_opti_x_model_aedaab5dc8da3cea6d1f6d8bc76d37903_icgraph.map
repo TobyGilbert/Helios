@@ -1,0 +1,28 @@
+<map id="OptiXModel::setMaterial" name="OptiXModel::setMaterial">
+<area shape="rect" id="node2" href="$class_opti_x_model.html#ae090cf6bb20600227351b98c9248c56a" title="our copy contructor that will create an instance of geomtry in our scene " alt="" coords="233,565,399,592"/>
+<area shape="rect" id="node3" href="$class_path_tracer_scene.html#ab41f55350a5a50b60381cd46120c45aa" title="function to import a mesh to our scene " alt="" coords="217,667,415,693"/>
+<area shape="rect" id="node4" href="$class_mesh_widget.html#a47bdbf5350b44dd43a08e27b16c407d7" title="loads scene from file " alt="" coords="1881,667,2007,693"/>
+<area shape="rect" id="node25" href="$class_path_tracer_scene.html#a2930f6745167861525ce431487daa40f" title="sets the material of a model in our scene " alt="" coords="688,195,872,237"/>
+<area shape="rect" id="node8" href="$class_mesh_widget.html#a771417b5002a0e5e9cfb32553b7f7544" title="slot to import a model " alt="" coords="465,667,639,693"/>
+<area shape="rect" id="node5" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="2094,616,2261,643"/>
+<area shape="rect" id="node6" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="2979,521,3159,548"/>
+<area shape="rect" id="node7" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="3209,521,3389,548"/>
+<area shape="rect" id="node9" href="$class_mesh_widget.html#a2a83b4ce21ff9a33d5b7315faefb8fed" title="our default constructor " alt="" coords="692,565,868,592"/>
+<area shape="rect" id="node10" href="$class_mesh_widget.html#ab69e785150bd1802124a3fea62940866" title="returns the instance of our mesh widget " alt="" coords="939,565,1109,592"/>
+<area shape="rect" id="node11" href="$class_main_window.html#ae98d00a93bc118200eeef9f9bba1dba7" title="Destructor. " alt="" coords="2738,480,2926,507"/>
+<area shape="rect" id="node12" href="$class_main_window.html#a8c5c70395af911e771dbf61da52169ab" title="saves our scene " alt="" coords="1392,768,1563,795"/>
+<area shape="rect" id="node13" href="$class_material_library.html#a25fbe1df01423d3c29f17b068c1fa93e" title="applys selected material to current selected in mesh widget " alt="" coords="1176,195,1344,237"/>
+<area shape="rect" id="node19" href="$class_material_library.html#a2e77c2e90d100dec3a113c2ea1e94fb5" title="slot to be called if something is selected in our material list " alt="" coords="2738,68,2926,95"/>
+<area shape="rect" id="node22" href="$class_abstract_material_widget.html#a02cc4a4c8e489854363c646cd67c03f7" title="applies material to currently selected mesh " alt="" coords="2098,195,2257,237"/>
+<area shape="rect" id="node14" href="$class_material_library.html#ac0fdd21aa44b30e4ef14f252f26c3f1e" title="defalut constructor " alt="" coords="1397,195,1558,237"/>
+<area shape="rect" id="node15" href="$class_material_library.html#a9dddb26d8ba882414f96bf5e4e6c3cf6" title="get an instance of our material library " alt="" coords="1611,304,1794,331"/>
+<area shape="rect" id="node16" href="$class_abstract_material_widget.html#ace749c971293b2aef90e2861500be8bd" title="our default constructor " alt="" coords="2310,313,2477,354"/>
+<area shape="rect" id="node20" href="$class_abstract_material_widget.html#a965876cda41ec655a45c2c34d86a97ae" title="compiles destination file and adds to material library " alt="" coords="2314,414,2473,455"/>
+<area shape="rect" id="node21" href="$class_abstract_material_widget.html#ab4350dfde2aadd6e6c42210ec03a4dd1" title="slot to add our material to our library " alt="" coords="1865,297,2023,338"/>
+<area shape="rect" id="node24" href="$class_mesh_widget.html#aac3bcbbfb389bf17505d4eb894ae5693" title="applies material from library to mesh " alt="" coords="1843,515,2045,541"/>
+<area shape="rect" id="node17" href="$class_abstract_material_widget.html#a96533d07fe6cc79527f5df9ddf2199a7" title="accessor to our instance of our class " alt="" coords="2526,359,2685,401"/>
+<area shape="rect" id="node18" href="$class_material_library.html#a93a390e382f15c20a3ba3d760cdb4bc5" title="imports all materials from a directory " alt="" coords="2734,425,2930,452"/>
+<area shape="rect" id="node23" href="$class_abstract_material_widget.html#a314c224671ac3e3aa56d313eaa95398f" title="saves our current node graph " alt="" coords="2098,313,2257,354"/>
+<area shape="rect" id="node26" href="$class_abstract_material_widget.html#a7085b0419e52157f46312928d9bfc326" title="applies the current createed material to mesh of choosing " alt="" coords="945,195,1103,237"/>
+<area shape="rect" id="node27" href="$class_mesh_widget.html#af819cb26a8a0ed4b6aa86fdf6a7c8bc7" title="applys material to currently selected model " alt="" coords="921,144,1127,171"/>
+</map>

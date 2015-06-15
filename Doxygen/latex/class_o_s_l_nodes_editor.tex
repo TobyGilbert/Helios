@@ -1,0 +1,257 @@
+\hypertarget{class_o_s_l_nodes_editor}{\section{O\-S\-L\-Nodes\-Editor Class Reference}
+\label{class_o_s_l_nodes_editor}\index{O\-S\-L\-Nodes\-Editor@{O\-S\-L\-Nodes\-Editor}}
+}
+
+
+An extention to \hyperlink{class_q_nodes_editor}{Q\-Nodes\-Editor} which adds O\-S\-L to Optix compilation steps.  
+
+
+
+
+{\ttfamily \#include $<$O\-S\-L\-Nodes\-Editor.\-h$>$}
+
+
+
+Inheritance diagram for O\-S\-L\-Nodes\-Editor\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=192pt]{class_o_s_l_nodes_editor__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for O\-S\-L\-Nodes\-Editor\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_o_s_l_nodes_editor__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_o_s_l_nodes_editor_a7c204e417e08aa49683281b10385f37a}{percent\-Compiled} (int \-\_\-percent)
+\begin{DoxyCompactList}\small\item\em signal to give the progress of compilation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_o_s_l_nodes_editor_a50fca1e570de24c6147d264b72533ce5}{\hyperlink{class_o_s_l_nodes_editor_a50fca1e570de24c6147d264b72533ce5}{O\-S\-L\-Nodes\-Editor} (Q\-Object $\ast$parent=0)}\label{class_o_s_l_nodes_editor_a50fca1e570de24c6147d264b72533ce5}
+
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_a3d53185e726ee8e247636af05f3cbf80}{void \hyperlink{class_o_s_l_nodes_editor_a3d53185e726ee8e247636af05f3cbf80}{set\-Mat\-Destination} (std\-::string \-\_\-dest)}\label{class_o_s_l_nodes_editor_a3d53185e726ee8e247636af05f3cbf80}
+
+\begin{DoxyCompactList}\small\item\em mutator to the path where our optix material is created \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_af5964ed254722881c65a834c60513ba6}{std\-::string \hyperlink{class_o_s_l_nodes_editor_af5964ed254722881c65a834c60513ba6}{get\-Mat\-Destination} ()}\label{class_o_s_l_nodes_editor_af5964ed254722881c65a834c60513ba6}
+
+\begin{DoxyCompactList}\small\item\em accessor to the path where our optix material is created \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_ad72361168d0605b5449b05d271535d23}{void \hyperlink{class_o_s_l_nodes_editor_ad72361168d0605b5449b05d271535d23}{set\-Mat\-Name} (std\-::string \-\_\-name)}\label{class_o_s_l_nodes_editor_ad72361168d0605b5449b05d271535d23}
+
+\begin{DoxyCompactList}\small\item\em mutator for our material name \end{DoxyCompactList}\item 
+std\-::string \& \hyperlink{class_o_s_l_nodes_editor_a6947b479148cf42fe6252621ff7a5251}{get\-Material\-Name} ()
+\begin{DoxyCompactList}\small\item\em accessor to our material name \end{DoxyCompactList}\item 
+std\-::string \hyperlink{class_o_s_l_nodes_editor_a4b1199c7b3d4449e08fb8d9e6080219b}{compile\-Material} (optix\-::\-Material \&\-\_\-mat)
+\begin{DoxyCompactList}\small\item\em creates an optix material program from our O\-S\-L node graph. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_o_s_l_nodes_editor_a2847eb45d0080e03b5accca596ea43d8}{evaluate\-Block} (\hyperlink{class_q_n_e_block}{Q\-N\-E\-Block} $\ast$\-\_\-block, std\-::vector$<$ \hyperlink{class_q_n_e_block}{Q\-N\-E\-Block} $\ast$ $>$ \&\-\_\-block\-Vector)
+\begin{DoxyCompactList}\small\item\em a recursive function to to evaluate our blocks to find there order \end{DoxyCompactList}\item 
+\hyperlink{class_q_n_e_block}{Q\-N\-E\-Block} $\ast$ \hyperlink{class_o_s_l_nodes_editor_ab662050f4cb531c1d1a7980ca0327e82}{get\-Last\-Block} ()
+\begin{DoxyCompactList}\small\item\em iterates through our scenes children to the last block to be written in our material. \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_ab5c850b082cd87c467b16d33596afa03}{Q\-String \hyperlink{class_o_s_l_nodes_editor_ab5c850b082cd87c467b16d33596afa03}{port\-Type\-To\-String} (\hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{Q\-N\-E\-Port\-::variable\-Type} \-\_\-type)}\label{class_o_s_l_nodes_editor_ab5c850b082cd87c467b16d33596afa03}
+
+\begin{DoxyCompactList}\small\item\em takes in an Q\-N\-E\-Port\-::type and returns the type in string form \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_o_s_l_nodes_editor_a0627066cf0707571edbfbf9c5421ec44}{std\-::string \hyperlink{class_o_s_l_nodes_editor_a0627066cf0707571edbfbf9c5421ec44}{m\-\_\-optix\-Mat\-Dest}}\label{class_o_s_l_nodes_editor_a0627066cf0707571edbfbf9c5421ec44}
+
+\begin{DoxyCompactList}\small\item\em the destination that we wish to create our optix material. Defualt is Optix\-Materials/temp\-Mat.\-cu \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_aa051d19170023ebf57f6c79a5dc490e9}{std\-::string \hyperlink{class_o_s_l_nodes_editor_aa051d19170023ebf57f6c79a5dc490e9}{m\-\_\-material\-Name}}\label{class_o_s_l_nodes_editor_aa051d19170023ebf57f6c79a5dc490e9}
+
+\begin{DoxyCompactList}\small\item\em the name of our material, this will default to temp\-Mat \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_af0ee4bce62b2365bfe20956a0080c2ba}{std\-::string \hyperlink{class_o_s_l_nodes_editor_af0ee4bce62b2365bfe20956a0080c2ba}{m\-\_\-cuda\-Dir}}\label{class_o_s_l_nodes_editor_af0ee4bce62b2365bfe20956a0080c2ba}
+
+\begin{DoxyCompactList}\small\item\em C\-U\-D\-A's directory. \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_a2c629326a2a6b08331588434828a27e8}{std\-::string \hyperlink{class_o_s_l_nodes_editor_a2c629326a2a6b08331588434828a27e8}{m\-\_\-optix\-Dir}}\label{class_o_s_l_nodes_editor_a2c629326a2a6b08331588434828a27e8}
+
+\begin{DoxyCompactList}\small\item\em Opti\-X's directory. \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_nodes_editor_a199c1da6a74b718cfcb2b9756d11d155}{std\-::string \hyperlink{class_o_s_l_nodes_editor_a199c1da6a74b718cfcb2b9756d11d155}{m\-\_\-cuda\-Version}}\label{class_o_s_l_nodes_editor_a199c1da6a74b718cfcb2b9756d11d155}
+
+\begin{DoxyCompactList}\small\item\em C\-U\-D\-A version. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+An extention to \hyperlink{class_q_nodes_editor}{Q\-Nodes\-Editor} which adds O\-S\-L to Optix compilation steps. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+20/03/2015 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_o_s_l_nodes_editor_a4b1199c7b3d4449e08fb8d9e6080219b}{\index{O\-S\-L\-Nodes\-Editor@{O\-S\-L\-Nodes\-Editor}!compile\-Material@{compile\-Material}}
+\index{compile\-Material@{compile\-Material}!OSLNodesEditor@{O\-S\-L\-Nodes\-Editor}}
+\subsubsection[{compile\-Material}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string O\-S\-L\-Nodes\-Editor\-::compile\-Material (
+\begin{DoxyParamCaption}
+\item[{optix\-::\-Material \&}]{\-\_\-mat}
+\end{DoxyParamCaption}
+)}}\label{class_o_s_l_nodes_editor_a4b1199c7b3d4449e08fb8d9e6080219b}
+
+
+creates an optix material program from our O\-S\-L node graph. 
+
+The file will default be created in Optix\-Materials/temp\-Mat.\-cu unless specified otherwise 
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-mat} & -\/ material we wish to compile O\-S\-L shader to \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Material Compiled if compilation succesful otherwise oppropriate error message 
+\end{DoxyReturn}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_nodes_editor_a4b1199c7b3d4449e08fb8d9e6080219b_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_nodes_editor_a4b1199c7b3d4449e08fb8d9e6080219b_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_o_s_l_nodes_editor_a2847eb45d0080e03b5accca596ea43d8}{\index{O\-S\-L\-Nodes\-Editor@{O\-S\-L\-Nodes\-Editor}!evaluate\-Block@{evaluate\-Block}}
+\index{evaluate\-Block@{evaluate\-Block}!OSLNodesEditor@{O\-S\-L\-Nodes\-Editor}}
+\subsubsection[{evaluate\-Block}]{\setlength{\rightskip}{0pt plus 5cm}void O\-S\-L\-Nodes\-Editor\-::evaluate\-Block (
+\begin{DoxyParamCaption}
+\item[{{\bf Q\-N\-E\-Block} $\ast$}]{\-\_\-block, }
+\item[{std\-::vector$<$ {\bf Q\-N\-E\-Block} $\ast$ $>$ \&}]{\-\_\-block\-Vector}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{class_o_s_l_nodes_editor_a2847eb45d0080e03b5accca596ea43d8}
+
+
+a recursive function to to evaluate our blocks to find there order 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-block} & -\/ the block we want to evaluate \\
+\hline
+{\em \-\_\-block\-Vector} & -\/ the vector we wish to store our ordered blocks \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_nodes_editor_a2847eb45d0080e03b5accca596ea43d8_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_o_s_l_nodes_editor_ab662050f4cb531c1d1a7980ca0327e82}{\index{O\-S\-L\-Nodes\-Editor@{O\-S\-L\-Nodes\-Editor}!get\-Last\-Block@{get\-Last\-Block}}
+\index{get\-Last\-Block@{get\-Last\-Block}!OSLNodesEditor@{O\-S\-L\-Nodes\-Editor}}
+\subsubsection[{get\-Last\-Block}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Q\-N\-E\-Block} $\ast$ O\-S\-L\-Nodes\-Editor\-::get\-Last\-Block (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}}\label{class_o_s_l_nodes_editor_ab662050f4cb531c1d1a7980ca0327e82}
+
+
+iterates through our scenes children to the last block to be written in our material. 
+
+this will be the first node found with Ci as an output. 
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_nodes_editor_ab662050f4cb531c1d1a7980ca0327e82_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_nodes_editor_ab662050f4cb531c1d1a7980ca0327e82_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_o_s_l_nodes_editor_a6947b479148cf42fe6252621ff7a5251}{\index{O\-S\-L\-Nodes\-Editor@{O\-S\-L\-Nodes\-Editor}!get\-Material\-Name@{get\-Material\-Name}}
+\index{get\-Material\-Name@{get\-Material\-Name}!OSLNodesEditor@{O\-S\-L\-Nodes\-Editor}}
+\subsubsection[{get\-Material\-Name}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string\& O\-S\-L\-Nodes\-Editor\-::get\-Material\-Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_o_s_l_nodes_editor_a6947b479148cf42fe6252621ff7a5251}
+
+
+accessor to our material name 
+
+\begin{DoxyReturn}{Returns}
+material name 
+\end{DoxyReturn}
+\hypertarget{class_o_s_l_nodes_editor_a7c204e417e08aa49683281b10385f37a}{\index{O\-S\-L\-Nodes\-Editor@{O\-S\-L\-Nodes\-Editor}!percent\-Compiled@{percent\-Compiled}}
+\index{percent\-Compiled@{percent\-Compiled}!OSLNodesEditor@{O\-S\-L\-Nodes\-Editor}}
+\subsubsection[{percent\-Compiled}]{\setlength{\rightskip}{0pt plus 5cm}void O\-S\-L\-Nodes\-Editor\-::percent\-Compiled (
+\begin{DoxyParamCaption}
+\item[{int}]{\-\_\-percent}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [signal]}}}\label{class_o_s_l_nodes_editor_a7c204e417e08aa49683281b10385f37a}
+
+
+signal to give the progress of compilation 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-percent} & -\/ percent from 0 to 100 of progress of compilation \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_nodes_editor_a7c204e417e08aa49683281b10385f37a_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/O\-S\-L\-Nodes\-Editor.\-h\item 
+moc/moc\-\_\-\-O\-S\-L\-Nodes\-Editor.\-cpp\item 
+src/\-Node\-Graph/O\-S\-L\-Nodes\-Editor.\-cpp\end{DoxyCompactItemize}

@@ -1,0 +1,4 @@
+<map id="PathTracerScene::createInstance" name="PathTracerScene::createInstance">
+<area shape="rect" id="node2" href="$class_opti_x_model.html#a5b9b10ed9b5df1104a2bdb5019fcd06d" title="an accessor to our model with a transformation applied " alt="" coords="273,5,479,32"/>
+<area shape="rect" id="node3" href="$class_opti_x_model.html#aba60cfa935329bacb5c55b9e4dac0b7b" title="accessor to query number of polygons " alt="" coords="277,56,475,83"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="OSLAbstractVarBlock::setBlockName" name="OSLAbstractVarBlock::setBlockName">
+<area shape="rect" id="node2" href="$class_q_n_e_block.html#a1e45a9b7f2ace3da607662a84af3388a" title="adds a port to our node. This has been modified to also set the varibel type and initial paramiters..." alt="" coords="206,56,343,83"/>
+<area shape="rect" id="node3" href="$class_q_n_e_port.html#af880fe558d12955f874b4f1eef5261b2" title="set initial paramiters string " alt="" coords="395,5,559,32"/>
+<area shape="rect" id="node4" href="$class_q_n_e_port.html#aa8e18998a29ef7ec2d26143d6835d0cd" title="mutator for the variable type of the port " alt="" coords="392,56,563,83"/>
+<area shape="rect" id="node5" href="$class_q_n_e_port.html#aca918fc27382de55761b2b2045f4d9f4" title="accessor to the the ports label text " alt="" coords="398,107,557,133"/>
+</map>

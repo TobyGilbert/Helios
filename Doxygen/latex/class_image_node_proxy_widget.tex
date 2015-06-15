@@ -1,0 +1,137 @@
+\hypertarget{class_image_node_proxy_widget}{\section{Image\-Node\-Proxy\-Widget Class Reference}
+\label{class_image_node_proxy_widget}\index{Image\-Node\-Proxy\-Widget@{Image\-Node\-Proxy\-Widget}}
+}
+
+
+Extention of \hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} that allows us to select an image and apply it to a attribute of a material.  
+
+
+
+
+{\ttfamily \#include $<$Image\-Node\-Proxy\-Widget.\-h$>$}
+
+
+
+Inheritance diagram for Image\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=228pt]{class_image_node_proxy_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Image\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_image_node_proxy_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_image_node_proxy_widget_afb9272f0af02e0d8b5d70f2b7eb246eb}{void \hyperlink{class_image_node_proxy_widget_afb9272f0af02e0d8b5d70f2b7eb246eb}{get\-Image} ()}\label{class_image_node_proxy_widget_afb9272f0af02e0d8b5d70f2b7eb246eb}
+
+\begin{DoxyCompactList}\small\item\em slot to import an image to our node \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_image_node_proxy_widget_aa978f88ffefe88664d6d4f5177224015}{{\bfseries Image\-Node\-Proxy\-Widget} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$\-\_\-port\-Connected, optix\-::\-Material \&\-\_\-mat, Q\-Graphics\-Item $\ast$parent=0)}\label{class_image_node_proxy_widget_aa978f88ffefe88664d6d4f5177224015}
+
+\item 
+\hypertarget{class_image_node_proxy_widget_acbe422d61639eb6479ae01e2f4c6531a}{\hyperlink{class_image_node_proxy_widget_acbe422d61639eb6479ae01e2f4c6531a}{$\sim$\-Image\-Node\-Proxy\-Widget} ()}\label{class_image_node_proxy_widget_acbe422d61639eb6479ae01e2f4c6531a}
+
+\begin{DoxyCompactList}\small\item\em default destructor \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_af837a3a6278f17d6be03f309302d1614}{void \hyperlink{class_image_node_proxy_widget_af837a3a6278f17d6be03f309302d1614}{set\-Image\-Size} (int \-\_\-width, int \-\_\-height)}\label{class_image_node_proxy_widget_af837a3a6278f17d6be03f309302d1614}
+
+\begin{DoxyCompactList}\small\item\em mutator to the width and height of our image \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_a18574265844e2a6165ab6608f08a5fe1}{void \hyperlink{class_image_node_proxy_widget_a18574265844e2a6165ab6608f08a5fe1}{set\-Linked\-Var} ()}\label{class_image_node_proxy_widget_a18574265844e2a6165ab6608f08a5fe1}
+
+\begin{DoxyCompactList}\small\item\em overite our set\-Linked\-Var function to put our own functionality in \end{DoxyCompactList}\item 
+void \hyperlink{class_image_node_proxy_widget_a0930cf7ae23b7056c46f8ecd510f1542}{load\-Image} (Q\-String \-\_\-path)
+\begin{DoxyCompactList}\small\item\em load an image into our widget \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_a6e21c3e4552dc8a7da308a905c9b841d}{Q\-String \hyperlink{class_image_node_proxy_widget_a6e21c3e4552dc8a7da308a905c9b841d}{get\-Image\-Path} ()}\label{class_image_node_proxy_widget_a6e21c3e4552dc8a7da308a905c9b841d}
+
+\begin{DoxyCompactList}\small\item\em accessor to image path \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_image_node_proxy_widget_a6addc0eef24e9bc9b010eca29c126943}{optix\-::\-Texture\-Sampler \hyperlink{class_image_node_proxy_widget_a6addc0eef24e9bc9b010eca29c126943}{m\-\_\-texure}}\label{class_image_node_proxy_widget_a6addc0eef24e9bc9b010eca29c126943}
+
+\begin{DoxyCompactList}\small\item\em our optix texture \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_aede65813ea9649a733fb03226082fc54}{Q\-Label $\ast$ \hyperlink{class_image_node_proxy_widget_aede65813ea9649a733fb03226082fc54}{m\-\_\-img\-Label}}\label{class_image_node_proxy_widget_aede65813ea9649a733fb03226082fc54}
+
+\begin{DoxyCompactList}\small\item\em label widget to hold our image \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_a2bbc7434a8db9f8e49937968fcc1e5fe}{Q\-Group\-Box $\ast$ \hyperlink{class_image_node_proxy_widget_a2bbc7434a8db9f8e49937968fcc1e5fe}{m\-\_\-group\-Box}}\label{class_image_node_proxy_widget_a2bbc7434a8db9f8e49937968fcc1e5fe}
+
+\begin{DoxyCompactList}\small\item\em our group box \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_a6db30ded674d54f7b39fa5c4ffb5af26}{bool \hyperlink{class_image_node_proxy_widget_a6db30ded674d54f7b39fa5c4ffb5af26}{m\-\_\-img\-Created}}\label{class_image_node_proxy_widget_a6db30ded674d54f7b39fa5c4ffb5af26}
+
+\begin{DoxyCompactList}\small\item\em bool to indicate if we have a texture created \end{DoxyCompactList}\item 
+\hypertarget{class_image_node_proxy_widget_a90f807adc849eea5050763eb6a849f4e}{Q\-String \hyperlink{class_image_node_proxy_widget_a90f807adc849eea5050763eb6a849f4e}{m\-\_\-image\-Path}}\label{class_image_node_proxy_widget_a90f807adc849eea5050763eb6a849f4e}
+
+\begin{DoxyCompactList}\small\item\em the image path \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Extention of \hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} that allows us to select an image and apply it to a attribute of a material. 
+
+This Widget consists of a button to load in an image and a label to display the image. \begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/05/2015 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_image_node_proxy_widget_a0930cf7ae23b7056c46f8ecd510f1542}{\index{Image\-Node\-Proxy\-Widget@{Image\-Node\-Proxy\-Widget}!load\-Image@{load\-Image}}
+\index{load\-Image@{load\-Image}!ImageNodeProxyWidget@{Image\-Node\-Proxy\-Widget}}
+\subsubsection[{load\-Image}]{\setlength{\rightskip}{0pt plus 5cm}void Image\-Node\-Proxy\-Widget\-::load\-Image (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{\-\_\-path}
+\end{DoxyParamCaption}
+)}}\label{class_image_node_proxy_widget_a0930cf7ae23b7056c46f8ecd510f1542}
+
+
+load an image into our widget 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ path to desired image \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_image_node_proxy_widget_a0930cf7ae23b7056c46f8ecd510f1542_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_image_node_proxy_widget_a0930cf7ae23b7056c46f8ecd510f1542_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/Image\-Node\-Proxy\-Widget.\-h\item 
+src/\-Node\-Graph/Image\-Node\-Proxy\-Widget.\-cpp\end{DoxyCompactItemize}

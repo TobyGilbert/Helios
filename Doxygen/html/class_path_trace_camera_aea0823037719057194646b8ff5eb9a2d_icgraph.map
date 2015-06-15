@@ -1,0 +1,14 @@
+<map id="PathTraceCamera::getEyeUVW" name="PathTraceCamera::getEyeUVW">
+<area shape="rect" id="node2" href="$class_path_tracer_scene.html#a4daa09a33eeb4dfbbf7b736ac2626732" title="initialise our class " alt="" coords="298,19,446,45"/>
+<area shape="rect" id="node4" href="$class_path_tracer_scene.html#abc185fb2c0cd40aa439437c41109cb12" title="updates our camera the instance of our camera " alt="" coords="264,95,480,121"/>
+<area shape="rect" id="node3" href="$class_open_g_l_widget.html#a570df546f7206455c57addb624906576" title="the virtual initialize class is called once when the window is created and we have a valid GL context..." alt="" coords="538,5,721,32"/>
+<area shape="rect" id="node5" href="$class_path_tracer_scene.html#af1617b7ddb8ea3eeadc2f6a45be74e04" title="our trace function that launches our Optix context " alt="" coords="549,56,709,83"/>
+<area shape="rect" id="node8" href="$class_camera_widget.html#aafcf078d596c85bd61031163f855e3fa" title="Update other camera settings. " alt="" coords="528,107,731,133"/>
+<area shape="rect" id="node13" href="$class_camera_widget.html#a708a4a1499b94ed542268cd1de8fcb6e" title="Resets the camera. " alt="" coords="533,157,725,184"/>
+<area shape="rect" id="node6" href="$class_open_g_l_widget.html#a260a543726f601659cbd1809b90f9e4b" title="this is called everytime we want to draw the scene " alt="" coords="799,31,963,57"/>
+<area shape="rect" id="node7" href="$class_render_settings.html#a548914e7dc30c7c407836d0d90f05700" title="slot called to render our image " alt="" coords="785,81,977,108"/>
+<area shape="rect" id="node9" href="$class_camera_widget.html#a637ffd88fb213dad01dfa7294248029e" title="our default constructor " alt="" coords="779,144,983,171"/>
+<area shape="rect" id="node10" href="$class_camera_widget.html#a295cbb74d2843858399fdc45777b580d" title="returns the instance of our camera widget " alt="" coords="1033,144,1218,171"/>
+<area shape="rect" id="node11" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="1267,144,1447,171"/>
+<area shape="rect" id="node12" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="1497,144,1677,171"/>
+</map>

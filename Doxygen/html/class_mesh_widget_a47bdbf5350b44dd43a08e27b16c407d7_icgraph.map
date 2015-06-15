@@ -1,0 +1,5 @@
+<map id="MeshWidget::load" name="MeshWidget::load">
+<area shape="rect" id="node2" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="182,5,349,32"/>
+<area shape="rect" id="node3" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="398,5,578,32"/>
+<area shape="rect" id="node4" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="627,5,807,32"/>
+</map>

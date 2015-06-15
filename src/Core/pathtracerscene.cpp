@@ -22,7 +22,9 @@ PathTracerScene* PathTracerScene::getInstance(){
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-PathTracerScene::PathTracerScene()  : m_cameraChanged(false),
+PathTracerScene::PathTracerScene()  :
+                                    m_totalNumPolygons(0),
+                                    m_cameraChanged(false),
                                     m_rr_begin_depth(1u),
                                     m_sqrt_num_samples( 4u ),
                                     m_frame(0),
@@ -181,6 +183,7 @@ OptiXModel* PathTracerScene::importMesh(std::string _id, std::string _path)
     m_globalTransGroup->getAcceleration()->markDirty();
     m_meshArray[_id] = model;
     m_frame = 0;
+    m_totalNumPolygons+=model->getNumPolygons();
 
     return model;
 }
@@ -194,6 +197,7 @@ OptiXModel* PathTracerScene::createInstance(std::string _geomId, std::string _in
         m_globalTransGroup->addChild(instance->getGeomAndTrans());
         m_globalTransGroup->getAcceleration()->markDirty();
         m_meshArray[_instanceName] = instance;
+        m_totalNumPolygons+=instance->getNumPolygons();
         m_frame = 0;
         return instance;
     }
@@ -211,6 +215,7 @@ void PathTracerScene::removeGeomtry(std::string _id)
     {
         m_globalTransGroup->removeChild(model->second->getGeomAndTrans());
         m_globalTransGroup->getAcceleration()->markDirty();
+        m_totalNumPolygons-=model->second->getNumPolygons();
         delete model->second;
         m_meshArray.erase(model);
 

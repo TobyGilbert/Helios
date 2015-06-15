@@ -1,0 +1,122 @@
+\hypertarget{class_abstract_node_proxy_widget}{\section{Abstract\-Node\-Proxy\-Widget Class Reference}
+\label{class_abstract_node_proxy_widget}\index{Abstract\-Node\-Proxy\-Widget@{Abstract\-Node\-Proxy\-Widget}}
+}
+
+
+Abstract base class for all variable proxy widgets in our scene.  
+
+
+
+
+{\ttfamily \#include $<$Abstract\-Node\-Proxy\-Widget.\-h$>$}
+
+
+
+Inheritance diagram for Abstract\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_abstract_node_proxy_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Abstract\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_abstract_node_proxy_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_node_proxy_widget_a503fe31eb1e4ff86ee211c18bb11a46e}{void \hyperlink{class_abstract_node_proxy_widget_a503fe31eb1e4ff86ee211c18bb11a46e}{attribute\-Changed} ()}\label{class_abstract_node_proxy_widget_a503fe31eb1e4ff86ee211c18bb11a46e}
+
+\begin{DoxyCompactList}\small\item\em signal to notify if an attribute has changed \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_node_proxy_widget_a7ffe16a97b194e29c4bc15983e85402f}{\hyperlink{class_abstract_node_proxy_widget_a7ffe16a97b194e29c4bc15983e85402f}{Abstract\-Node\-Proxy\-Widget} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$\-\_\-connected\-Port, optix\-::\-Material \&\-\_\-mat, Q\-Graphics\-Item $\ast$\-\_\-parent=0)}\label{class_abstract_node_proxy_widget_a7ffe16a97b194e29c4bc15983e85402f}
+
+\begin{DoxyCompactList}\small\item\em our default constructor \end{DoxyCompactList}\item 
+void \hyperlink{class_abstract_node_proxy_widget_aeac0d3fa1930be2396e2ab7c5bf04d35}{get\-Linked\-Var\-Name} (std\-::vector$<$ std\-::string $>$ \&\-\_\-linked\-Var\-Names)
+\begin{DoxyCompactList}\small\item\em returns the linked varible name connected to desired port \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_node_proxy_widget_a0ffa73887a7646a6aaec547c81231617}{virtual void \hyperlink{class_abstract_node_proxy_widget_a0ffa73887a7646a6aaec547c81231617}{set\-Linked\-Var} ()}\label{class_abstract_node_proxy_widget_a0ffa73887a7646a6aaec547c81231617}
+
+\begin{DoxyCompactList}\small\item\em virtual method to set whatever linked variables we have \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_node_proxy_widget_a141801dfcb39ad2b60f61b7a98e95ea5}{optix\-::\-Material \hyperlink{class_abstract_node_proxy_widget_a141801dfcb39ad2b60f61b7a98e95ea5}{m\-\_\-material}}\label{class_abstract_node_proxy_widget_a141801dfcb39ad2b60f61b7a98e95ea5}
+
+\begin{DoxyCompactList}\small\item\em a member to hold the material to be edited \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_node_proxy_widget_a0aaa8236fc7633a79b32576024c22434}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ \hyperlink{class_abstract_node_proxy_widget_a0aaa8236fc7633a79b32576024c22434}{m\-\_\-connected\-Port}}\label{class_abstract_node_proxy_widget_a0aaa8236fc7633a79b32576024c22434}
+
+\begin{DoxyCompactList}\small\item\em a pointer to the port linked to our spin box \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Abstract base class for all variable proxy widgets in our scene. 
+
+This extends from Q\-Graphics\-Proxy\-Widget which allows us to attach Q\-Widgets onto Q\-Graphics\-Items. We need this got the ability to user signals and slots to change attributes in our optix material \begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/05/2015 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_abstract_node_proxy_widget_aeac0d3fa1930be2396e2ab7c5bf04d35}{\index{Abstract\-Node\-Proxy\-Widget@{Abstract\-Node\-Proxy\-Widget}!get\-Linked\-Var\-Name@{get\-Linked\-Var\-Name}}
+\index{get\-Linked\-Var\-Name@{get\-Linked\-Var\-Name}!AbstractNodeProxyWidget@{Abstract\-Node\-Proxy\-Widget}}
+\subsubsection[{get\-Linked\-Var\-Name}]{\setlength{\rightskip}{0pt plus 5cm}void Abstract\-Node\-Proxy\-Widget\-::get\-Linked\-Var\-Name (
+\begin{DoxyParamCaption}
+\item[{std\-::vector$<$ std\-::string $>$ \&}]{\-\_\-linked\-Var\-Names}
+\end{DoxyParamCaption}
+)}}\label{class_abstract_node_proxy_widget_aeac0d3fa1930be2396e2ab7c5bf04d35}
+
+
+returns the linked varible name connected to desired port 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-linked\-Var\-Names} & -\/ vector of strings to store linked variable names \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_abstract_node_proxy_widget_aeac0d3fa1930be2396e2ab7c5bf04d35_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_abstract_node_proxy_widget_aeac0d3fa1930be2396e2ab7c5bf04d35_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/Abstract\-Node\-Proxy\-Widget.\-h\item 
+moc/moc\-\_\-\-Abstract\-Node\-Proxy\-Widget.\-cpp\item 
+src/\-Node\-Graph/Abstract\-Node\-Proxy\-Widget.\-cpp\end{DoxyCompactItemize}

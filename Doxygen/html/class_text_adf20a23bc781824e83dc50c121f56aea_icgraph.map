@@ -1,0 +1,4 @@
+<map id="Text::setScreenSize" name="Text::setScreenSize">
+<area shape="rect" id="node2" href="$class_open_g_l_widget.html#a570df546f7206455c57addb624906576" title="the virtual initialize class is called once when the window is created and we have a valid GL context..." alt="" coords="195,5,378,32"/>
+<area shape="rect" id="node3" href="$class_open_g_l_widget.html#a55cf4659a7f10207fb6ab3fcf9273abc" title="called to resize the window " alt="" coords="201,56,372,83"/>
+</map>

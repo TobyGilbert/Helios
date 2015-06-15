@@ -1,0 +1,5 @@
+<map id="FloatNodeProxyWidget::setMaterialVariables" name="FloatNodeProxyWidget::setMaterialVariables">
+<area shape="rect" id="node2" href="$class_abstract_node_proxy_widget.html#aeac0d3fa1930be2396e2ab7c5bf04d35" title="returns the linked varible name connected to desired port " alt="" coords="211,23,389,65"/>
+<area shape="rect" id="node3" href="$class_o_s_l_shader_block.html#a1af4f62c3a39d6eed25123695bcbceee" title="accessor to the shader name " alt="" coords="437,5,653,32"/>
+<area shape="rect" id="node4" href="$class_q_n_e_port.html#afb0f6931a74eaaeee1975b21dc754051" title="accessor to the port name " alt="" coords="477,56,613,83"/>
+</map>

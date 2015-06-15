@@ -139,9 +139,13 @@ void OpenGLWidget::initializeGL(){
     //start our render time out
     m_timeOutStart = m_timeOutStart.currentTime();
 
+    //create our HUD
     m_textDrawer = new Text(QFont("Arial",14));
     m_textDrawer->setColour(255,0,0);
     m_textDrawer->setScreenSize(width(),height());
+
+    //start our FPS counter
+    m_FPSTimer = QTime::currentTime();
 
     startTimer(0);
 
@@ -199,19 +203,32 @@ void OpenGLWidget::paintGL(){
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     glBindVertexArray(0);
 
+
+    QTime updateTime = QTime::currentTime();
     if(m_drawHud)
     {
+        //calc the update time
+        int msecsto = m_FPSTimer.msecsTo(updateTime);
+        QString FPS;
+        (msecsto==0)?FPS = "FPS: Too fast to calculate" : FPS = QString("FPS: %1").arg(1000/msecsto);
         int textIndent  = (width()-height())/2;
         if(textIndent<0) textIndent = 0;
         if(timedOut)
         {
             m_textDrawer->renderText(textIndent,5,QString("Render Timed Out"));
+            m_textDrawer->renderText(textIndent,20, FPS);
+            m_textDrawer->renderText(textIndent,35,QString("Total number of polygons: %1").arg(PathTracerScene::getInstance()->getTotalScenePolygons()));
         }
         else
         {
             m_textDrawer->renderText(textIndent,5,QString("Rendering"));
+            m_textDrawer->renderText(textIndent,20, FPS);
+            m_textDrawer->renderText(textIndent,35,QString("Total number of polygons: %1").arg(PathTracerScene::getInstance()->getTotalScenePolygons()));
         }
     }
+
+    //restart ouf FPS timere
+    m_FPSTimer = QTime::currentTime();
 
 }
 //----------------------------------------------------------------------------------------------------------------------

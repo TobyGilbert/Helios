@@ -1,0 +1,193 @@
+\hypertarget{class_o_s_l_shader_block}{\section{O\-S\-L\-Shader\-Block Class Reference}
+\label{class_o_s_l_shader_block}\index{O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}}
+}
+
+
+This is a node for our user interface specialised for loading in and setting up O\-S\-L shaders.  
+
+
+
+
+{\ttfamily \#include $<$O\-S\-L\-Shader\-Block.\-h$>$}
+
+
+
+Inheritance diagram for O\-S\-L\-Shader\-Block\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_o_s_l_shader_block__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for O\-S\-L\-Shader\-Block\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_o_s_l_shader_block__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries Type} = Q\-Graphics\-Item\-:\-:User\-Type + 4
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_o_s_l_shader_block_a265e920913d83ef46f5d9a7075687a7b}{O\-S\-L\-Shader\-Block} (Q\-Graphics\-Item $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em our default constructor, takes in a path to osl shader and sets up our ports accordingly \end{DoxyCompactList}\item 
+std\-::string \hyperlink{class_o_s_l_shader_block_aec2dc7eb77840b0270c2f4112133b3f7}{get\-Devicefunction} ()
+\begin{DoxyCompactList}\small\item\em accessor to the this shaders cuda kernal \end{DoxyCompactList}\item 
+std\-::string \hyperlink{class_o_s_l_shader_block_a1af4f62c3a39d6eed25123695bcbceee}{get\-Block\-Name} ()
+\begin{DoxyCompactList}\small\item\em accessor to the shader name \end{DoxyCompactList}\item 
+bool \hyperlink{class_o_s_l_shader_block_a4c5f75777bcd1a81bd66294f3d736214}{load\-Shader} (Q\-String \-\_\-path)
+\begin{DoxyCompactList}\small\item\em compiles our osl shader and sets up our ports and obtains required data about shader \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_shader_block_acafc30832b9fa520cf0294451dfd2301}{int \hyperlink{class_o_s_l_shader_block_acafc30832b9fa520cf0294451dfd2301}{type} () const }\label{class_o_s_l_shader_block_acafc30832b9fa520cf0294451dfd2301}
+
+\begin{DoxyCompactList}\small\item\em returns the type of our class \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_shader_block_a9154c7cae58c25d43de7302cf1c836a4}{void \hyperlink{class_o_s_l_shader_block_a9154c7cae58c25d43de7302cf1c836a4}{save} (Q\-Data\-Stream \&ds)}\label{class_o_s_l_shader_block_a9154c7cae58c25d43de7302cf1c836a4}
+
+\begin{DoxyCompactList}\small\item\em overide our save function to give our new implimentation \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_shader_block_a9cf63f4ceb335aea5b6c2d7ba77d9d2c}{void \hyperlink{class_o_s_l_shader_block_a9cf63f4ceb335aea5b6c2d7ba77d9d2c}{load} (Q\-Data\-Stream \&ds, Q\-Map$<$ quint64, \hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ $>$ \&port\-Map)}\label{class_o_s_l_shader_block_a9cf63f4ceb335aea5b6c2d7ba77d9d2c}
+
+\begin{DoxyCompactList}\small\item\em overide our load function to give our new implimentation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_o_s_l_shader_block_a7e0482a0ab278134ac53f681c0a54013}{std\-::string \hyperlink{class_o_s_l_shader_block_a7e0482a0ab278134ac53f681c0a54013}{m\-\_\-cuda\-Kernal}}\label{class_o_s_l_shader_block_a7e0482a0ab278134ac53f681c0a54013}
+
+\begin{DoxyCompactList}\small\item\em string to store the cuda kernal form of our osl shader \end{DoxyCompactList}\item 
+\hypertarget{class_o_s_l_shader_block_a36de76ba8232506ea576a5167e8fee46}{std\-::string \hyperlink{class_o_s_l_shader_block_a36de76ba8232506ea576a5167e8fee46}{m\-\_\-shader\-Name}}\label{class_o_s_l_shader_block_a36de76ba8232506ea576a5167e8fee46}
+
+\begin{DoxyCompactList}\small\item\em the name of our shader \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+This is a node for our user interface specialised for loading in and setting up O\-S\-L shaders. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+20/03/2014 
+\end{DoxyDate}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_o_s_l_shader_block_a265e920913d83ef46f5d9a7075687a7b}{\index{O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}!O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}}
+\index{O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}!OSLShaderBlock@{O\-S\-L\-Shader\-Block}}
+\subsubsection[{O\-S\-L\-Shader\-Block}]{\setlength{\rightskip}{0pt plus 5cm}O\-S\-L\-Shader\-Block\-::\-O\-S\-L\-Shader\-Block (
+\begin{DoxyParamCaption}
+\item[{Q\-Graphics\-Item $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_o_s_l_shader_block_a265e920913d83ef46f5d9a7075687a7b}
+
+
+our default constructor, takes in a path to osl shader and sets up our ports accordingly 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ path to our shader program \\
+\hline
+{\em parrent} & -\/ parent of our class, this is optional. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_o_s_l_shader_block_a1af4f62c3a39d6eed25123695bcbceee}{\index{O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}!get\-Block\-Name@{get\-Block\-Name}}
+\index{get\-Block\-Name@{get\-Block\-Name}!OSLShaderBlock@{O\-S\-L\-Shader\-Block}}
+\subsubsection[{get\-Block\-Name}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string O\-S\-L\-Shader\-Block\-::get\-Block\-Name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_o_s_l_shader_block_a1af4f62c3a39d6eed25123695bcbceee}
+
+
+accessor to the shader name 
+
+\begin{DoxyReturn}{Returns}
+shader name in the form of a string 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{class_q_n_e_block_ac4108ddff3e3e0c8825238fff81d5811}{Q\-N\-E\-Block}.
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_shader_block_a1af4f62c3a39d6eed25123695bcbceee_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_o_s_l_shader_block_aec2dc7eb77840b0270c2f4112133b3f7}{\index{O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}!get\-Devicefunction@{get\-Devicefunction}}
+\index{get\-Devicefunction@{get\-Devicefunction}!OSLShaderBlock@{O\-S\-L\-Shader\-Block}}
+\subsubsection[{get\-Devicefunction}]{\setlength{\rightskip}{0pt plus 5cm}std\-::string O\-S\-L\-Shader\-Block\-::get\-Devicefunction (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_o_s_l_shader_block_aec2dc7eb77840b0270c2f4112133b3f7}
+
+
+accessor to the this shaders cuda kernal 
+
+\begin{DoxyReturn}{Returns}
+Cuda kernal in the form of a string from of compiled O\-S\-L shader 
+\end{DoxyReturn}
+\hypertarget{class_o_s_l_shader_block_a4c5f75777bcd1a81bd66294f3d736214}{\index{O\-S\-L\-Shader\-Block@{O\-S\-L\-Shader\-Block}!load\-Shader@{load\-Shader}}
+\index{load\-Shader@{load\-Shader}!OSLShaderBlock@{O\-S\-L\-Shader\-Block}}
+\subsubsection[{load\-Shader}]{\setlength{\rightskip}{0pt plus 5cm}bool O\-S\-L\-Shader\-Block\-::load\-Shader (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{\-\_\-path}
+\end{DoxyParamCaption}
+)}}\label{class_o_s_l_shader_block_a4c5f75777bcd1a81bd66294f3d736214}
+
+
+compiles our osl shader and sets up our ports and obtains required data about shader 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ path to our shader file \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_shader_block_a4c5f75777bcd1a81bd66294f3d736214_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_o_s_l_shader_block_a4c5f75777bcd1a81bd66294f3d736214_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/O\-S\-L\-Shader\-Block.\-h\item 
+src/\-Node\-Graph/O\-S\-L\-Shader\-Block.\-cpp\end{DoxyCompactItemize}

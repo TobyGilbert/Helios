@@ -1,0 +1,23 @@
+<map id="PathTracerScene::importMesh" name="PathTracerScene::importMesh">
+<area shape="rect" id="node2" href="$class_mesh_widget.html#a47bdbf5350b44dd43a08e27b16c407d7" title="loads scene from file " alt="" coords="1625,93,1751,120"/>
+<area shape="rect" id="node6" href="$class_mesh_widget.html#a771417b5002a0e5e9cfb32553b7f7544" title="slot to import a model " alt="" coords="254,429,429,456"/>
+<area shape="rect" id="node3" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="1838,93,2005,120"/>
+<area shape="rect" id="node4" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="2723,367,2903,393"/>
+<area shape="rect" id="node5" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="2953,367,3133,393"/>
+<area shape="rect" id="node7" href="$class_mesh_widget.html#a2a83b4ce21ff9a33d5b7315faefb8fed" title="our default constructor " alt="" coords="477,575,653,601"/>
+<area shape="rect" id="node8" href="$class_mesh_widget.html#ab69e785150bd1802124a3fea62940866" title="returns the instance of our mesh widget " alt="" coords="701,575,872,601"/>
+<area shape="rect" id="node9" href="$class_main_window.html#ae98d00a93bc118200eeef9f9bba1dba7" title="Destructor. " alt="" coords="2482,480,2670,507"/>
+<area shape="rect" id="node10" href="$class_main_window.html#a8c5c70395af911e771dbf61da52169ab" title="saves our scene " alt="" coords="1136,743,1307,769"/>
+<area shape="rect" id="node11" href="$class_material_library.html#a25fbe1df01423d3c29f17b068c1fa93e" title="applys selected material to current selected in mesh widget " alt="" coords="920,626,1088,667"/>
+<area shape="rect" id="node17" href="$class_material_library.html#a2e77c2e90d100dec3a113c2ea1e94fb5" title="slot to be called if something is selected in our material list " alt="" coords="2482,632,2670,659"/>
+<area shape="rect" id="node20" href="$class_abstract_material_widget.html#a02cc4a4c8e489854363c646cd67c03f7" title="applies material to currently selected mesh " alt="" coords="1842,297,2001,338"/>
+<area shape="rect" id="node12" href="$class_material_library.html#ac0fdd21aa44b30e4ef14f252f26c3f1e" title="defalut constructor " alt="" coords="1141,626,1302,667"/>
+<area shape="rect" id="node13" href="$class_material_library.html#a9dddb26d8ba882414f96bf5e4e6c3cf6" title="get an instance of our material library " alt="" coords="1355,436,1538,463"/>
+<area shape="rect" id="node14" href="$class_abstract_material_widget.html#ace749c971293b2aef90e2861500be8bd" title="our default constructor " alt="" coords="2054,355,2221,397"/>
+<area shape="rect" id="node18" href="$class_abstract_material_widget.html#a965876cda41ec655a45c2c34d86a97ae" title="compiles destination file and adds to material library " alt="" coords="2058,235,2217,277"/>
+<area shape="rect" id="node19" href="$class_abstract_material_widget.html#ab4350dfde2aadd6e6c42210ec03a4dd1" title="slot to add our material to our library " alt="" coords="1609,385,1767,426"/>
+<area shape="rect" id="node22" href="$class_mesh_widget.html#aac3bcbbfb389bf17505d4eb894ae5693" title="applies material from library to mesh " alt="" coords="1587,683,1789,709"/>
+<area shape="rect" id="node15" href="$class_abstract_material_widget.html#a96533d07fe6cc79527f5df9ddf2199a7" title="accessor to our instance of our class " alt="" coords="2270,385,2429,426"/>
+<area shape="rect" id="node16" href="$class_material_library.html#a93a390e382f15c20a3ba3d760cdb4bc5" title="imports all materials from a directory " alt="" coords="2478,341,2674,368"/>
+<area shape="rect" id="node21" href="$class_abstract_material_widget.html#a314c224671ac3e3aa56d313eaa95398f" title="saves our current node graph " alt="" coords="1842,414,2001,455"/>
+</map>

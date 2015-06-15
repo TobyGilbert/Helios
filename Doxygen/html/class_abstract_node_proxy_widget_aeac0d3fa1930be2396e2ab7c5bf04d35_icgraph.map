@@ -1,0 +1,16 @@
+<map id="AbstractNodeProxyWidget::getLinkedVarName" name="AbstractNodeProxyWidget::getLinkedVarName">
+<area shape="rect" id="node2" href="$class_color_node_proxy_widget.html#add07d21a9e816205e9771214ec2fa6f4" title="a slot to set the varibles in our material when our spin box values is changed " alt="" coords="249,5,407,46"/>
+<area shape="rect" id="node4" href="$class_color_node_proxy_widget.html#aba24c0f8211c399c29c458a8ee0dd912" title="overite our setLinkedVar function to put our own functionality in " alt="" coords="249,70,407,111"/>
+<area shape="rect" id="node5" href="$class_float_node_proxy_widget.html#af2534a2cae437c7b5c123d52315d0fbf" title="slot to set the varible in our material when our spin box value is changed " alt="" coords="249,135,407,177"/>
+<area shape="rect" id="node6" href="$class_float_node_proxy_widget.html#aba0f4178a27b9040de1b84ee3ffd71f4" title="overite our setLinkedVar function to put our own functionality in " alt="" coords="249,201,407,242"/>
+<area shape="rect" id="node7" href="$class_float_three_node_proxy_widget.html#afee8481ba8a495ad843429f99b561ecb" title="a slot to set the varibles in our material when our spin box values is changed " alt="" coords="233,266,423,307"/>
+<area shape="rect" id="node9" href="$class_float_three_node_proxy_widget.html#a646dc00d5bf72c2555e0251b58a8b640" title="overite our setLinkedVar function to put our own functionality in " alt="" coords="233,331,423,373"/>
+<area shape="rect" id="node10" href="$class_image_node_proxy_widget.html#afb9272f0af02e0d8b5d70f2b7eb246eb" title="slot to import an image to our node " alt="" coords="246,397,410,438"/>
+<area shape="rect" id="node11" href="$class_image_node_proxy_widget.html#a18574265844e2a6165ab6608f08a5fe1" title="overite our setLinkedVar function to put our own functionality in " alt="" coords="246,462,410,503"/>
+<area shape="rect" id="node12" href="$class_image_node_proxy_widget.html#a0930cf7ae23b7056c46f8ecd510f1542" title="load an image into our widget " alt="" coords="246,527,410,569"/>
+<area shape="rect" id="node14" href="$class_int_node_proxy_widget.html#a04d972bdd37258011454c1fc116723cd" title="slot to set the varible in our material when our spin box value is changed " alt="" coords="254,593,402,634"/>
+<area shape="rect" id="node15" href="$class_int_node_proxy_widget.html#a36821d35f9e61bf34e504c2c6d980388" title="overite our setLinkedVar function to put our own functionality in " alt="" coords="257,658,399,699"/>
+<area shape="rect" id="node3" href="$class_color_node_proxy_widget.html#a7a3ed9e2294413a74f5f1470df0fd5c8" title="default constructor " alt="" coords="489,5,655,46"/>
+<area shape="rect" id="node8" href="$class_float_three_node_proxy_widget.html#ac212c5dca46905943b440d47aef9816e" title="default constructor " alt="" coords="473,266,671,307"/>
+<area shape="rect" id="node13" href="$class_o_s_l_var_image_block.html#a155e7a032f9df5e3c49edff6216a7348" title="overload our load function for image node implimentation " alt="" coords="487,535,657,561"/>
+</map>

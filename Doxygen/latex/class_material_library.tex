@@ -1,0 +1,266 @@
+\hypertarget{class_material_library}{\section{Material\-Library Class Reference}
+\label{class_material_library}\index{Material\-Library@{Material\-Library}}
+}
+
+
+A wigdet to store and allow the user to select between.  
+
+
+
+
+{\ttfamily \#include $<$Material\-Library.\-h$>$}
+
+
+
+Inheritance diagram for Material\-Library\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{class_material_library__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Material\-Library\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=289pt]{class_material_library__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_material_library_a25fbe1df01423d3c29f17b068c1fa93e}{void \hyperlink{class_material_library_a25fbe1df01423d3c29f17b068c1fa93e}{apply\-Mat\-To\-Selected} ()}\label{class_material_library_a25fbe1df01423d3c29f17b068c1fa93e}
+
+\begin{DoxyCompactList}\small\item\em applys selected material to current selected in mesh widget \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_a0757b6c745d5796b30abcdb042ba1273}{void \hyperlink{class_material_library_a0757b6c745d5796b30abcdb042ba1273}{load\-Mat\-To\-Hyper\-Shader} ()}\label{class_material_library_a0757b6c745d5796b30abcdb042ba1273}
+
+\begin{DoxyCompactList}\small\item\em functino to let the user select a material from our library to put in our node graph \end{DoxyCompactList}\item 
+void \hyperlink{class_material_library_a2e77c2e90d100dec3a113c2ea1e94fb5}{mat\-Selected} (Q\-List\-Widget\-Item $\ast$\-\_\-item)
+\begin{DoxyCompactList}\small\item\em slot to be called if something is selected in our material list \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_abc3c89c6bbf434a2ea9d21e70198f2ae}{void \hyperlink{class_material_library_abc3c89c6bbf434a2ea9d21e70198f2ae}{delete\-Selected\-Mat} ()}\label{class_material_library_abc3c89c6bbf434a2ea9d21e70198f2ae}
+
+\begin{DoxyCompactList}\small\item\em slot to be called to delete selected materials in material library list \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_material_library_a8b0b82c532ada235ad3a74d623345600}{\hyperlink{class_material_library_a8b0b82c532ada235ad3a74d623345600}{$\sim$\-Material\-Library} ()}\label{class_material_library_a8b0b82c532ada235ad3a74d623345600}
+
+\begin{DoxyCompactList}\small\item\em default destructor. Deals with our garbage collection \end{DoxyCompactList}\item 
+bool \hyperlink{class_material_library_a6ed4adc6fb885d3a7cd69437117092c6}{add\-Material\-To\-Library} (std\-::string \-\_\-name, optix\-::\-Material \-\_\-material)
+\begin{DoxyCompactList}\small\item\em add a material to our library \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_ad5e0c33418b4554c7167d8cff539f951}{void \hyperlink{class_material_library_ad5e0c33418b4554c7167d8cff539f951}{destroy} ()}\label{class_material_library_ad5e0c33418b4554c7167d8cff539f951}
+
+\begin{DoxyCompactList}\small\item\em removes our singleton class from existance \end{DoxyCompactList}\item 
+void \hyperlink{class_material_library_a505e48b500d1d04f6445c423a2fe66ac}{apply\-Lib\-Mat\-To\-Mesh} (std\-::string \-\_\-mesh\-Id)
+\begin{DoxyCompactList}\small\item\em function let the user select a material from our library and apply it to a mesh \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_a7fa5922dfa78d16fafa8dc79ddaf427e}{void \hyperlink{class_material_library_a7fa5922dfa78d16fafa8dc79ddaf427e}{close\-Event} (Q\-Close\-Event $\ast$event)}\label{class_material_library_a7fa5922dfa78d16fafa8dc79ddaf427e}
+
+\begin{DoxyCompactList}\small\item\em overide our close event to reset our variables \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_a93a390e382f15c20a3ba3d760cdb4bc5}{void \hyperlink{class_material_library_a93a390e382f15c20a3ba3d760cdb4bc5}{import\-All\-From} (Q\-String \-\_\-path)}\label{class_material_library_a93a390e382f15c20a3ba3d760cdb4bc5}
+
+\begin{DoxyCompactList}\small\item\em imports all materials from a directory \end{DoxyCompactList}\item 
+bool \hyperlink{class_material_library_a0d8235104709564a600a6ece7ea048ae}{get\-Mat\-From\-Lib} (std\-::string \-\_\-mat, optix\-::\-Material \&o\-\_\-mat)
+\begin{DoxyCompactList}\small\item\em returns a queried material from library if it exits \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_material_library_a9dddb26d8ba882414f96bf5e4e6c3cf6}{static \hyperlink{class_material_library}{Material\-Library} $\ast$ \hyperlink{class_material_library_a9dddb26d8ba882414f96bf5e4e6c3cf6}{get\-Instance} (Q\-Widget $\ast$parent=0)}\label{class_material_library_a9dddb26d8ba882414f96bf5e4e6c3cf6}
+
+\begin{DoxyCompactList}\small\item\em get an instance of our material library \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_material_library_ac0fdd21aa44b30e4ef14f252f26c3f1e}{\hyperlink{class_material_library_ac0fdd21aa44b30e4ef14f252f26c3f1e}{Material\-Library} (Q\-Widget $\ast$parent=0)}\label{class_material_library_ac0fdd21aa44b30e4ef14f252f26c3f1e}
+
+\begin{DoxyCompactList}\small\item\em defalut constructor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_material_library_acc7cbee72728cb17b9dc46c6eb181235}{Q\-Grid\-Layout $\ast$ \hyperlink{class_material_library_acc7cbee72728cb17b9dc46c6eb181235}{m\-\_\-widget\-Layout}}\label{class_material_library_acc7cbee72728cb17b9dc46c6eb181235}
+
+\begin{DoxyCompactList}\small\item\em the layout of our wigdet \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_a68a1b4d7a9cae065772845db125fee27}{Q\-Spacer\-Item $\ast$ \hyperlink{class_material_library_a68a1b4d7a9cae065772845db125fee27}{m\-\_\-widget\-Spacer}}\label{class_material_library_a68a1b4d7a9cae065772845db125fee27}
+
+\begin{DoxyCompactList}\small\item\em spacer for our widget \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_af25abb43cda644364bc7faefbd957f9d}{std\-::map$<$ std\-::string, \\*
+optix\-::\-Material $>$ \hyperlink{class_material_library_af25abb43cda644364bc7faefbd957f9d}{m\-\_\-materials}}\label{class_material_library_af25abb43cda644364bc7faefbd957f9d}
+
+\begin{DoxyCompactList}\small\item\em map of our materials \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_a6a4c3021bf23b7048bbb5ef82c66d9dd}{Q\-List\-Widget $\ast$ \hyperlink{class_material_library_a6a4c3021bf23b7048bbb5ef82c66d9dd}{m\-\_\-mat\-List\-Widget}}\label{class_material_library_a6a4c3021bf23b7048bbb5ef82c66d9dd}
+
+\begin{DoxyCompactList}\small\item\em list widget to display the materials in our library \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_ab1dded7ae6d88f5407e29af6f68caf4a}{bool \hyperlink{class_material_library_ab1dded7ae6d88f5407e29af6f68caf4a}{m\-\_\-apply\-Mat\-To\-Mesh}}\label{class_material_library_ab1dded7ae6d88f5407e29af6f68caf4a}
+
+\begin{DoxyCompactList}\small\item\em a bool to indicate if we are applying the next selected material to a mesh \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_a6ee155650b6bbf4b3b959fa2b931ad7d}{std\-::string \hyperlink{class_material_library_a6ee155650b6bbf4b3b959fa2b931ad7d}{m\-\_\-selected\-Mesh\-Id}}\label{class_material_library_a6ee155650b6bbf4b3b959fa2b931ad7d}
+
+\begin{DoxyCompactList}\small\item\em mesh to apply material to \end{DoxyCompactList}\item 
+\hypertarget{class_material_library_aa095023b0334021154906729f0cba732}{bool \hyperlink{class_material_library_aa095023b0334021154906729f0cba732}{m\-\_\-load\-To\-Hyper\-Shader}}\label{class_material_library_aa095023b0334021154906729f0cba732}
+
+\begin{DoxyCompactList}\small\item\em a bool to indicate if we are importing our material to our hypershader \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_material_library_aef4ba3f093412e83f5da295865f8b508}{static \hyperlink{class_material_library}{Material\-Library} $\ast$ \hyperlink{class_material_library_aef4ba3f093412e83f5da295865f8b508}{m\-\_\-instance}}\label{class_material_library_aef4ba3f093412e83f5da295865f8b508}
+
+\begin{DoxyCompactList}\small\item\em pointer to the instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A wigdet to store and allow the user to select between. 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/03/15 optix materials availible in out program. This is a singleton class as we want all instances of our library to be the same. 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_material_library_a6ed4adc6fb885d3a7cd69437117092c6}{\index{Material\-Library@{Material\-Library}!add\-Material\-To\-Library@{add\-Material\-To\-Library}}
+\index{add\-Material\-To\-Library@{add\-Material\-To\-Library}!MaterialLibrary@{Material\-Library}}
+\subsubsection[{add\-Material\-To\-Library}]{\setlength{\rightskip}{0pt plus 5cm}bool Material\-Library\-::add\-Material\-To\-Library (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-name, }
+\item[{optix\-::\-Material}]{\-\_\-material}
+\end{DoxyParamCaption}
+)}}\label{class_material_library_a6ed4adc6fb885d3a7cd69437117092c6}
+
+
+add a material to our library 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-name} & -\/ the name of the material to add \\
+\hline
+{\em \-\_\-material} & -\/ the optix material to add to the library \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+bool indicating if the material has been successfully added to the library 
+\end{DoxyReturn}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_material_library_a6ed4adc6fb885d3a7cd69437117092c6_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_material_library_a505e48b500d1d04f6445c423a2fe66ac}{\index{Material\-Library@{Material\-Library}!apply\-Lib\-Mat\-To\-Mesh@{apply\-Lib\-Mat\-To\-Mesh}}
+\index{apply\-Lib\-Mat\-To\-Mesh@{apply\-Lib\-Mat\-To\-Mesh}!MaterialLibrary@{Material\-Library}}
+\subsubsection[{apply\-Lib\-Mat\-To\-Mesh}]{\setlength{\rightskip}{0pt plus 5cm}void Material\-Library\-::apply\-Lib\-Mat\-To\-Mesh (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-mesh\-Id}
+\end{DoxyParamCaption}
+)}}\label{class_material_library_a505e48b500d1d04f6445c423a2fe66ac}
+
+
+function let the user select a material from our library and apply it to a mesh 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-mesh\-Id} & -\/ id of mesh to apply it to \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_material_library_a505e48b500d1d04f6445c423a2fe66ac_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_material_library_a0d8235104709564a600a6ece7ea048ae}{\index{Material\-Library@{Material\-Library}!get\-Mat\-From\-Lib@{get\-Mat\-From\-Lib}}
+\index{get\-Mat\-From\-Lib@{get\-Mat\-From\-Lib}!MaterialLibrary@{Material\-Library}}
+\subsubsection[{get\-Mat\-From\-Lib}]{\setlength{\rightskip}{0pt plus 5cm}bool Material\-Library\-::get\-Mat\-From\-Lib (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-mat, }
+\item[{optix\-::\-Material \&}]{o\-\_\-mat}
+\end{DoxyParamCaption}
+)}}\label{class_material_library_a0d8235104709564a600a6ece7ea048ae}
+
+
+returns a queried material from library if it exits 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-mat} & -\/ name of material to be queried \\
+\hline
+{\em o\-\_\-mat} & -\/ handle of found material \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true is material is found 
+\end{DoxyReturn}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_material_library_a0d8235104709564a600a6ece7ea048ae_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_material_library_a2e77c2e90d100dec3a113c2ea1e94fb5}{\index{Material\-Library@{Material\-Library}!mat\-Selected@{mat\-Selected}}
+\index{mat\-Selected@{mat\-Selected}!MaterialLibrary@{Material\-Library}}
+\subsubsection[{mat\-Selected}]{\setlength{\rightskip}{0pt plus 5cm}void Material\-Library\-::mat\-Selected (
+\begin{DoxyParamCaption}
+\item[{Q\-List\-Widget\-Item $\ast$}]{\-\_\-item}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_material_library_a2e77c2e90d100dec3a113c2ea1e94fb5}
+
+
+slot to be called if something is selected in our material list 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-item} & -\/ item selected in list \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_material_library_a2e77c2e90d100dec3a113c2ea1e94fb5_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_material_library_a2e77c2e90d100dec3a113c2ea1e94fb5_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Core/Material\-Library.\-h\item 
+src/\-Core/Material\-Library.\-cpp\end{DoxyCompactItemize}

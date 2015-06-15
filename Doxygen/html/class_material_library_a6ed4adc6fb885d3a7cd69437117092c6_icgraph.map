@@ -1,0 +1,6 @@
+<map id="MaterialLibrary::addMaterialToLibrary" name="MaterialLibrary::addMaterialToLibrary">
+<area shape="rect" id="node2" href="$class_abstract_material_widget.html#a965876cda41ec655a45c2c34d86a97ae" title="compiles destination file and adds to material library " alt="" coords="238,5,397,46"/>
+<area shape="rect" id="node3" href="$class_material_library.html#a93a390e382f15c20a3ba3d760cdb4bc5" title="imports all materials from a directory " alt="" coords="446,12,642,39"/>
+<area shape="rect" id="node4" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="691,12,871,39"/>
+<area shape="rect" id="node5" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="921,12,1101,39"/>
+</map>

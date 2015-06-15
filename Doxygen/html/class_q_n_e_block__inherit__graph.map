@@ -1,0 +1,11 @@
+<map id="QNEBlock" name="QNEBlock">
+<area shape="rect" id="node3" href="$class_o_s_l_abstract_var_block.html" title="{OSLAbstractVarBlock\n|+ m_widgetProxy\l# m_material\l|+ OSLAbstractVarBlock()\l+ ~OSLAbstractVarBlock()\l+ setBlockName()\l+ getBlockName()\l+ setLinkedVar()\l+ type()\l}" alt="" coords="581,499,760,664"/>
+<area shape="rect" id="node11" href="$class_o_s_l_shader_block.html" title="This is a node for our user interface specialised for loading in and setting up OSL shaders..." alt="" coords="784,491,931,671"/>
+<area shape="rect" id="node4" href="$class_o_s_l_var_color_block.html" title="{OSLVarColorBlock\n||+ OSLVarColorBlock()\l+ ~OSLVarColorBlock()\l+ save()\l+ load()\l}" alt="" coords="5,721,164,842"/>
+<area shape="rect" id="node5" href="$class_o_s_l_var_float_block.html" title="This class is used for creating a color variable node in our node graphics interface. " alt="" coords="190,721,348,842"/>
+<area shape="rect" id="node6" href="$class_o_s_l_var_float_three_block.html" title="{OSLVarFloatThreeBlock\n||+ OSLVarFloatThreeBlock()\l+ ~OSLVarFloatThreeBlock()\l+ save()\l+ load()\l}" alt="" coords="373,721,563,842"/>
+<area shape="rect" id="node7" href="$class_o_s_l_var_image_block.html" title="{OSLVarImageBlock\n||+ OSLVarImageBlock()\l+ ~OSLVarImageBlock()\l+ save()\l+ load()\l}" alt="" coords="588,721,752,842"/>
+<area shape="rect" id="node8" href="$class_o_s_l_var_int_block.html" title="{OSLVarIntBlock\n||+ OSLVarIntBlock()\l+ ~OSLVarIntBlock()\l+ save()\l+ load()\l}" alt="" coords="777,721,921,842"/>
+<area shape="rect" id="node9" href="$class_o_s_l_var_normal_block.html" title="{OSLVarNormalBlock\n||+ OSLVarNormalBlock()\l+ ~OSLVarNormalBlock()\l+ save()\l+ load()\l}" alt="" coords="945,721,1116,842"/>
+<area shape="rect" id="node10" href="$class_o_s_l_var_point_block.html" title="{OSLVarPointBlock\n||+ OSLVarPointBlock()\l+ ~OSLVarPointBlock()\l+ save()\l+ load()\l}" alt="" coords="1141,721,1299,842"/>
+</map>

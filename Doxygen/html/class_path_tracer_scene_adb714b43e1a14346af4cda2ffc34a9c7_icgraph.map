@@ -1,0 +1,51 @@
+<map id="PathTracerScene::PathTracerScene" name="PathTracerScene::PathTracerScene">
+<area shape="rect" id="node2" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="249,1102,447,1128"/>
+<area shape="rect" id="node3" href="$class_open_g_l_widget.html#a1c999d41b2fd1235075366d5f3ae8f8c" title="reset our timeout " alt="" coords="502,266,709,292"/>
+<area shape="rect" id="node4" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="807,63,974,90"/>
+<area shape="rect" id="node6" href="$class_open_g_l_widget.html#a55cf4659a7f10207fb6ab3fcf9273abc" title="called to resize the window " alt="" coords="805,114,976,140"/>
+<area shape="rect" id="node7" href="$class_open_g_l_widget.html#aa6d543f552c813df3b3a78dc5c4899fd" title="mouse move " alt="" coords="779,164,1003,191"/>
+<area shape="rect" id="node8" href="$class_open_g_l_widget.html#a0682546d360b7ce9ae1dce31a090cfca" title="Scroll wheel event. " alt="" coords="797,215,984,242"/>
+<area shape="rect" id="node9" href="$class_open_g_l_widget.html#a3dcd8afdaba77d2e15dd73d34186a734" title="Load a new environment map. " alt="" coords="770,267,1011,294"/>
+<area shape="rect" id="node10" href="$class_open_g_l_widget.html#aaa5b62c05c82cf2c5b253bc36608d3fc" title="Toggles the environment map on and off. " alt="" coords="763,320,1018,347"/>
+<area shape="rect" id="node11" href="$class_open_g_l_widget.html#a8866e109f82d389c566ff559879c1853" title="Sets the strength of the environment map. " alt="" coords="797,377,984,418"/>
+<area shape="rect" id="node12" href="$class_open_g_l_widget.html#a101d91ac750f7980b75ee3fcb48a3f36" title="Reset Global Trans. " alt="" coords="798,453,983,494"/>
+<area shape="rect" id="node13" href="$class_gen_set_dock_widget.html#a1c26ee85a7c8734aa70472466f4777a7" title="slot to set the max ray depth " alt="" coords="511,520,700,561"/>
+<area shape="rect" id="node15" href="$class_open_g_l_widget.html#a293847f6a7e6c40344a1acfca3e9eb51" title="dtor must close down and release OpenGL resources " alt="" coords="497,586,713,612"/>
+<area shape="rect" id="node16" href="$class_open_g_l_widget.html#a570df546f7206455c57addb624906576" title="the virtual initialize class is called once when the window is created and we have a valid GL context..." alt="" coords="514,636,697,663"/>
+<area shape="rect" id="node17" href="$class_open_g_l_widget.html#a260a543726f601659cbd1809b90f9e4b" title="this is called everytime we want to draw the scene " alt="" coords="523,687,687,714"/>
+<area shape="rect" id="node18" href="$class_open_g_l_widget.html#adaab83f0bed689b0765d42b6ae760220" title="A function called when a mouse button is pressed. " alt="" coords="509,738,701,780"/>
+<area shape="rect" id="node19" href="$class_open_g_l_widget.html#aa3f5541e5da2d5c52ca16b99f40dfd75" title="Called when the mouse button is released. " alt="" coords="502,804,709,845"/>
+<area shape="rect" id="node20" href="$class_open_g_l_widget.html#add5f020c30887952a27d05bce9c30a65" title="saves render to image file " alt="" coords="514,870,697,896"/>
+<area shape="rect" id="node21" href="$class_opti_x_model.html#a38269b05e4286011e3a83b2abe3b25b6" title="our default constructor, doesnt really do anything apart from init our members " alt="" coords="522,920,689,947"/>
+<area shape="rect" id="node22" href="$class_opti_x_model.html#a48b8aed79fd7eae1d03bd58f2a57b95a" title="creates our buffers in our OptiX context and sets our data " alt="" coords="517,971,693,998"/>
+<area shape="rect" id="node24" href="$class_light.html#aeb5df09a25a32f19fdffa761268ba24f" title="Constructor. " alt="" coords="562,1022,649,1048"/>
+<area shape="rect" id="node25" href="$class_light.html#abcc5c13ce90a138c34cd2176414ca796" title="Create the parallelogram geometry used by the light. " alt="" coords="519,1072,692,1099"/>
+<area shape="rect" id="node26" href="$class_light.html#a7621ee283ddbe3fec59dee5c34e6317a" title="Create a parallelogram shaped light. " alt="" coords="519,1124,692,1165"/>
+<area shape="rect" id="node27" href="$class_light_manager.html#ae415dd0ef2294e649b546d928837b860" title="Initialise the light buffer. " alt="" coords="1080,1227,1235,1254"/>
+<area shape="rect" id="node29" href="$class_light_manager.html#aa25de876fdf8e06b33e6d8e161f8a44e" title="Adds a light to the scene. " alt="" coords="527,1240,684,1267"/>
+<area shape="rect" id="node31" href="$class_light_manager.html#a277063837cd2e2d17fd1e221e39add4a" title="Deletes a light from the scene. " alt="" coords="520,1291,691,1318"/>
+<area shape="rect" id="node32" href="$class_light_manager.html#a403f28b82c78e0b9946848f16ecd7581" title="Update a light already created. " alt="" coords="518,1342,693,1368"/>
+<area shape="rect" id="node34" href="$class_image_node_proxy_widget.html#afb9272f0af02e0d8b5d70f2b7eb246eb" title="slot to import an image to our node " alt="" coords="523,1393,687,1434"/>
+<area shape="rect" id="node35" href="$class_image_node_proxy_widget.html#a0930cf7ae23b7056c46f8ecd510f1542" title="load an image into our widget " alt="" coords="523,1458,687,1500"/>
+<area shape="rect" id="node36" href="$class_o_s_l_nodes_editor.html#a4b1199c7b3d4449e08fb8d9e6080219b" title="creates an optix material program from our OSL node graph. " alt="" coords="496,1524,715,1551"/>
+<area shape="rect" id="node37" href="$class_abstract_material_widget.html#ace749c971293b2aef90e2861500be8bd" title="our default constructor " alt="" coords="807,1597,974,1638"/>
+<area shape="rect" id="node38" href="$class_abstract_material_widget.html#a7085b0419e52157f46312928d9bfc326" title="applies the current createed material to mesh of choosing " alt="" coords="526,1692,685,1733"/>
+<area shape="rect" id="node39" href="$class_abstract_material_widget.html#ae3fc9533799259797b676f07d084211f" title="slot to create a new material " alt="" coords="526,1626,685,1668"/>
+<area shape="rect" id="node40" href="$class_camera_widget.html#a61afcd6f680d6ec43b9949c6f324c047" title="Enables the depth of field controls. " alt="" coords="514,1758,697,1784"/>
+<area shape="rect" id="node41" href="$class_camera_widget.html#a94acbc0fd82c07bb2f77c09dc8aafd84" title="Update DOF camera settings. " alt="" coords="513,1808,697,1835"/>
+<area shape="rect" id="node42" href="$class_camera_widget.html#aafcf078d596c85bd61031163f855e3fa" title="Update other camera settings. " alt="" coords="504,1859,707,1886"/>
+<area shape="rect" id="node43" href="$class_camera_widget.html#a708a4a1499b94ed542268cd1de8fcb6e" title="Resets the camera. " alt="" coords="509,1910,701,1936"/>
+<area shape="rect" id="node44" href="$class_mesh_widget.html#a47bdbf5350b44dd43a08e27b16c407d7" title="loads scene from file " alt="" coords="542,63,669,90"/>
+<area shape="rect" id="node45" href="$class_mesh_widget.html#a771417b5002a0e5e9cfb32553b7f7544" title="slot to import a model " alt="" coords="518,1960,693,1987"/>
+<area shape="rect" id="node46" href="$class_mesh_widget.html#a39e961759059b54abc380b149f0186f8" title="slot to create instance of geometry selected " alt="" coords="511,2011,700,2038"/>
+<area shape="rect" id="node47" href="$class_mesh_widget.html#a4e934e8f2eb83349fe0b865f4c242e3d" title="slot to remove selected geometry " alt="" coords="507,2062,704,2088"/>
+<area shape="rect" id="node48" href="$class_mesh_widget.html#ad31fbdeac98ac757b6fc8f1a6dccb197" title="our slot to notify if any tranform spinbox have been changed " alt="" coords="507,2113,703,2154"/>
+<area shape="rect" id="node49" href="$class_mesh_widget.html#af819cb26a8a0ed4b6aa86fdf6a7c8bc7" title="applys material to currently selected model " alt="" coords="502,2179,709,2206"/>
+<area shape="rect" id="node50" href="$class_render_settings.html#a548914e7dc30c7c407836d0d90f05700" title="slot called to render our image " alt="" coords="509,2230,701,2256"/>
+<area shape="rect" id="node5" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="1067,63,1247,90"/>
+<area shape="rect" id="node14" href="$class_gen_set_dock_widget.html#a438953fb1560e6b04895023cdc805e00" title="our default constructor " alt="" coords="795,520,986,561"/>
+<area shape="rect" id="node23" href="$class_opti_x_model.html#a67c070a756231acd6a7ad9aef7c8c505" title="loads a mesh from our current assimp scene " alt="" coords="813,971,968,998"/>
+<area shape="rect" id="node28" href="$class_light_manager.html#af7566c95a70bbf2b8fb03f9565dd4f2e" title="Constructor. " alt="" coords="1296,1227,1483,1254"/>
+<area shape="rect" id="node30" href="$class_light_manager.html#af36184ad28565d27b80f213ef8ac04a1" title="Creates our GUI elements. " alt="" coords="807,1266,975,1292"/>
+<area shape="rect" id="node33" href="$class_light_manager.html#acef6714d411c825fc6599a1c892fc9ff" title="Sets the GUI to the default values. " alt="" coords="793,1342,988,1368"/>
+</map>

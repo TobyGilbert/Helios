@@ -1,0 +1,46 @@
+
+\begin{DoxyRefList}
+\item[\label{todo__todo000008}%
+\hypertarget{todo__todo000008}{}%
+Member \hyperlink{class_float_three_node_proxy_widget_ac212c5dca46905943b440d47aef9816e}{Float\-Three\-Node\-Proxy\-Widget\-:\-:Float\-Three\-Node\-Proxy\-Widget} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$\-\_\-port\-Connected, optix\-::\-Material \&\-\_\-mat, Q\-Graphics\-Item $\ast$parent=0)]comment this class mo!  
+\item[\label{todo__todo000001}%
+\hypertarget{todo__todo000001}{}%
+Class \hyperlink{class_opti_x_model}{Opti\-X\-Model} ]do something with the material buffer, atm it all just defaults to 0  
+\item[\label{todo__todo000002}%
+\hypertarget{todo__todo000002}{}%
+Member \hyperlink{class_opti_x_model_a4ef713de613b12da4e49a7599516b081}{Opti\-X\-Model\-:\-:m\-\_\-indices} ]not let toby touch my classes, toby what is this member for??  
+\item[\label{todo__todo000009}%
+\hypertarget{todo__todo000009}{}%
+Class \hyperlink{class_o_s_l_var_float_three_block}{O\-S\-L\-Var\-Float\-Three\-Block} ]comment this class  
+\item[\label{todo__todo000015}%
+\hypertarget{todo__todo000015}{}%
+Member \hyperlink{class_oso_reader_a73b356139df5730e756f2366ec1e1924}{Oso\-Reader\-:\-:generate\-Device\-Function} ()]implement a fully 0 matrix 
+
+take into account the first parameter which specifies the coordinate space  
+\item[\label{todo__todo000004}%
+\hypertarget{todo__todo000004}{}%
+Member \hyperlink{class_path_trace_camera_a28b8c742021899cc72760977ad864764}{Path\-Trace\-Camera\-:\-:dolly} (float \-\_\-scale)]fix this, you are using m\-\_\-\-W instead of lookat in places  
+\item[\label{todo__todo000003}%
+\hypertarget{todo__todo000003}{}%
+Member \hyperlink{class_path_trace_camera_a96f2c8e5b33f2d2503891c4d9c431948}{Path\-Trace\-Camera\-:\-:rotate} (glm\-::mat4 \-\_\-trans)]fix this, you are using m\-\_\-\-W instead of lookat in places  
+\item[\label{todo__todo000012}%
+\hypertarget{todo__todo000012}{}%
+Member \hyperlink{class_path_tracer_scene_ab41f55350a5a50b60381cd46120c45aa}{Path\-Tracer\-Scene\-:\-:import\-Mesh} (std\-::string \-\_\-id, std\-::string \-\_\-path)]maybe have all this stuff in a model management class rather than the scene 
+
+meshes are all set with detault diffuse texture, we need some sort of material management  
+\item[\label{todo__todo000005}%
+\hypertarget{todo__todo000005}{}%
+Member \hyperlink{class_path_tracer_scene_a9eff6b99097c6edb6e4da1ab6da1f494}{Path\-Tracer\-Scene\-:\-:m\-\_\-pgram\-\_\-bounding\-\_\-box} ]probably doesnt need to be a member but we'll get rid of that later  
+\item[\label{todo__todo000006}%
+\hypertarget{todo__todo000006}{}%
+Member \hyperlink{class_path_tracer_scene_a50f096b5a5941c50a87fdd8864304852}{Path\-Tracer\-Scene\-:\-:m\-\_\-pgram\-\_\-intersection} ]probably doesn't need to be a member but we'll get rid of that later  
+\item[\label{todo__todo000014}%
+\hypertarget{todo__todo000014}{}%
+Member \hyperlink{class_q_n_e_block_ab7fb118bd4bcf8aa224d03807a6dc315}{Q\-N\-E\-Block\-:\-:load} (Q\-Data\-Stream \&, Q\-Map$<$ quint64, Q\-N\-E\-Port $\ast$ $>$ \&port\-Map)]load and save new osl port data  
+\item[\label{todo__todo000010}%
+\hypertarget{todo__todo000010}{}%
+Member \hyperlink{class_q_n_e_port_aeb3a8a2ac138252d1a0afc2c4f00438f}{Q\-N\-E\-Port\-:\-:variable\-Type} ]Get toby to romove is types from global name space so this class can just use Oso\-Reader\-::\-Type  
+\item[\label{todo__todo000007}%
+\hypertarget{todo__todo000007}{}%
+File \hyperlink{_text_8h}{Text.h} ]support unicode A\-S\-C\-I\-I is so 1980's ;-\/0 This class will generate billboard textures and Vertex\-Array\-Objects for each of the font glyphs, this means we need a valid Open\-G\-L context before using this class, therefore it should be constructed in initalize\-G\-L or after. Note for efficiency once the font has been created we can only change the colour, if you need different sizes / emphasis you will need to create a new \hyperlink{class_text}{Text} object with the desired size / emphasis. This is accelerated as much as possible but text rendering will sometimes be slow as we bind a new texture for each char being drawn for more details look at the blog post here \href{http://jonmacey.blogspot.com/2011/10/text-rendering-using-opengl-32.html}{\tt http\-://jonmacey.\-blogspot.\-com/2011/10/text-\/rendering-\/using-\/opengl-\/32.\-html} 
+\end{DoxyRefList}

@@ -1,0 +1,121 @@
+\hypertarget{class_float_three_node_proxy_widget}{\section{Float\-Three\-Node\-Proxy\-Widget Class Reference}
+\label{class_float_three_node_proxy_widget}\index{Float\-Three\-Node\-Proxy\-Widget@{Float\-Three\-Node\-Proxy\-Widget}}
+}
+
+
+Extention of \hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} that allows us to select 3 floats and apply it to a attribute of a material.  
+
+
+
+
+{\ttfamily \#include $<$Float\-Three\-Node\-Proxy\-Widget.\-h$>$}
+
+
+
+Inheritance diagram for Float\-Three\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=244pt]{class_float_three_node_proxy_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Float\-Three\-Node\-Proxy\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_float_three_node_proxy_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_float_three_node_proxy_widget_afee8481ba8a495ad843429f99b561ecb}{void \hyperlink{class_float_three_node_proxy_widget_afee8481ba8a495ad843429f99b561ecb}{set\-Material\-Vars} ()}\label{class_float_three_node_proxy_widget_afee8481ba8a495ad843429f99b561ecb}
+
+\begin{DoxyCompactList}\small\item\em a slot to set the varibles in our material when our spin box values is changed \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_float_three_node_proxy_widget_ac212c5dca46905943b440d47aef9816e}{Float\-Three\-Node\-Proxy\-Widget} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$\-\_\-port\-Connected, optix\-::\-Material \&\-\_\-mat, Q\-Graphics\-Item $\ast$parent=0)
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\hypertarget{class_float_three_node_proxy_widget_ad56cb8416bf4207dedd542cf5a359d63}{\hyperlink{class_float_three_node_proxy_widget_ad56cb8416bf4207dedd542cf5a359d63}{$\sim$\-Float\-Three\-Node\-Proxy\-Widget} ()}\label{class_float_three_node_proxy_widget_ad56cb8416bf4207dedd542cf5a359d63}
+
+\begin{DoxyCompactList}\small\item\em defualt destructor \end{DoxyCompactList}\item 
+\hypertarget{class_float_three_node_proxy_widget_a646dc00d5bf72c2555e0251b58a8b640}{void \hyperlink{class_float_three_node_proxy_widget_a646dc00d5bf72c2555e0251b58a8b640}{set\-Linked\-Var} ()}\label{class_float_three_node_proxy_widget_a646dc00d5bf72c2555e0251b58a8b640}
+
+\begin{DoxyCompactList}\small\item\em overite our set\-Linked\-Var function to put our own functionality in \end{DoxyCompactList}\item 
+\hypertarget{class_float_three_node_proxy_widget_afd953a0e2e5ac6f59b7b5c50ecbc7fa9}{void \hyperlink{class_float_three_node_proxy_widget_afd953a0e2e5ac6f59b7b5c50ecbc7fa9}{save} (Q\-Data\-Stream \&ds)}\label{class_float_three_node_proxy_widget_afd953a0e2e5ac6f59b7b5c50ecbc7fa9}
+
+\begin{DoxyCompactList}\small\item\em overload our save function for float 3 node implimentation \end{DoxyCompactList}\item 
+\hypertarget{class_float_three_node_proxy_widget_acbbe2ad712df333c00ee33f26b12fc61}{void \hyperlink{class_float_three_node_proxy_widget_acbbe2ad712df333c00ee33f26b12fc61}{load} (Q\-Data\-Stream \&, Q\-Map$<$ quint64, \hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ $>$ \&port\-Map)}\label{class_float_three_node_proxy_widget_acbbe2ad712df333c00ee33f26b12fc61}
+
+\begin{DoxyCompactList}\small\item\em overload our load function for float 3 node implimentation \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_float_three_node_proxy_widget_af683535cdc97dd14e07fccc72a6466eb}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_float_three_node_proxy_widget_af683535cdc97dd14e07fccc72a6466eb}{m\-\_\-spin\-Box\-X}}\label{class_float_three_node_proxy_widget_af683535cdc97dd14e07fccc72a6466eb}
+
+\begin{DoxyCompactList}\small\item\em spinbox for our x component \end{DoxyCompactList}\item 
+\hypertarget{class_float_three_node_proxy_widget_a972ce13076c540a1cc01ec8a69e5e725}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_float_three_node_proxy_widget_a972ce13076c540a1cc01ec8a69e5e725}{m\-\_\-spin\-Box\-Y}}\label{class_float_three_node_proxy_widget_a972ce13076c540a1cc01ec8a69e5e725}
+
+\begin{DoxyCompactList}\small\item\em spinbox for our y component \end{DoxyCompactList}\item 
+\hypertarget{class_float_three_node_proxy_widget_a647eb0ec6918e85d8e2595025a834ad8}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_float_three_node_proxy_widget_a647eb0ec6918e85d8e2595025a834ad8}{m\-\_\-spin\-Box\-Z}}\label{class_float_three_node_proxy_widget_a647eb0ec6918e85d8e2595025a834ad8}
+
+\begin{DoxyCompactList}\small\item\em spinbox for our z component \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_float_three_node_proxy_widget_a584837e3859b1fdadd453ae844d46948}{Q\-Group\-Box $\ast$ \hyperlink{class_float_three_node_proxy_widget_a584837e3859b1fdadd453ae844d46948}{m\-\_\-group\-Box}}\label{class_float_three_node_proxy_widget_a584837e3859b1fdadd453ae844d46948}
+
+\begin{DoxyCompactList}\small\item\em groupbox for our spinbox's to live in \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Extention of \hyperlink{class_abstract_node_proxy_widget}{Abstract\-Node\-Proxy\-Widget} that allows us to select 3 floats and apply it to a attribute of a material. 
+
+This widget consists of 3 Double Spinbox's. This is to be used for such tripplets as Vectors. \begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/05/2015 
+\end{DoxyDate}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_float_three_node_proxy_widget_ac212c5dca46905943b440d47aef9816e}{\index{Float\-Three\-Node\-Proxy\-Widget@{Float\-Three\-Node\-Proxy\-Widget}!Float\-Three\-Node\-Proxy\-Widget@{Float\-Three\-Node\-Proxy\-Widget}}
+\index{Float\-Three\-Node\-Proxy\-Widget@{Float\-Three\-Node\-Proxy\-Widget}!FloatThreeNodeProxyWidget@{Float\-Three\-Node\-Proxy\-Widget}}
+\subsubsection[{Float\-Three\-Node\-Proxy\-Widget}]{\setlength{\rightskip}{0pt plus 5cm}Float\-Three\-Node\-Proxy\-Widget\-::\-Float\-Three\-Node\-Proxy\-Widget (
+\begin{DoxyParamCaption}
+\item[{{\bf Q\-N\-E\-Port} $\ast$}]{\-\_\-port\-Connected, }
+\item[{optix\-::\-Material \&}]{\-\_\-mat, }
+\item[{Q\-Graphics\-Item $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_float_three_node_proxy_widget_ac212c5dca46905943b440d47aef9816e}
+
+
+default constructor 
+
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000008}{Todo}]comment this class mo! \end{DoxyRefDesc}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_float_three_node_proxy_widget_ac212c5dca46905943b440d47aef9816e_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/Float\-Three\-Node\-Proxy\-Widget.\-h\item 
+src/\-Node\-Graph/Float\-Three\-Node\-Proxy\-Widget.\-cpp\end{DoxyCompactItemize}

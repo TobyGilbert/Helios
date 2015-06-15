@@ -1,0 +1,6 @@
+<map id="AbstractMaterialWidget::applyMaterialToMesh" name="AbstractMaterialWidget::applyMaterialToMesh">
+<area shape="rect" id="node2" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="214,12,413,39"/>
+<area shape="rect" id="node4" href="$class_path_tracer_scene.html#a2930f6745167861525ce431487daa40f" title="sets the material of a model in our scene " alt="" coords="221,63,405,105"/>
+<area shape="rect" id="node3" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="461,5,656,46"/>
+<area shape="rect" id="node5" href="$class_opti_x_model.html#aedaab5dc8da3cea6d1f6d8bc76d37903" title="set our models material " alt="" coords="477,71,640,97"/>
+</map>

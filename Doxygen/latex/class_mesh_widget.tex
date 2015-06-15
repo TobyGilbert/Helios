@@ -1,0 +1,284 @@
+\hypertarget{class_mesh_widget}{\section{Mesh\-Widget Class Reference}
+\label{class_mesh_widget}\index{Mesh\-Widget@{Mesh\-Widget}}
+}
+
+
+This class is an extention of Q\-Dock\-Widget that includes our camera controls.  
+
+
+
+
+{\ttfamily \#include $<$Camera\-Widget.\-h$>$}
+
+
+
+Inheritance diagram for Mesh\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_mesh_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Mesh\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_mesh_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_mesh_widget_1_1model_prop}{model\-Prop}
+\begin{DoxyCompactList}\small\item\em structure for our model properties \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mesh_widget_a6f5f317f243ea5c06b235af97edf6f49}{void \hyperlink{class_mesh_widget_a6f5f317f243ea5c06b235af97edf6f49}{clear\-Scene} ()}\label{class_mesh_widget_a6f5f317f243ea5c06b235af97edf6f49}
+
+\begin{DoxyCompactList}\small\item\em clears all models in our scene \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_ad31fbdeac98ac757b6fc8f1a6dccb197}{void \hyperlink{class_mesh_widget_ad31fbdeac98ac757b6fc8f1a6dccb197}{signal\-Transform\-Change} (double \-\_\-val=0)}\label{class_mesh_widget_ad31fbdeac98ac757b6fc8f1a6dccb197}
+
+\begin{DoxyCompactList}\small\item\em our slot to notify if any tranform spinbox have been changed \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_af819cb26a8a0ed4b6aa86fdf6a7c8bc7}{void \hyperlink{class_mesh_widget_af819cb26a8a0ed4b6aa86fdf6a7c8bc7}{apply\-O\-S\-L\-Material} (optix\-::\-Material \-\_\-mat, std\-::string \-\_\-mat\-Name)}\label{class_mesh_widget_af819cb26a8a0ed4b6aa86fdf6a7c8bc7}
+
+\begin{DoxyCompactList}\small\item\em applys material to currently selected model \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_aac3bcbbfb389bf17505d4eb894ae5693}{void \hyperlink{class_mesh_widget_aac3bcbbfb389bf17505d4eb894ae5693}{apply\-Mat\-From\-Lib} ()}\label{class_mesh_widget_aac3bcbbfb389bf17505d4eb894ae5693}
+
+\begin{DoxyCompactList}\small\item\em applies material from library to mesh \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a771417b5002a0e5e9cfb32553b7f7544}{void \hyperlink{class_mesh_widget_a771417b5002a0e5e9cfb32553b7f7544}{import\-Model} ()}\label{class_mesh_widget_a771417b5002a0e5e9cfb32553b7f7544}
+
+\begin{DoxyCompactList}\small\item\em slot to import a model \end{DoxyCompactList}\item 
+void \hyperlink{class_mesh_widget_afc878f28393e7e918e5d88f6a747d22a}{model\-Selected} (Q\-List\-Widget\-Item $\ast$\-\_\-item)
+\begin{DoxyCompactList}\small\item\em slot for if a item is selected from our list \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a39e961759059b54abc380b149f0186f8}{void \hyperlink{class_mesh_widget_a39e961759059b54abc380b149f0186f8}{create\-Instance} ()}\label{class_mesh_widget_a39e961759059b54abc380b149f0186f8}
+
+\begin{DoxyCompactList}\small\item\em slot to create instance of geometry selected \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a4e934e8f2eb83349fe0b865f4c242e3d}{void \hyperlink{class_mesh_widget_a4e934e8f2eb83349fe0b865f4c242e3d}{remove\-Selected} ()}\label{class_mesh_widget_a4e934e8f2eb83349fe0b865f4c242e3d}
+
+\begin{DoxyCompactList}\small\item\em slot to remove selected geometry \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mesh_widget_adfc6c88e47a65d0e41b7b1f4b4db216d}{void \hyperlink{class_mesh_widget_adfc6c88e47a65d0e41b7b1f4b4db216d}{update\-Scene} ()}\label{class_mesh_widget_adfc6c88e47a65d0e41b7b1f4b4db216d}
+
+\begin{DoxyCompactList}\small\item\em a signal called when something has changed to promt the update of our scene \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_mesh_widget_a67ebdf43ebd7ada4ef14d0c72f6a2f35}{save} (Q\-Data\-Stream \&ds)
+\begin{DoxyCompactList}\small\item\em saves the objects in our scene to file \end{DoxyCompactList}\item 
+void \hyperlink{class_mesh_widget_a47bdbf5350b44dd43a08e27b16c407d7}{load} (Q\-Data\-Stream \&ds)
+\begin{DoxyCompactList}\small\item\em loads scene from file \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a456ac85d510b5700f60877a5466d0311}{int \hyperlink{class_mesh_widget_a456ac85d510b5700f60877a5466d0311}{get\-Num\-Models} ()}\label{class_mesh_widget_a456ac85d510b5700f60877a5466d0311}
+
+\begin{DoxyCompactList}\small\item\em returns the number of models in our scene \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mesh_widget_ab69e785150bd1802124a3fea62940866}{static \hyperlink{class_mesh_widget}{Mesh\-Widget} $\ast$ \hyperlink{class_mesh_widget_ab69e785150bd1802124a3fea62940866}{get\-Instance} (Q\-Widget $\ast$parent=0)}\label{class_mesh_widget_ab69e785150bd1802124a3fea62940866}
+
+\begin{DoxyCompactList}\small\item\em returns the instance of our mesh widget \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a39971ebf92a18d4d2a975fcefab82c91}{static void \hyperlink{class_mesh_widget_a39971ebf92a18d4d2a975fcefab82c91}{destroy} ()}\label{class_mesh_widget_a39971ebf92a18d4d2a975fcefab82c91}
+
+\begin{DoxyCompactList}\small\item\em destroys our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mesh_widget_ab914a1597ebaa0b2679f9ae32226ab3f}{\hyperlink{class_mesh_widget_ab914a1597ebaa0b2679f9ae32226ab3f}{$\sim$\-Mesh\-Widget} ()}\label{class_mesh_widget_ab914a1597ebaa0b2679f9ae32226ab3f}
+
+\begin{DoxyCompactList}\small\item\em our destructor \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a2a83b4ce21ff9a33d5b7315faefb8fed}{\hyperlink{class_mesh_widget_a2a83b4ce21ff9a33d5b7315faefb8fed}{Mesh\-Widget} (Q\-Widget $\ast$parent=0)}\label{class_mesh_widget_a2a83b4ce21ff9a33d5b7315faefb8fed}
+
+\begin{DoxyCompactList}\small\item\em our default constructor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mesh_widget_aa919bf9e1a8f87a2f88beb5bebcc8365}{bool \hyperlink{class_mesh_widget_aa919bf9e1a8f87a2f88beb5bebcc8365}{m\-\_\-update}}\label{class_mesh_widget_aa919bf9e1a8f87a2f88beb5bebcc8365}
+
+\begin{DoxyCompactList}\small\item\em bool to define if we want to be able to update models translation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a5db4abbd4581a08f7e0cab81a36672a9}{std\-::map$<$ Q\-String, \hyperlink{struct_mesh_widget_1_1model_prop}{model\-Prop} $\ast$ $>$ \hyperlink{class_mesh_widget_a5db4abbd4581a08f7e0cab81a36672a9}{m\-\_\-model\-Properties}}\label{class_mesh_widget_a5db4abbd4581a08f7e0cab81a36672a9}
+
+\begin{DoxyCompactList}\small\item\em map of our model properties \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_aa9bc3fcd1cabd6c762c1592bba3ecb3d}{\hyperlink{struct_mesh_widget_1_1model_prop}{model\-Prop} $\ast$ \hyperlink{class_mesh_widget_aa9bc3fcd1cabd6c762c1592bba3ecb3d}{m\-\_\-cur\-Model\-Prop}}\label{class_mesh_widget_aa9bc3fcd1cabd6c762c1592bba3ecb3d}
+
+\begin{DoxyCompactList}\small\item\em our current model properties \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_aeb16152b584efae49428f395ae71d255}{Q\-List\-Widget $\ast$ \hyperlink{class_mesh_widget_aeb16152b584efae49428f395ae71d255}{m\-\_\-model\-List}}\label{class_mesh_widget_aeb16152b584efae49428f395ae71d255}
+
+\begin{DoxyCompactList}\small\item\em List Widget to give U\-I to our models. \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a2a90703bcfd2bfba0f177763b9492bde}{Q\-Spacer\-Item $\ast$ \hyperlink{class_mesh_widget_a2a90703bcfd2bfba0f177763b9492bde}{m\-\_\-mesh\-Spacer}}\label{class_mesh_widget_a2a90703bcfd2bfba0f177763b9492bde}
+
+\begin{DoxyCompactList}\small\item\em our spacer for the widget \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a04fd332bcf722b71c2da1e05b1f1dde6}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_a04fd332bcf722b71c2da1e05b1f1dde6}{m\-\_\-mesh\-Rotate\-X\-D\-Spin\-Box}}\label{class_mesh_widget_a04fd332bcf722b71c2da1e05b1f1dde6}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for x rotation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a69d18769fc96a008437a072e29a2d6d2}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_a69d18769fc96a008437a072e29a2d6d2}{m\-\_\-mesh\-Rotate\-Y\-D\-Spin\-Box}}\label{class_mesh_widget_a69d18769fc96a008437a072e29a2d6d2}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for y rotation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a5e41ed433f956c32749a2667337cb2b0}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_a5e41ed433f956c32749a2667337cb2b0}{m\-\_\-mesh\-Rotate\-Z\-D\-Spin\-Box}}\label{class_mesh_widget_a5e41ed433f956c32749a2667337cb2b0}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for z rotation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_aecdcbe099985d8e399a54cdfbe4698ff}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_aecdcbe099985d8e399a54cdfbe4698ff}{m\-\_\-mesh\-Translate\-X\-D\-Spin\-Box}}\label{class_mesh_widget_aecdcbe099985d8e399a54cdfbe4698ff}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for x translation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a931d6dc6dbe58dda28e096455303582f}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_a931d6dc6dbe58dda28e096455303582f}{m\-\_\-mesh\-Translate\-Y\-D\-Spin\-Box}}\label{class_mesh_widget_a931d6dc6dbe58dda28e096455303582f}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for y translation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_ad421ee8459363aaa4641a629e14c8d3e}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_ad421ee8459363aaa4641a629e14c8d3e}{m\-\_\-mesh\-Translate\-Z\-D\-Spin\-Box}}\label{class_mesh_widget_ad421ee8459363aaa4641a629e14c8d3e}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for z translation \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_ad0727eeb3046c2a4e219dc0702b02f4a}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_ad0727eeb3046c2a4e219dc0702b02f4a}{m\-\_\-mesh\-Scale\-X\-D\-Spin\-Box}}\label{class_mesh_widget_ad0727eeb3046c2a4e219dc0702b02f4a}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for x scale \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_abbbc813dffc7918cdc1575ecfc8d9059}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_abbbc813dffc7918cdc1575ecfc8d9059}{m\-\_\-mesh\-Scale\-Y\-D\-Spin\-Box}}\label{class_mesh_widget_abbbc813dffc7918cdc1575ecfc8d9059}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for Y scale \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a39ffc5b350c23735bb883366975289e0}{Q\-Double\-Spin\-Box $\ast$ \hyperlink{class_mesh_widget_a39ffc5b350c23735bb883366975289e0}{m\-\_\-mesh\-Scale\-Z\-D\-Spin\-Box}}\label{class_mesh_widget_a39ffc5b350c23735bb883366975289e0}
+
+\begin{DoxyCompactList}\small\item\em our spinbox for z scale \end{DoxyCompactList}\item 
+\hypertarget{class_mesh_widget_a601eabcfd24a5918de58f19a6911bfcd}{Q\-String \hyperlink{class_mesh_widget_a601eabcfd24a5918de58f19a6911bfcd}{m\-\_\-cur\-Mesh\-Name}}\label{class_mesh_widget_a601eabcfd24a5918de58f19a6911bfcd}
+
+\begin{DoxyCompactList}\small\item\em current mesh name \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_mesh_widget_aafa751fb28e452ccaa5cbe83fa3b287b}{static \hyperlink{class_mesh_widget}{Mesh\-Widget} $\ast$ \hyperlink{class_mesh_widget_aafa751fb28e452ccaa5cbe83fa3b287b}{m\-\_\-instance}}\label{class_mesh_widget_aafa751fb28e452ccaa5cbe83fa3b287b}
+
+\begin{DoxyCompactList}\small\item\em pointer to the instance of our singleton class \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is an extention of Q\-Dock\-Widget that includes our camera controls. 
+
+A simple widget for rendering out images from our path tracer.
+
+This class is an extention of Q\-Widget that adds all our mesh properties controls as default.
+
+\begin{DoxyDate}{Date}
+02/05/15 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Toby Gilbert
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+29/01/14 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Declan Russell
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+18/05/15 
+\end{DoxyDate}
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_mesh_widget_a47bdbf5350b44dd43a08e27b16c407d7}{\index{Mesh\-Widget@{Mesh\-Widget}!load@{load}}
+\index{load@{load}!MeshWidget@{Mesh\-Widget}}
+\subsubsection[{load}]{\setlength{\rightskip}{0pt plus 5cm}void Mesh\-Widget\-::load (
+\begin{DoxyParamCaption}
+\item[{Q\-Data\-Stream \&}]{ds}
+\end{DoxyParamCaption}
+)}}\label{class_mesh_widget_a47bdbf5350b44dd43a08e27b16c407d7}
+
+
+loads scene from file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ds} & -\/ Q\-Data\-Stream of file \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_mesh_widget_a47bdbf5350b44dd43a08e27b16c407d7_cgraph}
+\end{center}
+\end{figure}
+
+
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_mesh_widget_a47bdbf5350b44dd43a08e27b16c407d7_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_mesh_widget_afc878f28393e7e918e5d88f6a747d22a}{\index{Mesh\-Widget@{Mesh\-Widget}!model\-Selected@{model\-Selected}}
+\index{model\-Selected@{model\-Selected}!MeshWidget@{Mesh\-Widget}}
+\subsubsection[{model\-Selected}]{\setlength{\rightskip}{0pt plus 5cm}void Mesh\-Widget\-::model\-Selected (
+\begin{DoxyParamCaption}
+\item[{Q\-List\-Widget\-Item $\ast$}]{\-\_\-item}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_mesh_widget_afc878f28393e7e918e5d88f6a747d22a}
+
+
+slot for if a item is selected from our list 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-item} & -\/ item selected from list \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_mesh_widget_afc878f28393e7e918e5d88f6a747d22a_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_mesh_widget_a67ebdf43ebd7ada4ef14d0c72f6a2f35}{\index{Mesh\-Widget@{Mesh\-Widget}!save@{save}}
+\index{save@{save}!MeshWidget@{Mesh\-Widget}}
+\subsubsection[{save}]{\setlength{\rightskip}{0pt plus 5cm}void Mesh\-Widget\-::save (
+\begin{DoxyParamCaption}
+\item[{Q\-Data\-Stream \&}]{ds}
+\end{DoxyParamCaption}
+)}}\label{class_mesh_widget_a67ebdf43ebd7ada4ef14d0c72f6a2f35}
+
+
+saves the objects in our scene to file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em ds} & -\/ Q\-Data\-Stream of file; \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_mesh_widget_a67ebdf43ebd7ada4ef14d0c72f6a2f35_icgraph}
+\end{center}
+\end{figure}
+
+
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-U\-I/Mesh\-Widget.\-h\item 
+moc/moc\-\_\-\-Mesh\-Widget.\-cpp\item 
+src/\-U\-I/Mesh\-Widget.\-cpp\end{DoxyCompactItemize}

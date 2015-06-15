@@ -1,0 +1,6 @@
+<map id="OpenGLWidget" name="OpenGLWidget">
+<area shape="rect" id="node3" href="$class_shader_program.html" title="{ShaderProgram\n|&#45; m_programID\l|+ ShaderProgram()\l+ ~ShaderProgram()\l+ attachShader()\l+ bindFragDataLocation()\l+ link()\l+ use()\l+ getProgramID()\l+ getAttribLoc()\l+ getUniformLoc()\l}" alt="" coords="121,5,289,200"/>
+<area shape="rect" id="node6" href="$class_text.html" title="{Text\n|&#45; m_characters\l|+ Text()\l+ ~Text()\l+ renderText()\l+ setScreenSize()\l+ setColour()\l+ setTransform()\l}" alt="" coords="283,323,409,474"/>
+<area shape="rect" id="node4" href="$class_shader.html" title="{Shader\n|&#45; m_shaderID\l|+ Shader()\l+ ~Shader()\l+ getShaderID()\l}" alt="" coords="435,345,549,452"/>
+<area shape="rect" id="node5" href="$class_camera.html" title="{Camera\n|&#45; m_position\l&#45; m_up\l&#45; m_projectionMatrix\l&#45; m_viewMatrix\l&#45; m_aspect\l&#45; m_fov\l|+ Camera()\l+ ~Camera()\l+ setPosition()\l+ lookAt()\l+ getViewMatrix()\l+ setProjectionMatrix()\l+ getProjectionMatrix()\l+ setShape()\l+ setShape()\l}" alt="" coords="573,265,727,533"/>
+</map>

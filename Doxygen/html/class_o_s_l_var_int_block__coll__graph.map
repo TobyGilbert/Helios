@@ -1,0 +1,6 @@
+<map id="OSLVarIntBlock" name="OSLVarIntBlock">
+<area shape="rect" id="node2" href="$class_o_s_l_abstract_var_block.html" title="{OSLAbstractVarBlock\n|# m_material\l|+ OSLAbstractVarBlock()\l+ ~OSLAbstractVarBlock()\l+ setBlockName()\l+ getBlockName()\l+ setLinkedVar()\l+ type()\l}" alt="" coords="5,1115,184,1266"/>
+<area shape="rect" id="node3" href="$class_q_n_e_block.html" title="This class originally written by STANISLAW ADASZEWSKI has been modified. " alt="" coords="165,133,293,445"/>
+<area shape="rect" id="node7" href="$class_q_n_e_port.html" title="{QNEPort\n|&#45; name\l&#45; isOutput_\l&#45; label\l&#45; radius_\l&#45; margin\l&#45; m_connections\l&#45; m_portFlags\l&#45; m_ptr\l&#45; m_varibleType\l&#45; m_initParams\l|+ QNEPort()\l+ ~QNEPort()\l+ setNEBlock()\l+ setName()\l+ setIsOutput()\l+ radius()\l+ isOutput()\l+ connections()\l+ setPortFlags()\l+ portName()\land 12 more...\l# itemChange()\l}" alt="" coords="271,509,389,880"/>
+<area shape="rect" id="node5" href="$class_abstract_node_proxy_widget.html" title="Abstract base class for all variable proxy widgets in our scene. " alt="" coords="88,944,285,1051"/>
+</map>

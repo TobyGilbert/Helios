@@ -1,0 +1,5 @@
+<map id="MeshWidget::save" name="MeshWidget::save">
+<area shape="rect" id="node2" href="$class_main_window.html#a8c5c70395af911e771dbf61da52169ab" title="saves our scene " alt="" coords="184,5,355,32"/>
+<area shape="rect" id="node3" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="403,5,583,32"/>
+<area shape="rect" id="node4" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="633,5,813,32"/>
+</map>

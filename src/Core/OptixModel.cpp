@@ -26,6 +26,7 @@ OptiXModel::OptiXModel(std::string _path)
     //init our trans
     m_trans = PathTracerScene::getInstance()->getContext()->createTransform();
     m_trans->setMatrix(false,m,0);
+    m_numPolygons = 0;
     createGeometry(_path);
 }
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,8 +41,9 @@ OptiXModel::OptiXModel(OptiXModel *_instance){
     m_geometryInstance = PathTracerScene::getInstance()->getContext()->createGeometryInstance();
     m_geometryInstance->setGeometry(m_geometry);
     Material mat = PathTracerScene::getInstance()->getContext()->createMaterial();
-    mat->setClosestHitProgram(0,_instance->m_geometryInstance->getMaterial(0)->getClosestHitProgram(0));
-    mat->setAnyHitProgram(1,_instance->m_geometryInstance->getMaterial(0)->getAnyHitProgram(1));
+    mat = _instance->getGeometryInstance()->getMaterial(0);
+    //mat->setClosestHitProgram(0,_instance->m_geometryInstance->getMaterial(0)->getClosestHitProgram(0));
+    //mat->setAnyHitProgram(1,_instance->m_geometryInstance->getMaterial(0)->getAnyHitProgram(1));
     setMaterial(mat);
     // create a new transform as we dont want this to be the same as our other model
     m_trans = PathTracerScene::getInstance()->getContext()->createTransform();
@@ -76,6 +78,8 @@ OptiXModel::OptiXModel(OptiXModel *_instance){
     m_texCoords = _instance->m_texCoords;
     m_tangents = _instance->m_tangents;
     m_bitangents = _instance->m_bitangents;
+    //finally set the number of pollygons
+    m_numPolygons = _instance->m_numPolygons;
 }
 //----------------------------------------------------------------------------------------------------------------------
 OptiXModel::~OptiXModel(){
@@ -109,6 +113,7 @@ void OptiXModel::createGeometry(std::string _loc){
 void OptiXModel::loadMesh(const aiNode* _node, const aiScene *_scene){
     for (unsigned int i=0; i<_node->mNumMeshes; i++){
         aiMesh *mesh = _scene->mMeshes[_node->mMeshes[i]];
+        m_numPolygons+=mesh->mNumFaces;
         processMesh(mesh);
     }
 

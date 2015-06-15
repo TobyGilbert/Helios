@@ -1,0 +1,8 @@
+<map id="OptiXModel::createGeometry" name="OptiXModel::createGeometry">
+<area shape="rect" id="node2" href="$class_opti_x_model.html#a67c070a756231acd6a7ad9aef7c8c505" title="loads a mesh from our current assimp scene " alt="" coords="245,31,400,57"/>
+<area shape="rect" id="node3" href="$class_opti_x_model.html#a6c35b710b10cb8671fb7644d8832d837" title="processes an imported mesh " alt="" coords="448,5,624,32"/>
+<area shape="rect" id="node4" href="$class_opti_x_model.html#a48b8aed79fd7eae1d03bd58f2a57b95a" title="creates our buffers in our OptiX context and sets our data " alt="" coords="448,56,624,83"/>
+<area shape="rect" id="node5" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="673,31,871,57"/>
+<area shape="rect" id="node7" href="$class_path_tracer_scene.html#acf716516054d2afead58edc76c65f609" title="accessor to our context " alt="" coords="675,81,869,108"/>
+<area shape="rect" id="node6" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="920,23,1115,65"/>
+</map>

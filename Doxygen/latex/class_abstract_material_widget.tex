@@ -1,0 +1,245 @@
+\hypertarget{class_abstract_material_widget}{\section{Abstract\-Material\-Widget Class Reference}
+\label{class_abstract_material_widget}\index{Abstract\-Material\-Widget@{Abstract\-Material\-Widget}}
+}
+
+
+an abstract material widget that creates a simple setup  
+
+
+
+
+{\ttfamily \#include $<$Abstract\-Material\-Widget.\-h$>$}
+
+
+
+Inheritance diagram for Abstract\-Material\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_abstract_material_widget__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Abstract\-Material\-Widget\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_abstract_material_widget__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_a1443013bf1f4b913b8d69d10eeaca186}{void \hyperlink{class_abstract_material_widget_a1443013bf1f4b913b8d69d10eeaca186}{signal\-Mat\-Changed} ()}\label{class_abstract_material_widget_a1443013bf1f4b913b8d69d10eeaca186}
+
+\begin{DoxyCompactList}\small\item\em slot to be called to signal if the material has been changed \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a5ef500ae0f272d97fb4687ac0c6fd114}{void \hyperlink{class_abstract_material_widget_a5ef500ae0f272d97fb4687ac0c6fd114}{show\-Context\-Menu} (const Q\-Point \&pos)}\label{class_abstract_material_widget_a5ef500ae0f272d97fb4687ac0c6fd114}
+
+\begin{DoxyCompactList}\small\item\em Create a slot to show our context menu if we right click anywhere on our widget. \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_aae96067fbd8e7c2cdd686688bc25c3fd}{void \hyperlink{class_abstract_material_widget_aae96067fbd8e7c2cdd686688bc25c3fd}{create\-Optix\-Material} ()}\label{class_abstract_material_widget_aae96067fbd8e7c2cdd686688bc25c3fd}
+
+\begin{DoxyCompactList}\small\item\em Slot to create a material from our O\-S\-L node graph. \end{DoxyCompactList}\item 
+void \hyperlink{class_abstract_material_widget_a7085b0419e52157f46312928d9bfc326}{apply\-Material\-To\-Mesh} (std\-::string \-\_\-mesh)
+\begin{DoxyCompactList}\small\item\em applies the current createed material to mesh of choosing \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a02cc4a4c8e489854363c646cd67c03f7}{void \hyperlink{class_abstract_material_widget_a02cc4a4c8e489854363c646cd67c03f7}{apply\-Material\-To\-Mesh} ()}\label{class_abstract_material_widget_a02cc4a4c8e489854363c646cd67c03f7}
+
+\begin{DoxyCompactList}\small\item\em applies material to currently selected mesh \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_ae3fc9533799259797b676f07d084211f}{void \hyperlink{class_abstract_material_widget_ae3fc9533799259797b676f07d084211f}{new\-Material} ()}\label{class_abstract_material_widget_ae3fc9533799259797b676f07d084211f}
+
+\begin{DoxyCompactList}\small\item\em slot to create a new material \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_ab4350dfde2aadd6e6c42210ec03a4dd1}{bool \hyperlink{class_abstract_material_widget_ab4350dfde2aadd6e6c42210ec03a4dd1}{add\-Material\-To\-Lib} ()}\label{class_abstract_material_widget_ab4350dfde2aadd6e6c42210ec03a4dd1}
+
+\begin{DoxyCompactList}\small\item\em slot to add our material to our library \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_ac4c17109d68c6540f5cfbcd3c409db3a}{void \hyperlink{class_abstract_material_widget_ac4c17109d68c6540f5cfbcd3c409db3a}{import\-Node\-Graph} ()}\label{class_abstract_material_widget_ac4c17109d68c6540f5cfbcd3c409db3a}
+
+\begin{DoxyCompactList}\small\item\em slot to load node graphs to our scene \end{DoxyCompactList}\item 
+void \hyperlink{class_abstract_material_widget_acf6a38c7f984df1eb5470780f1f8aa83}{set\-Cur\-N\-G\-Path} (Q\-String \-\_\-path)
+\begin{DoxyCompactList}\small\item\em set the path to the current node graph file \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a314c224671ac3e3aa56d313eaa95398f}{void \hyperlink{class_abstract_material_widget_a314c224671ac3e3aa56d313eaa95398f}{save\-Node\-Graph} ()}\label{class_abstract_material_widget_a314c224671ac3e3aa56d313eaa95398f}
+
+\begin{DoxyCompactList}\small\item\em saves our current node graph \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Signals}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_a57872e797feedc126fc15823c5b6d8e2}{void \hyperlink{class_abstract_material_widget_a57872e797feedc126fc15823c5b6d8e2}{mat\-Changed} ()}\label{class_abstract_material_widget_a57872e797feedc126fc15823c5b6d8e2}
+
+\begin{DoxyCompactList}\small\item\em if the material has changed in some way \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_af5dcc2f282ee2b607c7cfb132fd96b12}{\hyperlink{class_abstract_material_widget_af5dcc2f282ee2b607c7cfb132fd96b12}{$\sim$\-Abstract\-Material\-Widget} ()}\label{class_abstract_material_widget_af5dcc2f282ee2b607c7cfb132fd96b12}
+
+\begin{DoxyCompactList}\small\item\em our default destructor. Deals with our gabage collection \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a3e25d0095c98840a1705fcb34a78441b}{std\-::string \hyperlink{class_abstract_material_widget_a3e25d0095c98840a1705fcb34a78441b}{get\-Cur\-Mat\-Name\-Name} ()}\label{class_abstract_material_widget_a3e25d0095c98840a1705fcb34a78441b}
+
+\begin{DoxyCompactList}\small\item\em accessor to the name of our material \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a85987f671b7e4c284f6d7d39d834d800}{optix\-::\-Material \hyperlink{class_abstract_material_widget_a85987f671b7e4c284f6d7d39d834d800}{get\-Material} ()}\label{class_abstract_material_widget_a85987f671b7e4c284f6d7d39d834d800}
+
+\begin{DoxyCompactList}\small\item\em accessot to our material \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a24133fd1d3a66d898ca30a69b8f9cff3}{void \hyperlink{class_abstract_material_widget_a24133fd1d3a66d898ca30a69b8f9cff3}{add\-Shader\-Node} ()}\label{class_abstract_material_widget_a24133fd1d3a66d898ca30a69b8f9cff3}
+
+\begin{DoxyCompactList}\small\item\em adds a shader node to our user interface \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_ac7b5ac03177e6f3779b055c2ae872308}{bool \hyperlink{class_abstract_material_widget_ac7b5ac03177e6f3779b055c2ae872308}{material\-Created} ()}\label{class_abstract_material_widget_ac7b5ac03177e6f3779b055c2ae872308}
+
+\begin{DoxyCompactList}\small\item\em query if a material has been created \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a4c08ffa418405cfb09de9ce04716d21c}{void \hyperlink{class_abstract_material_widget_a4c08ffa418405cfb09de9ce04716d21c}{destroy} ()}\label{class_abstract_material_widget_a4c08ffa418405cfb09de9ce04716d21c}
+
+\begin{DoxyCompactList}\small\item\em removes our singleton class from existence \end{DoxyCompactList}\item 
+void \hyperlink{class_abstract_material_widget_ab697eed181925e2511b385b07ed13780}{load\-Node\-Graph} (Q\-String \-\_\-path)
+\begin{DoxyCompactList}\small\item\em loads a nodegraph from a file \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a275ddde6f459273d70597e54896f0ba2}{void \hyperlink{class_abstract_material_widget_a275ddde6f459273d70597e54896f0ba2}{set\-Material} (optix\-::\-Material \-\_\-mat, bool \-\_\-in\-Library=false)}\label{class_abstract_material_widget_a275ddde6f459273d70597e54896f0ba2}
+
+\begin{DoxyCompactList}\small\item\em mutator to our optix material \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_aa5c700df91c81fae3ed650abb315ce43}{void \hyperlink{class_abstract_material_widget_aa5c700df91c81fae3ed650abb315ce43}{set\-Cur\-Mat\-Name} (std\-::string \-\_\-name)}\label{class_abstract_material_widget_aa5c700df91c81fae3ed650abb315ce43}
+
+\begin{DoxyCompactList}\small\item\em set the current material name \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a965876cda41ec655a45c2c34d86a97ae}{void \hyperlink{class_abstract_material_widget_a965876cda41ec655a45c2c34d86a97ae}{compile\-And\-Add\-To\-Lib} (Q\-String \-\_\-path)}\label{class_abstract_material_widget_a965876cda41ec655a45c2c34d86a97ae}
+
+\begin{DoxyCompactList}\small\item\em compiles destination file and adds to material library \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_a96533d07fe6cc79527f5df9ddf2199a7}{static \hyperlink{class_abstract_material_widget}{Abstract\-Material\-Widget} $\ast$ \hyperlink{class_abstract_material_widget_a96533d07fe6cc79527f5df9ddf2199a7}{get\-Instance} (Q\-Widget $\ast$parent=0)}\label{class_abstract_material_widget_a96533d07fe6cc79527f5df9ddf2199a7}
+
+\begin{DoxyCompactList}\small\item\em accessor to our instance of our class \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_ace749c971293b2aef90e2861500be8bd}{\hyperlink{class_abstract_material_widget_ace749c971293b2aef90e2861500be8bd}{Abstract\-Material\-Widget} (Q\-Widget $\ast$parent=0)}\label{class_abstract_material_widget_ace749c971293b2aef90e2861500be8bd}
+
+\begin{DoxyCompactList}\small\item\em our default constructor \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_aa24e234565e46730e0102263774a380c}{std\-::string \hyperlink{class_abstract_material_widget_aa24e234565e46730e0102263774a380c}{m\-\_\-cur\-Mat\-Name}}\label{class_abstract_material_widget_aa24e234565e46730e0102263774a380c}
+
+\begin{DoxyCompactList}\small\item\em the current material name \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a5cd78b14d7ada8dcb73cbd9c03f6d2a9}{Q\-String \hyperlink{class_abstract_material_widget_a5cd78b14d7ada8dcb73cbd9c03f6d2a9}{m\-\_\-cur\-N\-G\-Path}}\label{class_abstract_material_widget_a5cd78b14d7ada8dcb73cbd9c03f6d2a9}
+
+\begin{DoxyCompactList}\small\item\em Path to our current node graph. \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_ae03c748d938aa021c7f18d2a064895f4}{bool \hyperlink{class_abstract_material_widget_ae03c748d938aa021c7f18d2a064895f4}{m\-\_\-mat\-Created}}\label{class_abstract_material_widget_ae03c748d938aa021c7f18d2a064895f4}
+
+\begin{DoxyCompactList}\small\item\em a bool to indicate if a material has been successfuly created \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_aa0cfa5f820744336c4d75d957576998b}{\hyperlink{class_o_s_l_nodes_editor}{O\-S\-L\-Nodes\-Editor} $\ast$ \hyperlink{class_abstract_material_widget_aa0cfa5f820744336c4d75d957576998b}{m\-\_\-node\-Editor}}\label{class_abstract_material_widget_aa0cfa5f820744336c4d75d957576998b}
+
+\begin{DoxyCompactList}\small\item\em Q\-Node\-Editor that manges loading and saving of our node graph. \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a96104151aec95df4b3eecf56486c5cfc}{Q\-Graphics\-Scene $\ast$ \hyperlink{class_abstract_material_widget_a96104151aec95df4b3eecf56486c5cfc}{m\-\_\-node\-Interface\-Scene}}\label{class_abstract_material_widget_a96104151aec95df4b3eecf56486c5cfc}
+
+\begin{DoxyCompactList}\small\item\em Q\-Graphics scene which will hold the node interface. \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a9e3d797b92f1518223ff4f48d1c35918}{Q\-Graphics\-View $\ast$ \hyperlink{class_abstract_material_widget_a9e3d797b92f1518223ff4f48d1c35918}{m\-\_\-graphics\-View}}\label{class_abstract_material_widget_a9e3d797b92f1518223ff4f48d1c35918}
+
+\begin{DoxyCompactList}\small\item\em Q\-Graphics\-View which will hold our material graph scene. \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_afd84a89a0bfff011f67af8b844a156c9}{optix\-::\-Material \hyperlink{class_abstract_material_widget_afd84a89a0bfff011f67af8b844a156c9}{m\-\_\-material}}\label{class_abstract_material_widget_afd84a89a0bfff011f67af8b844a156c9}
+
+\begin{DoxyCompactList}\small\item\em Our optix material. \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_aabf9f661c778f9f2926777f5177ed176}{Q\-Grid\-Layout $\ast$ \hyperlink{class_abstract_material_widget_aabf9f661c778f9f2926777f5177ed176}{m\-\_\-group\-Box\-Layout}}\label{class_abstract_material_widget_aabf9f661c778f9f2926777f5177ed176}
+
+\begin{DoxyCompactList}\small\item\em the layout of our group box \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_a2267d86e075a49f0b127a0dc53f4a924}{Q\-Group\-Box $\ast$ \hyperlink{class_abstract_material_widget_a2267d86e075a49f0b127a0dc53f4a924}{m\-\_\-widget\-Group\-Box}}\label{class_abstract_material_widget_a2267d86e075a49f0b127a0dc53f4a924}
+
+\begin{DoxyCompactList}\small\item\em a group box to hold all our widgets buttons \end{DoxyCompactList}\item 
+\hypertarget{class_abstract_material_widget_abf17d1069b4ed91bc0fccbf724404ef9}{bool \hyperlink{class_abstract_material_widget_abf17d1069b4ed91bc0fccbf724404ef9}{m\-\_\-mat\-Added\-To\-Lib}}\label{class_abstract_material_widget_abf17d1069b4ed91bc0fccbf724404ef9}
+
+\begin{DoxyCompactList}\small\item\em bool to indicate if our material has been added to our library already \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_abstract_material_widget_a73496d58f2f8e06da9fdac08f9757dfa}{static \hyperlink{class_abstract_material_widget}{Abstract\-Material\-Widget} $\ast$ \hyperlink{class_abstract_material_widget_a73496d58f2f8e06da9fdac08f9757dfa}{m\-\_\-instance}}\label{class_abstract_material_widget_a73496d58f2f8e06da9fdac08f9757dfa}
+
+\begin{DoxyCompactList}\small\item\em our instance of our node graph widget \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+an abstract material widget that creates a simple setup 
+
+\begin{DoxyAuthor}{Author}
+Declan Russell 
+\end{DoxyAuthor}
+\begin{DoxyDate}{Date}
+05/03/15 so that we can quickly create a U\-I for an optix material. 
+\end{DoxyDate}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_abstract_material_widget_a7085b0419e52157f46312928d9bfc326}{\index{Abstract\-Material\-Widget@{Abstract\-Material\-Widget}!apply\-Material\-To\-Mesh@{apply\-Material\-To\-Mesh}}
+\index{apply\-Material\-To\-Mesh@{apply\-Material\-To\-Mesh}!AbstractMaterialWidget@{Abstract\-Material\-Widget}}
+\subsubsection[{apply\-Material\-To\-Mesh}]{\setlength{\rightskip}{0pt plus 5cm}void Abstract\-Material\-Widget\-::apply\-Material\-To\-Mesh (
+\begin{DoxyParamCaption}
+\item[{std\-::string}]{\-\_\-mesh}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_abstract_material_widget_a7085b0419e52157f46312928d9bfc326}
+
+
+applies the current createed material to mesh of choosing 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-mesh} & -\/ the mesh name to apply the material to \\
+\hline
+\end{DoxyParams}
+
+
+Here is the call graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_abstract_material_widget_a7085b0419e52157f46312928d9bfc326_cgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_abstract_material_widget_ab697eed181925e2511b385b07ed13780}{\index{Abstract\-Material\-Widget@{Abstract\-Material\-Widget}!load\-Node\-Graph@{load\-Node\-Graph}}
+\index{load\-Node\-Graph@{load\-Node\-Graph}!AbstractMaterialWidget@{Abstract\-Material\-Widget}}
+\subsubsection[{load\-Node\-Graph}]{\setlength{\rightskip}{0pt plus 5cm}void Abstract\-Material\-Widget\-::load\-Node\-Graph (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{\-\_\-path}
+\end{DoxyParamCaption}
+)}}\label{class_abstract_material_widget_ab697eed181925e2511b385b07ed13780}
+
+
+loads a nodegraph from a file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ path to node graph \\
+\hline
+\end{DoxyParams}
+
+
+Here is the caller graph for this function\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{class_abstract_material_widget_ab697eed181925e2511b385b07ed13780_icgraph}
+\end{center}
+\end{figure}
+
+
+\hypertarget{class_abstract_material_widget_acf6a38c7f984df1eb5470780f1f8aa83}{\index{Abstract\-Material\-Widget@{Abstract\-Material\-Widget}!set\-Cur\-N\-G\-Path@{set\-Cur\-N\-G\-Path}}
+\index{set\-Cur\-N\-G\-Path@{set\-Cur\-N\-G\-Path}!AbstractMaterialWidget@{Abstract\-Material\-Widget}}
+\subsubsection[{set\-Cur\-N\-G\-Path}]{\setlength{\rightskip}{0pt plus 5cm}void Abstract\-Material\-Widget\-::set\-Cur\-N\-G\-Path (
+\begin{DoxyParamCaption}
+\item[{Q\-String}]{\-\_\-path}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [slot]}}}\label{class_abstract_material_widget_acf6a38c7f984df1eb5470780f1f8aa83}
+
+
+set the path to the current node graph file 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \-\_\-path} & -\/ path to nodegraph \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-U\-I/Abstract\-Material\-Widget.\-h\item 
+moc/moc\-\_\-\-Abstract\-Material\-Widget.\-cpp\item 
+src/\-U\-I/Abstract\-Material\-Widget.\-cpp\end{DoxyCompactItemize}

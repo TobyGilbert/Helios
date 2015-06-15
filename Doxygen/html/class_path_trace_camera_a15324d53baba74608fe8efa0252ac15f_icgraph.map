@@ -1,0 +1,12 @@
+<map id="PathTraceCamera::calcVectors" name="PathTraceCamera::calcVectors">
+<area shape="rect" id="node2" href="$class_path_trace_camera.html#ae4a78b282905e582d5d3b3954ecbb6c6" title="our default contructor that does all our calculations " alt="" coords="271,5,467,46"/>
+<area shape="rect" id="node3" href="$class_path_trace_camera.html#a5ab2d42a39520558a7d536fca99bdddf" title="a mutator for our paramters " alt="" coords="259,71,480,97"/>
+<area shape="rect" id="node10" href="$class_path_trace_camera.html#a28b8c742021899cc72760977ad864764" title="zoom in and out our camera " alt="" coords="288,121,451,148"/>
+<area shape="rect" id="node11" href="$class_path_trace_camera.html#a96f2c8e5b33f2d2503891c4d9c431948" title="rotates our camera " alt="" coords="285,172,454,199"/>
+<area shape="rect" id="node4" href="$class_camera_widget.html#aafcf078d596c85bd61031163f855e3fa" title="Update other camera settings. " alt="" coords="528,45,731,72"/>
+<area shape="rect" id="node9" href="$class_camera_widget.html#a708a4a1499b94ed542268cd1de8fcb6e" title="Resets the camera. " alt="" coords="533,96,725,123"/>
+<area shape="rect" id="node5" href="$class_camera_widget.html#a637ffd88fb213dad01dfa7294248029e" title="our default constructor " alt="" coords="779,71,983,97"/>
+<area shape="rect" id="node6" href="$class_camera_widget.html#a295cbb74d2843858399fdc45777b580d" title="returns the instance of our camera widget " alt="" coords="1033,71,1218,97"/>
+<area shape="rect" id="node7" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="1267,71,1447,97"/>
+<area shape="rect" id="node8" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="1497,71,1677,97"/>
+</map>

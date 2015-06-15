@@ -1,0 +1,24 @@
+<map id="PathTracerScene::setModelMaterial" name="PathTracerScene::setModelMaterial">
+<area shape="rect" id="node2" href="$class_abstract_material_widget.html#a7085b0419e52157f46312928d9bfc326" title="applies the current createed material to mesh of choosing " alt="" coords="262,449,421,490"/>
+<area shape="rect" id="node3" href="$class_mesh_widget.html#af819cb26a8a0ed4b6aa86fdf6a7c8bc7" title="applys material to currently selected model " alt="" coords="238,515,445,542"/>
+<area shape="rect" id="node4" href="$class_material_library.html#a25fbe1df01423d3c29f17b068c1fa93e" title="applys selected material to current selected in mesh widget " alt="" coords="493,396,661,437"/>
+<area shape="rect" id="node13" href="$class_material_library.html#a2e77c2e90d100dec3a113c2ea1e94fb5" title="slot to be called if something is selected in our material list " alt="" coords="2493,536,2681,563"/>
+<area shape="rect" id="node16" href="$class_abstract_material_widget.html#a02cc4a4c8e489854363c646cd67c03f7" title="applies material to currently selected mesh " alt="" coords="1850,398,2009,440"/>
+<area shape="rect" id="node5" href="$class_material_library.html#ac0fdd21aa44b30e4ef14f252f26c3f1e" title="defalut constructor " alt="" coords="710,396,871,437"/>
+<area shape="rect" id="node6" href="$class_material_library.html#a9dddb26d8ba882414f96bf5e4e6c3cf6" title="get an instance of our material library " alt="" coords="921,323,1103,350"/>
+<area shape="rect" id="node7" href="$class_main_window.html#ae98d00a93bc118200eeef9f9bba1dba7" title="Destructor. " alt="" coords="2493,246,2681,272"/>
+<area shape="rect" id="node8" href="$class_main_window.html#aa4907b0251d305659e403c62921ef331" title="Slot when called creates all our menus. " alt="" coords="2734,119,2914,146"/>
+<area shape="rect" id="node10" href="$class_abstract_material_widget.html#ace749c971293b2aef90e2861500be8bd" title="our default constructor " alt="" coords="2063,457,2230,498"/>
+<area shape="rect" id="node14" href="$class_abstract_material_widget.html#a965876cda41ec655a45c2c34d86a97ae" title="compiles destination file and adds to material library " alt="" coords="1411,348,1570,389"/>
+<area shape="rect" id="node15" href="$class_abstract_material_widget.html#ab4350dfde2aadd6e6c42210ec03a4dd1" title="slot to add our material to our library " alt="" coords="1633,516,1791,557"/>
+<area shape="rect" id="node18" href="$class_mesh_widget.html#a47bdbf5350b44dd43a08e27b16c407d7" title="loads scene from file " alt="" coords="1190,154,1317,180"/>
+<area shape="rect" id="node20" href="$class_mesh_widget.html#aac3bcbbfb389bf17505d4eb894ae5693" title="applies material from library to mesh " alt="" coords="1152,223,1355,250"/>
+<area shape="rect" id="node9" href="$class_main_window.html#a8b244be8b7b7db1b08de2a2acb9409db" title="Constructor. " alt="" coords="2963,119,3143,146"/>
+<area shape="rect" id="node11" href="$class_abstract_material_widget.html#a96533d07fe6cc79527f5df9ddf2199a7" title="accessor to our instance of our class " alt="" coords="2281,373,2439,414"/>
+<area shape="rect" id="node12" href="$class_material_library.html#a93a390e382f15c20a3ba3d760cdb4bc5" title="imports all materials from a directory " alt="" coords="2489,322,2685,348"/>
+<area shape="rect" id="node17" href="$class_abstract_material_widget.html#a314c224671ac3e3aa56d313eaa95398f" title="saves our current node graph " alt="" coords="1850,516,2009,557"/>
+<area shape="rect" id="node19" href="$class_main_window.html#abc2541016866f91904cb3aa64ca85a06" title="load scene from a file " alt="" coords="1846,43,2013,70"/>
+<area shape="rect" id="node21" href="$class_mesh_widget.html#a2a83b4ce21ff9a33d5b7315faefb8fed" title="our default constructor " alt="" coords="1403,211,1579,238"/>
+<area shape="rect" id="node22" href="$class_mesh_widget.html#ab69e785150bd1802124a3fea62940866" title="returns the instance of our mesh widget " alt="" coords="1627,186,1797,212"/>
+<area shape="rect" id="node23" href="$class_main_window.html#a8c5c70395af911e771dbf61da52169ab" title="saves our scene " alt="" coords="2061,144,2232,171"/>
+</map>

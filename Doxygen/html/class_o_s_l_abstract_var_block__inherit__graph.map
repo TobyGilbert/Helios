@@ -1,0 +1,10 @@
+<map id="OSLAbstractVarBlock" name="OSLAbstractVarBlock">
+<area shape="rect" id="node4" href="$class_o_s_l_var_color_block.html" title="{OSLVarColorBlock\n||+ OSLVarColorBlock()\l+ ~OSLVarColorBlock()\l+ save()\l+ load()\l}" alt="" coords="5,705,164,826"/>
+<area shape="rect" id="node5" href="$class_o_s_l_var_float_block.html" title="This class is used for creating a color variable node in our node graphics interface. " alt="" coords="190,705,348,826"/>
+<area shape="rect" id="node6" href="$class_o_s_l_var_float_three_block.html" title="{OSLVarFloatThreeBlock\n||+ OSLVarFloatThreeBlock()\l+ ~OSLVarFloatThreeBlock()\l+ save()\l+ load()\l}" alt="" coords="373,705,563,826"/>
+<area shape="rect" id="node7" href="$class_o_s_l_var_image_block.html" title="{OSLVarImageBlock\n||+ OSLVarImageBlock()\l+ ~OSLVarImageBlock()\l+ save()\l+ load()\l}" alt="" coords="588,705,752,826"/>
+<area shape="rect" id="node8" href="$class_o_s_l_var_int_block.html" title="{OSLVarIntBlock\n||+ OSLVarIntBlock()\l+ ~OSLVarIntBlock()\l+ save()\l+ load()\l}" alt="" coords="777,705,921,826"/>
+<area shape="rect" id="node9" href="$class_o_s_l_var_normal_block.html" title="{OSLVarNormalBlock\n||+ OSLVarNormalBlock()\l+ ~OSLVarNormalBlock()\l+ save()\l+ load()\l}" alt="" coords="945,705,1116,826"/>
+<area shape="rect" id="node10" href="$class_o_s_l_var_point_block.html" title="{OSLVarPointBlock\n||+ OSLVarPointBlock()\l+ ~OSLVarPointBlock()\l+ save()\l+ load()\l}" alt="" coords="1141,705,1299,826"/>
+<area shape="rect" id="node2" href="$class_q_n_e_block.html" title="This class originally written by STANISLAW ADASZEWSKI has been modified. " alt="" coords="607,131,735,443"/>
+</map>

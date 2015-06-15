@@ -1,0 +1,51 @@
+\hypertarget{_text_8h}{\section{include/\-Core/\-Text.h File Reference}
+\label{_text_8h}\index{include/\-Core/\-Text.\-h@{include/\-Core/\-Text.\-h}}
+}
+
+
+Basic text rendering for Open\-G\-L 3.\-x.  
+
+
+{\ttfamily \#include $<$G\-L/glew.\-h$>$}\\*
+{\ttfamily \#include $<$G\-L/gl.\-h$>$}\\*
+{\ttfamily \#include $<$Qt\-Core/\-Q\-Hash$>$}\\*
+{\ttfamily \#include $<$Q\-Font$>$}\\*
+{\ttfamily \#include $<$glm.\-h$>$}\\*
+{\ttfamily \#include $<$Core/\-Shader\-Program.\-h$>$}\\*
+Include dependency graph for Text.\-h\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{_text_8h__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=287pt]{_text_8h__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_text}{Text}
+\item 
+struct \hyperlink{struct_text_1_1_font_char}{Text\-::\-Font\-Char}
+\begin{DoxyCompactList}\small\item\em a structure to hold the font char texture id and the vao. The vao for each font will be a different size need to investigate is a scale would be quicker / more efficient than storing multiple billboards (some will be the same size) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Basic text rendering for Open\-G\-L 3.\-x. \begin{DoxyAuthor}{Author}
+Jonathan Macey 
+\end{DoxyAuthor}
+\begin{DoxyVersion}{Version}
+1.\-0 
+\end{DoxyVersion}
+\begin{DoxyDate}{Date}
+10/10/11 Initial version 
+\end{DoxyDate}
+\begin{DoxyRefDesc}{Todo}
+\item[\hyperlink{todo__todo000007}{Todo}]support unicode A\-S\-C\-I\-I is so 1980's ;-\/0 This class will generate billboard textures and Vertex\-Array\-Objects for each of the font glyphs, this means we need a valid Open\-G\-L context before using this class, therefore it should be constructed in initalize\-G\-L or after. Note for efficiency once the font has been created we can only change the colour, if you need different sizes / emphasis you will need to create a new \hyperlink{class_text}{Text} object with the desired size / emphasis. This is accelerated as much as possible but text rendering will sometimes be slow as we bind a new texture for each char being drawn for more details look at the blog post here \href{http://jonmacey.blogspot.com/2011/10/text-rendering-using-opengl-32.html}{\tt http\-://jonmacey.\-blogspot.\-com/2011/10/text-\/rendering-\/using-\/opengl-\/32.\-html} \end{DoxyRefDesc}

@@ -1,0 +1,51 @@
+<map id="MeshWidget::load" name="MeshWidget::load">
+<area shape="rect" id="node2" href="$class_path_tracer_scene.html#aaf30f931afe7fc4df149c5754ec273d0" title="returns an instance of our singleton class " alt="" coords="2354,670,2553,697"/>
+<area shape="rect" id="node4" href="$class_path_tracer_scene.html#ab41f55350a5a50b60381cd46120c45aa" title="function to import a mesh to our scene " alt="" coords="2354,1142,2553,1169"/>
+<area shape="rect" id="node5" href="$class_opti_x_model.html#aedaab5dc8da3cea6d1f6d8bc76d37903" title="set our models material " alt="" coords="2636,1193,2799,1219"/>
+<area shape="rect" id="node8" href="$class_path_tracer_scene.html#a3980f3179a2f1d1a97ea5698f76eb317" title="creates an instance of geometry in our scene " alt="" coords="2345,1091,2562,1118"/>
+<area shape="rect" id="node9" href="$class_material_library.html#a9dddb26d8ba882414f96bf5e4e6c3cf6" title="get an instance of our material library " alt="" coords="191,822,374,849"/>
+<area shape="rect" id="node22" href="$class_path_tracer_scene.html#adeddc6d4c2df9c23baebb32ee016c57b" title="transforms a model in our scene " alt="" coords="2360,321,2547,363"/>
+<area shape="rect" id="node50" href="$class_material_library.html#a0d8235104709564a600a6ece7ea048ae" title="returns a queried material from library if it exits " alt="" coords="181,1243,384,1270"/>
+<area shape="rect" id="node3" href="$class_path_tracer_scene.html#adb714b43e1a14346af4cda2ffc34a9c7" title="our default constructor " alt="" coords="2620,663,2815,704"/>
+<area shape="rect" id="node6" href="$class_opti_x_model.html#a5b9b10ed9b5df1104a2bdb5019fcd06d" title="an accessor to our model with a transformation applied " alt="" coords="2614,1091,2821,1118"/>
+<area shape="rect" id="node7" href="$class_opti_x_model.html#aba60cfa935329bacb5c55b9e4dac0b7b" title="accessor to query number of polygons " alt="" coords="2618,1142,2817,1169"/>
+<area shape="rect" id="node10" href="$class_material_library.html#ac0fdd21aa44b30e4ef14f252f26c3f1e" title="defalut constructor " alt="" coords="433,815,594,856"/>
+<area shape="rect" id="node11" href="$class_material_library.html#a2e77c2e90d100dec3a113c2ea1e94fb5" title="slot to be called if something is selected in our material list " alt="" coords="661,822,849,849"/>
+<area shape="rect" id="node48" href="$class_material_library.html#a25fbe1df01423d3c29f17b068c1fa93e" title="applys selected material to current selected in mesh widget " alt="" coords="1339,873,1507,915"/>
+<area shape="rect" id="node49" href="$class_material_library.html#abc3c89c6bbf434a2ea9d21e70198f2ae" title="slot to be called to delete selected materials in material library list " alt="" coords="643,771,866,798"/>
+<area shape="rect" id="node12" href="$class_mesh_widget.html#ab69e785150bd1802124a3fea62940866" title="returns the instance of our mesh widget " alt="" coords="1573,881,1744,907"/>
+<area shape="rect" id="node24" href="$class_mesh_widget.html#af819cb26a8a0ed4b6aa86fdf6a7c8bc7" title="applys material to currently selected model " alt="" coords="1555,729,1762,755"/>
+<area shape="rect" id="node26" href="$class_abstract_material_widget.html#a96533d07fe6cc79527f5df9ddf2199a7" title="accessor to our instance of our class " alt="" coords="915,625,1074,667"/>
+<area shape="rect" id="node45" href="$class_abstract_material_widget.html#a275ddde6f459273d70597e54896f0ba2" title="mutator to our optix material " alt="" coords="915,873,1074,915"/>
+<area shape="rect" id="node46" href="$class_abstract_material_widget.html#aa5c700df91c81fae3ed650abb315ce43" title="set the current material name " alt="" coords="915,691,1074,732"/>
+<area shape="rect" id="node47" href="$class_abstract_material_widget.html#ab697eed181925e2511b385b07ed13780" title="loads a nodegraph from a file " alt="" coords="915,756,1074,797"/>
+<area shape="rect" id="node13" href="$class_mesh_widget.html#a2a83b4ce21ff9a33d5b7315faefb8fed" title="our default constructor " alt="" coords="1832,881,2008,907"/>
+<area shape="rect" id="node14" href="$class_mesh_widget.html#afc878f28393e7e918e5d88f6a747d22a" title="slot for if a item is selected from our list " alt="" coords="2091,822,2280,849"/>
+<area shape="rect" id="node15" href="$class_mesh_widget.html#a771417b5002a0e5e9cfb32553b7f7544" title="slot to import a model " alt="" coords="2098,990,2273,1017"/>
+<area shape="rect" id="node16" href="$class_mesh_widget.html#a39e961759059b54abc380b149f0186f8" title="slot to create instance of geometry selected " alt="" coords="2091,939,2280,966"/>
+<area shape="rect" id="node17" href="$class_mesh_widget.html#a4e934e8f2eb83349fe0b865f4c242e3d" title="slot to remove selected geometry " alt="" coords="2087,771,2284,798"/>
+<area shape="rect" id="node19" href="$class_mesh_widget.html#aac3bcbbfb389bf17505d4eb894ae5693" title="applies material from library to mesh " alt="" coords="2084,1041,2287,1067"/>
+<area shape="rect" id="node21" href="$class_mesh_widget.html#ad31fbdeac98ac757b6fc8f1a6dccb197" title="our slot to notify if any tranform spinbox have been changed " alt="" coords="2087,873,2283,915"/>
+<area shape="rect" id="node18" href="$class_path_tracer_scene.html#ac65c3f2b50b67511416cc80ca9abc179" title="removes a geometry from our scene " alt="" coords="2341,771,2565,798"/>
+<area shape="rect" id="node20" href="$class_material_library.html#a505e48b500d1d04f6445c423a2fe66ac" title="function let the user select a material from our library and apply it to a mesh " alt="" coords="2372,1025,2535,1067"/>
+<area shape="rect" id="node23" href="$class_opti_x_model.html#a901337f12a6b306703e29c7b57c4af86" title="a mutator for our transformation matrix for our geomtry " alt="" coords="2643,329,2792,355"/>
+<area shape="rect" id="node25" href="$class_path_tracer_scene.html#a2930f6745167861525ce431487daa40f" title="sets the material of a model in our scene " alt="" coords="1828,721,2012,763"/>
+<area shape="rect" id="node27" href="$class_abstract_material_widget.html#ace749c971293b2aef90e2861500be8bd" title="our default constructor " alt="" coords="1123,453,1290,495"/>
+<area shape="rect" id="node28" href="$class_abstract_material_widget.html#a1443013bf1f4b913b8d69d10eeaca186" title="slot to be called to signal if the material has been changed " alt="" coords="1579,249,1738,291"/>
+<area shape="rect" id="node29" href="$class_abstract_material_widget.html#aae96067fbd8e7c2cdd686688bc25c3fd" title="Slot to create a material from our OSL node graph. " alt="" coords="1579,439,1738,480"/>
+<area shape="rect" id="node37" href="$class_path_tracer_scene.html#acf716516054d2afead58edc76c65f609" title="accessor to our context " alt="" coords="2088,299,2283,326"/>
+<area shape="rect" id="node38" href="$class_abstract_material_widget.html#ae3fc9533799259797b676f07d084211f" title="slot to create a new material " alt="" coords="1841,220,1999,261"/>
+<area shape="rect" id="node39" href="$class_abstract_material_widget.html#ab4350dfde2aadd6e6c42210ec03a4dd1" title="slot to add our material to our library " alt="" coords="1579,571,1738,612"/>
+<area shape="rect" id="node40" href="$class_abstract_material_widget.html#a314c224671ac3e3aa56d313eaa95398f" title="saves our current node graph " alt="" coords="1343,483,1502,524"/>
+<area shape="rect" id="node41" href="$class_abstract_material_widget.html#ac4c17109d68c6540f5cfbcd3c409db3a" title="slot to load node graphs to our scene " alt="" coords="1343,665,1502,707"/>
+<area shape="rect" id="node42" href="$class_abstract_material_widget.html#a02cc4a4c8e489854363c646cd67c03f7" title="applies material to currently selected mesh " alt="" coords="1343,600,1502,641"/>
+<area shape="rect" id="node43" href="$class_abstract_material_widget.html#a5ef500ae0f272d97fb4687ac0c6fd114" title="Create a slot to show our context menu if we right click anywhere on our widget. " alt="" coords="1343,315,1502,356"/>
+<area shape="rect" id="node30" href="$class_o_s_l_nodes_editor.html#a4b1199c7b3d4449e08fb8d9e6080219b" title="creates an optix material program from our OSL node graph. " alt="" coords="1811,446,2029,473"/>
+<area shape="rect" id="node31" href="$class_q_nodes_editor.html#a381b679a27db1a4aeaaa271631c8c699" title="accesor to our scene " alt="" coords="2102,249,2269,275"/>
+<area shape="rect" id="node32" href="$class_o_s_l_shader_block.html#a1af4f62c3a39d6eed25123695bcbceee" title="accessor to the shader name " alt="" coords="2077,502,2293,529"/>
+<area shape="rect" id="node33" href="$class_o_s_l_nodes_editor.html#ab5c850b082cd87c467b16d33596afa03" title="takes in an QNEPort::type and returns the type in string form " alt="" coords="2096,553,2275,595"/>
+<area shape="rect" id="node34" href="$class_q_n_e_port.html#a64115add3b4da6d58d287fe9530ca696" title="accessor to the varible type of the port " alt="" coords="2100,619,2271,646"/>
+<area shape="rect" id="node35" href="$class_q_n_e_port.html#afb0f6931a74eaaeee1975b21dc754051" title="accessor to the port name " alt="" coords="2117,401,2253,427"/>
+<area shape="rect" id="node36" href="$class_q_n_e_port.html#a43790ff1780c4efe01494e6b9182d21e" title="accessor to initial paramiters to port " alt="" coords="2103,451,2267,478"/>
+<area shape="rect" id="node44" href="$class_abstract_material_widget.html#a24133fd1d3a66d898ca30a69b8f9cff3" title="adds a shader node to our user interface " alt="" coords="1579,315,1738,356"/>
+</map>

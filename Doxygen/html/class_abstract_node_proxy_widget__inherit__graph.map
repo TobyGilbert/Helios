@@ -1,0 +1,7 @@
+<map id="AbstractNodeProxyWidget" name="AbstractNodeProxyWidget">
+<area shape="rect" id="node3" href="$class_color_node_proxy_widget.html" title="Extention of AbstractNodeProxyWidget that allows us to select a color and apply it to a attribute of ..." alt="" coords="5,309,192,518"/>
+<area shape="rect" id="node4" href="$class_float_node_proxy_widget.html" title="Extention of AbstractNodeProxyWidget that allows us to select a float and apply it to a attribute of ..." alt="" coords="217,353,401,474"/>
+<area shape="rect" id="node5" href="$class_float_three_node_proxy_widget.html" title="Extention of AbstractNodeProxyWidget that allows us to select 3 floats and apply it to a attribute of..." alt="" coords="427,316,645,511"/>
+<area shape="rect" id="node6" href="$class_image_node_proxy_widget.html" title="Extention of AbstractNodeProxyWidget that allows us to select an image and apply it to a attribute of..." alt="" coords="669,301,861,525"/>
+<area shape="rect" id="node7" href="$class_int_node_proxy_widget.html" title="Extention of AbstractNodeProxyWidget that allows us to select an int and apply it to a attribute of a..." alt="" coords="885,353,1056,474"/>
+</map>

@@ -1,0 +1,90 @@
+\hypertarget{class_light}{\section{Light Class Reference}
+\label{class_light}\index{Light@{Light}}
+}
+
+
+Collaboration diagram for Light\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=248pt]{class_light__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_light_1_1_parallelogram_light}{Parallelogram\-Light}
+\begin{DoxyCompactList}\small\item\em A structure to hold information about our parallelogram area lights. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_aeb5df09a25a32f19fdffa761268ba24f}{\hyperlink{class_light_aeb5df09a25a32f19fdffa761268ba24f}{Light} ()}\label{class_light_aeb5df09a25a32f19fdffa761268ba24f}
+
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\hypertarget{class_light_ad0e59fad13bb6cfadc25b2c477e9ddc7}{\hyperlink{class_light_ad0e59fad13bb6cfadc25b2c477e9ddc7}{$\sim$\-Light} ()}\label{class_light_ad0e59fad13bb6cfadc25b2c477e9ddc7}
+
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a7621ee283ddbe3fec59dee5c34e6317a}{void \hyperlink{class_light_a7621ee283ddbe3fec59dee5c34e6317a}{create\-Parollelogram\-Light} ()}\label{class_light_a7621ee283ddbe3fec59dee5c34e6317a}
+
+\begin{DoxyCompactList}\small\item\em Create a parallelogram shaped light. \end{DoxyCompactList}\item 
+\hypertarget{class_light_accfd9bb583a936a092bcca37866f0f40}{optix\-::\-Geometry\-Instance \hyperlink{class_light_accfd9bb583a936a092bcca37866f0f40}{get\-Geometry\-Instance} ()}\label{class_light_accfd9bb583a936a092bcca37866f0f40}
+
+\begin{DoxyCompactList}\small\item\em Returns the gemoetry instance for the light. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a4a50c1f55863d0e7bcb6e15c56161f89}{\hyperlink{struct_light_1_1_parallelogram_light}{Parallelogram\-Light} \hyperlink{class_light_a4a50c1f55863d0e7bcb6e15c56161f89}{get\-Parallelogrom\-Light} ()}\label{class_light_a4a50c1f55863d0e7bcb6e15c56161f89}
+
+\begin{DoxyCompactList}\small\item\em Returns the Parallelogram data structure for holding the light information. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a56ae6197fefbc72b1114a696539d9e41}{optix\-::\-Material \hyperlink{class_light_a56ae6197fefbc72b1114a696539d9e41}{get\-Material} ()}\label{class_light_a56ae6197fefbc72b1114a696539d9e41}
+
+\begin{DoxyCompactList}\small\item\em Returns the material attached to the light. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a547b5f6bce87bb1afaa310da7e60debd}{void {\bfseries set\-Trans} (glm\-::mat4 \-\_\-trans, bool \-\_\-transpose=0)}\label{class_light_a547b5f6bce87bb1afaa310da7e60debd}
+
+\item 
+\hypertarget{class_light_a40b9f2558fab3ad3368eeda329dcd540}{optix\-::\-Transform {\bfseries get\-Geom\-And\-Trans} ()}\label{class_light_a40b9f2558fab3ad3368eeda329dcd540}
+
+\item 
+\hypertarget{class_light_aa3dc480efad5296465c3221a0ae5ccb3}{optix\-::\-Acceleration {\bfseries get\-Acceleration} ()}\label{class_light_aa3dc480efad5296465c3221a0ae5ccb3}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_abcc5c13ce90a138c34cd2176414ca796}{optix\-::\-Geometry\-Instance \hyperlink{class_light_abcc5c13ce90a138c34cd2176414ca796}{create\-Parallelogram} (const optix\-::float3 \&\-\_\-point1, const optix\-::float3 \&\-\_\-point2, const optix\-::float3 \&\-\_\-point3)}\label{class_light_abcc5c13ce90a138c34cd2176414ca796}
+
+\begin{DoxyCompactList}\small\item\em Create the parallelogram geometry used by the light. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_light_a1a38877bc851fc52aa56b74797cd4b39}{optix\-::\-Geometry\-Instance \hyperlink{class_light_a1a38877bc851fc52aa56b74797cd4b39}{m\-\_\-geometry\-Instance}}\label{class_light_a1a38877bc851fc52aa56b74797cd4b39}
+
+\begin{DoxyCompactList}\small\item\em The geometry instance. \end{DoxyCompactList}\item 
+\hypertarget{class_light_ae9a20c4be482422ffbfdbd20cbdced3b}{\hyperlink{struct_light_1_1_parallelogram_light}{Parallelogram\-Light} \hyperlink{class_light_ae9a20c4be482422ffbfdbd20cbdced3b}{m\-\_\-parallelogram\-Light}}\label{class_light_ae9a20c4be482422ffbfdbd20cbdced3b}
+
+\begin{DoxyCompactList}\small\item\em The data structure for holding information about the light. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a717ad0883b7b5d662411ff8e07adc672}{optix\-::\-Material \hyperlink{class_light_a717ad0883b7b5d662411ff8e07adc672}{m\-\_\-light\-Material}}\label{class_light_a717ad0883b7b5d662411ff8e07adc672}
+
+\begin{DoxyCompactList}\small\item\em The optix material attached to the light. \end{DoxyCompactList}\item 
+\hypertarget{class_light_af3b4e7b6a3666c514b3d096529cf1f11}{optix\-::\-Program \hyperlink{class_light_af3b4e7b6a3666c514b3d096529cf1f11}{m\-\_\-pgram\-\_\-intersection}}\label{class_light_af3b4e7b6a3666c514b3d096529cf1f11}
+
+\begin{DoxyCompactList}\small\item\em The intersection program used for the light geometry. \end{DoxyCompactList}\item 
+\hypertarget{class_light_ab024a48ce987f83ea350b9ea5312a13a}{optix\-::\-Program \hyperlink{class_light_ab024a48ce987f83ea350b9ea5312a13a}{m\-\_\-pgram\-\_\-bounding\-\_\-box}}\label{class_light_ab024a48ce987f83ea350b9ea5312a13a}
+
+\begin{DoxyCompactList}\small\item\em An A\-A\-B\-B intersection program for the light geometry. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a4f27233a6a4f24bd6af470325722e91f}{optix\-::\-Transform \hyperlink{class_light_a4f27233a6a4f24bd6af470325722e91f}{m\-\_\-trans}}\label{class_light_a4f27233a6a4f24bd6af470325722e91f}
+
+\begin{DoxyCompactList}\small\item\em A translation. \end{DoxyCompactList}\item 
+\hypertarget{class_light_a303ad623513cfe674f4a49096358d24e}{optix\-::\-Geometry\-Group {\bfseries m\-\_\-geometry\-Group}}\label{class_light_a303ad623513cfe674f4a49096358d24e}
+
+\item 
+\hypertarget{class_light_a4bf35bc5c66a467228b76098a8775c5c}{optix\-::\-Acceleration {\bfseries m\-\_\-acceleration}}\label{class_light_a4bf35bc5c66a467228b76098a8775c5c}
+
+\item 
+\hypertarget{class_light_a6f7c0af5a0fec1b1a8a941e14943f006}{float {\bfseries m\-\_\-points} \mbox{[}4\mbox{]}}\label{class_light_a6f7c0af5a0fec1b1a8a941e14943f006}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Lights/Light.\-h\item 
+src/\-Lights/Light.\-cpp\end{DoxyCompactItemize}

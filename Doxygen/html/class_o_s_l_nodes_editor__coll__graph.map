@@ -1,0 +1,6 @@
+<map id="OSLNodesEditor" name="OSLNodesEditor">
+<area shape="rect" id="node2" href="$class_q_nodes_editor.html" title="{QNodesEditor\n|&#45; scene\l|+ QNodesEditor()\l+ install()\l+ eventFilter()\l+ save()\l+ load()\l+ getScene()\l+ signalMatChanged()\l&#45; itemAt()\l}" alt="" coords="10,1291,160,1471"/>
+<area shape="rect" id="node4" href="$class_q_n_e_connection.html" title="{QNEConnection\n|&#45; pos1\l&#45; pos2\l|+ QNEConnection()\l+ ~QNEConnection()\l+ setPos1()\l+ setPos2()\l+ setPort1()\l+ setPort2()\l+ updatePosFromPorts()\l+ updatePath()\l+ port1()\l+ port2()\l+ save()\l+ load()\l+ type()\l}" alt="" coords="99,958,263,1226"/>
+<area shape="rect" id="node6" href="$class_q_n_e_port.html" title="{QNEPort\n|&#45; name\l&#45; isOutput_\l&#45; label\l&#45; radius_\l&#45; margin\l&#45; m_connections\l&#45; m_portFlags\l&#45; m_ptr\l&#45; m_varibleType\l&#45; m_initParams\l|+ QNEPort()\l+ ~QNEPort()\l+ setNEBlock()\l+ setName()\l+ setIsOutput()\l+ radius()\l+ isOutput()\l+ connections()\l+ setPortFlags()\l+ portName()\land 12 more...\l# itemChange()\l}" alt="" coords="183,509,301,880"/>
+<area shape="rect" id="node7" href="$class_q_n_e_block.html" title="This class originally written by STANISLAW ADASZEWSKI has been modified. " alt="" coords="233,133,361,445"/>
+</map>

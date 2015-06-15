@@ -1,0 +1,89 @@
+\hypertarget{class_q_n_e_connection}{\section{Q\-N\-E\-Connection Class Reference}
+\label{class_q_n_e_connection}\index{Q\-N\-E\-Connection@{Q\-N\-E\-Connection}}
+}
+
+
+Inheritance diagram for Q\-N\-E\-Connection\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=202pt]{class_q_n_e_connection__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for Q\-N\-E\-Connection\-:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=550pt]{class_q_n_e_connection__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \{ {\bfseries Type} = Q\-Graphics\-Item\-:\-:User\-Type + 2
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_connection_ae447737e149634f2f84f0edb184a3121}{{\bfseries Q\-N\-E\-Connection} (Q\-Graphics\-Item $\ast$parent=0)}\label{class_q_n_e_connection_ae447737e149634f2f84f0edb184a3121}
+
+\item 
+\hypertarget{class_q_n_e_connection_a96df4410d2cdd3896aef2adaa413fdca}{void {\bfseries set\-Pos1} (const Q\-Point\-F \&p)}\label{class_q_n_e_connection_a96df4410d2cdd3896aef2adaa413fdca}
+
+\item 
+\hypertarget{class_q_n_e_connection_a584ee43f408436b16dfded5820278ad8}{void {\bfseries set\-Pos2} (const Q\-Point\-F \&p)}\label{class_q_n_e_connection_a584ee43f408436b16dfded5820278ad8}
+
+\item 
+\hypertarget{class_q_n_e_connection_aafc7639063c58d3f5ef68e79427ac892}{void {\bfseries set\-Port1} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$p)}\label{class_q_n_e_connection_aafc7639063c58d3f5ef68e79427ac892}
+
+\item 
+\hypertarget{class_q_n_e_connection_ab756e8136042cbe398264d8e0300497f}{void {\bfseries set\-Port2} (\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$p)}\label{class_q_n_e_connection_ab756e8136042cbe398264d8e0300497f}
+
+\item 
+\hypertarget{class_q_n_e_connection_a8ac846bb2d6ca3eb3a450a4652cbbe2e}{void {\bfseries update\-Pos\-From\-Ports} ()}\label{class_q_n_e_connection_a8ac846bb2d6ca3eb3a450a4652cbbe2e}
+
+\item 
+\hypertarget{class_q_n_e_connection_a98793e21093dde710079b2f2a0937b12}{void {\bfseries update\-Path} ()}\label{class_q_n_e_connection_a98793e21093dde710079b2f2a0937b12}
+
+\item 
+\hypertarget{class_q_n_e_connection_a8b9fcbe74b6c263d0a15235be768c195}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ {\bfseries port1} () const }\label{class_q_n_e_connection_a8b9fcbe74b6c263d0a15235be768c195}
+
+\item 
+\hypertarget{class_q_n_e_connection_a4092be01cd41c35fe57912ed68a5cf8e}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ {\bfseries port2} () const }\label{class_q_n_e_connection_a4092be01cd41c35fe57912ed68a5cf8e}
+
+\item 
+\hypertarget{class_q_n_e_connection_a464c441d1c9074d81916fbaf6e7a6408}{void {\bfseries save} (Q\-Data\-Stream \&)}\label{class_q_n_e_connection_a464c441d1c9074d81916fbaf6e7a6408}
+
+\item 
+\hypertarget{class_q_n_e_connection_a06b01eb3a17238308e489781b271cc2e}{void {\bfseries load} (Q\-Data\-Stream \&, const Q\-Map$<$ quint64, \hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ $>$ \&port\-Map)}\label{class_q_n_e_connection_a06b01eb3a17238308e489781b271cc2e}
+
+\item 
+\hypertarget{class_q_n_e_connection_a207b37cc0587e43a5fbdd90ce838921f}{int {\bfseries type} () const }\label{class_q_n_e_connection_a207b37cc0587e43a5fbdd90ce838921f}
+
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_q_n_e_connection_a787f13c53870b9cf0eba9bcc313d6851}{Q\-Point\-F {\bfseries pos1}}\label{class_q_n_e_connection_a787f13c53870b9cf0eba9bcc313d6851}
+
+\item 
+\hypertarget{class_q_n_e_connection_a27d068bac8220e31d339537e2c27512d}{Q\-Point\-F {\bfseries pos2}}\label{class_q_n_e_connection_a27d068bac8220e31d339537e2c27512d}
+
+\item 
+\hypertarget{class_q_n_e_connection_a58e8bf6d65c9ded23a13d0ff261b453c}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ {\bfseries m\-\_\-port1}}\label{class_q_n_e_connection_a58e8bf6d65c9ded23a13d0ff261b453c}
+
+\item 
+\hypertarget{class_q_n_e_connection_a7133385034cf2bc2376c2ed81c5dff2a}{\hyperlink{class_q_n_e_port}{Q\-N\-E\-Port} $\ast$ {\bfseries m\-\_\-port2}}\label{class_q_n_e_connection_a7133385034cf2bc2376c2ed81c5dff2a}
+
+\end{DoxyCompactItemize}
+
+
+The documentation for this class was generated from the following files\-:\begin{DoxyCompactItemize}
+\item 
+include/\-Node\-Graph/qneconnection.\-h\item 
+src/\-Node\-Graph/qneconnection.\-cpp\end{DoxyCompactItemize}
